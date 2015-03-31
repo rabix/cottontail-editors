@@ -1,0 +1,24 @@
+<div class="content content-ten">
+
+    <legend class="legend-small" ng-class="{nb: view.type === 'script'}">
+        Properties
+        <add-property
+                type="output"
+                key="@id"
+                tool-type="{{ view.type }}"
+                properties="view.tool.outputs">
+        </add-property>
+    </legend>
+
+    <property-output
+            ng-repeat="property in view.tool.outputs track by property['@id']"
+            ng-model="property"
+            key="@id"
+            type="{{ view.type }}"
+            properties="view.tool.outputs">
+    </property-output>
+
+    <p class="alert alert-info" ng-if="view.tool.outputs.length === 0">There are no outputs at this moment.</p>
+</div>
+
+

@@ -1,0 +1,25 @@
+<div class="content content-ten">
+
+    <legend class="legend-small" ng-class="{nb: view.type === 'script'}">
+        Properties
+        <add-property
+                type="input"
+                key="@id"
+                tool-type="{{ view.type }}"
+                properties="view.tool.inputs"
+                inputs="view.job.inputs">
+        </add-property>
+    </legend>
+
+    <property-input
+            ng-repeat="property in view.tool.inputs | orderBy:sortByPosition track by property['@id']"
+            ng-model="property"
+            key="@id"
+            type="{{ view.type }}"
+            inputs="view.job.inputs"
+            properties="view.tool.inputs">
+    </property-input>
+
+    <p class="alert alert-info" ng-if="view.tool.inputs.length === 0">There are no inputs at this moment.</p>
+
+</div>

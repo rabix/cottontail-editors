@@ -1,0 +1,572 @@
+.page {
+
+  @import "heading";
+
+  /* Page description */
+  .description {
+    margin: 20px 0;
+    overflow: auto;
+
+    .panel {
+      p {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        & > span,
+        & > strong {
+          display: inline-block;
+          vertical-align: middle;
+        }
+        & > strong {
+          width: 140px;
+        }
+        &:last-of-type {
+          margin-bottom: 0;
+        }
+      }
+      .panel-body {
+        h5 {
+          margin: -15px -15px 5px;
+          padding: 10px 15px;
+          background-color: #fcf8e3;
+          border-top: 1px solid #faebcc;
+          border-bottom: 1px solid #faebcc;
+        }
+        section {
+          margin: 0 0 20px 0;
+          &:first-child {
+            h5 {
+              border-top: none;
+            }
+          }
+          &:last-child {
+            margin: 0;
+          }
+        }
+      }
+
+      &.horizontal {
+        .panel-body {
+          padding: 0;
+          margin: 0;
+          h5 {
+            margin: 0;
+          }
+          section {
+            padding: 0 0 5px 0;
+            margin: 0;
+            &:not(:last-child) {
+              border-right: 1px solid #faebcc;
+            }
+            p {
+              padding: 5px 15px;
+              margin: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &.loading {
+    @extend %loading-abs;
+    &:after {
+      opacity: 0;
+      @include transition(opacity 0.3s ease);
+    }
+    &.loading-fade {
+      &:after {
+        opacity: 1;
+      }
+    }
+  }
+
+  .snippet {
+    border-left: 5px solid $orange;
+    margin-bottom: 25px;
+
+    p {
+      padding: 5px;
+      margin: 0 0 5px;
+    }
+
+    .box {
+      background-color: #fcfcfc;
+      padding: 5px;
+      margin: 0 0 5px;
+    }
+
+    pre {
+      @include border-radius(0 3px 3px 0);
+      border-left: none;
+      margin-bottom: 1px;
+    }
+
+    &.log {
+      pre {
+        border-color: $orange;
+        background-color: #222;
+        padding: 0 10px;
+        counter-reset: counter;
+        @include box-shadow(none);
+        @extend %scrollbar;
+
+        .line {
+          color: $orange;
+          white-space: nowrap;
+          &:before {
+            content: counter(counter);
+            counter-increment: counter;
+            display: inline-block;
+            width: 55px;
+            text-align: right;
+            padding: 0 5px 0 0;
+            margin: 0 5px 0 0;
+            color: #666;
+          }
+        }
+      }
+    }
+
+    &.list {
+      ul {
+        list-style: none;
+        border: 1px solid #ddd;
+        border-left-color: transparent;
+        @include border-radius(0 3px 3px 0);
+        padding: 10px 10px 10px 20px;
+        margin: 0;
+      }
+    }
+
+    &.token {
+      border-bottom: 2px solid #f0ad4e;
+      .btn {
+        margin-left: 5px;
+      }
+      .alert {
+        &.trace {
+          visibility: hidden;
+          margin: 5px;
+          display: block;
+          padding: 5px 10px;
+          max-width: 300px;
+          min-height: 32px;
+
+          &.show {
+            visibility: visible;
+          }
+        }
+      }
+    }
+  }
+
+  .col {
+   .tab {
+      position: relative;
+      &.loading {
+        @extend %loading-abs;
+      }
+    }
+
+    &.sidebar-col {
+      width: 450px;
+      border-left: 2px solid $orange;
+      overflow-x: hidden;
+      @include transition(width 0.2s ease);
+
+      .filter,
+      .content,
+      .heading {
+        overflow-x: hidden;
+        white-space: nowrap;
+      }
+
+      &.closed {
+        width: 35px;
+
+        .filter,
+        .content,
+        .nav-tabs-steps li:not(.toggle-action),
+        .nav-tabs-trace li:not(.toggle-action) {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+.tabs {
+  .tab {
+    &.tab-tbl {
+      margin: 0 -10px;
+    }
+    .tab-title {
+      margin: 0;
+      padding: 5px 10px;
+      border-bottom: 1px solid #ccc;
+      font-size: 20px;
+      @extend %ellipsis;
+    }
+  }
+}
+
+/* Paginator */
+.paginator {
+  padding: 10px;
+  overflow: auto;
+  background-color: $gray;
+  background-image: url(../images/bg.png);
+  border-top: 1px solid #ddd;
+  text-align: center;
+  @extend .flex-auto;
+
+  .page-number {
+    display: inline-block;
+    font-weight: bold;
+    padding: 7px;
+  }
+}
+
+.s3-link {
+  padding: 0 10px;
+  text-overflow: ellipsis;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  display: block;
+}
+
+/* Browser happy box */
+.browsehappy {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.2);
+  p {
+    color: #fff;
+    width: 400px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -200px;
+    font-size: 20px;
+    margin-top: -120px;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    @include border-radius(10px);
+    a {
+      text-decoration: underline;
+      font-weight: bold;
+    }
+
+  }
+}
+
+/* Enumerating list */
+.enum-list-wrap {
+  .alert {
+    padding: 6px 10px;
+    margin: 0;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  .add-enum-item {
+    float: left;
+  }
+  .enum-list-container {
+    display: block;
+    margin-left: 50px;
+  }
+  .enum-list {
+    li {
+      position: relative;
+      margin-bottom: 10px;
+
+      .enum-field-empty {
+        padding: 7px 5px;
+        display: block;
+      }
+
+      .enum-field.form-group {
+        border: none;
+        margin: 0 25px 0 0;
+        overflow: auto;
+
+        &.form-group-object {
+          border-bottom: 1px solid #ddd;
+        }
+        &.split {
+          border: none;
+          & > .form-control {
+            display: inline-block;
+            &:nth-child(1) {
+              width: 40%;
+            }
+            &:nth-child(2) {
+              margin-left: -5px;
+              width: 60%;
+            }
+          }
+        }
+      }
+      & > .remove-btn {
+        top: 4px;
+      }
+      &:last-child {
+        margin-bottom: 0;
+        .enum-field.form-group {
+          &.form-group-object {
+            border-bottom: 0;
+          }
+        }
+      }
+    }
+    &.wide {
+      li {
+        .enum-field.form-group {
+          margin-right: 0px;
+        }
+      }
+    }
+  }
+}
+
+/* Legend used as box heading */
+legend {
+  &.toggle {
+    position: relative;
+    cursor: pointer;
+    border: none;
+    padding-left: 25px;
+    @include user-select(none);
+
+    &:after {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 50%;
+      left: 10px;
+      border-left: 5px solid #555;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      margin-top: -5px;
+    }
+    &.active {
+      &:after {
+        border-top: 5px solid #555;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-bottom: none;
+        margin-top: -2.5px;
+      }
+    }
+  }
+}
+
+.app-sidebar-list {
+  border-bottom: 1px solid #ddd;
+  li {
+    border-bottom: 1px solid #ddd;
+    &:first-child {
+      border-top: 1px solid #ddd;
+    }
+    &:last-child {
+      border-bottom: none;
+    }
+    & > span {
+      cursor: pointer;
+      color: #555;
+      padding: 7px 7px;
+      display: block;
+
+
+      &.section-name {
+        font-size: 1em;
+        color: #aaa;
+        text-align: left;
+        text-indent: 13px;
+        font-weight: 100;
+        background: #FFFFFF;
+      }
+
+      i {
+        color: $sidebar-blue;
+      }
+    }
+    & > ul {
+      display: none;
+      & > li {
+        & > span {
+          padding-left: 20px;
+        }
+
+        span.pointer {
+          cursor: pointer;
+          margin-right: 10px;
+        }
+
+        .nested {
+          margin-left: 22px;
+        }
+      }
+    }
+    &.open {
+      & > ul {
+        display: block;
+      }
+    }
+  }
+  .apps-inner-list {
+    li {
+      a {
+        cursor: move;
+        background-color: #fdfdfd;
+        color: #555;
+        padding: 7px 15px 7px 35px;
+        display: block;
+        text-decoration: none;
+        @include user-select(none);
+
+        & > i {
+          color: $sidebar-blue;
+        }
+
+        &.drag {
+          opacity: 0.7;
+        }
+      }
+      .revisions-list {
+        border-bottom: 1px solid #eee;
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+    }
+  }
+  .alert {
+    margin: 0;
+    padding: 5px 10px 5px 30px;
+  }
+}
+
+/* Pipeline */
+.pipeline-wrap {
+  position: relative;
+
+  .pipeline-drop-area {
+    position: relative;
+
+    &.drag-over {
+      background-color: #f3f3f3;
+    }
+
+    &.loading {
+      @extend %loading-abs;
+    }
+
+    .pipeline-actions {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+    }
+
+    .pipeline-user-guide {
+      width: 400px;
+      height: 100px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: -150px 0 0 -200px;
+      @extend %guide-box;
+    }
+
+  }
+}
+
+.job-user-guide {
+  width: 480px;
+  margin: 150px auto;
+  @extend %guide-box;
+}
+
+.changes-mark {
+  font-size: 13px;
+  color: #aa0000;
+  cursor: pointer;
+  margin: 0 10px;
+  .tooltip {
+    font-weight: normal;
+  }
+}
+
+.pipeline-get-url {
+  position: absolute;
+  bottom: 5px;
+  right: 15px;
+}
+
+.pick-repo-wrap {
+  margin: 15px 0;
+}
+
+.json-pretty-scroll {
+  max-height: 500px;
+  overflow: auto;
+
+  @extend %scrollbar;
+}
+
+.copy-btn {
+  display: inline-block;
+  vertical-align: middle;
+  max-width: 60%;
+
+  %ellipsis {
+    max-width: 70%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  & > span {
+    @extend %ellipsis;
+  }
+
+  & > span,
+  .btn,
+  .error {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .btn.btn-sm {
+    padding: 2px 10px;
+  }
+
+  .error {
+    @extend %ellipsis;
+    color: #ff0000;
+  }
+}
+
+.toggle-btn {
+  color: #555;
+  display: block;
+  padding: 5px;
+  text-decoration: none;
+  &:hover {
+    color: #555;
+    text-decoration: none;
+  }
+}
+
+.preload {
+  img {
+    display: none;
+  }
+}
