@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .filter('contains', [function() {
+    .filter('contains', ['lodash', function(_) {
         return function(array, element) {
 
             return _.contains(array, element);

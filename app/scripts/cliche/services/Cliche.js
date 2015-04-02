@@ -5,7 +5,7 @@
  */
 'use strict';
 angular.module('registryApp.cliche')
-    .factory('Cliche', ['$q', '$localForage', '$injector', 'rawTool', 'rawJob', 'rawTransform', function($q, $localForage, $injector, rawTool, rawJob, rawTransform) {
+    .factory('Cliche', ['$q', '$injector', 'rawTool', 'rawJob', 'rawTransform', 'lodash', function($q, $injector, rawTool, rawJob, rawTransform, _) {
 
         /**
          * Version of the storage
@@ -67,20 +67,24 @@ angular.module('registryApp.cliche')
          * @returns {*}
          */
         var checkVersion = function() {
+            var deferred = $q.defer();
+            deferred.resolve();
 
-            return $localForage.getItem('version')
-                .then(function(v) {
+            return deferred.promise;
 
-                    if (v === version) {
-                        return false;
-                    } else {
-                        return $q.all([
-                            $localForage.setItem('version', version),
-                            $localForage.setItem('tool', rawTool),
-                            $localForage.setItem('job', rawJob)
-                        ]);
-                    }
-                });
+            //return $localForage.getItem('version')
+            //    .then(function(v) {
+            //
+            //        if (v === version) {
+            //            return false;
+            //        } else {
+            //            return $q.all([
+            //                $localForage.setItem('version', version),
+            //                $localForage.setItem('tool', rawTool),
+            //                $localForage.setItem('job', rawJob)
+            //            ]);
+            //        }
+            //    });
 
         };
 
@@ -129,16 +133,10 @@ angular.module('registryApp.cliche')
 
             var deferred = $q.defer();
 
-            $q.all([
-                    $localForage.getItem('tool'),
-                    $localForage.getItem('job')
-                ]).then(function (result) {
+            toolJSON = transformToolJson(type, rawTool);
+            jobJSON = rawJob;
 
-                    toolJSON = transformToolJson(type, result[0]);
-                    jobJSON = result[1];
-
-                    deferred.resolve();
-                });
+            deferred.resolve();
 
             return deferred.promise;
         };

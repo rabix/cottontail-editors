@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('registryApp.app')
-    .factory('Tool', ['$q', 'Api', 'SchemaValidator', function ($q, Api, SchemaValidator) {
+    .factory('Tool', ['$q', 'Api', 'SchemaValidator', 'lodash', function ($q, Api, SchemaValidator, _) {
 
         /**
          * Get list of tools

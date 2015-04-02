@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('registryApp.app')
-    .service('Workflow', ['Api', '$localForage', function (Api, $localForage) {
+    .service('Workflow', ['Api', 'lodash', function (Api, _) {
 
         var self = {};
 

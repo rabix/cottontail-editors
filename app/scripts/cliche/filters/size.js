@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .filter('size', [function() {
+    .filter('size', ['lodash', function(_) {
         return function(obj) {
 
             return _.size(obj);

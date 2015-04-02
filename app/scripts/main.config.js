@@ -24,12 +24,13 @@ angular
         'registryApp.dyole',
         'registryApp.repo',
         'registryApp.task',
-        'registryApp.common'
+        'registryApp.common',
+        'registryApp.util'
     ])
     .constant('Const', {
         exposedSeparator: '$'
     })
-    .config(['$stateProvider', '$urlRouterProvider', '$httpProvider', '$localForageProvider', function ($stateProvider, $urlRouterProvider, $httpProvider, $localForageProvider) {
+    .config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function ($stateProvider, $urlRouterProvider, $httpProvider) {
         $stateProvider
             .state('home', {
                 url: '/',
@@ -57,11 +58,5 @@ angular
         $urlRouterProvider.otherwise('/');
 
         $httpProvider.interceptors.push('HTTPInterceptor');
-
-        $localForageProvider.config({
-            name: 'registryApp',
-            version: 1.0,
-            storeName: 'registryDB'
-        });
 
     }]);

@@ -17,7 +17,7 @@ angular.module('registryApp.common')
 
         return self;
     }])
-    .directive('loading', ['$timeout', 'Loading', function ($timeout, Loading) {
+    .directive('loading', ['$timeout', 'Loading', 'lodash', function ($timeout, Loading, _) {
         return {
             scope: {
                 loading: '='
@@ -34,20 +34,18 @@ angular.module('registryApp.common')
                 }
 
                 scope.$watch('loading', function(newVal, oldVal) {
-                    if (newVal !== oldVal) {
 
-                        if (newVal === true && !_.contains(scope.classes, 'loading')) {
-                            scope.classes.push('loading');
-                            scope.classes.push('loading-fade');
-                        } else {
-                            scope.stopLoadingDelay();
+                    if (newVal === true && !_.contains(scope.classes, 'loading')) {
+                        scope.classes.push('loading');
+                        scope.classes.push('loading-fade');
+                    } else if (newVal === false ){
+                        scope.stopLoadingDelay();
 
-                            _.remove(scope.classes, function(cls) { return cls === 'loading-fade'; });
+                        _.remove(scope.classes, function(cls) { return cls === 'loading-fade'; });
 
-                            timeoutId = $timeout(function() {
-                                _.remove(scope.classes, function(cls) { return cls === 'loading'; });
-                            }, 300);
-                        }
+                        timeoutId = $timeout(function() {
+                            _.remove(scope.classes, function(cls) { return cls === 'loading'; });
+                        }, 300);
                     }
                 });
 
