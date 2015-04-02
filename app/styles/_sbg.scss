@@ -1,0 +1,27 @@
+/* layout */
+
+#container {
+  @extend .flex-box-column;
+}
+
+#wrap {
+  margin: 0;
+  padding-top: 40px;
+  @extend .flex-box-column;
+  @extend .flex-one;
+}
+
+#content, #main, .cliche-editor, .container-fluid, .main, .page {
+  width: 100%;
+  max-width: 100%;
+  padding: 0;
+  @extend .flex-box-column;
+  @extend .flex-one;
+}
+
+
+/* forms */
+
+input[type="text"], input[type="password"], select, textarea {
+  width: 100%;
+}

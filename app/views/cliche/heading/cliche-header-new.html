@@ -17,7 +17,6 @@
             </button>
 
             <div class="btn-group" role="group">
-
                 <json-preview title="Tool JSON" json="{{ view.tool }}"></json-preview>
                 <json-preview title="Job JSON" json="{{ view.job }}"></json-preview>
             </div>
@@ -28,7 +27,6 @@
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu" ng-click="toggleMenu()">
-                    <li><a href ng-click="loadMarkdown()"><i class="fa fa-ellipsis-h"></i> <span>Description</span></a></li>
                     <li><a href ng-click="loadJsonEditor()"><i class="fa fa-cloud-download"></i> <span>Import</span></a></li>
                 </ul>
             </div>
