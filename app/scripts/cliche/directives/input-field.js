@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('InputFieldCtrl', ['$scope', '$modal', '$templateCache', 'Cliche', 'Const', function ($scope, $modal, $templateCache, Cliche, Const) {
+    .controller('InputFieldCtrl', ['$scope', '$modal', '$templateCache', 'Cliche', 'Const', 'lodash', function ($scope, $modal, $templateCache, Cliche, Const, _) {
 
         $scope.view = {};
 

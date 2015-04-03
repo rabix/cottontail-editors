@@ -5,7 +5,7 @@
 'use strict';
 
 angular.module('registryApp.common')
-    .factory('SandBox', ['$q', 'Cliche', function ($q, Cliche) {
+    .factory('SandBox', ['$q', 'Cliche', 'lodash', function ($q, Cliche, _) {
 
         var Sandbox;
 

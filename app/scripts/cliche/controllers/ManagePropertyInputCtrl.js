@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('ManagePropertyInputCtrl', ['$scope', '$modalInstance', 'Cliche', 'options', function ($scope, $modalInstance, Cliche, options) {
+    .controller('ManagePropertyInputCtrl', ['$scope', '$modalInstance', 'Cliche', 'options', 'lodash', function ($scope, $modalInstance, Cliche, options, _) {
 
         var key = options.key || 'name';
         var idObj = {n: '', o: ''};

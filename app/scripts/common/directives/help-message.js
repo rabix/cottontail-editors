@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('registryApp.common')
-	.directive('helpMessage', [function() {
+	.directive('helpMessage', ['lodash', function(_) {
 		return {
 			scope: {
 				message: '='

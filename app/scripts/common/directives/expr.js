@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.common')
-    .directive('expr', ['$templateCache', function ($templateCache) {
+    .directive('expr', ['$templateCache', 'lodash', function ($templateCache, _) {
 
         return {
             restrict: 'E',

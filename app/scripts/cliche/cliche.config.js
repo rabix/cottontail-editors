@@ -6,7 +6,7 @@
 
 'use strict';
 
-angular.module('registryApp.cliche', ['ui.bootstrap', 'registryApp.common', 'registryApp.repo', 'registryApp.app', 'registryApp.util', 'ngPrettyJson', 'hc.marked', 'ngTagsInput'])
+angular.module('registryApp.cliche', ['ui.bootstrap', 'registryApp.common', 'registryApp.app', 'registryApp.util', 'registryApp.repo', 'ngPrettyJson', 'hc.marked', 'ngTagsInput'])
     .constant('Const', {
         exposedSeparator: '$'
     })

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('registryApp.util')
-    .filter('repo', [function() {
+    .filter('repo', ['lodash', function(_) {
         return function(owner, name) {
 
             var outout = '';

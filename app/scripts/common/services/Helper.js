@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.common')
-    .factory('Helper', ['$injector', function($injector) {
+    .factory('Helper', ['$injector', 'lodash', function($injector, _) {
 
         /**
          * Check if name is valid

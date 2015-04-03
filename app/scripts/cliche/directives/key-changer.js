@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .directive('keyChanger', ['$templateCache', function ($templateCache) {
+    .directive('keyChanger', ['$templateCache', 'lodash', function ($templateCache, _) {
 
         return {
             restrict: 'E',

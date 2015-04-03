@@ -2,8 +2,7 @@
 
 angular.module('registryApp.common')
     .controller('ModalCtrl', ['$scope', '$modalInstance', 'data', function ($scope, $modalInstance, data) {
-        console.log(data);
-        
+
         $scope.data = data;
         $scope.view = {};
 

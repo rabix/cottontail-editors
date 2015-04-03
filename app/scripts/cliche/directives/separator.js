@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .directive('separator', ['$templateCache', function ($templateCache) {
+    .directive('separator', ['$templateCache', 'lodash', function ($templateCache, _) {
         return {
             restrict: 'E',
             template: $templateCache.get('views/cliche/partials/separator.html'),

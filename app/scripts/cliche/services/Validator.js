@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .factory('Validator', ['$q', '$injector', function($q, $injector) {
+    .factory('Validator', ['$q', '$injector', 'lodash', function($q, $injector, _) {
 
         /**
          * Trace object which contains info about required, invalid and obsolete values

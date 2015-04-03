@@ -2,7 +2,7 @@
 
 angular
     .module('registryApp.cliche')
-    .factory('SchemaValidator', ['toolSchemaDefs', 'scriptSchemaDefs', '$q', function (ToolSchema, ScriptSchema, $q) {
+    .factory('SchemaValidator', ['toolSchemaDefs', 'scriptSchemaDefs', '$q', 'lodash', function (ToolSchema, ScriptSchema, $q, _) {
         var validator = tv4;
 
         validator.addSchema('tool', ToolSchema);

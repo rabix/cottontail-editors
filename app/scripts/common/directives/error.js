@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('registryApp.common')
-    .directive('error', ['$templateCache', function ($templateCache) {
+    .directive('error', ['$templateCache', 'lodash', function ($templateCache, _) {
         return {
             restrict: 'E',
             template: $templateCache.get('views/partials/error.html'),

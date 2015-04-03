@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .directive('separatorInfo', [function () {
+    .directive('separatorInfo', ['lodash', function (_) {
         return {
             restrict: 'E',
             template: '<span>{{ view.separator }}</span>',

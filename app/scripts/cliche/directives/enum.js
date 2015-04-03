@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('EnumCtrl', ['$scope', '$modal', '$templateCache', function ($scope, $modal, $templateCache) {
+    .controller('EnumCtrl', ['$scope', '$modal', '$templateCache', 'lodash', function ($scope, $modal, $templateCache, _) {
 
         $scope.view = {};
         $scope.view.tplPath = 'views/cliche/enum/enum-' + $scope.type  + '.html';
