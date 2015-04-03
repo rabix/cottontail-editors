@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('clicheApp', ['ui.router', 'registryApp.cliche'])
-    .controller('ToolEditorCtrl', ['$scope', '$state', function ($scope, $state) {
+    .controller('ClicheAppCtrl', ['$scope', '$state', function ($scope, $state) {
         $state.go('cliche-editor-new', {type: 'tool'});
     }])
 
