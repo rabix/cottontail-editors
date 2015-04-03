@@ -5,7 +5,7 @@
 'use strict';
 
 angular.module('registryApp.dyole')
-    .factory('pipeline', ['event', 'node', 'connection', '$rootScope', 'systemNodeModel', 'FormaterD2', 'Const', function (Event, Node, Connection, $rootScope, systemNodeModel, Formater, Const) {
+    .factory('pipeline', ['event', 'node', 'connection', '$rootScope', 'systemNodeModel', 'FormaterD2', 'Const', 'common', function (Event, Node, Connection, $rootScope, systemNodeModel, Formater, Const, Common) {
 
             /**
              * Pipeline constructor
@@ -166,6 +166,21 @@ angular.module('registryApp.dyole')
 
                         _self.createConnection(model);
 
+                    });
+                    
+                    this.Event.subscribe('connection:destroyed', function (model) {
+                        var endNode = _self.nodes[model.end_node],
+                            startNode = _self.nodes[model.start_node];
+
+                        console.log('connection:destroyed', model);
+
+                        if (startNode && Common.checkSystem(startNode.model)) {
+                            startNode.removeNode();
+                        }
+
+                        if (endNode && Common.checkSystem(endNode.model)) {
+                            endNode.removeNode();
+                        }
                     });
 
                     $canvasArea.mousemove(function (e) {
@@ -492,7 +507,8 @@ angular.module('registryApp.dyole')
                         'id': terId,
                         '@id': terId,
                         'depth': 0,
-                        'schema': ['null', 'file']
+//                        'schema': ['null', 'file']
+						'schema': terminal.model.schema
                     });
 
                     terminalId = terId;
@@ -924,16 +940,15 @@ angular.module('registryApp.dyole')
 
                     this.$parent.find('svg').remove();
 
-                    _.each(this.connections, function (connection) {
-                        connection.destroy();
-                    });
-
                     _.each(this.nodes, function (node) {
                         node.destroy();
                     });
 
-                    this.nodes = null;
+                    _.each(this.connections, function (connection) {
+                        connection.destroy();
+                    });
 
+                    this.nodes = null;
 
                     _.each(events, function (event) {
                         _self.Event.unsubscribe(event);
