@@ -59,7 +59,7 @@ module.exports = function (grunt) {
                     '<%= yeoman.app %>/views/repo/{,*/}*.html',
                     '<%= yeoman.app %>/views/task/{,*/}*.html'
                 ],
-                tasks: ['ngtemplates:app', 'ngtemplates:integrate']
+                tasks: ['ngtemplates:app', 'ngtemplates:cliche', 'ngtemplates:dyole']
             }
         },
 
@@ -438,7 +438,7 @@ module.exports = function (grunt) {
                 }
             },
 
-            integrate: {
+            cliche: {
                 cwd: '<%= yeoman.app %>',
                 src: [
                     'views/{,*/}*.html',
@@ -447,9 +447,28 @@ module.exports = function (grunt) {
                     'views/repo/{,*/}*.html',
                     'views/task/{,*/}*.html'
                 ],
-                dest: '<%= yeoman.app %>/rabixApp/scripts/template.js',
+                dest: '<%= yeoman.app %>/scripts/cliche-app/template.js',
                 options: {
-                    module: 'rabixApp',
+                    module: 'clicheApp',
+                    htmlmin: {
+                        collapseWhitespace: true,
+                        collapseBooleanAttributes: true
+                    }
+                }
+            },
+
+            dyole: {
+                cwd: '<%= yeoman.app %>',
+                src: [
+                    'views/{,*/}*.html',
+                    'views/dyole/{,*/}*.html',
+                    'views/app/{,*/}*.html',
+                    'views/repo/{,*/}*.html',
+                    'views/task/{,*/}*.html'
+                ],
+                dest: '<%= yeoman.app %>/scripts/dyole-app/template.js',
+                options: {
+                    module: 'dyoleApp',
                     htmlmin: {
                         collapseWhitespace: true,
                         collapseBooleanAttributes: true
@@ -480,18 +499,26 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('integrate', 'Compiles editors as separate apps', function (target) {
-        if (target === 'dyole') {
-            grunt.log.write('dyole coming soon');
-            return;
+
+        if (target === 'cliche') {
+            grunt.task.run([
+                'clean:server',
+                'concurrent:server',
+                'autoprefixer',
+                'ngtemplates:cliche',
+                'watch'
+            ]);
         }
 
-        grunt.task.run([
-            'clean:server',
-            'concurrent:server',
-            'autoprefixer',
-            'ngtemplates:integrate',
-            'watch'
-        ]);
+        if (target === 'dyole') {
+            grunt.task.run([
+                'clean:server',
+                'concurrent:server',
+                'autoprefixer',
+                'ngtemplates:dyole',
+                'watch'
+            ]);
+        }
     });
 
     grunt.registerTask('server', 'DEPRECATED TASK. Use the "serve" task instead', function (target) {

@@ -25,3 +25,33 @@
 input[type="text"], input[type="password"], select, textarea {
   width: 100%;
 }
+
+input[type="checkbox"], input[type="radio"] {
+  margin: 2px 0 0;
+  display: inline-block;
+}
+
+label.checkbox {
+  margin: 10px 10px 10px 20px;
+}
+
+.modal-header .modal-title .checkbox {
+  margin-top: 5px;
+}
+
+
+/* layout structure */
+.row {
+  border: none;
+}
+
+.modal-header {
+  background: transparent;
+  .modal-title {
+    padding: 0;
+  }
+
+  button.close {
+    height: auto;
+  }
+}

@@ -1,23 +1,21 @@
 /**
  * @ngdoc service
- * @name rabixApp.ApiService
+ * @name clicheApp.ApiService
  * @description
  * _Please update the description and dependencies._
  *
- * @requires $replace_me
+ * @requires
+ *
  *
  * */
 
 
-angular.module('rabixApp')
+angular.module('clicheApp')
     .service('Api', ['$resource', '$http', function ($resource, $http) {
 
         var self = {};
         var apiUrl = '/api';
 
-        self.test = function () {
-            return 'meee';
-        }
 
         self.apps = $resource(apiUrl + '/apps/:id/:revision', {id: '@id', revision: '@revision'}, {
             add: {method: 'POST'},

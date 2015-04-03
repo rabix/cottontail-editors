@@ -10,7 +10,7 @@
 
  'use strict';
 
-angular.module('rabixApp')
+angular.module('clicheApp')
     .service('User', ['$q', function($q){
 
     var Mock = {
