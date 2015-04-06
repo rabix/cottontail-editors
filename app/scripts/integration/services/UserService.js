@@ -10,7 +10,7 @@
 
  'use strict';
 
-angular.module('clicheApp')
+angular.module('integration')
     .service('User', ['$q', function($q){
 
     var Mock = {

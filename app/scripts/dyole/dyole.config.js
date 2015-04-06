@@ -6,4 +6,10 @@
 
 'use strict';
 
-angular.module('registryApp.dyole', []);
+angular.module('registryApp.dyole', ['registryApp.app', 'ui.bootstrap', 'registryApp.common', 'registryApp.util', 'registryApp.repo', 'ngPrettyJson'])
+	.constant('Const', {
+		exposedSeparator: '$'
+	})
+	.config([function() {
+		ZeroClipboard.config({swfPath: 'bower_components/zeroclipboard/dist/ZeroClipboard.swf'});
+	}]);

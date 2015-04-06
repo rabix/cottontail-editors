@@ -10,7 +10,7 @@
  * */
 
 
-angular.module('clicheApp')
+angular.module('integration')
     .service('Api', ['$resource', '$http', function ($resource, $http) {
 
         var self = {};

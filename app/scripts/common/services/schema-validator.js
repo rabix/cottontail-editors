@@ -1,7 +1,7 @@
 'use strict';
 
 angular
-    .module('registryApp.cliche')
+    .module('registryApp.common')
     .factory('SchemaValidator', ['toolSchemaDefs', 'scriptSchemaDefs', '$q', 'lodash', function (ToolSchema, ScriptSchema, $q, _) {
         var validator = tv4;
 

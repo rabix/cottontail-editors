@@ -10,18 +10,6 @@ angular.module('registryApp.cliche', ['ui.bootstrap', 'registryApp.common', 'reg
     .constant('Const', {
         exposedSeparator: '$'
     })
-    .config([function () {
-
-
-        //$stateProvider
-        //    .state('cliche-new', {
-        //        url: '/cliche/:type',
-        //        templateUrl: '/views/cliche/cliche.html',
-        //        controller: 'ClicheCtrl'
-        //    })
-        //    .state('cliche-edit', {
-        //        url: '/cliche/:type/:id/:revision',
-        //        templateUrl: '/views/cliche/cliche.html',
-        //        controller: 'ClicheCtrl'
-        //    });
+    .config([function() {
+        ZeroClipboard.config({swfPath: 'bower_components/zeroclipboard/dist/ZeroClipboard.swf'});
     }]);

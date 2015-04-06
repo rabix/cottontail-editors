@@ -11,7 +11,7 @@
   @extend .flex-one;
 }
 
-#content, #main, .cliche-editor, .container-fluid, .main, .page {
+#content, #main, .cliche-editor, .dyole-editor, .container-fluid, .main, .page {
   width: 100%;
   max-width: 100%;
   padding: 0;
@@ -37,6 +37,12 @@ label.checkbox {
 
 .modal-header .modal-title .checkbox {
   margin-top: 5px;
+}
+
+.sbg-feedback-header {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;;
 }
 
 

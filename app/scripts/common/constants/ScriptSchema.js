@@ -159,7 +159,7 @@ var Schema = {
         },
         '@type': {
             type: 'string',
-            enum: ['CommandLine']
+            enum: ['Script']
         },
         '@context': {
             type: 'string'
@@ -280,34 +280,32 @@ var Schema = {
                 required: ['schema', '@id', 'depth']
             }
         },
-        cliAdapter: {
+        transform: {
             type: 'object',
             properties: {
-                baseCmd: {
-                    type: ['string', 'array']
+                '@type': {
+                    type: 'string'
                 },
-                stdIn: {
-                    type: ['string', 'object']
+                lang: {
+                    type: 'string'
                 },
-                stdOut: {
-                    type: ['string', 'object']
-                },
-                argAdapters: {
-                    type: 'array',
-                    items: {
-                        $ref: '#/definitions/adapterDef'
-                    }
+                value: {
+                    type: 'string'
                 }
             },
-            required: ['baseCmd', 'argAdapters']
+            required: ['@type', 'lang', 'value']
         }
     },
     required: ['@id', '@type', '@context', 'label', 'owner', 'inputs', 'outputs']
 };
 
+/**
+ * Shared code with node
+ */
+
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
     module.exports = Schema;
 } else if (typeof angular !== 'undefined') {
-    angular.module('registryApp.cliche')
-        .constant('toolSchemaDefs', Schema);
+    angular.module('registryApp.common')
+        .constant('scriptSchemaDefs', Schema);
 }

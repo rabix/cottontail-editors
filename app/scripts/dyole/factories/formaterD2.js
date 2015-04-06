@@ -10,8 +10,8 @@
 //TODO: needs to be removed, used for sharing code between angular and node
 var fs;
 if (typeof require !== 'undefined') {
-    var _ = require('lodash');
-    fs = require('fs');
+    //var _ = require('lodash');
+    //fs = require('fs');
 } else {
     fs = {};
 }

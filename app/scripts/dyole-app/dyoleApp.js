@@ -3,11 +3,8 @@
  */
 'use strict';
 
-angular.module('dyoleApp', ['ui.router', 'registryApp.dyole'])
-	.controller('DyoleAppCtrl', ['$scope', '$state', function ($scope, $state) {
-
+angular.module('dyoleApp', ['registryApp.dyole', 'integration'])
+	.controller('DyoleAppCtrl', ['$scope', function ($scope) {
 	}])
-
-	.config(['$stateProvider', function ($stateProvider) {
-
+	.config([function() {
 	}]);

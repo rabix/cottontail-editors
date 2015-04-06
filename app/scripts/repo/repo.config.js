@@ -7,28 +7,5 @@
 'use strict';
 
 angular.module('registryApp.repo', ['registryApp.common', 'ngResource'])
-    //.config(['$stateProvider', function($stateProvider) {
     .config([function() {
-
-        //$stateProvider
-        //    .state('repos', {
-        //        url: '/repos',
-        //        templateUrl: 'views/repo/repos.html',
-        //        controller: 'ReposCtrl'
-        //    })
-        //    .state('repo', {
-        //        url: '/repo/:id',
-        //        templateUrl: 'views/repo/repo.html',
-        //        controller: 'RepoCtrl'
-        //    })
-        //    .state('add-your-github-repo', {
-        //        url: '/add-your-github-repo',
-        //        templateUrl: 'views/repo/add-your-github-repo.html',
-        //        controller: 'AddYourGitHubRepoCtrl'
-        //    })
-        //    .state('repo-instructions', {
-        //        url: '/repo-instructions/:id',
-        //        templateUrl: 'views/repo/repo-instructions.html',
-        //        controller: 'RepoInstructionsCtrl'
-        //    });
     }]);

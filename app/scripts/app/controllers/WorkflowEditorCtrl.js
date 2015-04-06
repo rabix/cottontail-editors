@@ -4,16 +4,13 @@
 'use strict';
 
 angular.module('registryApp.app')
-    .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$stateParams', '$modal', '$templateCache', 'Sidebar', 'Loading', 'Tool', 'Workflow', 'User', 'Repo', 'BeforeRedirect', 'Helper', 'PipelineService', 'lodash', function ($scope, $rootScope, $q, $stateParams, $modal, $templateCache, Sidebar, Loading, Tool, Workflow, User, Repo, BeforeRedirect, Helper, PipelineService, _) {
-
-        Sidebar.setActive('workflow editor');
-
+    .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$modal', '$templateCache', 'Loading', 'Tool', 'Workflow', 'User', 'Repo', 'BeforeRedirect', 'Helper', 'PipelineService', 'lodash', 'Globals', function ($scope, $rootScope, $q, $modal, $templateCache, Loading, Tool, Workflow, User, Repo, BeforeRedirect, Helper, PipelineService, _, Globals) {
         var PipelineInstance = null;
 
         $scope.view = {};
 
         /* workflow mode: new or edit */
-        $scope.view.mode = $stateParams.mode;
+        $scope.view.mode = 'edit';
 
         /* loading state of the page */
         $scope.view.loading = true;
@@ -90,8 +87,8 @@ angular.module('registryApp.app')
                 $scope.view.userRepos = result[1].list;
             });
 
-        if ($stateParams.mode === 'edit') {
-            Workflow.getRevision($stateParams.id)
+        if ($scope.view.mode === 'edit') {
+            Workflow.getRevision(Globals.id)
                 .then(function (result) {
                     $scope.view.workflow = result.data;
                 });
@@ -120,7 +117,7 @@ angular.module('registryApp.app')
             tools = formatApps((result[1].list ? result[1].list.tools : {}));
             scripts = formatApps((result[1].list ? result[1].list.scripts : {}));
             workflows = formatApps(result[3].list || {});
-            
+
             mergeToolsWorkflows('otherRepositories', tools, scripts, workflows);
 
         };
@@ -378,7 +375,7 @@ angular.module('registryApp.app')
 
             var deferred = $q.defer();
 
-            if ($stateParams.mode === 'new') {
+            if ($scope.view.mode === 'new') {
                 $scope.$broadcast('save-local', true);
             }
 
