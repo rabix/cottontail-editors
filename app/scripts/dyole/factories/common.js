@@ -5,7 +5,7 @@
 'use strict';
 
 angular.module('registryApp.dyole')
-    .factory('common', function() {
+    .factory('common', ['lodash', function(_) {
 
         return {
 
@@ -50,4 +50,4 @@ angular.module('registryApp.dyole')
             }
 
         };
-    });
+    }]);

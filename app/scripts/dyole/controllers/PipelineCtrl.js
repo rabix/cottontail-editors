@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.dyole')
-    .controller('PipelineCtrl', ['$scope', '$rootScope', '$stateParams', '$element', '$state', '$window', '$timeout', '$injector', 'pipeline', 'Tool', 'rawPipeline', 'Workflow', '$modal', '$templateCache', 'PipelineService', function ($scope, $rootScope, $stateParams, $element, $state, $window, $timeout, $injector, pipeline, Tool, rawPipeline, Workflow, $modal, $templateCache, PipelineService) {
+    .controller('PipelineCtrl', ['$scope', '$rootScope', '$stateParams', '$element', '$state', '$window', '$timeout', '$injector', 'pipeline', 'Tool', 'rawPipeline', 'Workflow', '$modal', '$templateCache', 'PipelineService', 'lodash', function ($scope, $rootScope, $stateParams, $element, $state, $window, $timeout, $injector, pipeline, Tool, rawPipeline, Workflow, $modal, $templateCache, PipelineService, _) {
 
         var Pipeline;
         var selector = '.pipeline';

@@ -1,7 +1,7 @@
 "use strict";
 
 angular.module('registryApp.repo')
-    .service('Repo', ['Api', function (Api) {
+    .service('Repo', ['Api', 'lodash', function (Api, _) {
 
         var self = {};
 

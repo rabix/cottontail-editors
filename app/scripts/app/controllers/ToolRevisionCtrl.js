@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('registryApp.app')
-    .controller('ToolRevisionCtrl', ['$scope', '$stateParams', '$q', 'Tool', 'Sidebar', 'Loading', 'Helper', function ($scope, $stateParams, $q, Tool, Sidebar, Loading, Helper) {
+    .controller('ToolRevisionCtrl', ['$scope', '$stateParams', '$q', 'Tool', 'Sidebar', 'Loading', 'Helper', 'lodash', function ($scope, $stateParams, $q, Tool, Sidebar, Loading, Helper, _) {
 
         Sidebar.setActive('apps');
 

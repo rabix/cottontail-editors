@@ -4,7 +4,7 @@
 
 'use strict';
 angular.module('registryApp.dyole')
-    .factory('Formater', ['Const', function (Const) {
+    .factory('Formater', ['Const', 'lodash', function (Const, _) {
 
         var formater = {
 

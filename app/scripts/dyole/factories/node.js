@@ -5,7 +5,7 @@
 'use strict';
 
 angular.module('registryApp.dyole')
-    .factory('node', ['$rootScope', 'terminal', 'Const', 'common', function ($rootScope, Terminal, Const, Common) {
+    .factory('node', ['$rootScope', 'terminal', 'Const', 'common', 'lodash', function ($rootScope, Terminal, Const, Common, _) {
 
         var Node = function (options) {
             var _self = this;

@@ -1,7 +1,7 @@
 "use strict";
 
 angular.module('registryApp')
-    .factory('HTTPInterceptor', ['$q', '$rootScope', '$location', function ($q, $rootScope, $location) {
+    .factory('HTTPInterceptor', ['$q', '$rootScope', '$location', 'lodash', function ($q, $rootScope, $location, _) {
 
         var host = $location.protocol() + '://' + $location.host();
 

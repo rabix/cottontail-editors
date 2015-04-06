@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('registryApp.app')
-    .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$stateParams', '$modal', '$templateCache', 'Sidebar', 'Loading', 'Tool', 'Workflow', 'User', 'Repo', 'BeforeRedirect', 'Helper', 'PipelineService', function ($scope, $rootScope, $q, $stateParams, $modal, $templateCache, Sidebar, Loading, Tool, Workflow, User, Repo, BeforeRedirect, Helper, PipelineService) {
+    .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$stateParams', '$modal', '$templateCache', 'Sidebar', 'Loading', 'Tool', 'Workflow', 'User', 'Repo', 'BeforeRedirect', 'Helper', 'PipelineService', 'lodash', function ($scope, $rootScope, $q, $stateParams, $modal, $templateCache, Sidebar, Loading, Tool, Workflow, User, Repo, BeforeRedirect, Helper, PipelineService, _) {
 
         Sidebar.setActive('workflow editor');
 
