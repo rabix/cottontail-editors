@@ -6,14 +6,14 @@
 'use strict';
 
 angular.module('registryApp.dyole')
-    .controller('PipelineCtrl', ['$scope', '$rootScope', '$stateParams', '$element', '$state', '$window', '$timeout', '$injector', 'pipeline', 'Tool', 'rawPipeline', 'Workflow', '$modal', '$templateCache', 'PipelineService', 'lodash', function ($scope, $rootScope, $stateParams, $element, $state, $window, $timeout, $injector, pipeline, Tool, rawPipeline, Workflow, $modal, $templateCache, PipelineService, _) {
+    .controller('PipelineCtrl', ['$scope', '$rootScope', '$element', '$window', '$timeout', '$injector', 'pipeline', 'App', 'rawPipeline', '$modal', '$templateCache', 'PipelineService', 'lodash', function ($scope, $rootScope, $element, $window, $timeout, $injector, pipeline, App, rawPipeline, $modal, $templateCache, PipelineService, _) {
 
         var Pipeline;
         var selector = '.pipeline';
         var timeoutId;
 
         $scope.view = {};
-        $scope.view.canFlush = _.contains(['new', 'edit'], $stateParams.mode);
+        $scope.view.canFlush = true;
 
         /* show usage hints to user flag */
         $scope.view.explanation = false;
@@ -36,14 +36,10 @@ angular.module('registryApp.dyole')
 
         };
 
-        if ($stateParams.mode === 'new') {
-//            Workflow.getLocal()
-//                .then(function (json) {
-//                    initPipeline(json);
-//                });
-            initPipeline({});
-        } else if ($scope.pipeline){
+        if ($scope.pipeline){
             initPipeline($scope.pipeline);
+        } else {
+            initPipeline({});
         }
 
         if ($scope.previewNode) {
@@ -86,22 +82,22 @@ angular.module('registryApp.dyole')
                 $scope.pipeline.json.description = $scope.pipeline.description;
             }
 
-            Workflow.saveWorkflow($scope.pipeline.pipeline ? $scope.pipeline.pipeline._id : '', $scope.pipeline)
-                .then(function (data) {
-
-                    if (data.id) {
-                        if (repoId) {
-                            $state.go('workflow-view', {id: data.id});
-                        } else {
-                            $state.go('workflow-editor', {id: data.id, mode: 'edit'});
-                        }
-                    } else {
-                        $scope.pipelineChangeFn({value: false});
-                    }
-                }, function () {
-                    $scope.$parent.view.saving = false;
-                    $scope.$parent.view.loading = false;
-                });
+//            Workflow.saveWorkflow($scope.pipeline.pipeline ? $scope.pipeline.pipeline._id : '', $scope.pipeline)
+//                .then(function (data) {
+//
+//                    if (data.id) {
+//                        if (repoId) {
+//                            $state.go('workflow-view', {id: data.id});
+//                        } else {
+//                            $state.go('workflow-editor', {id: data.id, mode: 'edit'});
+//                        }
+//                    } else {
+//                        $scope.pipelineChangeFn({value: false});
+//                    }
+//                }, function () {
+//                    $scope.$parent.view.saving = false;
+//                    $scope.$parent.view.loading = false;
+//                });
         };
 
         var fork = function (repoId, name) {
@@ -113,9 +109,9 @@ angular.module('registryApp.dyole')
                 $scope.pipeline.name = name;
             }
 
-            Workflow.fork($scope.pipeline).then(function (pipeline) {
-                $state.go('workflow-editor', {id: pipeline.id, mode: 'edit'});
-            });
+//            Workflow.fork($scope.pipeline).then(function (pipeline) {
+//                $state.go('workflow-editor', {id: pipeline.id, mode: 'edit'});
+//            });
         };
 
         /**
@@ -263,7 +259,7 @@ angular.module('registryApp.dyole')
             });
 
             modalInstance.result.then(function () {
-                Workflow.flush();
+                App.flush();
 
                 if (angular.isDefined(Pipeline)) {
                     Pipeline.destroy();

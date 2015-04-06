@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('registryApp.app')
-    .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$modal', '$templateCache', 'Loading', 'Tool', 'Workflow', 'User', 'Repo', 'BeforeRedirect', 'Helper', 'PipelineService', 'lodash', 'Globals', function ($scope, $rootScope, $q, $modal, $templateCache, Loading, Tool, Workflow, User, Repo, BeforeRedirect, Helper, PipelineService, _, Globals) {
+    .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$modal', '$templateCache', 'Loading', 'App', 'User', 'Repo', 'BeforeRedirect', 'Helper', 'PipelineService', 'lodash', 'Globals', function ($scope, $rootScope, $q, $modal, $templateCache, Loading, App, User, Repo, BeforeRedirect, Helper, PipelineService, _, Globals) {
         var PipelineInstance = null;
 
         $scope.view = {};
@@ -80,18 +80,20 @@ angular.module('registryApp.app')
         });
 
         $q.all([
-                User.getUser(),
-                Repo.getRepos(0, '', true)
+                User.getUser()
+//                Repo.getRepos(0, '', true)
             ]).then(function(result) {
                 $scope.view.user = result[0].user;
-                $scope.view.userRepos = result[1].list;
+//                $scope.view.userRepos = result[1].list;
+                $scope.view.loading = false;
             });
 
         if ($scope.view.mode === 'edit') {
-            Workflow.getRevision(Globals.id)
-                .then(function (result) {
-                    $scope.view.workflow = result.data;
-                });
+            $scope.view.workflow = {};
+//            App.get()
+//                .then(function (result) {
+//                    $scope.view.workflow = result.data;
+//                });
         }
 
         /**
@@ -100,6 +102,7 @@ angular.module('registryApp.app')
          * @param {Object} result
          */
         var appsLoaded = function (result) {
+            return;
             var tools, workflows, scripts;
             $scope.view.loading = false;
             $scope.view.filtering = false;
@@ -197,10 +200,10 @@ angular.module('registryApp.app')
 
         /* load tools/workflows grouped by repositories */
         $q.all([
-            Tool.getGroupedTools('my'),
-            Tool.getGroupedTools('other'),
-            Workflow.groupedWorkflows('my'),
-            Workflow.groupedWorkflows('other')
+//            Tool.getGroupedTools('my'),
+//            Tool.getGroupedTools('other'),
+//            Workflow.groupedWorkflows('my'),
+//            Workflow.groupedWorkflows('other')
         ]).then(appsLoaded);
 
         /**

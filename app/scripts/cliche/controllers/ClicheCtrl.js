@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('ClicheCtrl', ['$scope', '$q', '$modal', '$templateCache', '$rootScope', 'Repo', 'Tool', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload', 'BeforeRedirect', 'Api', 'User', 'lodash', 'HelpMessages', 'Globals', function($scope, $q, $modal, $templateCache, $rootScope, Repo, Tool, Cliche, Loading, SandBox, BeforeUnload, BeforeRedirect, Api, User, _, HelpMessages, Globals) {
+    .controller('ClicheCtrl', ['$scope', '$q', '$modal', '$templateCache', '$rootScope', 'App', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload', 'BeforeRedirect', 'Api', 'User', 'lodash', 'HelpMessages', 'Globals', function($scope, $q, $modal, $templateCache, $rootScope, App, Cliche, Loading, SandBox, BeforeUnload, BeforeRedirect, Api, User, _, HelpMessages, Globals) {
         $scope.Loading = Loading;
 
         var cliAdapterWatchers = [],
@@ -27,7 +27,7 @@ angular.module('registryApp.cliche')
         $scope.view.job = {};
 
         /* actual tool app from db */
-        $scope.view.app = {is_script: Globals.isScript};
+        $scope.view.app = {is_script: Globals.appType === 'script'};
         /* actual tool app revision from db */
         $scope.view.revision = {};
 
@@ -84,7 +84,7 @@ angular.module('registryApp.cliche')
             .then(function() {
 
                 $q.all([
-                        (Globals.id ? Tool.getTool(Globals.id, Globals.revision) : Cliche.fetchLocalToolAndJob($scope.view.type)),
+                        App.get(),
                         User.getUser()
                         //Repo.getRepos(0, '', true)
                     ])
@@ -92,11 +92,14 @@ angular.module('registryApp.cliche')
 
                         $scope.view.loading = false;
 
-                        if (Globals.id) {
-                            $scope.view.app = result[0].data;
-                            $scope.view.revision = result[0].revision;
+                        if (result[0].message) {
 
-                            Cliche.setTool($scope.view.revision.json);
+                            var tool = result[0].message;
+
+//                            $scope.view.app = tool;
+                            $scope.view.revision = tool;
+
+                            Cliche.setTool(tool);
                             Cliche.setJob($scope.view.revision.job ? JSON.parse($scope.view.revision.job) : null);
                         }
 
