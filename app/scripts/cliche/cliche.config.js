@@ -10,18 +10,18 @@ angular.module('registryApp.cliche', ['ui.bootstrap', 'registryApp.common', 'reg
     .constant('Const', {
         exposedSeparator: '$'
     })
-    .config(['$stateProvider', function ($stateProvider) {
+    .config([function () {
 
 
-        $stateProvider
-            .state('cliche-new', {
-                url: '/cliche/:type',
-                templateUrl: '/views/cliche/cliche.html',
-                controller: 'ClicheCtrl'
-            })
-            .state('cliche-edit', {
-                url: '/cliche/:type/:id/:revision',
-                templateUrl: '/views/cliche/cliche.html',
-                controller: 'ClicheCtrl'
-            });
+        //$stateProvider
+        //    .state('cliche-new', {
+        //        url: '/cliche/:type',
+        //        templateUrl: '/views/cliche/cliche.html',
+        //        controller: 'ClicheCtrl'
+        //    })
+        //    .state('cliche-edit', {
+        //        url: '/cliche/:type/:id/:revision',
+        //        templateUrl: '/views/cliche/cliche.html',
+        //        controller: 'ClicheCtrl'
+        //    });
     }]);

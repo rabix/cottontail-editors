@@ -6,7 +6,8 @@
 'use strict';
 
 angular.module('registryApp.common')
-    .factory('BeforeRedirect', ['$q', '$rootScope', '$modal', '$templateCache', '$state', function($q, $rootScope, $modal, $templateCache, $state) {
+    //.factory('BeforeRedirect', ['$q', '$rootScope', '$modal', '$templateCache', '$state', function($q, $rootScope, $modal, $templateCache, $state) {
+    .factory('BeforeRedirect', ['$q', '$rootScope', '$modal', '$templateCache', function($q, $rootScope, $modal, $templateCache) {
 
         var callback;
         var reload = false;

@@ -1,16 +1,18 @@
 'use strict';
 
-angular.module('clicheApp', ['ui.router', 'registryApp.cliche'])
-    .controller('ClicheAppCtrl', ['$scope', '$state', function ($scope, $state) {
-        $state.go('cliche-editor-new', {type: 'tool'});
+angular.module('clicheApp', ['registryApp.cliche'])
+    .controller('ClicheAppCtrl', ['$scope', function ($scope) {
+
+        //$state.go('cliche-editor-new', {type: 'tool'});
     }])
 
-    .config(['$stateProvider', function ($stateProvider) {
+    .config([function () {
 
-        $stateProvider
-            .state('cliche-editor-new', {
-                url: '/:type',
-                templateUrl: 'views/cliche/cliche.html',
-                controller: 'ClicheCtrl'
-            });
+        //
+        //$stateProvider
+        //    .state('cliche-editor-new', {
+        //        url: '/:type',
+        //        templateUrl: 'views/cliche/cliche.html',
+        //        controller: 'ClicheCtrl'
+        //    });
     }]);
