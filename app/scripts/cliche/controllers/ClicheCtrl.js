@@ -6,7 +6,8 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('ClicheCtrl', ['$scope', '$q', '$stateParams', '$modal', '$templateCache', '$state', '$rootScope', 'Repo', 'Tool', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload', 'BeforeRedirect', 'Api', 'User', 'lodash', 'HelpMessages', function($scope, $q, $stateParams, $modal, $templateCache, $state, $rootScope, Repo, Tool, Cliche, Loading, SandBox, BeforeUnload, BeforeRedirect, Api, User, _, HelpMessages) {
+    .controller('ClicheCtrl', ['$scope', '$q', '$stateParams', '$modal', '$templateCache', '$state', '$rootScope', 'Repo', 'Tool', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload', 'BeforeRedirect', 'Api', 'User', 'lodash', 'HelpMessages', 'Globals', function($scope, $q, $stateParams, $modal, $templateCache, $state, $rootScope, Repo, Tool, Cliche, Loading, SandBox, BeforeUnload, BeforeRedirect, Api, User, _, HelpMessages, Globals) {
+        console.log('Globals',Globals);
         $scope.Loading = Loading;
 
         var cliAdapterWatchers = [],
