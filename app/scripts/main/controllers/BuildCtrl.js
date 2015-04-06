@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('registryApp')
-    .controller('BuildCtrl', ['$scope', '$stateParams', '$interval', '$document', '$timeout', 'Build', 'Sidebar', 'Loading', function ($scope, $stateParams, $interval, $document, $timeout, Build, Sidebar, Loading) {
+    .controller('BuildCtrl', ['$scope', '$stateParams', '$interval', '$document', '$timeout', 'Build', 'Sidebar', 'Loading', 'lodash', function ($scope, $stateParams, $interval, $document, $timeout, Build, Sidebar, Loading, _) {
 
         var logIntervalId;
         var scrollTimeoutId;

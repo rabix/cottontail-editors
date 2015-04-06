@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('registryApp.dyole')
-    .factory('connection', ['event', 'common', function(Event, Common) {
+    .factory('connection', ['event', 'common', 'lodash', function(Event, Common, _) {
 
         var Connection = function(options) {
 

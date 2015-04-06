@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('registryApp.dyole')
-    .factory('terminal', [function () {
+    .factory('terminal', ['lodash', function (_) {
 
         var Terminal = function (options) {
 

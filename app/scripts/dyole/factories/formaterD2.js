@@ -740,7 +740,7 @@ if (typeof module !== 'undefined' && module.exports) {
 
 } else if (typeof angular !== 'undefined') {
     angular.module('registryApp.dyole')
-        .factory('FormaterD2', ['Const', 'common', function (Cons, Common) {
+        .factory('FormaterD2', ['Const', 'common', 'lodash', function (Cons, Common, _) {
             Const = Cons;
             _common = Common;
 

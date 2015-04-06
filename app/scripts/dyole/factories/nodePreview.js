@@ -5,7 +5,7 @@
 'use strict';
 
 angular.module('registryApp.dyole')
-    .factory('node', ['$rootScope', 'node', function ($rootScope, Node) {
+    .factory('node', ['$rootScope', 'node', 'lodash', function ($rootScope, Node, _) {
         var Super;
 
         var NodePreview = function (options) {
