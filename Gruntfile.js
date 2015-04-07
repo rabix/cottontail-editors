@@ -133,7 +133,7 @@ module.exports = function (grunt) {
                             '.tmp',
                             '<%= yeoman.dist %>/{,*/}*',
                             '!<%= yeoman.dist %>/.git*',
-                            '!<%= yeoman.dist %>/fonts',
+                            '!<%= yeoman.dist %>/fonts'
                         ]
                     }
                 ]
@@ -207,7 +207,7 @@ module.exports = function (grunt) {
             dist: {
                 src: [
                     '<%= yeoman.dist %>/scripts/{,*/}*.js',
-                    '<%= yeoman.dist %>/styles/{,*/}*.css',
+                    '<%= yeoman.dist %>/styles/{,*/}*.css'
                     //'<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
                     //'<%= yeoman.dist %>/fonts/*'
                 ]
@@ -386,7 +386,7 @@ module.exports = function (grunt) {
                         src: ['generated/*']
                     }
                 ]
-            },
+            }
 //            styles: {
 //                expand: true,
 //                cwd: '<%= yeoman.app %>/styles',
@@ -516,6 +516,17 @@ module.exports = function (grunt) {
                 'concurrent:server',
                 'autoprefixer',
                 'ngtemplates:dyole',
+                'watch'
+            ]);
+        }
+
+        if (!target) {
+            grunt.task.run([
+                'clean:server',
+                'concurrent:server',
+                'autoprefixer',
+                'ngtemplates:dyole',
+                'ngtemplates:cliche',
                 'watch'
             ]);
         }
