@@ -330,7 +330,7 @@ angular.module('registryApp.cliche')
          * Prepares categories for tagsInput directive
          */
         var setUpCategories = function() {
-            $scope.view.categories = _.map($scope.view.tool['sbg:category'], function(cat) {
+            $scope.view.categories = _.map($scope.view.tool['sbg:categories'], function(cat) {
 
                 return {text: cat};
             });
@@ -456,7 +456,7 @@ angular.module('registryApp.cliche')
          * Updates $scope.view.tool.categories
          */
         $scope.updateCategories = function() {
-            $scope.view.tool['sbg:category'] = _.pluck($scope.view.categories, 'text');
+            $scope.view.tool['sbg:categories'] = _.pluck($scope.view.categories, 'text');
         };
 
         /**
