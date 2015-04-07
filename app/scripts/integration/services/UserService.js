@@ -33,7 +33,6 @@ angular.module('integration')
     return {
         getUser: function () {
 
-            console.log('getting user');
             var deferred = $q.defer();
 
             deferred.resolve({user: Mock});
