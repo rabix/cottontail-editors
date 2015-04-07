@@ -34,8 +34,8 @@ angular.module('registryApp.cliche')
         /* loading flag */
         $scope.view.loading = true;
 
-        /* cliche mode: new or edit */
-        $scope.view.mode = Globals.id ? 'edit' : 'new';
+        /* cliche mode: always 'edit' on SBG */
+        $scope.view.mode = 'edit';
 
         /* menu visibility flag */
         $scope.view.isMenuVisible = false;
@@ -86,7 +86,6 @@ angular.module('registryApp.cliche')
                 $q.all([
                         App.get(),
                         User.getUser()
-                        //Repo.getRepos(0, '', true)
                     ])
                     .then(function(result) {
 
@@ -96,7 +95,9 @@ angular.module('registryApp.cliche')
 
                             var tool = result[0].message;
 
-//                            $scope.view.app = tool;
+                            $scope.view.app = tool;
+
+                            //@todo: get actual revision
                             $scope.view.revision = tool;
 
                             Cliche.setTool(tool);
@@ -104,7 +105,6 @@ angular.module('registryApp.cliche')
                         }
 
                         $scope.view.user = result[1].user;
-                        //$scope.view.repos = result[2].list;
 
                         setUpCliche();
                         prepareRequirements();
