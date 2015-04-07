@@ -11,5 +11,4 @@ angular.module('registryApp.dyole', ['registryApp.app', 'ui.bootstrap', 'registr
 		exposedSeparator: '$'
 	})
 	.config([function() {
-		ZeroClipboard.config({swfPath: 'bower_components/zeroclipboard/dist/ZeroClipboard.swf'});
 	}]);

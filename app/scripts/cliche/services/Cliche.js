@@ -5,7 +5,7 @@
  */
 'use strict';
 angular.module('registryApp.cliche')
-    .factory('Cliche', ['$q', '$injector', 'rawTool', 'rawJob', 'rawTransform', 'lodash', function($q, $injector, rawTool, rawJob, rawTransform, _) {
+    .factory('Cliche', ['$q', '$injector', 'rawTool', 'rawJob', 'rawTransform', 'lodash', '$localForage', function($q, $injector, rawTool, rawJob, rawTransform, _, $localForage) {
 
         /**
          * Version of the storage
@@ -67,24 +67,20 @@ angular.module('registryApp.cliche')
          * @returns {*}
          */
         var checkVersion = function() {
-            var deferred = $q.defer();
-            deferred.resolve();
 
-            return deferred.promise;
+            return $localForage.getItem('version')
+                .then(function(v) {
 
-            //return $localForage.getItem('version')
-            //    .then(function(v) {
-            //
-            //        if (v === version) {
-            //            return false;
-            //        } else {
-            //            return $q.all([
-            //                $localForage.setItem('version', version),
-            //                $localForage.setItem('tool', rawTool),
-            //                $localForage.setItem('job', rawJob)
-            //            ]);
-            //        }
-            //    });
+                    if (v === version) {
+                        return false;
+                    } else {
+                        return $q.all([
+                            $localForage.setItem('version', version),
+                            $localForage.setItem('tool', rawTool),
+                            $localForage.setItem('job', rawJob)
+                        ]);
+                    }
+                });
 
         };
 
@@ -130,13 +126,18 @@ angular.module('registryApp.cliche')
          * @returns {*}
          */
         var fetchLocalToolAndJob = function (type) {
-
             var deferred = $q.defer();
 
-            toolJSON = transformToolJson(type, rawTool);
-            jobJSON = rawJob;
+            $q.all([
+                $localForage.getItem('tool'),
+                $localForage.getItem('job')
+            ]).then(function (result) {
 
-            deferred.resolve();
+                toolJSON = transformToolJson(type, result[0]);
+                jobJSON = result[1];
+
+                deferred.resolve();
+            });
 
             return deferred.promise;
         };

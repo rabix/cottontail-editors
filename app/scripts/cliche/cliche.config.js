@@ -10,6 +10,11 @@ angular.module('registryApp.cliche', ['ui.bootstrap', 'registryApp.common', 'reg
     .constant('Const', {
         exposedSeparator: '$'
     })
-    .config([function() {
-        ZeroClipboard.config({swfPath: 'bower_components/zeroclipboard/dist/ZeroClipboard.swf'});
+    .config(['$localForageProvider', function($localForageProvider) {
+
+        $localForageProvider.config({
+            name: 'sbgApp',
+            version: 1.0,
+            storeName: 'sbgDB'
+        });
     }]);
