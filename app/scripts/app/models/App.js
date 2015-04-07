@@ -1,14 +1,14 @@
 'use strict';
 
 angular.module('registryApp.app')
-    .factory('App', ['$q', 'Api', 'SchemaValidator', 'lodash', function ($q, Api, SchemaValidator, _) {
-
+    .factory('App', ['$q', 'Api', 'SchemaValidator', 'lodash', 'Globals', function ($q, Api, SchemaValidator, _, Globals) {
+        var self = {};
         /**
          * Get tools
          *
          * @returns {*}
          */
-        var getTools = function() {
+        self.getTools = function() {
 
             return Api.apps.get(params).$promise;
 
@@ -19,7 +19,7 @@ angular.module('registryApp.app')
          *
          * @returns {*}
          */
-        var getScripts = function() {
+        self.getScripts = function() {
 
             return Api.apps.get(params).$promise;
 
@@ -30,7 +30,7 @@ angular.module('registryApp.app')
          *
          * @returns {*}
          */
-        var getWorkflows = function() {
+        self.getWorkflows = function() {
 
             return Api.apps.get(params).$promise;
         };
@@ -41,7 +41,7 @@ angular.module('registryApp.app')
          * @param revision
          * @returns {object} $promise
          */
-        var get = function(revision) {
+        self.get = function(revision) {
 
             return Api.apps.get().$promise;
         };
@@ -55,7 +55,7 @@ angular.module('registryApp.app')
          * @param type
          * @returns {*}
          */
-        var update = function(appId, tool, job, type) {
+        self.update = function(appId, tool, job, type) {
 
             return SchemaValidator.validate(type, tool)
                 .then(function() {
@@ -66,21 +66,18 @@ angular.module('registryApp.app')
 
         };
 
-        var validateJson = function (json) {
+        self.validateJson = function (json) {
             return Api.validateApp.validate({}, json).$promise;
         };
 
-        var flush = function (type) {
+        self.getAppUrl = function (json) {
+            return Globals.brood + '/v1/app' + Globals.app_url;
+        };
+
+        self.flush = function (type) {
 //            return $localForage.removeItem(type);
         };
 
-        return {
-            getTools: getTools,
-            getScripts: getScripts,
-            get: get,
-            update: update,
-            flush: flush,
-            validateJson: validateJson
-        };
+        return self;
 
     }]);

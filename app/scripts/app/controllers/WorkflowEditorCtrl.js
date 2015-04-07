@@ -258,9 +258,10 @@ angular.module('registryApp.app')
             BeforeRedirect.setReload(true);
             $scope.view.saving = true;
             $scope.view.loading = true;
-//                        $scope.$broadcast('save', data.repoId);
-            PipelineInstance.save(data.repoId);
 
+
+            var workflow = PipelineInstance.format();
+            // App.update(workflow)
         };
 
         $scope.toggleSidebar = function() {
@@ -404,8 +405,19 @@ angular.module('registryApp.app')
         };
 
         $scope.workflowToJSON = function () {
-            var p = PipelineInstance.format();
-            $scope.formatPipeline(p);
+            var workflow = PipelineInstance.format();
+
+            var modal = $modal.open({
+                template: $templateCache.get('views/dyole/json-modal.html'),
+                controller: 'ModalJSONCtrl',
+                resolve: {data: function () {
+                    return {json: workflow};
+                }}
+            });
+
+            modal.result.then(function () {
+                PipelineInstance.getUrl({url: App.getAppUrl()});
+            });
         };
 
         $scope.$on('$destroy', function () {

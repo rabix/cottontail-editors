@@ -67,39 +67,6 @@ angular.module('registryApp.dyole')
             }
         });
 
-        var save = function (repoId) {
-            if (repoId) {
-                $scope.pipeline.repo = repoId;
-            }
-
-            $scope.pipeline.json = Pipeline.getJSON();
-
-            if ($scope.pipeline.name) {
-                $scope.pipeline.json.name = $scope.pipeline.name;
-            }
-
-            if ($scope.pipeline.description) {
-                $scope.pipeline.json.description = $scope.pipeline.description;
-            }
-
-//            Workflow.saveWorkflow($scope.pipeline.pipeline ? $scope.pipeline.pipeline._id : '', $scope.pipeline)
-//                .then(function (data) {
-//
-//                    if (data.id) {
-//                        if (repoId) {
-//                            $state.go('workflow-view', {id: data.id});
-//                        } else {
-//                            $state.go('workflow-editor', {id: data.id, mode: 'edit'});
-//                        }
-//                    } else {
-//                        $scope.pipelineChangeFn({value: false});
-//                    }
-//                }, function () {
-//                    $scope.$parent.view.saving = false;
-//                    $scope.$parent.view.loading = false;
-//                });
-        };
-
         var fork = function (repoId, name) {
             $scope.pipeline.json = Pipeline.getJSON();
 
@@ -129,36 +96,28 @@ angular.module('registryApp.dyole')
 
         };
 
-        var getUrl = function () {
-            $scope.$parent.view.saving = true;
+        var getUrl = function (url) {
 
-            $scope.pipeline.json = Pipeline.getJSON();
+            $modal.open({
+                template: $templateCache.get('views/partials/job-url-response.html'),
+                controller: ['$scope', '$modalInstance', 'data', function($scope, $modalInstance, data) {
 
-            Workflow.getURL($scope.pipeline).then(function (url) {
-                $modal.open({
-                    template: $templateCache.get('views/partials/job-url-response.html'),
-                    controller: ['$scope', '$modalInstance', 'data', function($scope, $modalInstance, data) {
-
-                        $scope.view = {};
-                        $scope.data = data;
+                    $scope.view = {};
+                    $scope.data = data;
 //                        $scope.view.trace = data.trace;
 
-                        /**
-                         * Close the modal window
-                         */
-                        $scope.ok = function () {
-                            $modalInstance.close();
-                        };
+                    /**
+                     * Close the modal window
+                     */
+                    $scope.ok = function () {
+                        $modalInstance.close();
+                    };
 
-                    }],
-                    resolve: { data: function () { return {trace: {message: 'Pipeline link:', url:  url.url}}; }}
-                });
-
-                $scope.$parent.view.saving = false;
-
-            }, function () {
-                $scope.$parent.view.saving = false;
+                }],
+                resolve: { data: function () { return {trace: {message: 'Workflow link:', url:  url.url}}; }}
             });
+
+
         };
 
         /**
@@ -362,7 +321,6 @@ angular.module('registryApp.dyole')
             var methods = {
                 flush: $scope.flush,
                 dropNode: $scope.dropNode,
-                save: save,
                 getUrl: getUrl,
                 fork: fork,
                 format: format,
