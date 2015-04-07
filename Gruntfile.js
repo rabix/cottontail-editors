@@ -462,6 +462,7 @@ module.exports = function (grunt) {
                 src: [
                     'views/{,*/}*.html',
                     'views/dyole/{,*/}*.html',
+                    'views/cliche/{,*/}*.html',
                     'views/app/{,*/}*.html',
                     'views/repo/{,*/}*.html',
                     'views/task/{,*/}*.html'

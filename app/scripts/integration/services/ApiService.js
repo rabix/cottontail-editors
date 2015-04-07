@@ -17,6 +17,7 @@ angular.module('integration')
         var broodUrl = Globals.brood + '/v1/app';
         var appUrl = Globals.app_url;
         var getAppsUrl = Globals.get_apps_url;
+        var validateAppUrl =  Globals.brood + '/v1/validate/app';
         var headers = {
             'Content-Type': 'application/json',
             'session-id': sessionId
@@ -30,7 +31,11 @@ angular.module('integration')
         });
 
         self.getAllApps = $resource(broodUrl + getAppsUrl, {}, {
-            'get': {method: 'GET', headers: headers},
+            'get': {method: 'GET', headers: headers}
+        });
+
+        self.validateApp = $resource(validateAppUrl, {}, {
+            'validate': {method: 'POST', headers: headers}
         });
 
         return self;

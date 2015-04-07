@@ -5,7 +5,7 @@
 'use strict';
 
 angular.module('registryApp.dyole')
-    .factory('node', ['$rootScope', 'terminal', 'Const', 'common', 'lodash', function ($rootScope, Terminal, Const, Common, _) {
+    .factory('node', ['$rootScope', 'terminal', 'Const', 'common', 'lodash', 'Globals', function ($rootScope, Terminal, Const, Common, _, Globals) {
 
         var Node = function (options) {
             var _self = this;
@@ -88,10 +88,10 @@ angular.module('registryApp.dyole')
             },
 
             icons: {
-                input: '/images/icon-input-1.png',
-                output: '/images/icon-output-2.png',
-                workflow: '/images/icon-workflow.png',
-                default: '/images/logo.png'
+                input: Globals.urls.base + 'img/rabix/icon-input-1.png',
+                output: Globals.urls.base + 'img/rabix/icon-output-2.png',
+                workflow: Globals.urls.base + 'img/rabix/icon-workflow.png',
+                default: Globals.urls.base + 'img/rabix/logo.png'
             },
 
             buttons: {
@@ -609,7 +609,7 @@ angular.module('registryApp.dyole')
                         radius: this.buttons.radius,
                         border: this.buttons.border,
                         image: {
-                            url: 'images/' + this.buttons.info.image.name,
+                            url: Globals.urls.base + 'img/rabix/' + this.buttons.info.image.name,
                             width: 14,
                             height: 14
                         }
@@ -625,7 +625,7 @@ angular.module('registryApp.dyole')
                         radius: this.buttons.radius,
                         border: this.buttons.border,
                         image: {
-                            url: 'images/' + this.buttons.delete.image.name,
+                            url: Globals.urls.base + 'img/rabix/' + this.buttons.delete.image.name,
                             width: 14,
                             height: 14
                         }
@@ -645,7 +645,7 @@ angular.module('registryApp.dyole')
                             radius: 10,
                             border: this.buttons.border,
                             image: {
-                                url: 'images/' + this.buttons.rename.image.name,
+                                url: Globals.urls.base + 'img/rabix/' + this.buttons.rename.image.name,
                                 width: 13,
                                 height: 13
                             },

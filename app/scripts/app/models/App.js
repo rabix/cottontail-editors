@@ -66,6 +66,9 @@ angular.module('registryApp.app')
 
         };
 
+        var validateJson = function (json) {
+            return Api.validateApp.validate({}, json).$promise;
+        };
 
         var flush = function (type) {
 //            return $localForage.removeItem(type);
@@ -76,7 +79,8 @@ angular.module('registryApp.app')
             getScripts: getScripts,
             get: get,
             update: update,
-            flush: flush
+            flush: flush,
+            validateJson: validateJson
         };
 
     }]);

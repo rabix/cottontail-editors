@@ -89,11 +89,10 @@ angular.module('registryApp.app')
             });
 
         if ($scope.view.mode === 'edit') {
-            $scope.view.workflow = {};
-//            App.get()
-//                .then(function (result) {
-//                    $scope.view.workflow = result.data;
-//                });
+            App.get()
+                .then(function (result) {
+                    $scope.view.workflow = result.message;
+                });
         }
 
         /**
@@ -256,62 +255,11 @@ angular.module('registryApp.app')
          * Initiate workflow save
          */
         $scope.save = function () {
-            var modalInstance, mode = $scope.view.mode;
-
-            if (!Helper.isValidName($scope.view.workflow.name) && mode === 'new') {
-
-                $modal.open({
-                    template: $templateCache.get('views/partials/validation.html'),
-                    size: 'sm',
-                    controller: 'ModalCtrl',
-                    windowClass: 'modal-validation',
-                    resolve: {data: function () { return {messages: ['You must enter valid name (avoid characters \'$\' and \'.\')']}; }}
-                });
-
-                return false;
-
-            } else if (mode === 'edit') {
-                BeforeRedirect.setReload(true);
-//                $scope.$broadcast('save', null);
-                PipelineInstance.save(null);
-            } else {
-                modalInstance = $modal.open({
-                    controller: 'PickRepoModalCtrl',
-                    template: $templateCache.get('views/repo/pick-repo-name.html'),
-                    windowClass: 'modal-confirm',
-                    resolve: {data: function () { return {repos: $scope.view.userRepos, type: 'save'};}}
-                });
-            }
-
-            if (typeof modalInstance !== 'undefined') {
-
-                modalInstance.result.then(function (data) {
-
-                    if (typeof data.repoId !== 'undefined') {
-
-                        BeforeRedirect.setReload(true);
-                        $scope.view.saving = true;
-                        $scope.view.loading = true;
+            BeforeRedirect.setReload(true);
+            $scope.view.saving = true;
+            $scope.view.loading = true;
 //                        $scope.$broadcast('save', data.repoId);
-                        PipelineInstance.save(data.repoId);
-
-                    } else {
-
-                        $modal.open({
-                            template: $templateCache.get('views/partials/validation.html'),
-                            size: 'sm',
-                            controller: 'ModalCtrl',
-                            windowClass: 'modal-validation',
-                            resolve: {data: function () { return {messages: ['You must pick repo name']}; }}
-                        });
-
-                    }
-
-
-
-                });
-            }
-
+            PipelineInstance.save(data.repoId);
 
         };
 
@@ -356,8 +304,8 @@ angular.module('registryApp.app')
 
             $scope.view.required = $scope.view.json.inputs.required;
 
+            $scope.switchTab('params');
             $scope.$digest();
-
         };
 
         /**
@@ -367,8 +315,8 @@ angular.module('registryApp.app')
 
             $scope.view.json = {};
 
+            $scope.switchTab('apps');
             $scope.$digest();
-
         };
 
         var onNodeSelectOff = $rootScope.$on('node:select', onNodeSelect);
@@ -387,69 +335,6 @@ angular.module('registryApp.app')
             return deferred.promise;
 
         });
-
-        $scope.workflowToJSON = function () {
-//            $scope.$broadcast('pipeline:format');
-            var p = PipelineInstance.format();
-            $scope.formatPipeline(p);
-        };
-
-        $scope.fork = function () {
-
-            var modalInstance = $modal.open({
-                controller: 'PickRepoModalCtrl',
-                template: $templateCache.get('views/repo/pick-repo-name.html'),
-                resolve: { data: function () { return { repos: $scope.view.userRepos, pickName: true, type: 'fork', message: 'Are you sure you want to fork this workflow?'}; }}
-            });
-
-            modalInstance.result.then(function (data) {
-                if (data.repoId) {
-                    BeforeRedirect.setReload(true);
-//                    $scope.$broadcast('pipeline:fork', data.repoId, data.name);
-                    PipelineInstance.fork(data.repoId, data.name);
-                } else {
-                    $modal.open({
-                        template: $templateCache.get('views/partials/validation.html'),
-                        size: 'sm',
-                        controller: 'ModalCtrl',
-                        windowClass: 'modal-validation',
-                        resolve: {data: function () { return {messages: ['You must pick repo name']}; }}
-                    });
-
-                }
-            });
-
-        };
-        
-        $scope.publish = function () {
-            Workflow.publishRevision($scope.view.workflow._id, {publish: true}).then(function (data) {
-                var trace = data;
-
-                $modal.open({
-                    template: $templateCache.get('views/cliche/partials/app-save-response.html'),
-                    controller: 'ModalCtrl',
-                    backdrop: 'static',
-                    resolve: { data: function () { return { trace: trace }; }}
-                });
-
-            });
-        };
-
-        $scope.formatPipeline = function(workflow) {
-
-            var modal = $modal.open({
-                template: $templateCache.get('views/dyole/json-modal.html'),
-                controller: 'ModalJSONCtrl',
-                resolve: {data: function () {
-                    return {json: workflow};
-                }}
-            });
-
-            modal.result.then(function () {
-                PipelineInstance.getUrl();
-            });
-
-        };
 
         /**
          * Toggle dropdown menu
@@ -483,26 +368,27 @@ angular.module('registryApp.app')
             });
         };
 
-        /**
-         * Load json importer
-         */
-        $scope.loadJsonImport = function() {
+        $scope.editMetadata = function () {
 
             var modalInstance = $modal.open({
-                template: $templateCache.get('views/cliche/partials/json-editor.html'),
-                controller: 'DyoleJsonEditorCtrl',
-                resolve: { options: function () { return {user: $scope.view.user}; }}
+                template: $templateCache.get('views/dyole/edit-metadata.html'),
+                controller: 'DyoleEditMetadataCtrl',
+                windowClass: 'modal-markdown',
+                size: 'lg',
+                backdrop: 'static',
+                resolve: {data: function () {return {tool: $scope.view.workflow};}}
             });
 
-            modalInstance.result.then(function (json) {
-
-                if (json) {
-                    $scope.view.workflow = json;
-                }
+            modalInstance.result.then(function(result) {
+                $scope.view.workflow.description = result;
             });
 
         };
-        
+
+        $scope.runWorkflow = function () {
+            // create task and redirect to task page for that task
+        };
+
         $scope.validateWorkflowJSON = function () {
 
             PipelineInstance.validate().then(function (workflow) {
@@ -515,6 +401,11 @@ angular.module('registryApp.app')
                 });
             });
 
+        };
+
+        $scope.workflowToJSON = function () {
+            var p = PipelineInstance.format();
+            $scope.formatPipeline(p);
         };
 
         $scope.$on('$destroy', function () {
