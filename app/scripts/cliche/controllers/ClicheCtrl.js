@@ -575,10 +575,10 @@ angular.module('registryApp.cliche')
                     adapterBaseCmd.push(cmd);
                 });
 
-                $scope.$apply();
-
+                if(!$scope.$$phase) {
+                    $scope.$apply();
+                }
             }
-
         };
 
         /**
