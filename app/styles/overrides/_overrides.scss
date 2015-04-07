@@ -13,7 +13,7 @@
       a:hover {
         color: #555;
         background-color: $gray;
-        background-image: url(../images/bg.png);
+        background-image: image-url('bg.png');
         border-bottom-color: $gray;
         cursor: pointer;
       }
@@ -173,7 +173,7 @@ form,
         width: 50%;
         margin: 0 0 5px 0;
         + .checkbox {
-          margin-top: 0px;
+          margin-top: 0;
         }
       }
     }
@@ -225,13 +225,14 @@ form,
 .btn {
   @include border-radius(0);
   &.btn-orange {
-    border: 1px solid darken($orange, 10%);
-    background-color: $orange;
-    color: #fff;
-    cursor: pointer;
-    &:active, &:focus {
-      color: #fff;
-    }
+    @include button-variant(#fff, $orange, darken($orange, 10%));
+//    border: 1px solid darken($orange, 10%);
+//    background-color: $orange;
+//    color: #fff;
+//    cursor: pointer;
+//    &:active, &:focus {
+//      color: #fff;
+//    }
   }
 
   &:active, &:focus {
@@ -292,7 +293,7 @@ form,
 .table {
   thead {
     tr {
-      background-image: url(../images/bg.png);
+      background-image: image-url('bg.png');
       border-left: 1px solid #ddd;
       border-right: 1px solid #ddd;
       th {
@@ -620,10 +621,12 @@ ul {
   }
 
   input.input {
+    @include box-shadow(none);
     padding: 2px 0;
     border: none;
     float: left;
-
+    width: auto;
+    transition: none;
 
     &:focus, &:active {
       outline: none;
@@ -631,4 +634,5 @@ ul {
   }
 }
 
-@import "sbg";
+@import "sbg-overrides";
+@import "sbg-buttons";

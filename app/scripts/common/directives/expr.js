@@ -165,11 +165,15 @@ angular.module('registryApp.common')
             link: function(scope, element) {
                 var el = angular.element(element);
 
-                el.find('input').on('blur', function() {
+                function runHanlder() {
                     if (!_.isUndefined(scope.handleItemBlur) && scope.view.mode === 'literal') {
                         scope.handleItemBlur({index: scope.index, value: scope.view.literal});
                     }
-                });
+                }
+
+                el.find('input').on('blur', runHanlder);
+
+                runHanlder();
 
                 scope.$on('$destroy', function() {
                     el.off('blur');

@@ -1,6 +1,6 @@
-h1 {
+h1, .main-heading {
   margin: 0;
-  padding: 13px 0 13px 90px;
+  padding: 13px 0 13px 0;
   font-size: 26px;
   font-weight: normal;
 
@@ -59,7 +59,7 @@ h1 {
     & > .btn-group,
     & > .fa {
       margin-left: 10px;
-      vertical-align: middle;
+      vertical-align: bottom;
     }
   }
 

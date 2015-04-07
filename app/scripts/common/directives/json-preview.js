@@ -9,11 +9,12 @@ angular.module('registryApp.common')
     .directive('jsonPreview', ['$templateCache', '$modal', function ($templateCache, $modal) {
         return {
             restrict: 'E',
+            replace: true,
             scope: {
                 title: '@',
                 json: '@'
             },
-            template: '<button class="btn btn-default" ng-click="showJson()"><i class="fa fa-code"></i> {{ title || \'JSON\' }}</button>',
+            template: '<a href ng-click="showJson()"><i class="fa fa-code"></i> {{ title || \'JSON\' }}</a>',
             link: function(scope) {
 
                 /**

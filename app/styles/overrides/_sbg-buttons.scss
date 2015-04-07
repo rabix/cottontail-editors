@@ -1,0 +1,5 @@
+// Included in _overrides.scss
+
+.btn:not(.btn-expression) {
+  @include button-size(7px, 10px, 14px, 18px, 2px);
+}
