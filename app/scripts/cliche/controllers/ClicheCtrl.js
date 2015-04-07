@@ -44,10 +44,10 @@ angular.module('registryApp.cliche')
         $scope.view.isConsoleVisible = false;
 
         /* tool type: tool or script */
-        $scope.view.type = Globals.isTool ? 'tool' : 'script';
+        $scope.view.type = Globals.appType;
 
         /* current tab - available: general, inputs, outputs, metadata, test, script */
-        $scope.view.tab = Globals.isScript ? 'script' : 'general';
+        $scope.view.tab = Globals.appType === 'script' ? 'script' : 'general';
 
         /* page classes */
         $scope.view.classes = ['page', 'cliche'];
@@ -161,7 +161,7 @@ angular.module('registryApp.cliche')
          */
         var turnOnCliAdapterDeepWatch = function() {
 
-            if (Globals.isTool) {
+            if (Globals.appType === 'tool') {
 
                 $scope.view.generatingCommand = true;
                 Cliche.generateCommand()
@@ -235,7 +235,7 @@ angular.module('registryApp.cliche')
          */
         var turnOnJobDeepWatch = function() {
 
-            if (Globals.isTool) {
+            if (Globals.appType === 'tool') {
 
                 checkRequirements();
 
@@ -289,7 +289,7 @@ angular.module('registryApp.cliche')
                 json.cliAdapter.baseCmd = [json.cliAdapter.baseCmd];
             }
 
-            if (Globals.isScript) {
+            if (Globals.appType === 'script') {
 
                 json.transform = Cliche.getTransformSchema();
                 delete json.cliAdapter;
