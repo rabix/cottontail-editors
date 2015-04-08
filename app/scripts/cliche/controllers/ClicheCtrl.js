@@ -11,8 +11,6 @@ angular.module('registryApp.cliche')
 
         var cliAdapterWatchers = [],
             jobWatcher,
-            onBeforeUnloadOff = BeforeUnload.register(function() { return 'Please save your changes before leaving.'; }),
-            onBeforeRedirectOff = BeforeRedirect.register(function () { return Cliche.save($scope.view.mode); }),
             reqMap = {CpuRequirement: 'cpu', MemRequirement: 'mem'};
 
         $scope.view = {};
@@ -80,42 +78,37 @@ angular.module('registryApp.cliche')
             if (n !== o) { $scope.view.classes = n; }
         });
 
-        Cliche.checkVersion()
-            .then(function() {
+        $q.all([
+                App.get(),
+                User.getUser()
+            ])
+            .then(function(result) {
 
-                $q.all([
-                        App.get(),
-                        User.getUser()
-                    ])
-                    .then(function(result) {
+                $scope.view.loading = false;
 
-                        $scope.view.loading = false;
+                if (result[0].message) {
 
-                        if (result[0].message) {
+                    var tool = result[0].message;
 
-                            var tool = result[0].message;
+                    $scope.view.app = tool;
 
-                            $scope.view.app = tool;
+                    //@todo: get actual revision
+                    $scope.view.revision = tool;
 
-                            //@todo: get actual revision
-                            $scope.view.revision = tool;
+                    Cliche.setTool(tool);
+                    Cliche.setJob($scope.view.revision.job ? JSON.parse($scope.view.revision.job) : null);
+                }
 
-                            Cliche.setTool(tool);
-                            Cliche.setJob($scope.view.revision.job ? JSON.parse($scope.view.revision.job) : null);
-                        }
+                $scope.view.user = result[1].user;
 
-                        $scope.view.user = result[1].user;
+                setUpCliche();
+                prepareRequirements();
+                setUpCategories();
 
-                        setUpCliche();
-                        prepareRequirements();
-                        setUpCategories();
-
-                        $scope.toggleConsole();
-
-
-                    });
+                $scope.toggleConsole();
 
             });
+
 
         /**
          * Set up cliche form
@@ -796,14 +789,5 @@ angular.module('registryApp.cliche')
             return deferred.promise;
 
         };
-
-        $scope.$on('$destroy', function() {
-
-            onBeforeUnloadOff();
-            onBeforeUnloadOff = undefined;
-
-            onBeforeRedirectOff();
-            onBeforeRedirectOff = undefined;
-        });
 
     }]);

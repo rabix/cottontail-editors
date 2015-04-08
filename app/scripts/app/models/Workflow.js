@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('registryApp.app')
-    .service('Workflow', ['Api', '$localForage', 'lodash', function (Api, $localForage, _) {
+    .service('Workflow', ['Api', 'lodash', function (Api, _) {
 
         var self = {};
 
@@ -64,40 +64,6 @@ angular.module('registryApp.app')
         self.deleteWorkflow = function (id) {
 
             return Api.pipelines.delete({id: id}).$promise;
-
-        };
-
-        /**
-         * Get workflow from the local db
-         *
-         * @returns {*}
-         */
-        self.getLocal = function () {
-
-            return $localForage.getItem('workflow')
-                .then(function (workflow) {
-                    return _.isNull(workflow) ? {} : {json: workflow};
-                });
-
-        };
-
-        /**
-         * Save workflow into local db
-         * @param json
-         */
-        self.saveLocal = function (json) {
-
-            $localForage.setItem('workflow', json);
-
-        };
-
-        /**
-         * Remove workflow from local db
-         * @returns {*}
-         */
-        self.flush = function() {
-
-            return $localForage.removeItem('workflow');
 
         };
 

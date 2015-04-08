@@ -6,12 +6,7 @@
 
 'use strict';
 
-angular.module('registryApp.common', ['LocalForageModule'])
-	.config(['$localForageProvider', function($localForageProvider) {
-		$localForageProvider.config({
-			name: 'sbgApp',
-			version: 1.0,
-			storeName: 'sbgDB'
-		});
+angular.module('registryApp.common', [])
+	.config([function() {
 	}]);
 
