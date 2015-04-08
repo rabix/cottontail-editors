@@ -12,7 +12,7 @@ angular.module('registryApp.app')
          */
         self.getTools = function() {
 
-            return Api.apps.get(params).$promise;
+            return Api.apps.get({}).$promise;
 
         };
 
@@ -23,7 +23,7 @@ angular.module('registryApp.app')
          */
         self.getScripts = function() {
 
-            return Api.apps.get(params).$promise;
+            return Api.apps.get({}).$promise;
 
         };
 
@@ -34,7 +34,7 @@ angular.module('registryApp.app')
          */
         self.getWorkflows = function() {
 
-            return Api.apps.get(params).$promise;
+            return Api.apps.get({}).$promise;
         };
 
         /**
@@ -79,6 +79,10 @@ angular.module('registryApp.app')
 
         self.flush = function (type) {
 //            return $localForage.removeItem(type);
+        };
+
+        self.getAppsByProject = function () {
+            return Api.getAppsByProject.get({}).$promise;
         };
 
         return self;

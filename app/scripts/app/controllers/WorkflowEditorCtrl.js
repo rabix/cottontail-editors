@@ -199,6 +199,7 @@ angular.module('registryApp.app')
 
         /* load tools/workflows grouped by repositories */
         $q.all([
+            App.getAppsByProject()
 //            Tool.getGroupedTools('my'),
 //            Tool.getGroupedTools('other'),
 //            Workflow.groupedWorkflows('my'),

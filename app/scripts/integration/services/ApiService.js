@@ -14,23 +14,30 @@ angular.module('integration')
 
         var self = {};
         var sessionId = Globals.user.sessionId;
-        var broodUrl = Globals.brood + '/v1/apps';
+        var apiVersion = '/v1';
+        var brood = Globals.brood;
+        var broodAppUrl = Globals.brood + apiVersion + '/apps';
         var appUrl = Globals.app_url;
         var getAppsUrl = Globals.get_apps_url;
-        var validateAppUrl =  Globals.brood + '/v1/validate/app';
+        var getAppsByProject = apiVersion + '/aggregate?group_by=project&func=array';
+        var validateAppUrl =  Globals.brood + apiVersion + '/validate/app';
         var headers = {
             'Content-Type': 'application/json',
             'session-id': sessionId
         };
 
-        self.apps = $resource(broodUrl + appUrl + '/:revision', {'revision':'@revision'}, {
+        self.apps = $resource(broodAppUrl + appUrl + '/:revision', {'revision':'@revision'}, {
             'post': {method: 'POST', headers: headers},
             'update': {method: 'POST', headers: headers},
             'get': {method: 'GET', headers: headers, params: {'_role': 'default'}},
             'delete': {method: 'DELETE', headers: headers}
         });
 
-        self.getAllApps = $resource(broodUrl + getAppsUrl, {}, {
+        self.getAllApps = $resource(broodAppUrl + getAppsUrl, {}, {
+            'get': {method: 'GET', headers: headers}
+        });
+
+        self.getAppsByProject = $resource(brood + getAppsByProject, {}, {
             'get': {method: 'GET', headers: headers}
         });
 
