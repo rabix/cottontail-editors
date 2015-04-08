@@ -3,6 +3,8 @@
 angular.module('registryApp.app')
     .factory('App', ['$q', 'Api', 'SchemaValidator', 'lodash', 'Globals', function ($q, Api, SchemaValidator, _, Globals) {
         var self = {};
+        var revision = parseInt(Globals.app_revision);
+
         /**
          * Get tools
          *
@@ -41,25 +43,26 @@ angular.module('registryApp.app')
          * @param revision
          * @returns {object} $promise
          */
-        self.get = function(revision) {
+        self.get = function() {
 
-            return Api.apps.get().$promise;
+            return Api.apps.get({revision: revision}).$promise;
         };
 
         /**
          * Update the tool - create new revision
          *
-         * @param appId
-         * @param tool
-         * @param job
+         * @param app
          * @param type
          * @returns {*}
          */
-        self.update = function(appId, tool, job, type) {
+        self.update = function(app, type) {
 
-            return SchemaValidator.validate(type, tool)
+            return SchemaValidator.validate(type, app)
                 .then(function() {
-                    return Api.apps.update({}, {tool: tool, job: job, app_id: appId}).$promise;
+                    return Api.apps.get().$promise.then(function (latest) {
+                        var rev = latest.message['sbg:revision'] + 1;
+                        return Api.apps.update({revision: rev}, app).$promise;
+                    });
                 }, function(trace) {
                     return $q.reject(trace);
                 });

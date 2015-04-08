@@ -14,7 +14,7 @@ angular.module('integration')
 
         var self = {};
         var sessionId = Globals.user.sessionId;
-        var broodUrl = Globals.brood + '/v1/app';
+        var broodUrl = Globals.brood + '/v1/apps';
         var appUrl = Globals.app_url;
         var getAppsUrl = Globals.get_apps_url;
         var validateAppUrl =  Globals.brood + '/v1/validate/app';
@@ -23,10 +23,10 @@ angular.module('integration')
             'session-id': sessionId
         };
 
-        self.apps = $resource(broodUrl + appUrl, {'_role': 'default'}, {
+        self.apps = $resource(broodUrl + appUrl + '/:revision', {'revision':'@revision'}, {
             'post': {method: 'POST', headers: headers},
             'update': {method: 'POST', headers: headers},
-            'get': {method: 'GET', headers: headers},
+            'get': {method: 'GET', headers: headers, params: {'_role': 'default'}},
             'delete': {method: 'DELETE', headers: headers}
         });
 

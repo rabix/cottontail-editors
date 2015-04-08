@@ -180,12 +180,11 @@
                     </div>
 
                     <div class="tab flex-one" ng-switch-when="params">
-
                         <p class="alert alert-info" ng-if="view.json | isEmpty">Select node in order to change its parameters</p>
 
                         <form ng-if="!(view.json | isEmpty)" class="form" name="paramForms" novalidate>
 
-                            <h3 class="tab-title">{{ ::view.json.name }}</h3>
+                            <h3 class="tab-title">{{ ::view.json.label }}</h3>
 
                             <input-field
                                     ng-repeat="property in view.json.inputs track by property['@id']"

@@ -85,13 +85,13 @@ angular.module('registryApp.app')
             ]).then(function(result) {
                 $scope.view.user = result[0].user;
 //                $scope.view.userRepos = result[1].list;
-                $scope.view.loading = false;
             });
 
         if ($scope.view.mode === 'edit') {
             App.get()
                 .then(function (result) {
                     $scope.view.workflow = result.message;
+                    $scope.view.loading = false;
                 });
         }
 
@@ -261,7 +261,34 @@ angular.module('registryApp.app')
 
 
             var workflow = PipelineInstance.format();
-            // App.update(workflow)
+            App.update(workflow, 'workflow').then(function(data) {
+
+                var rev = data.message['sbg:revision'];
+                var url, arr = window.location.href.split('/');
+
+                if (arr[arr.length-1] === '') {
+                    arr.pop()
+                }
+
+                arr.pop();
+                arr.push(rev.toString());
+
+                url = arr.join('/');
+
+                $scope.view.loading = false;
+
+                var modalInstance = $modal.open({
+                    template: $templateCache.get('views/cliche/partials/app-save-response.html'),
+                    controller: 'ModalCtrl',
+                    backdrop: 'static',
+                    resolve: { data: function () { return { trace: {message: 'Workflow successfully saved.'} }; }}
+                });
+
+                modalInstance.result.then(function() {
+                    window.location.href = url;
+                });
+
+            });
         };
 
         $scope.toggleSidebar = function() {

@@ -650,6 +650,16 @@ angular.module('registryApp.dyole')
             }
         };
 
+        var _mergeSBGProps = function (json, model) {
+            _.forEach(json, function (val, key) {
+               if (key.indexOf('sbg') !== -1) {
+                   model[key] = val;
+               }
+            })
+
+            return model;
+        };
+
         /**
          * Public exposed formatter methods
          *
@@ -668,6 +678,10 @@ angular.module('registryApp.dyole')
                 _formatter.addValuesToSteps(model.steps, values);
 
                 _formatter.createWorkflowInOut(model, json.schemas, json.relations);
+
+                model = _mergeSBGProps(json, model);
+                model['@id'] = model['@id'] || json['@id'];
+                model.label = model.label || json.label;
 
                 return model;
             },
@@ -692,8 +706,7 @@ angular.module('registryApp.dyole')
 
                 relations = _formatter.toPipelineRelations(schemas, json.dataLinks, exposed, json);
 
-
-                return {
+                var model = {
                     exposed: exposed,
                     values: values,
                     display: display,
@@ -701,6 +714,11 @@ angular.module('registryApp.dyole')
                     schemas: schemas,
                     relations: relations
                 };
+
+                model['@id'] = model['@id'] || json['@id'];
+                model.label = model.label || json.label;
+                model = _mergeSBGProps(json, model);
+                return model;
             }
         };
 

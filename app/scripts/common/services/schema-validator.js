@@ -2,11 +2,12 @@
 
 angular
     .module('registryApp.common')
-    .factory('SchemaValidator', ['toolSchemaDefs', 'scriptSchemaDefs', '$q', 'lodash', function (ToolSchema, ScriptSchema, $q, _) {
+    .factory('SchemaValidator', ['toolSchemaDefs', 'scriptSchemaDefs', 'workflowSchemaDefs', '$q', 'lodash', function (ToolSchema, ScriptSchema, WorkflowSchemaDefs, $q, _) {
         var validator = tv4;
 
         validator.addSchema('tool', ToolSchema);
         validator.addSchema('script', ScriptSchema);
+        validator.addSchema('workflow', WorkflowSchemaDefs);
 
         /**
          * Retrieves most deeply nested subError for each ValidationError
@@ -58,6 +59,10 @@ angular
 
             validateScript: function (json) {
                 return validator.validate('script', json);
+            },
+
+            validateWorkflow: function (json) {
+                return validator.validate('workflow', json);
             },
 
             /**
