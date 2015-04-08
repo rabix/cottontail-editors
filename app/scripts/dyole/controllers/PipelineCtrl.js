@@ -86,7 +86,7 @@ angular.module('registryApp.dyole')
          */
         $scope.$on('save-local', function (e, value) {
             if (value) {
-                Workflow.saveLocal(Pipeline.getJSON());
+                //Workflow.saveLocal(Pipeline.getJSON());
             }
         });
 

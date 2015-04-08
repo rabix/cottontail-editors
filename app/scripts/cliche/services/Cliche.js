@@ -5,7 +5,7 @@
  */
 'use strict';
 angular.module('registryApp.cliche')
-    .factory('Cliche', ['$q', '$injector', 'rawTool', 'rawJob', 'rawTransform', 'lodash', '$localForage', function($q, $injector, rawTool, rawJob, rawTransform, _, $localForage) {
+    .factory('Cliche', ['$q', '$injector', 'rawTool', 'rawJob', 'rawTransform', 'lodash', function($q, $injector, rawTool, rawJob, rawTransform, _) {
 
         /**
          * Version of the storage
@@ -62,29 +62,6 @@ angular.module('registryApp.cliche')
         };
 
         /**
-         * Check if old version of structure and if yes clean up the storage
-         *
-         * @returns {*}
-         */
-        var checkVersion = function() {
-
-            return $localForage.getItem('version')
-                .then(function(v) {
-
-                    if (v === version) {
-                        return false;
-                    } else {
-                        return $q.all([
-                            $localForage.setItem('version', version),
-                            $localForage.setItem('tool', rawTool),
-                            $localForage.setItem('job', rawJob)
-                        ]);
-                    }
-                });
-
-        };
-
-        /**
          * Transform tool json into appropriate structure
          *
          * @param {String} type
@@ -120,29 +97,6 @@ angular.module('registryApp.cliche')
         };
 
         /**
-         * Fetch tool and job from local db if exist
-         *
-         * @param {String} type
-         * @returns {*}
-         */
-        var fetchLocalToolAndJob = function (type) {
-            var deferred = $q.defer();
-
-            $q.all([
-                $localForage.getItem('tool'),
-                $localForage.getItem('job')
-            ]).then(function (result) {
-
-                toolJSON = transformToolJson(type, result[0]);
-                jobJSON = result[1];
-
-                deferred.resolve();
-            });
-
-            return deferred.promise;
-        };
-
-        /**
          * Set current tool
          *
          * @param t
@@ -153,17 +107,9 @@ angular.module('registryApp.cliche')
             var deferred = $q.defer();
 
             t = t || rawTool;
-
             toolJSON = angular.copy(t);
 
-            if (preserve) {
-                $localForage.setItem('tool', toolJSON)
-                    .then(function() {
-                        deferred.resolve();
-                    });
-            } else {
-                deferred.resolve();
-            }
+            deferred.resolve();
 
             return deferred.promise;
         };
@@ -182,14 +128,7 @@ angular.module('registryApp.cliche')
 
             jobJSON = angular.copy(j);
 
-            if (preserve) {
-                $localForage.setItem('job', jobJSON)
-                    .then(function() {
-                        deferred.resolve();
-                    });
-            } else {
-                deferred.resolve();
-            }
+            deferred.resolve();
 
             return deferred.promise;
 
@@ -1149,30 +1088,7 @@ angular.module('registryApp.cliche')
             return ref ? property.adapter : angular.copy(property.adapter);
         };
 
-        /**
-         * Save tool locally
-         *
-         * @param mode
-         * @returns {*}
-         */
-        var save = function(mode) {
-
-            if (mode === 'new') {
-                return $q.all([
-                    $localForage.setItem('tool', toolJSON),
-                    $localForage.setItem('job', jobJSON)
-                ]);
-            } else {
-                var d = $q.defer();
-                d.resolve();
-                return d.promise;
-            }
-
-        };
-
         return {
-            checkVersion: checkVersion,
-            fetchLocalToolAndJob: fetchLocalToolAndJob,
             setTool: setTool,
             setJob: setJob,
             getTool: getTool,
@@ -1198,7 +1114,6 @@ angular.module('registryApp.cliche')
             deleteProperty: deleteProperty,
             manageArg: manageArg,
             deleteArg: deleteArg,
-            save: save,
             subscribe: subscribe
         };
 
