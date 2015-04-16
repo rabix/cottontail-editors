@@ -170,8 +170,8 @@ h2 {
     }
   }
 
-  /* tool name heading that does not have an input field to change the name */
-  .tool-name {
+  /* tool/workflow heading that does not have an input field to change the name */
+  .tool-name, .workflow-name {
     float: left;
     .heading-text {
       a {
