@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('ClicheCtrl', ['$scope', '$q', '$modal', '$templateCache', '$rootScope', 'App', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload', 'BeforeRedirect', 'Api', 'User', 'lodash', 'HelpMessages', 'Globals', function($scope, $q, $modal, $templateCache, $rootScope, App, Cliche, Loading, SandBox, BeforeUnload, BeforeRedirect, Api, User, _, HelpMessages, Globals) {
+    .controller('ClicheCtrl', ['$scope', '$q', '$modal', '$templateCache', '$rootScope', 'App', 'Tool', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload', 'BeforeRedirect', 'Api', 'User', 'lodash', 'HelpMessages', 'Globals', '$window', function($scope, $q, $modal, $templateCache, $rootScope, App, Tool, Cliche, Loading, SandBox, BeforeUnload, BeforeRedirect, Api, User, _, HelpMessages, Globals, $window) {
         $scope.Loading = Loading;
 
         var cliAdapterWatchers = [],
@@ -91,9 +91,7 @@ angular.module('registryApp.cliche')
                     var tool = result[0].message;
 
                     $scope.view.app = tool;
-
-                    //@todo: get actual revision
-                    $scope.view.revision = tool;
+                    $scope.view.tool = tool;
 
                     Cliche.setTool(tool);
                     Cliche.setJob($scope.view.revision.job ? JSON.parse($scope.view.revision.job) : null);
@@ -641,12 +639,11 @@ angular.module('registryApp.cliche')
          * @returns {boolean}
          */
         $scope.updateTool = function() {
-
             var deferred = $q.defer();
 
             $scope.view.loading = true;
 
-            var appId = $scope.view.app._id,
+            var appId = $scope.view.app['@id'],
                 tool = Cliche.getTool(),
                 job = Cliche.getJob();
 
@@ -747,6 +744,7 @@ angular.module('registryApp.cliche')
             return modalInstance;
 
         };
+       
 
         /**
          * Switch to another revision of the app
@@ -755,36 +753,41 @@ angular.module('registryApp.cliche')
 
             var deferred = $q.defer();
 
-            Tool.getRevisions(0, '', Globals.id)
-                .then(function(result) {
 
-                    var modalInstance = $modal.open({
-                        template: $templateCache.get('views/cliche/partials/revisions.html'),
-                        controller: ['$scope', '$modalInstance', 'data', function ($scope, $modalInstance, data) {
+            Api.getLatest.get().$promise.then(function(result) {
+                var latestRevision = result.message['sbg:revision'];
+                var revisionsList = _.range(latestRevision + 1);
 
-                            $scope.view = data;
+                var modalInstance = $modal.open({
+                    template: $templateCache.get('views/cliche/partials/revisions.html'),
+                    controller: ['$scope', '$modalInstance', 'data', function ($scope, $modalInstance, data) {
 
-                            $scope.cancel = function () {
-                                $modalInstance.dismiss('cancel');
-                            };
+                        $scope.view = data;
 
-                            $scope.choose = function(id) {
-                                $modalInstance.close(id);
-                            };
+                        $scope.cancel = function () {
+                            $modalInstance.dismiss('cancel');
+                        };
 
-                        }],
-                        size: 'sm',
-                        windowClass: 'modal-revisions',
-                        resolve: {data: function () {return {revisions: result.list, app: $scope.view.app, current: $scope.view.revision};}}
-                    });
+                        $scope.choose = function(id) {
+                            $modalInstance.close(id);
+                        };
 
-                    modalInstance.result.then(function (revisionId) {
-                        //$state.go('cliche-edit', {type: $stateParams.type, id: $stateParams.id, revision: revisionId});
-                    });
-
-                    deferred.resolve(modalInstance);
-
+                    }],
+                    size: 'sm',
+                    windowClass: 'modal-revisions',
+                    resolve: {data: function () {return {revisions: revisionsList, app: $scope.view.app, current: $scope.view.tool['sbg:revision']};}}
                 });
+
+                modalInstance.result.then(function (revisionId) {
+                    $window.location.pathname = '/rabix/' + Globals.appType + '/' + Globals.projectId + '/' + Globals.appName + '/' + revisionId;
+
+                    // to indicate that something is happening while the page redirects
+                    $scope.view.loading = true;
+                });
+
+                deferred.resolve(modalInstance);
+            });
+
 
             return deferred.promise;
 

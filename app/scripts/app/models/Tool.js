@@ -115,7 +115,7 @@ angular.module('registryApp.app')
 
             return SchemaValidator.validate(type, tool)
                 .then(function() {
-                    return Api.revisions.add({}, {tool: tool, job: job, app_id: appId}).$promise;
+                    return Api.apps.update({}, tool).$promise;
                 }, function(trace) {
                     return $q.reject(trace);
                 });

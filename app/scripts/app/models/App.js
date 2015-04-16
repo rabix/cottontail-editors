@@ -3,7 +3,7 @@
 angular.module('registryApp.app')
     .factory('App', ['$q', 'Api', 'SchemaValidator', 'lodash', 'Globals', function ($q, Api, SchemaValidator, _, Globals) {
         var self = {};
-        var revision = parseInt(Globals.app_revision);
+        var revision = parseInt(Globals.revision);
 
         /**
          * Get tools

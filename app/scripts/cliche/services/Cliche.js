@@ -100,9 +100,8 @@ angular.module('registryApp.cliche')
          * Set current tool
          *
          * @param t
-         * @param preserve
          */
-        var setTool = function(t, preserve) {
+        var setTool = function(t) {
 
             var deferred = $q.defer();
 
@@ -118,9 +117,8 @@ angular.module('registryApp.cliche')
          * Set current job
          *
          * @param j
-         * @param preserve
          */
-        var setJob = function(j, preserve) {
+        var setJob = function(j) {
 
             var deferred = $q.defer();
 
