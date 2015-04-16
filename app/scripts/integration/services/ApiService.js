@@ -17,7 +17,10 @@ angular.module('integration')
         var apiVersion = '/v1';
         var brood = Globals.brood;
         var broodAppUrl = Globals.brood + apiVersion + '/apps';
-        var appUrl = Globals.app_url;
+        var projectOwner = Globals.projectOwner;
+        var projectSlug = Globals.projectSlug;
+        var appName = Globals.appName;
+        var revision = parseInt(Globals.revision, 10);
         var getAppsUrl = Globals.get_apps_url;
         var getMineAppsByProject = apiVersion + '/aggregate?group_by=project&func=array&visibility=mine';
         var getPublicAppsByProject = apiVersion + '/aggregate?group_by=project&func=array&visibility=public';
@@ -27,7 +30,7 @@ angular.module('integration')
             'session-id': sessionId
         };
 
-        self.apps = $resource(broodAppUrl + appUrl + '/:revision', {'revision':'@revision'}, {
+        self.apps = $resource(broodAppUrl + '/' + projectOwner + '/' + projectSlug + '/' + appName + '/:revision', {revision: '@revision'}, {
             'post': {method: 'POST', headers: headers},
             'update': {method: 'POST', headers: headers},
             'get': {method: 'GET', headers: headers, params: {'_role': 'default'}},
@@ -48,6 +51,10 @@ angular.module('integration')
 
         self.validateApp = $resource(validateAppUrl, {}, {
             'validate': {method: 'POST', headers: headers}
+        });
+
+        self.getLatest = $resource(broodAppUrl  + '/' + projectOwner + '/' + projectSlug + '/' + appName, {}, {
+            'get': {method: 'GET', headers: headers}
         });
 
         return self;

@@ -1,8 +1,9 @@
-h1, .main-heading {
+.main-heading {
   margin: 0;
   padding: 13px 0 13px 0;
   font-size: 26px;
   font-weight: normal;
+  @extend .clearfix;
 
   &.main-title {
     padding-left: 0;
@@ -145,6 +146,7 @@ h2 {
     }
 
     &.tool-name {
+
       max-width: 40%;
       & > span {
         margin-right: 50px;
@@ -166,6 +168,18 @@ h2 {
         }
       }
     }
+  }
+
+  /* tool name heading that does not have an input field to change the name */
+  .tool-name {
+    float: left;
+    .heading-text {
+      a {
+        font-size: 18px;
+      }
+    }
+
+
   }
 
   .go-back {

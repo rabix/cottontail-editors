@@ -1,9 +1,12 @@
 <div class="heading">
     <div class="main-heading">
 
-        <div class="form-group tool-name" ng-class="{'has-error': form.tool.label.$invalid}">
-            <a href class="version revision" ng-click="changeRevision()"><i class="fa fa-tag"></i> v{{ ::view.revision.version }}</a>
-            <span title="{{ ::view.app.label }}">{{ ::view.app.label }}</span>
+        <div class="tool-name">
+            <span class="heading-text" title="{{ ::view.app.label }}">
+                <a href="" title="Go back to project">{{ ::view.app['sbg:projectSlug'] }}/</a>
+                {{ ::view.app.label }}
+            </span>
+            <button class="version revision btn" ng-click="changeRevision()"><i class="fa fa-tag"></i> v{{ ::view.tool['sbg:revision'] }}</button>
         </div>
         <div class="actions pull-right">
 

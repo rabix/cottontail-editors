@@ -7,11 +7,11 @@
 
     <ul class="revisions-list">
         <li ng-repeat="revision in ::view.revisions">
-            <a href ng-click="choose(revision._id)">
+            <a href ng-click="choose(revision)">
                 <span class="label label-primary">
-                    <i class="fa fa-tag"></i> v{{ ::revision.version }}
+                    <i class="fa fa-tag"></i> v{{ ::revision }}
                 </span>
-                <span ng-if="view.current._id === revision._id" class="label label-warning pull-right">current</span>
+                <span ng-if="view.current === revision" class="label label-warning pull-right">current</span>
             </a>
         </li>
     </ul>
