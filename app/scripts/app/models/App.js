@@ -48,6 +48,11 @@ angular.module('registryApp.app')
             return Api.apps.get({revision: revision}).$promise;
         };
 
+        self.fetchApp = function(slug) {
+
+            return Api.apps.get({revision: revision}).$promise;
+        };
+
         /**
          * Update the tool - create new revision
          *
@@ -81,8 +86,12 @@ angular.module('registryApp.app')
 //            return $localForage.removeItem(type);
         };
 
-        self.getAppsByProject = function () {
-            return Api.getAppsByProject.get({}).$promise;
+        self.getPublicAppsByProject = function () {
+            return Api.getPublicAppsByProject.get({}).$promise;
+        };
+
+        self.getMineAppsByProject = function () {
+            return Api.getMineAppsByProject.get({}).$promise;
         };
 
         return self;

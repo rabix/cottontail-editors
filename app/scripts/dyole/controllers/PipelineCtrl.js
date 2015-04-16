@@ -129,32 +129,18 @@ angular.module('registryApp.dyole')
         $scope.dropNode = function(e, app) {
 
             app = JSON.parse(app);
-            var formated = app;
 
             $scope.view.loading = true;
             $scope.view.explanation = false;
 
-            if (app.pipeline) {
-
-                formated.json = JSON.parse(formated.json);
+            App.fetchApp().then(function(result) {
 
                 $scope.view.loading = false;
+                console.log(result.data);
 
-                formated.json.type = 'workflow';
-                formated.json.name = app.name;
+                Pipeline.addNode(result.data.json, e.clientX, e.clientY);
 
-                Pipeline.addNode(formated, e.clientX, e.clientY);
-
-            } else {
-                Tool.getRevision(app._id).then(function(result) {
-
-                    $scope.view.loading = false;
-                    console.log(result.data);
-
-                    Pipeline.addNode(result.data.json, e.clientX, e.clientY);
-
-                });
-            }
+            });
 
 
         };

@@ -19,7 +19,8 @@ angular.module('integration')
         var broodAppUrl = Globals.brood + apiVersion + '/apps';
         var appUrl = Globals.app_url;
         var getAppsUrl = Globals.get_apps_url;
-        var getAppsByProject = apiVersion + '/aggregate?group_by=project&func=array';
+        var getMineAppsByProject = apiVersion + '/aggregate?group_by=project&func=array&visibility=mine';
+        var getPublicAppsByProject = apiVersion + '/aggregate?group_by=project&func=array&visibility=public';
         var validateAppUrl =  Globals.brood + apiVersion + '/validate/app';
         var headers = {
             'Content-Type': 'application/json',
@@ -37,7 +38,11 @@ angular.module('integration')
             'get': {method: 'GET', headers: headers}
         });
 
-        self.getAppsByProject = $resource(brood + getAppsByProject, {}, {
+        self.getPublicAppsByProject = $resource(brood + getPublicAppsByProject, {}, {
+            'get': {method: 'GET', headers: headers}
+        });
+
+        self.getMineAppsByProject = $resource(brood + getMineAppsByProject, {}, {
             'get': {method: 'GET', headers: headers}
         });
 

@@ -31,15 +31,15 @@ angular.module('registryApp.app')
         $scope.view.repoGroups = {};
 
         $scope.view.repoTypes = {
-            myRepositories: {},
-            otherRepositories: {}
+            MyApps: {},
+            PublicApps: {}
         };
 
         /* list of my repos */
-        $scope.view.myRepositories = {};
+        $scope.view.MyApps = {};
 
         /* list of other repos */
-        $scope.view.otherRepositories = {};
+        $scope.view.PublicApps = {};
 
         /* list of user repos*/
         $scope.view.userRepos= [];
@@ -58,7 +58,7 @@ angular.module('registryApp.app')
 
         $scope.Loading = Loading;
 
-        $scope.view.appRevisions = {};
+//        $scope.view.appRevisions = {};
 
         /**
          * Set controller id for pipeline Service to use it
@@ -101,56 +101,40 @@ angular.module('registryApp.app')
          * @param {Object} result
          */
         var appsLoaded = function (result) {
-            return;
-            var tools, workflows, scripts;
-            $scope.view.loading = false;
             $scope.view.filtering = false;
-            $scope.view.message = result[0].message;
+            $scope.view.message = result[0].status;
 
-            $scope.view.repoTypes.myRepositories = {};
-            $scope.view.repoTypes.otherRepositories = {};
+            $scope.view.repoTypes.MyApps = result[0].message;
+            $scope.view.repoTypes.PublicApps = result[1].message;
 
-            tools = formatApps((result[0].list ? result[0].list.tools : {}));
-            scripts = formatApps((result[0].list ? result[0].list.scripts : {}));
-            workflows = formatApps(result[2].list || {});
-
-            mergeToolsWorkflows('myRepositories', tools, scripts, workflows);
-
-            tools = formatApps((result[1].list ? result[1].list.tools : {}));
-            scripts = formatApps((result[1].list ? result[1].list.scripts : {}));
-            workflows = formatApps(result[3].list || {});
-
-            mergeToolsWorkflows('otherRepositories', tools, scripts, workflows);
-
+            $scope.view.loading = false;
         };
 
-        var formatApps = function (apps) {
-
-            if (!apps) {
-                return {};
-            }
-
-            _.each(apps, function (apps) {
-                _.each(apps, function (value) {
-
-                    if (!value.latest) {
-                        value.latest = angular.copy(value.revisions[0]);
-                        value.revisions.splice(0,1);
-                    } else {
-                        _.remove(value.revisions, function (rev) {
-                            return rev.version === value.latest.version;
-                        });
-                    }
-
-                    $scope.view.appRevisions[value._id] = {
-                        toggled: false
-                    };
-
-                });
-            });
-
-            return apps;
-        };
+//        var formatApps = function (apps) {
+//
+//            if (!apps) {
+//                return {};
+//            }
+//
+//            _.each(apps, function (apps) {
+//
+//                if (!value.latest) {
+//                    value.latest = angular.copy(value.revisions[0]);
+//                    value.revisions.splice(0,1);
+//                } else {
+//                    _.remove(value.revisions, function (rev) {
+//                        return rev.version === value.latest.version;
+//                    });
+//                }
+//
+//                $scope.view.appRevisions[value._id] = {
+//                    toggled: false
+//                };
+//
+//            });
+//
+//            return apps;
+//        };
         
         var mergeToolsWorkflows = function (type, tools, scripts, workflows) {
             var repositories = $scope.view.repoTypes[type];
@@ -193,17 +177,14 @@ angular.module('registryApp.app')
             });
         };
 
-        $scope.toggleAppRevisions = function (rev) {
-            $scope.view.appRevisions[rev].toggled = !$scope.view.appRevisions[rev].toggled;
-        };
+//        $scope.toggleAppRevisions = function (rev) {
+//            $scope.view.appRevisions[rev].toggled = !$scope.view.appRevisions[rev].toggled;
+//        };
 
         /* load tools/workflows grouped by repositories */
         $q.all([
-            App.getAppsByProject()
-//            Tool.getGroupedTools('my'),
-//            Tool.getGroupedTools('other'),
-//            Workflow.groupedWorkflows('my'),
-//            Workflow.groupedWorkflows('other')
+            App.getMineAppsByProject(),
+            App.getPublicAppsByProject()
         ]).then(appsLoaded);
 
         /**

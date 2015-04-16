@@ -72,20 +72,20 @@
 
                     <div class="tab flex-box-column flex-one" ng-class="{loading: view.filtering}" ng-switch-when="apps">
 
-                        <!-- <ul class="app-sidebar-list">
+                        <ul class="app-sidebar-list">
 
                             <li ng-repeat="(repoType, repoTypeObj) in ::view.repoTypes" ng-class="{open: view.groups[repoType]}">
                                 <span ng-click="toggleGroup(repoType)">
                                     <i class="fa" ng-class="{'fa-plus-square': !view.groups[repoType], 'fa-minus-square': view.groups[repoType]}"></i>
-                                    {{ ::view.capitalize(repoType.split('Repositories')[0]) }} Repositories
+                                    {{ ::view.capitalize(repoType)}}
                                 </span>
 
                                 <ul>
-                                    <li ng-if="(repoTypeObj | isEmpty) && (repoTypeObj | isEmpty)">
+                                    <li ng-if="(repoTypeObj | isEmpty)">
                                         <p class="alert alert-info">
-                                            <span ng-if="repoType === 'myRepositories' && !view.user"> {{ view.message }}</span>
-                                            <span ng-if="repoType === 'myRepositories' && view.user">You don't have any repository yet</span>
-                                            <span ng-if="repoType === 'otherRepositories'">There are no other repositories</span>
+                                            <span ng-if="repoType === 'MyApps' && !view.user"> {{ view.message }}</span>
+                                            <span ng-if="repoType === 'MyApps' && view.user">You don't have any apps yet</span>
+                                            <span ng-if="repoType === 'PublicApps'">There are no public apps</span>
                                         </p>
                                     </li>
                                     <li ng-repeat="(repoName, apps) in ::repoTypeObj" ng-class="{open: view.repoGroups[repoName]}">
@@ -94,79 +94,22 @@
                                             <i class="fa" ng-class="{'fa-plus-square': !view.repoGroups[repoName], 'fa-minus-square': view.repoGroups[repoName]}"></i>
                                             {{ ::repoName }}
                                         </span>
-
+                                        <div>                                         {{ Object.keys(repoTypeObj[repoName]) }}
+                                        </div>
                                         <ul class="apps-inner-list">
-                                            <li ng-if="apps.tools.length !== 0"><span class="label label-info section-name">Tools</span></li>
+                                            <li ng-if="apps.length !== 0"><span class="label label-info section-name">Apps</span></li>
 
-                                            <li ng-repeat="app in ::apps.tools">
+                                            <li ng-repeat="app in ::apps">
 
-                                                <a href drag="app.latest">
-                                                    <span class="pointer pull-left" ng-if="app.revisions.length !== 0" ng-click="toggleAppRevisions(app._id)"><i class="fa" ng-class="{'fa-minus-square':view.appRevisions[app._id].toggled, 'fa-plus-square': !view.appRevisions[app._id].toggled}"></i></span>
+                                                <a href drag="app">
                                                     <i class="fa fa-puzzle-piece"></i>
-                                                    {{ ::app.name }} <small>(revision {{ ::app.latest.version }} )</small>
+                                                    {{ ::app.label }} <small>(type: {{ ::app.type }} )</small>
                                                     <div class="pull-right">
-                                                        <span ng-if="app.latest.version && app.latest.is_public" class="label label-primary"><i class="fa fa-tag"></i> v{{ ::app.latest.version }} </span>
+                                                        <span class="label label-primary"><i class="fa fa-tag"></i> v{{ ::app['sbg:revision'] }} </span>
                                                     </div>
                                                 </a>
-
-                                                <div ng-repeat="revision in ::app.revisions" class="revisions-list nested" ng-show="view.appRevisions[app._id].toggled">
-                                                    <a href drag="revision">
-                                                        <i class="fa fa-puzzle-piece"></i>
-                                                        {{ ::app.name }} <small>(revision {{ ::revision.version }} )</small>
-                                                        <div class="pull-right">
-                                                            <span ng-if="revision.version && revision.is_public" class="label label-primary"><i class="fa fa-tag"></i> v{{ ::revision.version }}</span>
-                                                        </div>
-                                                    </a>
-                                                </div>
                                             </li>
 
-                                            <li ng-if="apps.scripts.length !== 0"><span class="label label-info section-name">Scripts</span></li>
-
-                                            <li ng-repeat="app in apps.scripts">
-
-                                                <a href drag="app.latest">
-                                                    <span class="pointer pull-left" ng-if="app.revisions.length !== 0" ng-click="toggleAppRevisions(app._id)"><i class="fa" ng-class="{'fa-minus-square':view.appRevisions[app._id].toggled, 'fa-plus-square': !view.appRevisions[app._id].toggled}"></i></span>
-                                                    <i class="fa fa-puzzle-piece"></i>
-                                                    {{ ::app.name }} <small>(revision {{ ::app.latest.version }} )</small>
-                                                    <div class="pull-right">
-                                                        <span ng-if="app.latest.version && app.latest.is_public" class="label label-primary"><i class="fa fa-tag"></i> v{{ ::app.latest.version }} </span>
-                                                    </div>
-                                                </a>
-
-                                                <div ng-repeat="revision in app.revisions" class="revisions-list nested" ng-show="view.appRevisions[app._id].toggled">
-                                                    <a href drag="revision">
-                                                        <i class="fa fa-puzzle-piece"></i>
-                                                        {{ ::app.name }} <small>(revision {{ ::revision.version }} )</small>
-                                                        <div class="pull-right">
-                                                            <span ng-if="revision.version && revision.is_public" class="label label-primary"><i class="fa fa-tag"></i> v{{ ::revision.version }}</span>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                            </li>
-
-                                            <li ng-if="apps.workflows.length !== 0"><span class="label label-info section-name">Workflows</span></li>
-
-                                            <li ng-repeat="workflow in apps.workflows">
-
-                                                <a href drag="workflow.latest" >
-                                                    <span class="pointer pull-left" ng-click="toggleAppRevisions(workflow._id)" ng-if="workflow.revisions.length !== 0"  ><i class="fa" ng-class="{'fa-minus-square':view.appRevisions[workflow._id].toggled, 'fa-plus-square': !view.appRevisions[workflow._id].toggled}"></i></span>
-                                                    <i class="fa fa-puzzle-piece"></i>
-                                                    {{ ::workflow.name }} <small>(revision {{ ::workflow.latest.version }} )</small>
-                                                    <div class="pull-right">
-                                                        <span ng-if="workflow.latest.version && workflow.latest.is_public" class="label label-primary"><i class="fa fa-tag"></i> v{{ ::workflow.latest.version }} </span>
-                                                    </div>
-                                                </a>
-
-                                                <div ng-show="view.appRevisions[workflow._id].toggled" ng-repeat="revision in workflow.revisions | orderBy:'-version':false" class="revisions-list nested" ng-show="view.appRevisions[workflow._id].toggled">
-                                                    <a href drag="revision">
-                                                        <i class="fa fa-puzzle-piece"></i>
-                                                        {{ ::workflow.name }} <small>(revision {{ ::revision.version }} )</small>
-                                                        <div class="pull-right">
-                                                            <span ng-if="revision.version && revision.is_public" class="label label-primary"><i class="fa fa-tag"></i> v{{ ::revision.version }}</span>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                            </li>
                                         </ul>
 
                                     </li>
@@ -175,7 +118,7 @@
 
                             </li>
 
-                        </ul> -->
+                        </ul>
 
                     </div>
 
