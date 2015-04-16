@@ -133,12 +133,16 @@ angular.module('registryApp.dyole')
             $scope.view.loading = true;
             $scope.view.explanation = false;
 
-            App.fetchApp().then(function(result) {
+            App.getApp(app.project_owner, app.project_slug, app.app_name).then(function(result) {
 
                 $scope.view.loading = false;
-                console.log(result.data);
+                console.log(result.message);
 
-                Pipeline.addNode(result.data.json, e.clientX, e.clientY);
+                if (typeof result.message === 'object' && !_.isEmpty(result.message)) {
+                    Pipeline.addNode(result.message, e.clientX, e.clientY);
+                } else {
+                    console.error('App does not exist: Message: %s, Status: %s', result.message, result.status);
+                }
 
             });
 

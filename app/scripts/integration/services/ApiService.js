@@ -37,6 +37,10 @@ angular.module('integration')
             'delete': {method: 'DELETE', headers: headers}
         });
 
+        self.getApp = $resource(broodAppUrl + '/:projectOwner/:projectSlug/:appName', {projectOwner: '@projectOwner', appName: '@appName',projectSlug: '@projectSlug'}, {
+            'get': {method: 'GET', headers: headers, params: {'_role': 'default'}}
+        });
+
         self.getAllApps = $resource(broodAppUrl + getAppsUrl, {}, {
             'get': {method: 'GET', headers: headers}
         });

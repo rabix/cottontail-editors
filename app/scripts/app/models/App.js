@@ -48,9 +48,9 @@ angular.module('registryApp.app')
             return Api.apps.get({revision: revision}).$promise;
         };
 
-        self.fetchApp = function(slug) {
+        self.getApp = function(projectOwner, projectSlug, appName) {
 
-            return Api.apps.get({revision: revision}).$promise;
+            return Api.getApp.get({projectOwner: projectOwner, projectSlug: projectSlug, appName: appName}).$promise;
         };
 
         /**

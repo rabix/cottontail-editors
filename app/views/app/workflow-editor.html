@@ -74,7 +74,8 @@
 
                         <ul class="app-sidebar-list">
 
-                            <li ng-repeat="(repoType, repoTypeObj) in ::view.repoTypes" ng-class="{open: view.groups[repoType]}">
+                            <li ng-repeat="(repoType, repoTypeObj) in view.repoTypes" ng-class="{open: view.groups[repoType]}">
+
                                 <span ng-click="toggleGroup(repoType)">
                                     <i class="fa" ng-class="{'fa-plus-square': !view.groups[repoType], 'fa-minus-square': view.groups[repoType]}"></i>
                                     {{ ::view.capitalize(repoType)}}
@@ -88,14 +89,13 @@
                                             <span ng-if="repoType === 'PublicApps'">There are no public apps</span>
                                         </p>
                                     </li>
-                                    <li ng-repeat="(repoName, apps) in ::repoTypeObj" ng-class="{open: view.repoGroups[repoName]}">
+                                    <li ng-repeat="(repoName, apps) in repoTypeObj" ng-class="{open: view.repoGroups[repoName]}">
 
                                         <span ng-click="toggleRepo(repoName)">
                                             <i class="fa" ng-class="{'fa-plus-square': !view.repoGroups[repoName], 'fa-minus-square': view.repoGroups[repoName]}"></i>
                                             {{ ::repoName }}
                                         </span>
-                                        <div>                                         {{ Object.keys(repoTypeObj[repoName]) }}
-                                        </div>
+
                                         <ul class="apps-inner-list">
                                             <li ng-if="apps.length !== 0"><span class="label label-info section-name">Apps</span></li>
 
