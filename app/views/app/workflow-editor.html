@@ -71,7 +71,16 @@
                 <div class="tabs right flex-one" ng-switch="view.tab">
 
                     <div class="tab flex-box-column flex-one" ng-class="{loading: view.filtering}" ng-switch-when="apps">
-
+                        <form class="search-form" ng-submit="" novalidate>
+                            <div class="input-group">
+                                <input type="text" class="form-control" ng-model="view.searchTerm" placeholder="Search apps"
+                                       required>
+                        <span class="input-group-btn">
+                            <!--<button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>-->
+                            <button ng-disabled="view.searchTerm | isEmpty" class="btn btn-default" href ng-click="resetSearch()"><i class="fa fa-ban"></i></button>
+                        </span>
+                            </div>
+                        </form>
                         <ul class="app-sidebar-list">
 
                             <li ng-repeat="(repoType, repoTypeObj) in view.repoTypes" ng-class="{open: view.groups[repoType]}">
@@ -89,7 +98,7 @@
                                             <span ng-if="repoType === 'PublicApps'">There are no public apps</span>
                                         </p>
                                     </li>
-                                    <li ng-repeat="(repoName, apps) in repoTypeObj" ng-class="{open: view.repoGroups[repoName]}">
+                                    <li ng-repeat="(repoName, apps) in repoTypeObj" ng-class="{open: view.repoGroups[repoName]}" ng-show="filterdApps.length > 0 ">
 
                                         <span ng-click="toggleRepo(repoName)">
                                             <i class="fa" ng-class="{'fa-plus-square': !view.repoGroups[repoName], 'fa-minus-square': view.repoGroups[repoName]}"></i>
@@ -99,14 +108,14 @@
                                         <ul class="apps-inner-list">
                                             <li ng-if="apps.length !== 0"><span class="label label-info section-name">Apps</span></li>
 
-                                            <li ng-repeat="app in ::apps">
+                                            <li ng-repeat="app in filterdApps = (apps | filter:view.searchTerm)">
 
                                                 <a href drag="app">
                                                     <i class="fa fa-puzzle-piece"></i>
                                                     {{ ::app.label }} <small>(type: {{ ::app.type }} )</small>
-                                                    <div class="pull-right">
-                                                        <span class="label label-primary"><i class="fa fa-tag"></i> v{{ ::app['sbg:revision'] }} </span>
-                                                    </div>
+                                                    <!--<div class="pull-right">-->
+                                                        <!--<span class="label label-primary"><i class="fa fa-tag"></i> v{{ ::app['sbg:revision'] }} </span>-->
+                                                    <!--</div>-->
                                                 </a>
                                             </li>
 

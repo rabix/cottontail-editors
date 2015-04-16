@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('ClicheCtrl', ['$scope', '$q', '$modal', '$templateCache', '$rootScope', 'App', 'Tool', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload', 'BeforeRedirect', 'Api', 'User', 'lodash', 'HelpMessages', 'Globals', '$window', function($scope, $q, $modal, $templateCache, $rootScope, App, Tool, Cliche, Loading, SandBox, BeforeUnload, BeforeRedirect, Api, User, _, HelpMessages, Globals, $window) {
+    .controller('ClicheCtrl', ['$scope', '$q', '$modal', '$templateCache', '$rootScope', 'App', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload', 'BeforeRedirect', 'Api', 'User', 'lodash', 'HelpMessages', 'Globals', '$window', function($scope, $q, $modal, $templateCache, $rootScope, App, Cliche, Loading, SandBox, BeforeUnload, BeforeRedirect, Api, User, _, HelpMessages, Globals, $window) {
         $scope.Loading = Loading;
 
         var cliAdapterWatchers = [],
@@ -609,26 +609,26 @@ angular.module('registryApp.cliche')
                     tool = Cliche.getTool(),
                     job = Cliche.getJob();
 
-                Tool.create(repoId, tool, job, $scope.view.type)
-                    .then(function(result) {
-
-                        $scope.view.loading = false;
-
-                        var modalInstance = $modal.open({
-                            template: $templateCache.get('views/cliche/partials/app-save-response.html'),
-                            controller: 'ModalCtrl',
-                            backdrop: 'static',
-                            resolve: { data: function () { return { trace: result }; }}
-                        });
-
-                        modalInstance.result.then(function() {
-                            redirectTo('cliche-edit', {type: $scope.view.type, id: result.app._id, revision: 'latest'});
-                        });
-
-                    }, function (error) {
-                        $scope.view.loading = false;
-                        $rootScope.$broadcast('httpError', {message: error});
-                    });
+//                Tool.create(repoId, tool, job, $scope.view.type)
+//                    .then(function(result) {
+//
+//                        $scope.view.loading = false;
+//
+//                        var modalInstance = $modal.open({
+//                            template: $templateCache.get('views/cliche/partials/app-save-response.html'),
+//                            controller: 'ModalCtrl',
+//                            backdrop: 'static',
+//                            resolve: { data: function () { return { trace: result }; }}
+//                        });
+//
+//                        modalInstance.result.then(function() {
+//                            redirectTo('cliche-edit', {type: $scope.view.type, id: result.app._id, revision: 'latest'});
+//                        });
+//
+//                    }, function (error) {
+//                        $scope.view.loading = false;
+//                        $rootScope.$broadcast('httpError', {message: error});
+//                    });
             });
 
         };

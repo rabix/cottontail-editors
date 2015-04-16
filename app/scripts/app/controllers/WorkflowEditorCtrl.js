@@ -58,6 +58,10 @@ angular.module('registryApp.app')
 
         $scope.Loading = Loading;
 
+        $scope.view.searchTerm = '';
+
+        $scope.view.searchTerm = '';
+
 //        $scope.view.appRevisions = {};
 
         /**
@@ -95,6 +99,45 @@ angular.module('registryApp.app')
                 });
         }
 
+        var toggleState = true;
+
+        var toggleAll = function () {
+
+            _.forEach($scope.view.repoTypes.MyApps, function (obj, repo) {
+                $scope.view.repoGroups[repo] = toggleState;
+            });
+
+            _.forEach($scope.view.repoTypes.PublicApps, function (obj, repo) {
+                $scope.view.repoGroups[repo] = toggleState;
+            });
+
+            $scope.view.groups.MyApps = toggleState;
+            $scope.view.groups.PublicApps = toggleState;
+
+            toggleState = !toggleState;
+
+        };
+
+        $scope.resetSearch = function () {
+            $scope.view.searchTerm = '';
+            toggleState = false;
+            toggleAll();
+        };
+
+        $scope.$watch('view.searchTerm', function (newVal,oldVal) {
+
+            if (oldVal !== newVal) {
+
+                if (newVal === '') {
+                    $scope.resetSearch();
+                } else {
+                    toggleState = true;
+                    toggleAll();
+                }
+            }
+
+        });
+
         /**
          * Callback when apps are loaded
          *
@@ -108,73 +151,6 @@ angular.module('registryApp.app')
             $scope.view.repoTypes.PublicApps = result[1].message;
 
             $scope.view.loading = false;
-        };
-
-//        var formatApps = function (apps) {
-//
-//            if (!apps) {
-//                return {};
-//            }
-//
-//            _.each(apps, function (apps) {
-//
-//                if (!value.latest) {
-//                    value.latest = angular.copy(value.revisions[0]);
-//                    value.revisions.splice(0,1);
-//                } else {
-//                    _.remove(value.revisions, function (rev) {
-//                        return rev.version === value.latest.version;
-//                    });
-//                }
-//
-//                $scope.view.appRevisions[value._id] = {
-//                    toggled: false
-//                };
-//
-//            });
-//
-//            return apps;
-//        };
-        
-        var mergeToolsWorkflows = function (type, tools, scripts, workflows) {
-            var repositories = $scope.view.repoTypes[type];
-
-            _.forEach(tools, function (tool, repoName) {
-                if (!repositories[repoName]) {
-                    repositories[repoName] = {
-                        tools: tool,
-                        scripts: [],
-                        workflows: []
-                    };
-                } else {
-                    repositories[repoName].tools = tool;
-                }
-            });
-
-            _.forEach(scripts, function (script, repoName) {
-                if (!repositories[repoName]) {
-                    repositories[repoName] = {
-                        tools: [],
-                        scripts: script,
-                        workflows: []
-                    };
-                } else {
-                    repositories[repoName].scripts = script;
-                }
-            });
-
-
-            _.forEach(workflows, function (workflow, repoName) {
-                if (!repositories[repoName]) {
-                    repositories[repoName] = {
-                        tools: [],
-                        scripts: [],
-                        workflows: workflow
-                    };
-                } else {
-                    repositories[repoName].workflows = workflow;
-                }
-            });
         };
 
 //        $scope.toggleAppRevisions = function (rev) {
