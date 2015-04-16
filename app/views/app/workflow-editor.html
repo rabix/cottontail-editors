@@ -3,10 +3,10 @@
     <div class="heading">
 
         <div class="main-heading">
-            <div class="workflow-name">
-                <span class="pipeline-repo"> ({{ ::view.workflow['sbg:createdBy'] }}) </span>
-                <span>{{ ::view.workflow.label}}</span>
-            </div>
+            <span class="workflow-name">
+                <a href="" title="Go back to project">{{ ::view.workflow['sbg:projectSlug'] }}/</a>
+                {{ ::view.workflow.label}}
+            </span>
 
             <strong class="changes-mark" ng-if="view.isChanged" tooltip="There are changes in your workflow" tooltip-placement="right">
                 (<i class="fa fa-asterisk"></i>)

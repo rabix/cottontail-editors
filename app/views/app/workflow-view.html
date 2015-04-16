@@ -1,19 +1,17 @@
 <div ng-class="view.classes" loading="view.loading">
 
     <div class="heading">
-        <h1>
-            <span>
-                {{ ::view.workflow.pipeline.name }}
-                <span class="pipeline-repo">
-                    (<a ui-sref="repo({id: view.workflow.pipeline.repo._id})">{{ ::view.workflow.pipeline.repo.owner }}/{{ ::view.workflow.pipeline.repo.name }}</a>)
-                </span>
+        <div class="main-heading">
+            <span class="workflow-name">
+                <a href="" title="Go back to project">{{ ::view.workflow['sbg:projectSlug'] }}/</a>
+                {{ ::view.workflow.label}}
             </span>
 
             <div class="actions pull-right">
                 <a href ng-if="view.showDelete" ng-click="deleteWorkflow()" class="btn btn-danger" tooltip="Delete workflow" tooltip-placement="bottom"><i class="fa fa-trash"></i> Delete</a>
                 <a ui-sref="workflow-editor({id: view.workflow._id, mode: 'edit'})" class="btn btn-primary"><i class="fa fa-pencil"></i> Edit</a>
             </div>
-        </h1>
+        </div>
     </div>
     <!-- # .heading -->
 
