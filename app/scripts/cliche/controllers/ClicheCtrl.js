@@ -17,6 +17,10 @@ angular.module('registryApp.cliche')
         $scope.view = {};
         $scope.form = {};
 
+        /* globals gotten from camellia */
+        $scope.view.globals = Globals;
+
+
         /* form holders, for validation only */
         $scope.form.tool = {};
         $scope.form.job = {};
@@ -91,6 +95,9 @@ angular.module('registryApp.cliche')
 
                     var tool = result[0].message;
 
+                    console.log(tool);
+                    console.log(Globals);
+                    
                     $scope.view.app = tool;
                     $scope.view.tool = tool;
 

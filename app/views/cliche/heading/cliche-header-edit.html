@@ -2,11 +2,20 @@
     <div class="main-heading">
 
         <div class="tool-name">
-            <span class="heading-text" title="{{ ::view.app.label }}">
-                <a href="" title="Go back to project">{{ ::view.app['sbg:projectSlug'] }}/</a>
-                {{ ::view.app.label }}
+            <span class="heading-text">
+                <a title="">{{ ::view.globals['projectOwner'] }}</a>
+                <span class="separator">/</span>
+                <a href="" title="Go back to project">{{ ::view.globals.projectSlug }}</a>
+                <span class="separator">/</span>
+                <strong>{{ ::view.globals.appName }}</strong>
+                <span class="separator">/</span>
+                <a href ng-click="changeRevision()">{{ ::view.tool['sbg:revision'] }}</a>
             </span>
-            <button class="version revision btn" ng-click="changeRevision()"><i class="fa fa-tag"></i> v{{ ::view.tool['sbg:revision'] }}</button>
+            <!--<span class="heading-text" title="{{ ::view.app.label }}">-->
+                <!--<a href="" title="Go back to project">{{ ::view.app['sbg:projectSlug'] }}/</a>-->
+                <!--{{ ::view.app.label }}-->
+            <!--</span>-->
+            <!--<button class="version revision btn" ng-click="changeRevision()"><i class="fa fa-tag"></i> v{{ ::view.tool['sbg:revision'] }}</button>-->
         </div>
         <div class="actions pull-right">
 

@@ -173,9 +173,12 @@ h2 {
   /* tool/workflow heading that does not have an input field to change the name */
   .tool-name, .workflow-name {
     float: left;
+//    a {
+//      font-size: 18px;
+//    }
 
-    a {
-      font-size: 18px;
+    .separator {
+      color: #aaa;
     }
   }
 
