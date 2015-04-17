@@ -3,3 +3,11 @@
 .btn:not(.btn-expression) {
   @include button-size(7px, 10px, 14px, 18px, 2px);
 }
+
+.btn-warning {
+  @extend .btn-danger;
+}
+
+.has-error {
+  @include form-control-validation(#D91E18, #D91E18);
+}

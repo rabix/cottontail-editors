@@ -1,4 +1,8 @@
-// Included in _overrides.scss
+// Compiled separately
+//@import "../../../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap/mixins";
+//@import "styles/mixins";
+//@import "styles/overrides/sbg-variables";
+//@import "styles/common";
 
 /* layout */
 
@@ -13,7 +17,7 @@
   @extend .flex-one;
 }
 
-#content, #main, .cliche-editor, .dyole-editor, .container-fluid, .main, .page {
+#content, .cliche-editor, .dyole-editor, .container-fluid, .main, .page {
   width: 100%;
   max-width: 100%;
   padding: 0;
@@ -24,13 +28,17 @@
 
 /* forms */
 
-input[type="text"], input[type="password"], select, textarea {
+input[type="text"], input[type="password"], select, textarea, input[type="number"] {
   width: 100%;
+  border-width: 1px;
+  margin: 0;
 }
 
 input[type="checkbox"], input[type="radio"] {
   margin: 2px 0 0;
   display: inline-block;
+  height: auto;
+  width: auto;
 }
 
 label.checkbox {
@@ -64,10 +72,11 @@ label.checkbox {
   }
 }
 
-.btn-warning {
-  @extend .btn-danger;
+html {
+  // to override normalize because SBG works with rem units for font
+  // rem is relative to the root, in this case html
+  // if this changes on SBG, should be changed here too!
+  font-size: 87.5%;
+  line-height: 1.57143em;
 }
 
-.has-error {
-  @include form-control-validation(#D91E18, #D91E18);
-}
