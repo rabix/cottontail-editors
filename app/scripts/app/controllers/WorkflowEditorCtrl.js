@@ -4,8 +4,9 @@
 'use strict';
 
 angular.module('registryApp.app')
-    .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$modal', '$templateCache', 'Loading', 'App', 'User', 'Repo', 'BeforeRedirect', 'Helper', 'PipelineService', 'lodash', 'Globals', function ($scope, $rootScope, $q, $modal, $templateCache, Loading, App, User, Repo, BeforeRedirect, Helper, PipelineService, _, Globals) {
-        var PipelineInstance = null;
+    .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$modal', '$templateCache', 'Loading', 'App', 'User', 'Repo', 'BeforeRedirect', 'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload', function ($scope, $rootScope, $q, $modal, $templateCache, Loading, App, User, Repo, BeforeRedirect, Helper, PipelineService, _, Globals, BeforeUnload) {
+        var PipelineInstance = null,
+            onBeforeUnloadOff = BeforeUnload.register(function() { return 'Please save your changes before leaving.'; });
 
         $scope.view = {};
 
@@ -411,6 +412,9 @@ angular.module('registryApp.app')
 
             onBeforeRedirectOff();
             onBeforeRedirectOff = undefined;
+
+            onBeforeUnloadOff();
+            onBeforeUnloadOff = undefined;
 
             PipelineService.removeInstance($scope.view.id);
 

@@ -11,7 +11,8 @@ angular.module('registryApp.cliche')
 
         var cliAdapterWatchers = [],
             jobWatcher,
-            reqMap = {CpuRequirement: 'cpu', MemRequirement: 'mem'};
+            reqMap = {CpuRequirement: 'cpu', MemRequirement: 'mem'},
+            onBeforeUnloadOff = BeforeUnload.register(function() { return 'Please save your changes before leaving.'; });
 
         $scope.view = {};
         $scope.form = {};
