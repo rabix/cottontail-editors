@@ -14,17 +14,16 @@ angular.module('integration')
 
         var self = {};
         var sessionId = Globals.user.sessionId;
-        var apiVersion = '/v1';
-        var brood = Globals.brood;
-        var broodAppUrl = Globals.brood + apiVersion + '/apps';
+        var brood = Globals.urls.brood;
+        var broodAppUrl = brood + 'apps';
         var projectOwner = Globals.projectOwner;
         var projectSlug = Globals.projectSlug;
         var appName = Globals.appName;
         var revision = parseInt(Globals.revision, 10);
         var getAppsUrl = Globals.get_apps_url;
-        var getMineAppsByProject = apiVersion + '/aggregate?group_by=project&func=array&visibility=mine';
-        var getPublicAppsByProject = apiVersion + '/aggregate?group_by=project&func=array&visibility=public';
-        var validateAppUrl =  Globals.brood + apiVersion + '/validate/app';
+        var getMineAppsByProject = 'aggregate?group_by=project&func=array&visibility=mine';
+        var getPublicAppsByProject = 'aggregate?group_by=project&func=array&visibility=public';
+        var validateAppUrl =  brood + 'validate/app';
         var headers = {
             'Content-Type': 'application/json',
             'session-id': sessionId
