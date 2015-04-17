@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('ClicheCtrl', ['$scope', '$q', '$modal', '$templateCache', '$rootScope', 'App', 'Tool', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload', 'BeforeRedirect', 'Api', 'User', 'lodash', 'HelpMessages', 'Globals', '$window', function($scope, $q, $modal, $templateCache, $rootScope, App, Tool, Cliche, Loading, SandBox, BeforeUnload, BeforeRedirect, Api, User, _, HelpMessages, Globals, $window) {
+    .controller('ClicheCtrl', ['$scope', '$q', '$modal', '$templateCache', '$rootScope', 'App', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload', 'BeforeRedirect', 'Api', 'User', 'lodash', 'HelpMessages', 'Globals', '$window', function($scope, $q, $modal, $templateCache, $rootScope, App, Cliche, Loading, SandBox, BeforeUnload, BeforeRedirect, Api, User, _, HelpMessages, Globals, $window) {
         $scope.Loading = Loading;
 
         var cliAdapterWatchers = [],
@@ -786,5 +786,12 @@ angular.module('registryApp.cliche')
             return deferred.promise;
 
         };
+
+        $scope.$on('$destroy', function() {
+
+            onBeforeUnloadOff();
+            onBeforeUnloadOff = undefined;
+
+        });
 
     }]);
