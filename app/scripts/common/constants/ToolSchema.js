@@ -39,7 +39,7 @@ var Schema = {
         },
         stringTypeDef: {
             type: 'string',
-            enum: ['string', 'boolean', 'file', 'float', 'int', 'null']
+            enum: ['string', 'boolean', 'file', 'float', 'int', 'null', 'File']
         },
         enumDef: {
             type: 'object',
@@ -302,7 +302,7 @@ var Schema = {
             required: ['baseCmd', 'argAdapters']
         }
     },
-    required: ['@id', '@type', '@context', 'label', 'owner', 'inputs', 'outputs']
+    required: ['@id', '@type', '@context', 'label', 'inputs', 'outputs']
 };
 
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
