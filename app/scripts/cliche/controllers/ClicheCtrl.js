@@ -672,72 +672,72 @@ angular.module('registryApp.cliche')
         /**
          * Fork the current tool
          */
-        $scope.forkTool = function () {
-
-            var modalInstance = $modal.open({
-                controller: 'PickRepoModalCtrl',
-                template: $templateCache.get('views/repo/pick-repo-name.html'),
-                windowClass: 'modal-confirm',
-                resolve: {data: function () { return {repos: $scope.view.repos, type: 'save', pickName: true};}}
-
-            });
-
-            modalInstance.result.then(function(data) {
-
-                $scope.view.loading = true;
-
-                var repoId = data.repoId,
-                    name = data.name,
-                    tool = Cliche.getTool(),
-                    job = Cliche.getJob();
-
-                Tool.fork(repoId, name, tool, job, $scope.view.type).then(function (result) {
-
-                    $scope.view.loading = false;
-
-                    redirectTo('cliche-edit', {type: $scope.view.type, id: result.app._id, revision: 'latest'});
-
-                }, function(error) {
-                    $scope.view.loading = false;
-                    $rootScope.$broadcast('httpError', {json: error});
-                });
-
-            });
-
-            return modalInstance;
-
-        };
+        //$scope.forkTool = function () {
+        //
+        //    var modalInstance = $modal.open({
+        //        controller: 'PickRepoModalCtrl',
+        //        template: $templateCache.get('views/repo/pick-repo-name.html'),
+        //        windowClass: 'modal-confirm',
+        //        resolve: {data: function () { return {repos: $scope.view.repos, type: 'save', pickName: true};}}
+        //
+        //    });
+        //
+        //    modalInstance.result.then(function(data) {
+        //
+        //        $scope.view.loading = true;
+        //
+        //        var repoId = data.repoId,
+        //            name = data.name,
+        //            tool = Cliche.getTool(),
+        //            job = Cliche.getJob();
+        //
+        //        Tool.fork(repoId, name, tool, job, $scope.view.type).then(function (result) {
+        //
+        //            $scope.view.loading = false;
+        //
+        //            redirectTo('cliche-edit', {type: $scope.view.type, id: result.app._id, revision: 'latest'});
+        //
+        //        }, function(error) {
+        //            $scope.view.loading = false;
+        //            $rootScope.$broadcast('httpError', {json: error});
+        //        });
+        //
+        //    });
+        //
+        //    return modalInstance;
+        //
+        //};
 
         /**
          * Delete tool revision
          */
-        $scope.deleteRevision = function () {
-
-            var modalInstance = $modal.open({
-                template: $templateCache.get('views/partials/confirm-delete.html'),
-                controller: 'ModalCtrl',
-                windowClass: 'modal-confirm',
-                resolve: {data: function () { return {}; }}
-            });
-
-            modalInstance.result.then(function () {
-
-                $scope.view.loading = true;
-
-                Tool.deleteRevision($scope.view.revision._id).then(function () {
-
-                    $scope.view.loading = false;
-
-                    redirectTo('apps');
-
-                }, function() {
-                    $scope.view.loading = false;
-                });
-            });
-
-            return modalInstance;
-
-        };
+        //$scope.deleteRevision = function () {
+        //
+        //    var modalInstance = $modal.open({
+        //        template: $templateCache.get('views/partials/confirm-delete.html'),
+        //        controller: 'ModalCtrl',
+        //        windowClass: 'modal-confirm',
+        //        resolve: {data: function () { return {}; }}
+        //    });
+        //
+        //    modalInstance.result.then(function () {
+        //
+        //        $scope.view.loading = true;
+        //
+        //        Tool.deleteRevision($scope.view.revision._id).then(function () {
+        //
+        //            $scope.view.loading = false;
+        //
+        //            redirectTo('apps');
+        //
+        //        }, function() {
+        //            $scope.view.loading = false;
+        //        });
+        //    });
+        //
+        //    return modalInstance;
+        //
+        //};
        
 
         /**
