@@ -7,6 +7,9 @@
 'use strict';
 
 angular.module('registryApp.common', [])
-	.config([function() {
+	.config(['$httpProvider', function($httpProvider) {
+
+		$httpProvider.interceptors.push('HTTPInterceptor');
+
 	}]);
 
