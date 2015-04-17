@@ -179,26 +179,30 @@ module.exports = function (grunt) {
                     style: 'expanded',
                     sourcemap: 'auto'
                 },
-                files: [{
-                    expand: true,
-                    cwd: '<%= yeoman.app %>/styles',
-                    src: ['*.scss'],
-                    dest: '<%= yeoman.app %>/styles',
-                    ext: '.css'
-                }]
+                files: [
+                    {
+                        expand: true,
+                        cwd: '<%= yeoman.app %>/styles',
+                        src: ['*.scss'],
+                        dest: '<%= yeoman.app %>/styles',
+                        ext: '.css'
+                    }
+                ]
             },
             dist: {
                 options: {
                     style: 'compressed',
                     sourcemap: 'none'
                 },
-                files: [{
-                    expand: true,
-                    cwd: '<%= yeoman.app %>/styles',
-                    src: ['*.scss'],
-                    dest: '.tmp/styles',
-                    ext: '.css'
-                }]
+                files: [
+                    {
+                        expand: true,
+                        cwd: '<%= yeoman.app %>/styles',
+                        src: ['*.scss'],
+                        dest: '.tmp/styles',
+                        ext: '.css'
+                    }
+                ]
             }
         },
 
@@ -246,27 +250,213 @@ module.exports = function (grunt) {
         // By default, your `index.html`'s <!-- Usemin block --> will take care of
         // minification. These next options are pre-configured if you do not wish
         // to use the Usemin blocks.
-        // cssmin: {
-        //   dist: {
-        //     files: {
-        //       '<%= yeoman.dist %>/styles/main.css': [
-        //         '.tmp/styles/{,*/}*.css'
-        //       ]
-        //     }
-        //   }
-        // },
-        // uglify: {
-        //   dist: {
-        //     files: {
-        //       '<%= yeoman.dist %>/scripts/scripts.js': [
-        //         '<%= yeoman.dist %>/scripts/scripts.js'
-        //       ]
-        //     }
-        //   }
-        // },
-        // concat: {
-        //   dist: {}
-        // },
+        cssmin: {
+            dist: {
+                files: {
+                    '<%= yeoman.dist %>/styles/main.css': [
+                        '.tmp/styles/{,*/}*.css'
+                    ]
+                }
+            }
+        },
+        uglify: {
+            dist: {
+                files: {
+                    '<%= yeoman.dist %>/scripts/vendor.min.js': [
+                        '<%= yeoman.dist %>/scripts/vendor.js'
+                    ],
+                    '<%= yeoman.dist %>/scripts/dyole.min.js': [
+                        '<%= yeoman.dist %>/scripts/util.js',
+                        '<%= yeoman.dist %>/scripts/integration.js',
+                        '<%= yeoman.dist %>/scripts/cliche.js',
+                        '<%= yeoman.dist %>/scripts/dyole.js'
+                    ],
+                    '<%= yeoman.dist %>/scripts/cliche.min.js': [
+                        '<%= yeoman.dist %>/scripts/util.js',
+                        '<%= yeoman.dist %>/scripts/integration.js',
+                        '<%= yeoman.dist %>/scripts/cliche.js'
+                    ]
+                }
+            }
+        },
+        concat: {
+            options: {
+                separator: ';'
+            },
+            common: {
+                src: [
+
+                    '<%= yeoman.app %>/scripts/util/util.config.js',
+                    '<%= yeoman.app %>/scripts/util/filters/is-empty.js',
+                    '<%= yeoman.app %>/scripts/util/filters/encode.js',
+                    '<%= yeoman.app %>/scripts/util/filters/trim.js',
+                    '<%= yeoman.app %>/scripts/util/filters/repo.js',
+                    '<%= yeoman.app %>/scripts/util/filters/is-integer.js',
+                    '<%= yeoman.app %>/scripts/util/services/lodash.js',
+
+
+                    '<%= yeoman.app %>/scripts/app/app.config.js',
+                    '<%= yeoman.app %>/scripts/app/controllers/AppsCtrl.js',
+                    '<%= yeoman.app %>/scripts/app/controllers/ToolCtrl.js',
+                    '<%= yeoman.app %>/scripts/app/controllers/ToolRevisionCtrl.js',
+                    '<%= yeoman.app %>/scripts/app/controllers/WorkflowViewCtrl.js',
+                    '<%= yeoman.app %>/scripts/app/controllers/WorkflowEditorCtrl.js',
+                    '<%= yeoman.app %>/scripts/app/models/App.js',
+
+                    '<%= yeoman.app %>/scripts/repo/repo.config.js',
+                    '<%= yeoman.app %>/scripts/repo/controllers/ReposCtrl.js',
+                    '<%= yeoman.app %>/scripts/repo/controllers/RepoCtrl.js',
+                    '<%= yeoman.app %>/scripts/repo/controllers/AddYourGitHubRepoCtrl.js',
+                    '<%= yeoman.app %>/scripts/repo/controllers/RepoInstructionsCtrl.js',
+                    '<%= yeoman.app %>/scripts/repo/controllers/PickRepoModalCtrl.js',
+                    '<%= yeoman.app %>/scripts/repo/controllers/ManageRepoCtrl.js',
+                    '<%= yeoman.app %>/scripts/repo/models/Repo.js',
+
+                    '<%= yeoman.app %>/scripts/common/common.config.js',
+                    '<%= yeoman.app %>/scripts/common/controllers/MarkdownCtrl.js',
+                    '<%= yeoman.app %>/scripts/common/controllers/ModalCtrl.js',
+                    '<%= yeoman.app %>/scripts/common/controllers/ExpressionCtrl.js',
+                    '<%= yeoman.app %>/scripts/common/directives/copy.js',
+                    '<%= yeoman.app %>/scripts/common/directives/loading.js',
+                    '<%= yeoman.app %>/scripts/common/directives/paginator.js',
+                    '<%= yeoman.app %>/scripts/common/directives/json-preview.js',
+                    '<%= yeoman.app %>/scripts/common/directives/error.js',
+                    '<%= yeoman.app %>/scripts/common/directives/is-valid-name.js',
+                    '<%= yeoman.app %>/scripts/common/directives/is-valid-int.js',
+                    '<%= yeoman.app %>/scripts/common/directives/expr.js',
+                    '<%= yeoman.app %>/scripts/common/directives/codemirror.js',
+                    '<%= yeoman.app %>/scripts/common/directives/help-message.js',
+                    '<%= yeoman.app %>/scripts/common/services/BeforeUnload.js',
+                    '<%= yeoman.app %>/scripts/common/services/BeforeRedirect.js',
+                    '<%= yeoman.app %>/scripts/common/services/Helper.js',
+                    '<%= yeoman.app %>/scripts/common/services/SandBox.js',
+                    '<%= yeoman.app %>/scripts/common/services/schema-validator.js',
+                    '<%= yeoman.app %>/scripts/common/services/Api.js',
+                    '<%= yeoman.app %>/scripts/common/constants/ScriptSchema.js',
+                    '<%= yeoman.app %>/scripts/common/constants/ToolSchema.js',
+                    '<%= yeoman.app %>/scripts/common/constants/WorkflowSchema.js',
+                    '<%= yeoman.app %>/scripts/common/constants/HelpMessages.js',
+                    '<%= yeoman.app %>/scripts/common/controllers/ModalJSONCtrl.js'
+                ],
+                dest: 'dist/scripts/util.js'
+            },
+            dyole: {
+                src: [
+                    '<% yeoman.app %>/scripts/cliche/cliche.config.js',
+                    '<% yeoman.app %>/scripts/cliche/constants/schemas.js',
+                    '<% yeoman.app %>/scripts/cliche/constants/schema-definitions.js',
+                    '<% yeoman.app %>/scripts/cliche/controllers/ClicheCtrl.js',
+                    '<% yeoman.app %>/scripts/cliche/controllers/InputFileMoreCtrl.js',
+                    '<% yeoman.app %>/scripts/cliche/controllers/ManagePropertyArgCtrl.js',
+                    '<% yeoman.app %>/scripts/cliche/controllers/ManagePropertyInputCtrl.js',
+                    '<% yeoman.app %>/scripts/cliche/controllers/ManagePropertyOutputCtrl.js',
+                    '<% yeoman.app %>/scripts/cliche/controllers/JsonEditorCtrl.js',
+                    '<% yeoman.app %>/scripts/cliche/directives/property-input.js',
+                    '<% yeoman.app %>/scripts/cliche/directives/property-output.js',
+                    '<% yeoman.app %>/scripts/cliche/directives/property-arg.js',
+                    '<% yeoman.app %>/scripts/cliche/directives/enum.js',
+                    '<% yeoman.app %>/scripts/cliche/directives/input-field.js',
+                    '<% yeoman.app %>/scripts/cliche/directives/add-property.js',
+                    '<% yeoman.app %>/scripts/cliche/directives/key-changer.js',
+                    '<% yeoman.app %>/scripts/cliche/directives/separator.js',
+                    '<% yeoman.app %>/scripts/cliche/directives/separator-info.js',
+                    '<% yeoman.app %>/scripts/cliche/directives/property-header.js',
+                    '<% yeoman.app %>/scripts/cliche/filters/contains.js',
+                    '<% yeoman.app %>/scripts/cliche/filters/size.js',
+                    '<% yeoman.app %>/scripts/cliche/services/Cliche.js',
+                    '<% yeoman.app %>/scripts/cliche/services/RecursionHelper.js',
+                    '<% yeoman.app %>/scripts/cliche/services/Separator.js',
+                    '<% yeoman.app %>/scripts/cliche/services/Validator.js',
+
+                    '<%= yeoman.app %>/scripts/dyole-app/dyoleApp.js',
+                    '<%= yeoman.app %>/scripts/dyole-app/template.js',
+                    '<%= yeoman.app %>/scripts/dyole/dyole.config.js',
+
+                    '<%= yeoman.app %>/scripts/dyole/constants/Schemas.js',
+
+                    '<%= yeoman.app %>/scripts/dyole/controllers/PipelineCtrl.js',
+                    '<%= yeoman.app %>/scripts/dyole/controllers/NodeEditCtrl.js',
+                    '<%= yeoman.app %>/scripts/dyole/controllers/DyoleJsonEditorCtrl.js',
+                    '<%= yeoman.app %>/scripts/dyole/controllers/DyoleEditMetadataCtrl.js',
+                    '<%= yeoman.app %>/scripts/dyole/directives/pipeline.js',
+                    '<%= yeoman.app %>/scripts/dyole/directives/drag.js',
+                    '<%= yeoman.app %>/scripts/dyole/directives/drop.js',
+                    '<%= yeoman.app %>/scripts/dyole/factories/pipeline.js',
+                    '<%= yeoman.app %>/scripts/dyole/factories/event.js',
+                    '<%= yeoman.app %>/scripts/dyole/factories/node.js',
+                    '<%= yeoman.app %>/scripts/dyole/factories/connection.js',
+                    '<%= yeoman.app %>/scripts/dyole/factories/terminal.js',
+                    '<%= yeoman.app %>/scripts/dyole/factories/formater.js',
+                    '<%= yeoman.app %>/scripts/dyole/factories/formaterD2.js',
+                    '<%= yeoman.app %>/scripts/dyole/factories/common.js',
+
+                    '<%= yeoman.app %>/scripts/dyole/services/PipelineService.js'
+                ],
+                dest: 'dist/scripts/dyole.js'
+            },
+            cliche: {
+                src: [
+                    '<%= yeoman.app %>/scripts/cliche-app/clicheApp.js',
+                    '<%= yeoman.app %>/scripts/cliche-app/template.js',
+                    '<%= yeoman.app %>/scripts/cliche/cliche.config.js',
+                    '<%= yeoman.app %>/scripts/cliche/constants/schemas.js',
+                    '<%= yeoman.app %>/scripts/cliche/constants/schema-definitions.js',
+                    '<%= yeoman.app %>/scripts/cliche/controllers/ClicheCtrl.js',
+                    '<%= yeoman.app %>/scripts/cliche/controllers/InputFileMoreCtrl.js',
+                    '<%= yeoman.app %>/scripts/cliche/controllers/ManagePropertyArgCtrl.js',
+                    '<%= yeoman.app %>/scripts/cliche/controllers/ManagePropertyInputCtrl.js',
+                    '<%= yeoman.app %>/scripts/cliche/controllers/ManagePropertyOutputCtrl.js',
+                    '<%= yeoman.app %>/scripts/cliche/controllers/JsonEditorCtrl.js',
+                    '<%= yeoman.app %>/scripts/cliche/directives/property-input.js',
+                    '<%= yeoman.app %>/scripts/cliche/directives/property-output.js',
+                    '<%= yeoman.app %>/scripts/cliche/directives/property-arg.js',
+                    '<%= yeoman.app %>/scripts/cliche/directives/enum.js',
+                    '<%= yeoman.app %>/scripts/cliche/directives/input-field.js',
+                    '<%= yeoman.app %>/scripts/cliche/directives/add-property.js',
+                    '<%= yeoman.app %>/scripts/cliche/directives/key-changer.js',
+                    '<%= yeoman.app %>/scripts/cliche/directives/separator.js',
+                    '<%= yeoman.app %>/scripts/cliche/directives/separator-info.js',
+                    '<%= yeoman.app %>/scripts/cliche/directives/property-header.js',
+                    '<%= yeoman.app %>/scripts/cliche/filters/contains.js',
+                    '<%= yeoman.app %>/scripts/cliche/filters/size.js',
+                    '<%= yeoman.app %>/scripts/cliche/services/Cliche.js',
+                    '<%= yeoman.app %>/scripts/cliche/services/RecursionHelper.js',
+                    '<%= yeoman.app %>/scripts/cliche/services/Separator.js',
+                    '<%= yeoman.app %>/scripts/cliche/services/Validator.js'
+
+                ],
+                dest: 'dist/scripts/cliche.js'
+            },
+            integration: {
+                src: [
+                    '<%= yeoman.app %>/scripts/integration/integration.config.js',
+                    '<%= yeoman.app %>/scripts/integration/services/UserService.js',
+                    '<%= yeoman.app %>/scripts/integration/services/ApiService.js'
+                ],
+                dest: 'dist/scripts/integration.js'
+            },
+            vendor: {
+                src: [
+                    '<%= yeoman.app %>/vendor/jsandbox/src/jsandbox.js',
+
+                    'bower_components/jquery/dist/jquery.js',
+
+                    'bower_components/angular/angular.js',
+                    'bower_components/angular-resource/angular-resource.js',
+                    'bower_components/angular-cookies/angular-cookies.js',
+                    'bower_components/angular-sanitize/angular-sanitize.js',
+                    'bower_components/angular-animate/angular-animate.js',
+                    'bower_components/angular-ui-router/release/angular-ui-router.js',
+
+                    'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+                    'bower_components/ng-prettyjson/dist/ng-prettyjson.min.js',
+
+                    'bower_components/angular-marked/angular-marked.js',
+                    'bower_components/ng-tags-input/ng-tags-input.js'
+                ],
+                dest: 'dist/scripts/vendor.js'
+            }
+        },
 
         imagemin: {
             dist: {
@@ -548,20 +738,16 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build', [
         'clean:dist',
-        //'wiredep',
-        'useminPrepare',
+//        'useminPrepare',
         'concurrent:dist',
-        'ngtemplates:app',
+        'ngtemplates:dyole',
+        'ngtemplates:cliche',
         'autoprefixer',
         'concat',
         'ngAnnotate',
         'copy:dist',
-        'cdnify',
         'cssmin',
-        'uglify',
-        'filerev',
-        'usemin',
-        'htmlmin'
+        'uglify'
     ]);
 
     grunt.registerTask('default', [
