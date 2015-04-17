@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('ClicheCtrl', ['$scope', '$q', '$modal', '$templateCache', '$rootScope', 'App', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload', 'BeforeRedirect', 'Api', 'User', 'lodash', 'HelpMessages', 'Globals', '$window', function($scope, $q, $modal, $templateCache, $rootScope, App, Cliche, Loading, SandBox, BeforeUnload, BeforeRedirect, Api, User, _, HelpMessages, Globals, $window) {
+    .controller('ClicheCtrl', ['$scope', '$q', '$modal', '$templateCache', '$rootScope', 'App', 'Tool', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload', 'BeforeRedirect', 'Api', 'User', 'lodash', 'HelpMessages', 'Globals', '$window', function($scope, $q, $modal, $templateCache, $rootScope, App, Tool, Cliche, Loading, SandBox, BeforeUnload, BeforeRedirect, Api, User, _, HelpMessages, Globals, $window) {
         $scope.Loading = Loading;
 
         var cliAdapterWatchers = [],
@@ -306,15 +306,10 @@ angular.module('registryApp.cliche')
         /**
          * Redirect to the other page
          *
-         * @param url
+         * @param revisionId
          */
-        var redirectTo = function(state, params) {
-
-            params = params || {};
-
-            BeforeRedirect.setReload(true);
-            //$state.go(state, params);
-
+        var redirectTo = function(revisionId) {
+            $window.location.pathname = '/rabix/' + Globals.appType + '/' + Globals.projectId + '/' + Globals.appName + '/' + revisionId;
         };
 
         /**
@@ -643,15 +638,13 @@ angular.module('registryApp.cliche')
 
             $scope.view.loading = true;
 
-            var appId = $scope.view.app['@id'],
-                tool = Cliche.getTool(),
-                job = Cliche.getJob();
+            var tool = Cliche.getTool();
 
-            Tool.update(appId, tool, job, $scope.view.type)
+            App.update(tool, $scope.view.type)
                 .then(function(result) {
-
                     $scope.view.loading = false;
 
+                    var newRevision = result.message['sbg:revision'];
                     var modalInstance = $modal.open({
                         template: $templateCache.get('views/cliche/partials/app-save-response.html'),
                         controller: 'ModalCtrl',
@@ -660,7 +653,8 @@ angular.module('registryApp.cliche')
                     });
 
                     modalInstance.result.then(function() {
-                        redirectTo('cliche-edit', {type: $scope.view.type, id: $scope.view.app._id, revision: result.revision._id});
+                        redirectTo(newRevision);
+                        $scope.view.loading = true;
                     });
 
                     deferred.resolve(modalInstance);
@@ -779,7 +773,7 @@ angular.module('registryApp.cliche')
                 });
 
                 modalInstance.result.then(function (revisionId) {
-                    $window.location.pathname = '/rabix/' + Globals.appType + '/' + Globals.projectId + '/' + Globals.appName + '/' + revisionId;
+                    redirectTo(revisionId);
 
                     // to indicate that something is happening while the page redirects
                     $scope.view.loading = true;
