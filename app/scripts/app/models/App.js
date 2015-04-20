@@ -79,7 +79,7 @@ angular.module('registryApp.app')
         };
 
         self.getAppUrl = function (json) {
-            return Globals.brood + '/v1/app' + Globals.app_url;
+            return Globals.urls.brood + 'apps' + Globals.appUrl;
         };
 
         self.flush = function (type) {
