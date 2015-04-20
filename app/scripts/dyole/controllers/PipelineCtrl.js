@@ -136,7 +136,6 @@ angular.module('registryApp.dyole')
             App.getApp(app.project_owner, app.project_slug, app.app_name).then(function(result) {
 
                 $scope.view.loading = false;
-                console.log(result.message);
 
                 if (typeof result.message === 'object' && !_.isEmpty(result.message)) {
                     Pipeline.addNode(result.message, e.clientX, e.clientY);

@@ -1,8 +1,14 @@
 <div class="modal-header">
     <button type="button" class="close" ng-click="cancel()"><span>&times;</span><span class="sr-only">Close</span></button>
-    <h4 class="modal-title">{{ ::data.softwareDescription.name || 'Untitled' }}</strong></h4>
+    <h4 class="modal-title">{{ data.label || data.name || data.softwareDescription.name }}</strong></h4>
 </div>
 <div class="modal-body">
-    <p><strong>Author:</strong> {{ ::data.documentAuthor || 'N/A' }}</p>
-    <p><strong>Description:</strong> {{ ::data.softwareDescription.description || 'N/A' }}</p>
+    <p><strong>Author:</strong> <span ng-repeat="owner in ::data.owner"> {{ owner }} <span ng-if="!$last">,</span> </span></p>
+    <p>
+        <strong>Description:</strong>
+        <div class="form-group">
+            <div class="markdown-body" marked="data.description"></div>
+        </div>
+    </p>
+
 </div>
