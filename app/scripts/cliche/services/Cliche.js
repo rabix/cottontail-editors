@@ -51,10 +51,10 @@ angular.module('registryApp.cliche')
         var getTypes = function(type) {
 
             var map = {
-                input: ['file', 'string', 'enum', 'int', 'float', 'boolean', 'array'],
-                output: ['file', 'array'],
-                inputItem: ['string', 'int', 'float', 'file', 'record'],
-                outputItem: ['file']
+                input: ['File', 'string', 'enum', 'int', 'float', 'boolean', 'array'],
+                output: ['File', 'array'],
+                inputItem: ['string', 'int', 'float', 'File', 'record'],
+                outputItem: ['File']
             };
 
             return map[type] || [];
@@ -672,7 +672,7 @@ angular.module('registryApp.cliche')
                             deferred.reject(error);
                         });
                     break;
-                case 'file':
+                case 'file' || 'File':
                     /* if input is FILE */
                     applyTransform(property.adapter.argValue, inputs[key].path, true)
                         .then(function (result) {
@@ -1065,7 +1065,7 @@ angular.module('registryApp.cliche')
 
             var defaultTypes = {
                 input: 'string',
-                output: 'file'
+                output: 'File'
             };
 
             if (_.isEmpty(property)) {
