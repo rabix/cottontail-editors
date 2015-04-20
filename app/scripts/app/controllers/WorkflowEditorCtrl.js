@@ -15,6 +15,9 @@ angular.module('registryApp.app')
 
         $scope.view = {};
 
+        /* expose Globals to template */
+        $scope.view.globals = Globals;
+
         /* workflow mode: new or edit */
         $scope.view.mode = 'edit';
 
