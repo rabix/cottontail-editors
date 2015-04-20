@@ -34,7 +34,6 @@ angular.module('registryApp.cliche')
 
         var enumObj = Cliche.parseEnum($scope.view.property.schema);
 
-        $scope.view.enumName = enumObj.name;
         $scope.view.symbols = enumObj.symbols;
 
         $scope.view.disabled = ($scope.view.items && $scope.view.items.type) === 'record';
@@ -60,11 +59,10 @@ angular.module('registryApp.cliche')
 
             /* special case, if enum type we need to check if enum name already exists */
             if ($scope.view.type === 'enum') {
-
-                enumObj.newName = $scope.view.enumName;
+                enumObj.newName = $scope.view.name;
 
                 if (Cliche.checkIfEnumNameExists(options.mode, enumObj)) {
-                    $scope.view.error = 'Choose another enum name, "' + $scope.view.enumName + '" already exists';
+                    $scope.view.error = 'Choose another enum name, "' + $scope.view.name + '" already exists';
                     return false;
                 }
             }
@@ -74,7 +72,7 @@ angular.module('registryApp.cliche')
                 name: $scope.view.name,
                 required: $scope.view.required,
                 type: $scope.view.type,
-                enumName: $scope.view.enumName,
+                enumName: $scope.view.name,
                 symbols: $scope.view.symbols,
                 items: $scope.view.items,
                 label: $scope.view.label,
