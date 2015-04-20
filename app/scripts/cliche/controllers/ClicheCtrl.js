@@ -11,8 +11,14 @@ angular.module('registryApp.cliche')
 
         var cliAdapterWatchers = [],
             jobWatcher,
-            reqMap = {CpuRequirement: 'cpu', MemRequirement: 'mem'};
-            //onBeforeUnloadOff = BeforeUnload.register(function() { return 'Please save your changes before leaving.'; });
+            reqMap = {CpuRequirement: 'cpu', MemRequirement: 'mem'},
+            onBeforeUnloadOff = BeforeUnload.register(
+                function() {
+                    return 'Please save your changes before leaving.';
+                },
+                function() {
+                    return $scope.form.tool.$dirty
+                });
 
         $scope.view = {};
         $scope.form = {};
@@ -95,9 +101,6 @@ angular.module('registryApp.cliche')
 
                     var tool = result[0].message;
 
-                    console.log(tool);
-                    console.log(Globals);
-                    
                     $scope.view.app = tool;
                     $scope.view.tool = tool;
 
@@ -114,7 +117,6 @@ angular.module('registryApp.cliche')
                 $scope.toggleConsole();
 
             });
-
 
         /**
          * Set up cliche form
