@@ -133,7 +133,7 @@ angular.module('registryApp.dyole')
             $scope.view.loading = true;
             $scope.view.explanation = false;
 
-            App.getApp(app.project_owner, app.project_slug, app.app_name).then(function(result) {
+            App.getApp(app.project, app.app_name).then(function(result) {
 
                 $scope.view.loading = false;
 

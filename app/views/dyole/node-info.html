@@ -3,7 +3,7 @@
     <h4 class="modal-title">{{ data.label || data.name || data.softwareDescription.name }}</strong></h4>
 </div>
 <div class="modal-body">
-    <p><strong>Author:</strong> <span ng-repeat="owner in ::data.owner"> {{ owner }} <span ng-if="!$last">,</span> </span></p>
+    <p><strong>Author:</strong> <span > {{ ::data['sbg:createdBy'] }} </span></p>
     <p>
         <strong>Description:</strong>
         <div class="form-group">

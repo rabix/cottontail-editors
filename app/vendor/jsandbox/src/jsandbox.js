@@ -48,10 +48,19 @@ var JSandbox = (function (self) {
 		if (!(sandbox instanceof Sandbox)) {
 			return new Sandbox();
 		}
-		
-		sandbox[$worker] = new Worker(Sandbox.url);
+
+        var BlobBuilder = window.MozBlobBuilder || window.WebKitBlobBuilder || window.Blob,
+            URL = window.URL || window.webkitURL;
+
+        var blob = new BlobBuilder([
+            document.querySelector('#worker-script').textContent
+        ], { type: "text/javascript" });
+
+        // Note: window.webkitURL.createObjectURL() in Chrome 10+.
+        sandbox[$worker] = new Worker(URL.createObjectURL(blob));
+//		sandbox[$worker] = new Worker(Sandbox.url);
 		sandbox[$requests] = {};
-		
+
 		sandbox[$worker].onmessage = function (event) {
 			var data = event[$data], request;
 			if (typeof data !== "object") {
