@@ -27,7 +27,6 @@ angular.module('registryApp.cliche')
 
         var enumObj = Cliche.parseEnum($scope.view.property.schema);
 
-        $scope.view.enumName = enumObj.name;
         $scope.view.symbols = enumObj.symbols;
 
         $scope.view.expose = $scope.exposed ? !_.isUndefined($scope.exposed[keyName]) : false;

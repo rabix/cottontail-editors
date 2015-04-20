@@ -39,14 +39,6 @@
             </div>
             <!-- END Item Type -->
 
-            <div class="col-md-4" ng-if="view.type === 'enum'">
-                <div class="form-group" ng-class="{'has-error': (view.form.enumName.$invalid && view.form.$dirty)}">
-                    <label class="control-label" for="name">Enum Name</label>
-                    <input type="text" class="form-control" id="enumName" name="enumName" ng-model="view.enumName" required>
-                </div>
-            </div>
-            <!-- END Name -->
-
         </div>
 
         <div class="row" ng-if="view.type === 'enum'">

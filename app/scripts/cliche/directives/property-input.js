@@ -34,7 +34,6 @@ angular.module('registryApp.cliche')
 
             enumObj = Cliche.parseEnum($scope.view.schema);
 
-            $scope.view.enumName = enumObj.name;
             $scope.view.symbols = enumObj.symbols;
 
             tplType = Cliche.getTplType($scope.view.type);
