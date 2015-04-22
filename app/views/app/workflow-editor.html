@@ -73,7 +73,7 @@
 
             <div class="content content-tbl flex-box-column">
 
-                <div class="tabs right flex-one" ng-switch="view.tab">
+                <div class="tabs right flex-one" ng-switch="view.tab" >
 
                     <div class="tab flex-box-column flex-one" ng-class="{loading: view.filtering}" ng-switch-when="apps">
                         <form class="search-form" ng-submit="" novalidate>
@@ -111,7 +111,7 @@
                                         </span>
 
                                         <ul class="apps-inner-list">
-                                            <li ng-if="apps.length !== 0"><span class="label label-info section-name">Apps</span></li>
+                                            <!--<li ng-if="apps.length !== 0"><span class="label label-info section-name">Apps</span></li>-->
 
                                             <li ng-repeat="app in filterdApps = (apps | filter:view.searchTerm)">
 

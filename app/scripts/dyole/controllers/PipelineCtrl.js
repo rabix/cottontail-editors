@@ -225,11 +225,12 @@ angular.module('registryApp.dyole')
          *
          * @param e
          * @param model
+         * @param schema
          */
-        var onNodeInfo = function(e, model) {
+        var onNodeInfo = function(e, model, schema) {
 
             var _getConnections = function () {
-                var connections = Pipeline._getConnections();
+                var connections = Pipeline.getConnections();
 
                 return _.filter(connections, function(connection){
                     return connection.end_node === model.id || connection.starrt_node === model.id
@@ -240,10 +241,10 @@ angular.module('registryApp.dyole')
             var $templateCache = $injector.get('$templateCache');
 
             var modalInstance = $modal.open({
-                template: $templateCache.get('views/dyole/node-info.html'),
+                template: $templateCache.get('views/dyole/'+ ( schema ? 'io-' : '') +'node-info.html'),
                 controller: 'ModalTabsCtrl',
                 windowClass: 'modal-node',
-                resolve: {data: function () { return {model: model, connections: _getConnections()}; }}
+                resolve: {data: function () { return {model: model, connections: _getConnections(), schema: schema};}}
             });
 
             modalInstance.result.then(function (scatter) {

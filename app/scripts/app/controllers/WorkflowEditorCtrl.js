@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('registryApp.app')
-    .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$modal', '$templateCache', 'Loading', 'App', 'User', 'Repo', 'BeforeRedirect', 'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload', function ($scope, $rootScope, $q, $modal, $templateCache, Loading, App, User, Repo, BeforeRedirect, Helper, PipelineService, _, Globals, BeforeUnload) {
+    .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$modal', '$templateCache', 'Loading', 'App', 'User', 'Repo', 'BeforeRedirect', 'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload', '$timeout', function ($scope, $rootScope, $q, $modal, $templateCache, Loading, App, User, Repo, BeforeRedirect, Helper, PipelineService, _, Globals, BeforeUnload, $timeout) {
         var PipelineInstance = null,
             prompt = false,
             onBeforeUnloadOff = BeforeUnload.register(function() { return 'Please save your changes before leaving.'; }, function() {return prompt});
@@ -104,7 +104,6 @@ angular.module('registryApp.app')
             App.get()
                 .then(function (result) {
                     $scope.view.workflow = result.message;
-                    $scope.view.loading = false;
                 });
         }
 
@@ -252,6 +251,7 @@ angular.module('registryApp.app')
                 });
 
                 modalInstance.result.then(function() {
+                    prompt = false;
                     window.location.href = url;
                 });
 

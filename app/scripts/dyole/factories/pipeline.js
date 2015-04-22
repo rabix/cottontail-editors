@@ -500,9 +500,16 @@ angular.module('registryApp.dyole')
                         internalType = isInput ? 'outputs' : 'inputs',
                         type = isInput ? 'input' : 'output';
 
+                    var descriptions = {
+                        input: '###*Input*' + '\n' + 'Downloads input files to local cluster for further processing.',
+                        output: '###*Output*' + '\n' + 'Uploads resulting files from processing cluster to user storage.'
+                    };
+
                     terId  = this._generateNodeId({label: type});
 
                     model.label = terId;
+                    model.description = descriptions[type];
+                    model['sbg:createdBy'] = 'SBG';
                     model.softwareDescription.label = terId;
                     model.softwareDescription.type = type;
                     model[internalType].push({
@@ -803,6 +810,17 @@ angular.module('registryApp.dyole')
                  */
                 _getConnections: function () {
                     return _.pluck(this.connections, 'model');
+                },
+
+                /**
+                 * Get connections from pipeline model
+                 * Used when generating pipeline json
+                 *
+                 * @returns {*}
+                 * @private
+                 */
+                getConnections: function () {
+                    return this._getConnections();
                 },
 
                 /**

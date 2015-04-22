@@ -388,6 +388,8 @@ angular.module('registryApp.dyole')
                         }
                     }
 
+
+
                 });
 
                 return relations;

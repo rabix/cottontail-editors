@@ -11,7 +11,7 @@
         <div class="heading no-padding">
             <ul class="nav nav-tabs nav-tabs-steps nav-borders">
                 <li ng-class="{active: view.tab === 'info'}"><a href ng-click="switchTab('info')">Info</a></li>
-                <li ng-class="{active: view.tab === 'ports'}"><a href ng-click="switchTab('ports')">Ports</a></li>
+                <li ng-class="{active: view.tab === 'inputs'}"><a href ng-click="switchTab('inputs')">Inputs</a></li>
                 <!--<li ng-class="{active: view.tab === 'tags'}"><a href ng-click="switchTab('tags')">Tags</a></li>-->
             </ul>
         </div>
@@ -30,7 +30,7 @@
                 </p>
             </div>
 
-            <div ng-switch-when="ports">
+            <div ng-switch-when="inputs">
 
                 <form class="form">
 

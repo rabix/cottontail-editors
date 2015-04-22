@@ -4,6 +4,13 @@ angular.module('registryApp.common')
     .controller('ModalTabsCtrl', ['$scope', '$modalInstance', 'data', 'common', 'lodash', function ($scope, $modalInstance, data, Common, _) {
 
         $scope.data = data.model;
+        $scope.schema = _.clone(data.schema, true) || {};
+
+        if (typeof $scope.schema.id !== 'undefined') {
+            $scope.schema.id = null;
+            delete $scope.schema.id;
+        }
+
         $scope.view = {};
 
         $scope.view.tab = data.tabName || 'info';

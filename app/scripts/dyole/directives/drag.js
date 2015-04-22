@@ -28,7 +28,7 @@ angular.module('registryApp.dyole')
                     var data = JSON.stringify(scope.drag);
                     e.dataTransfer.effectAllowed = 'move';
                     e.dataTransfer.setData('Text', data);
-                    e.dataTransfer.setDragImage(angular.element('<img src="' + Globals.urls.base + 'img/rabix/node.png" width="96">')[0], 48, 48);
+                    e.dataTransfer.setDragImage(angular.element('<img style="opcaity: 1 !important;" src="' + Globals.urls.base + 'img/rabix/node.png" width="96">')[0], 48, 48);
 
                     this.classList.add('drag');
 
