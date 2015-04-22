@@ -143,6 +143,11 @@ angular.module('registryApp.dyole')
                             outputs: []
                         };
 
+                    if (typeof schema.scatter !== 'undefined' && typeof schema.scatter === 'string') {
+                        step.scatter = schema.scatter;
+                        delete schema.scatter;
+                    }
+
                     if (schema.ref) {
                         delete schema.ref;
                     }
@@ -394,6 +399,10 @@ angular.module('registryApp.dyole')
                     }
 
                     step.app.id = stepId;
+
+                    if (typeof step.scatter !== 'undefined' && typeof step.scatter === 'string') {
+                        step.app.scatter = step.scatter;
+                    }
 
                     schemas[stepId] = step.app;
 

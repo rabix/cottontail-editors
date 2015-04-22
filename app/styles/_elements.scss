@@ -472,7 +472,7 @@ legend {
     position: relative;
 
     &.drag-over {
-      background-color: #f3f3f3;
+//      background-color: #f3f3f3;
     }
 
     &.loading {
@@ -579,4 +579,13 @@ legend {
   img {
     display: none;
   }
+}
+
+ul.nav-tabs.nav-borders {
+  border-bottom: 2px solid #3584D1;
+  border-top: 2px solid #3584D1;
+}
+
+.modal-body .modal-tabs {
+  padding: 15px;
 }

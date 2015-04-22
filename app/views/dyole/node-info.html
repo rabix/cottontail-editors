@@ -1,14 +1,47 @@
 <div class="modal-header">
-    <button type="button" class="close" ng-click="cancel()"><span>&times;</span><span class="sr-only">Close</span></button>
-    <h4 class="modal-title">{{ data.label || data.name || data.softwareDescription.name }}</strong></h4>
+    <h4 class="modal-title"><a href="{{::data['@id']}}" target="_blank"> {{ data.label || data.name || data.softwareDescription.name }}</strong></a></h4>
 </div>
-<div class="modal-body">
-    <p><strong>Author:</strong> <span > {{ ::data['sbg:createdBy'] }} </span></p>
-    <p>
-        <strong>Description:</strong>
-        <div class="form-group">
-            <div class="markdown-body" marked="data.description"></div>
-        </div>
-    </p>
 
+<div class="modal-body no-padding">
+    <div class="col">
+        <div class="heading no-padding">
+            <ul class="nav nav-tabs nav-tabs-steps nav-borders">
+                <li ng-class="{active: view.tab === 'info'}"><a href ng-click="switchTab('info')">Info</a></li>
+                <li ng-class="{active: view.tab === 'ports'}"><a href ng-click="switchTab('ports')">Ports</a></li>
+                <!--<li ng-class="{active: view.tab === 'tags'}"><a href ng-click="switchTab('tags')">Tags</a></li>-->
+            </ul>
+        </div>
+
+        <div class="tabs right flex-one modal-tabs" ng-switch="view.tab">
+            <div class="tab" ng-switch-when="info">
+                <p><strong>Author:</strong> <span > {{ ::data['sbg:createdBy'] }} </span></p>
+                <p>
+                    <strong>Description:</strong>
+                    <div class="form-group">
+                        <div class="markdown-body" marked="data.description"></div>
+                    </div>
+                </p>
+            </div>
+            <div ng-switch-when="ports">
+                <p>Ports</p>
+
+                <form class="form">
+
+                    <div ng-repeat="input in view.inputs">
+                        <p><strong>id: {{ ::input["@id"] }}</strong> <span>Scatter: </span><input type="checkbox" ng-model="inputValues[input['@id']]" ng-change="onScatterChange(input['@id'], inputValues[input['@id']])"/></p>
+                    </div>
+
+                </form>
+
+            </div>
+            <div ng-switch-when="tags">
+                <p>Tags</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-default" ng-click="cancel()">Close</button>
+    <button class="btn btn-primary" ng-click="ok()">Save</button>
 </div>

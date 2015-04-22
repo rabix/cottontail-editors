@@ -231,11 +231,20 @@ angular.module('registryApp.dyole')
             var $modal = $injector.get('$modal');
             var $templateCache = $injector.get('$templateCache');
 
-            $modal.open({
+            var modalInstance = $modal.open({
                 template: $templateCache.get('views/dyole/node-info.html'),
-                controller: 'ModalCtrl',
+                controller: 'ModalTabsCtrl',
                 windowClass: 'modal-node',
                 resolve: {data: function () { return model; }}
+            });
+
+            modalInstance.result.then(function (scatter) {
+                if (scatter) {
+                    model.scatter = scatter;
+                } else {
+                    model.scatter = false;
+                    delete model.scatter;
+                }
             });
 
         };
