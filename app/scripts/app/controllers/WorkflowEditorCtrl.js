@@ -384,6 +384,27 @@ angular.module('registryApp.app')
             // create task and redirect to task page for that task
         };
 
+        /**
+         * Load json importer
+         */
+        $scope.loadJsonImport = function() {
+
+            var modalInstance = $modal.open({
+                template: $templateCache.get('views/cliche/partials/json-editor.html'),
+                controller: 'JsonEditorCtrl',
+                resolve: { options: function () { return {user: $scope.view.user, type: 'workflow'}; }}
+            });
+
+            modalInstance.result.then(function (json) {
+
+                if (json) {
+                    json = JSON.parse(json);
+                    $scope.view.workflow = json;
+                }
+            });
+
+        };
+
         $scope.validateWorkflowJSON = function () {
 
             PipelineInstance.validate().then(function (workflow) {

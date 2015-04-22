@@ -32,7 +32,10 @@
                         <span class="caret"></span>
                     </button>
 
-                    <ul class="dropdown-menu" role="menu" ng-click="toggleMenu()">
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href ng-click="loadJsonImport()"><i class="fa fa-cloud-download"></i> <span>Import</span></a>
+                        </li>
 
                         <li ng-if="view.user && view.mode === 'edit'">
                             <a href='' ng-click="validateWorkflowJSON()" ng-disabled="view.saving" ><i class="fa fa-check"></i> Validate</a>
