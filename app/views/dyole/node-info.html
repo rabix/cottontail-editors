@@ -1,5 +1,9 @@
 <div class="modal-header">
-    <h4 class="modal-title"><a href="{{::data['@id']}}" target="_blank"> {{ data.label || data.name || data.softwareDescription.name }}</strong></a></h4>
+    <h4 class="modal-title">
+        <a href="{{::data['@id']}}" target="_blank">
+            {{ data.label || data.name || data.softwareDescription.name }}
+        </a>
+    </h4>
 </div>
 
 <div class="modal-body no-padding">
@@ -14,7 +18,10 @@
 
         <div class="tabs right flex-one modal-tabs" ng-switch="view.tab">
             <div class="tab" ng-switch-when="info">
-                <p><strong>Author:</strong> <span > {{ ::data['sbg:createdBy'] }} </span></p>
+                <p>
+                    <strong>Author:</strong>
+                    <span> {{ ::data['sbg:createdBy'] }} </span>
+                </p>
                 <p>
                     <strong>Description:</strong>
                     <div class="form-group">
@@ -22,14 +29,24 @@
                     </div>
                 </p>
             </div>
+
             <div ng-switch-when="ports">
-                <p>Ports</p>
 
                 <form class="form">
 
-                    <div ng-repeat="input in view.inputs">
-                        <p><strong>id: {{ ::input["@id"] }}</strong> <span>Scatter: </span><input type="checkbox" ng-model="inputValues[input['@id']]" ng-change="onScatterChange(input['@id'], inputValues[input['@id']])"/></p>
-                    </div>
+                    <ul ng-repeat="input in view.inputs">
+                        <li class="row">
+                            <strong class="col-xs-3">
+                                {{ ::input["@id"] }}
+                            </strong>
+                            <div class="checkbox col-xs-9">
+                                <label for="{{ ::input['@id'] }}">
+                                    <input id="{{ ::input['@id'] }}" type="checkbox" ng-model="inputValues[input['@id']]" ng-change="onScatterChange(input['@id'], inputValues[input['@id']])"/>
+                                    Scatter
+                                </label>
+                            </div>
+                        </li>
+                    </ul>
 
                 </form>
 

@@ -171,6 +171,8 @@
 
     &.sidebar-col {
       width: 450px;
+      z-index: 1;
+      background-color: #fff;
       border-left: 2px solid $orange;
       overflow-x: hidden;
       @include transition(width 0.2s ease);
