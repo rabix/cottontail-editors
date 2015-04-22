@@ -400,7 +400,7 @@ angular.module('registryApp.dyole')
 
                     step.app.id = stepId;
 
-                    if (typeof step.scatter !== 'undefined' && typeof step.scatter === 'string') {
+                    if (typeof step.scatter !== 'undefined' && typeof step.scatter=== 'string') {
                         step.app.scatter = step.scatter;
                     }
 

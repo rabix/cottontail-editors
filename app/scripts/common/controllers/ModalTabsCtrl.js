@@ -3,19 +3,33 @@
 angular.module('registryApp.common')
     .controller('ModalTabsCtrl', ['$scope', '$modalInstance', 'data', 'common', 'lodash', function ($scope, $modalInstance, data, Common, _) {
 
-        $scope.data = data;
+        $scope.data = data.model;
         $scope.view = {};
 
         $scope.view.tab = data.tabName || 'info';
 
-        $scope.view.availablePorts = [];
+        $scope.inputConnections = {};
 
-        var inputRefs = data.inputs;
+        $scope.sortableOptions = {
+//            handle: ' .handle'
+            // items: ' .panel:not(.panel-heading)'
+            // axis: 'y'
+        };
+
+        var inputRefs = $scope.data.inputs;
 
         inputRefs.sort(function (a, b) {
             if (a['@id'] < b['@id']) { return 1; }
             if (b['@id'] < a['@id']) { return -1; }
             return 0;
+        });
+        
+        _.forEach(data.connections, function (connection) {
+            if ( typeof $scope.inputConnections[connection.input_name] === 'undefined') {
+                $scope.inputConnections[connection.input_name] = [];
+            }
+
+            $scope.inputConnections[connection.input_name].push(connection);
         });
 
         var _filterInputs = function () {

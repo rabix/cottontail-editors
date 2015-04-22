@@ -5,3 +5,15 @@
     margin: 0;
   }
 }
+
+.input-connections {
+  float: left;
+
+  ul {
+    padding-left: 10px;
+  }
+
+  .connection {
+    cursor: pointer;
+  }
+}
