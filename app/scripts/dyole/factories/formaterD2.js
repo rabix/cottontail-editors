@@ -65,6 +65,10 @@ angular.module('registryApp.dyole')
                         destination: ''
                     };
 
+                    if (typeof rel.position !== 'undefiend') {
+                        dataLink.position = rel.position;
+                    }
+
                     if (rel.input_name === rel.end_node) {
                         dataLink.destination = rel.end_node;
                     } else {
@@ -356,6 +360,10 @@ angular.module('registryApp.dyole')
                         } else {
                             relation.input_name = '#' + dest[1];
                             relation.end_node = dest[0];
+                        }
+
+                        if (typeof dataLink.position !== 'undefiend') {
+                            relation.position = dataLink.position;
                         }
 
                         relations.push(relation);

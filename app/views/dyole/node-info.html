@@ -48,7 +48,7 @@
                             <div class="input-connections col-xs-12">
                                 <ul ui-sortable="sortableOptions" ng-model="inputConnections[input['@id']]">
 
-                                    <li  ng-repeat="connection in inputConnections[input['@id']] track by $index" class="connection">
+                                    <li ng-repeat="connection in inputConnections[input['@id']]" class="connection" data-input="{{ ::input['@id'] }}">
                                         <div><i class="fa fa-bars"></i> Connection - src: {{ ::connection.start_node}}</div>
                                     </li>
 

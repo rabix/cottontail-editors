@@ -14,6 +14,11 @@ angular.module('registryApp.common')
 //            handle: ' .handle'
             // items: ' .panel:not(.panel-heading)'
             // axis: 'y'
+            stop: function(e, ui) {
+                // this callback has the changed model
+                var inputId = ui.item.data('input');
+                console.log($scope.inputConnections[inputId]);
+            }
         };
 
         var inputRefs = $scope.data.inputs;
@@ -30,6 +35,16 @@ angular.module('registryApp.common')
             }
 
             $scope.inputConnections[connection.input_name].push(connection);
+        });
+
+        _.forEach($scope.inputConnections, function (connections) {
+
+            connections.sort(function (a, b) {
+                if (a.position > b.position) { return 1; }
+                if (b.position > a.position) { return -1; }
+                return 0;
+            });
+
         });
 
         var _filterInputs = function () {
@@ -86,6 +101,13 @@ angular.module('registryApp.common')
                 if (val) {
                     scatter = inputId;
                 }
+            });
+
+            _.forEach($scope.inputConnections, function (connections, inputId) {
+                _.forEach(connections, function (connection, index) {
+                    connection.position = index;
+                });
+
             });
 
             $modalInstance.close(scatter);
