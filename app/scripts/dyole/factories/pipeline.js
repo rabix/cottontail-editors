@@ -1026,7 +1026,7 @@ angular.module('registryApp.dyole')
                     } else if (showSidebar) {
                         width = initWidth;
                     } else {
-                        width = initWidth + 300;
+                        width = initWidth + 315;
                     }
 
                     var height = this.$parent[0].offsetHeight || this.$parent[0].parentNode.offsetHeight;
