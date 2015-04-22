@@ -8,12 +8,14 @@
 
 .input-connections {
   float: left;
+  margin-top: 5px;
 
   ul {
-    padding-left: 10px;
-  }
+    padding-left: 15px;
 
-  .connection {
-    cursor: pointer;
+    .connection {
+      padding-bottom: 3px;
+      cursor: pointer;
+    }
   }
 }
