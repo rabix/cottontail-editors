@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('registryApp.app')
-    .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$modal', '$templateCache', 'Loading', 'App', 'User', 'Repo', 'BeforeRedirect', 'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload', '$timeout', function ($scope, $rootScope, $q, $modal, $templateCache, Loading, App, User, Repo, BeforeRedirect, Helper, PipelineService, _, Globals, BeforeUnload, $timeout) {
+    .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$modal', '$templateCache', 'Loading', 'App', 'User', 'Repo', 'BeforeRedirect', 'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload', 'Api', '$window', function ($scope, $rootScope, $q, $modal, $templateCache, Loading, App, User, Repo, BeforeRedirect, Helper, PipelineService, _, Globals, BeforeUnload, Api, $window) {
         var PipelineInstance = null,
             prompt = false,
             onBeforeUnloadOff = BeforeUnload.register(function() { return 'Please save your changes before leaving.'; }, function() {return prompt});
@@ -314,6 +314,15 @@ angular.module('registryApp.app')
             $scope.$digest();
         };
 
+        /**
+         * redirects to a specific revision
+         * @param revisionId
+         */
+        var redirectTo = function(revisionId) {
+            prompt = false;
+            $window.location.pathname = '/rabix/' + Globals.appType + '/' + Globals.projectId + '/' + Globals.appName + '/' + revisionId;
+        };
+
         var onNodeSelectOff = $rootScope.$on('node:select', onNodeSelect);
         var onNodeDeselectOff = $rootScope.$on('node:deselect', onNodeDeselect);
 
@@ -402,6 +411,52 @@ angular.module('registryApp.app')
                     $scope.view.workflow = json;
                 }
             });
+
+        };
+
+        /**
+         * Switch to another revision of the app
+         */
+        $scope.changeRevision = function() {
+
+            var deferred = $q.defer();
+
+            Api.getLatest.get().$promise.then(function(result) {
+                var latestRevision = result.message['sbg:revision'];
+                var revisionsList = _.range(latestRevision + 1);
+
+                var modalInstance = $modal.open({
+                    template: $templateCache.get('views/cliche/partials/revisions.html'),
+                    controller: ['$scope', '$modalInstance', 'data', function ($scope, $modalInstance, data) {
+
+                        $scope.view = data;
+
+                        $scope.cancel = function () {
+                            $modalInstance.dismiss('cancel');
+                        };
+
+                        $scope.choose = function(id) {
+                            $modalInstance.close(id);
+                        };
+
+                    }],
+                    size: 'sm',
+                    windowClass: 'modal-revisions',
+                    resolve: {data: function () {return {revisions: revisionsList, workflow: $scope.view.workflow, current: $scope.view.workflow['sbg:revision']};}}
+                });
+
+                modalInstance.result.then(function (revisionId) {
+                    redirectTo(revisionId);
+
+                    // to indicate that something is happening while the page redirects
+                    $scope.view.loading = true;
+                });
+
+                deferred.resolve(modalInstance);
+            });
+
+
+            return deferred.promise;
 
         };
 

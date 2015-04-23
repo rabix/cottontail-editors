@@ -291,8 +291,9 @@ angular.module('registryApp.dyole')
             onNodeLabelEditOff();
 
             if (angular.isDefined(Pipeline)) {
-                Pipeline.destroy();
-                Pipeline = null;
+                // not a single page app anymore
+                //Pipeline.destroy();
+                //Pipeline = null;
             }
 
         });
