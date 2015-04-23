@@ -23,9 +23,11 @@
                     ng-click="updateTool()"
                     ng-if="view.user && view.user.id === view.app.user._id"
                     ng-disabled="view.saving"
-                    class="app-save-btn btn btn-primary">
+                    class="app-save-btn btn btn-default">
                 <i class="fa fa-save"></i> Save
             </button>
+
+            <button class="btn btn-default" ng-click="runApp()" ng-disabled="view.saving" ><i class="fa fa-play"></i> Run</button>
 
             <div class="btn-group right"  dropdown is-open="status.isopen">
                 <button type="button"  class="btn btn-default dropdown-toggle" dropdown-toggle >

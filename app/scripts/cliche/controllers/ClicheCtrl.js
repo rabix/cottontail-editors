@@ -456,12 +456,10 @@ angular.module('registryApp.cliche')
         };
 
         /**
-         * Toggle dropdown menu
+         * Run app
          */
-        $scope.toggleMenu = function() {
-
-            $scope.view.isMenuVisible = !$scope.view.isMenuVisible;
-
+        $scope.runApp = function () {
+            //todo: run app
         };
 
         /**
