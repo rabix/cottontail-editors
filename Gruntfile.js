@@ -326,6 +326,7 @@ module.exports = function (grunt) {
                     '<%= yeoman.app %>/scripts/common/directives/expr.js',
                     '<%= yeoman.app %>/scripts/common/directives/codemirror.js',
                     '<%= yeoman.app %>/scripts/common/directives/help-message.js',
+                    '<%= yeoman.app %>/scripts/common/directives/ng-enter.js',
                     '<%= yeoman.app %>/scripts/common/services/BeforeUnload.js',
                     '<%= yeoman.app %>/scripts/common/services/BeforeRedirect.js',
                     '<%= yeoman.app %>/scripts/common/services/Helper.js',

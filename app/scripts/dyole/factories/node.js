@@ -203,12 +203,11 @@ angular.module('registryApp.dyole')
                     if (this.inputs.length === 0) {
                         imgUrl = this.icons.input;
                         modification.left = -2;
+                        modification.top = -1
                     } else {
                         imgUrl = this.icons.output;
                         modification.left = 1;
                     }
-                } else {
-                    modification.left = 2;
                 }
 
                 img = new Image();

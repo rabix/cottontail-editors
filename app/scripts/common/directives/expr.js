@@ -165,19 +165,23 @@ angular.module('registryApp.common')
             link: function(scope, element) {
                 var el = angular.element(element);
 
-                function runHanlder() {
-                    if (!_.isUndefined(scope.handleItemBlur) && scope.view.mode === 'literal') {
+                function runHandler(event) {
+
+                    if (event.type === 'keypress' && event.which === 13 || event.type === 'blur' || event.type === 'init' /* for initial load */) {
                         scope.handleItemBlur({index: scope.index, value: scope.view.literal});
                     }
                 }
 
-                el.find('input').on('blur', runHanlder);
+                // only set up event handler if event can be handled
+                if (!_.isUndefined(scope.handleItemBlur) && scope.view.mode === 'literal') {
+                    el.find('input').on('blur keypress', runHandler);
 
-                runHanlder();
+                    runHandler({type: 'init'});
 
-                scope.$on('$destroy', function() {
-                    el.off('blur');
-                });
+                    scope.$on('$destroy', function() {
+                        el.off('blur keypress');
+                    });
+                }
             }
         };
     }]);

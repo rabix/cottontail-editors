@@ -10,6 +10,8 @@
                     <a href="" ng-href="/rabix/projects/{{view.workflow['sbg:projectId']}}" title="Go back to project">{{ ::view.globals.projectSlug }}</a>
                     <span class="separator">/</span>
                     <strong>{{ ::view.globals.appName }}</strong>
+                    <span class="separator">/</span>
+                    <a href ng-click="changeRevision()">{{ ::view.workflow['sbg:revision'] }}</a>
                 </span>
             </span>
 
