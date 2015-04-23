@@ -91,6 +91,8 @@ angular.module('registryApp.dyole')
                 input: Globals.urls.base + 'img/rabix/icon-input-1.png',
                 output: Globals.urls.base + 'img/rabix/icon-output-2.png',
                 workflow: Globals.urls.base + 'img/rabix/icon-workflow.png',
+                script: Globals.urls.base + 'img/rabix/script.png',
+                cmd: Globals.urls.base + 'img/rabix/cmd.png',
                 default: Globals.urls.base + 'img/rabix/logo.png'
             },
 
@@ -182,7 +184,22 @@ angular.module('registryApp.dyole')
                     top: 0
                 };
 
-                if (model.softwareDescription && model.softwareDescription.repo_name === 'system') {
+                switch(model['@type']) {
+                    case 'Workflow':
+                        imgUrl = this.icons.workflow;
+                        break;
+                    case 'CommandLine':
+                        imgUrl = this.icons.cmd;
+                        break;
+                    case 'Script':
+                        imgUrl = this.icons.script;
+                        break;
+                    default:
+                        imgUrl = this.icons.default;
+                        break;
+                }
+
+                if (Common.checkSystem(model)) {
                     if (this.inputs.length === 0) {
                         imgUrl = this.icons.input;
                         modification.left = -2;
@@ -192,10 +209,6 @@ angular.module('registryApp.dyole')
                     }
                 } else {
                     modification.left = 2;
-                }
-
-                if (model.type === 'workflow') {
-                    imgUrl = this.icons.workflow;
                 }
 
                 img = new Image();

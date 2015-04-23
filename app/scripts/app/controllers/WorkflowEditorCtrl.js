@@ -339,7 +339,7 @@ angular.module('registryApp.app')
             $scope.view.isMenuOpen = !$scope.view.isMenuOpen;
 
         };
-        
+
         $scope.view.capitalize = function (string) {
             return string.charAt(0).toUpperCase() + string.slice(1);
         };
