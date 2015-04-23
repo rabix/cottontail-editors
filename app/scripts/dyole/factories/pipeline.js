@@ -517,7 +517,6 @@ angular.module('registryApp.dyole')
                         'id': terId,
                         '@id': terId,
                         'depth': 0,
-//                        'schema': ['null', 'file']
 						'schema': terminal.model.schema
                     });
 

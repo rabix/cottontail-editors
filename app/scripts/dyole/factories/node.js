@@ -700,6 +700,7 @@ angular.module('registryApp.dyole')
             },
 
             _removeNodeButtonClick: function () {
+                this.Pipeline.Event.trigger('node:deselect');
                 this._destroyButtons();
                 this.removeNode();
             },

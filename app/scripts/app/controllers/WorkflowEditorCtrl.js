@@ -240,20 +240,8 @@ angular.module('registryApp.app')
                 arr.push(rev.toString());
 
                 url = arr.join('/');
-
-                $scope.view.loading = false;
-
-                var modalInstance = $modal.open({
-                    template: $templateCache.get('views/cliche/partials/app-save-response.html'),
-                    controller: 'ModalCtrl',
-                    backdrop: 'static',
-                    resolve: { data: function () { return { trace: {message: 'Workflow successfully saved.'} }; }}
-                });
-
-                modalInstance.result.then(function() {
-                    prompt = false;
-                    window.location.href = url;
-                });
+                prompt = false;
+                window.location.href = url;
 
             });
         };

@@ -439,8 +439,15 @@ angular.module('registryApp.dyole')
 
                 schema.label = schema.label || id;
 
+                var descriptions = {
+                    input: '###*Input*' + '\n' + 'Downloads input files to local cluster for further processing.',
+                    output: '###*Output*' + '\n' + 'Uploads resulting files from processing cluster to user storage.'
+                };
+
                 var model = {
                     '@id': id,
+                    description: descriptions[type],
+                    'sbg:createdBy': 'SBG',
                     'label': schema.label || 'Rabix System app',
                     'softwareDescription': {
                         'repo_owner': 'rabix',
