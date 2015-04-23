@@ -14,7 +14,7 @@ angular.module('integration')
 
         var self = {};
         var sessionId = Globals.user.sessionId;
-        var brood = Globals.urls.brood;
+        var brood = Globals.apiUrls.brood;
         var broodAppUrl = brood + 'apps';
         var projectOwner = Globals.projectOwner;
         var projectSlug = Globals.projectSlug;

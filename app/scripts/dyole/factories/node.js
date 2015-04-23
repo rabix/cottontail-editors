@@ -88,12 +88,12 @@ angular.module('registryApp.dyole')
             },
 
             icons: {
-                input: Globals.urls.base + 'img/rabix/icon-input-1.png',
-                output: Globals.urls.base + 'img/rabix/icon-output-2.png',
-                workflow: Globals.urls.base + 'img/rabix/icon-workflow.png',
-                script: Globals.urls.base + 'img/rabix/script.png',
-                cmd: Globals.urls.base + 'img/rabix/cmd.png',
-                default: Globals.urls.base + 'img/rabix/logo.png'
+                input: Globals.base + 'img/rabix/icon-input-1.png',
+                output: Globals.base + 'img/rabix/icon-output-2.png',
+                workflow: Globals.base + 'img/rabix/icon-workflow.png',
+                script: Globals.base + 'img/rabix/script.png',
+                cmd: Globals.base + 'img/rabix/cmd.png',
+                default: Globals.base + 'img/rabix/logo.png'
             },
 
             buttons: {
@@ -622,7 +622,7 @@ angular.module('registryApp.dyole')
                         radius: this.buttons.radius,
                         border: this.buttons.border,
                         image: {
-                            url: Globals.urls.base + 'img/rabix/' + this.buttons.info.image.name,
+                            url: Globals.base + 'img/rabix/' + this.buttons.info.image.name,
                             width: 14,
                             height: 14
                         }
@@ -638,7 +638,7 @@ angular.module('registryApp.dyole')
                         radius: this.buttons.radius,
                         border: this.buttons.border,
                         image: {
-                            url: Globals.urls.base + 'img/rabix/' + this.buttons.delete.image.name,
+                            url: Globals.base + 'img/rabix/' + this.buttons.delete.image.name,
                             width: 14,
                             height: 14
                         }
@@ -658,7 +658,7 @@ angular.module('registryApp.dyole')
                             radius: 10,
                             border: this.buttons.border,
                             image: {
-                                url: Globals.urls.base + 'img/rabix/' + this.buttons.rename.image.name,
+                                url: Globals.base + 'img/rabix/' + this.buttons.rename.image.name,
                                 width: 13,
                                 height: 13
                             },
