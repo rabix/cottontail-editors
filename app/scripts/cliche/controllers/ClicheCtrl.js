@@ -565,8 +565,8 @@ angular.module('registryApp.cliche')
             if (baseCmds.length > 1) {
                 adapterBaseCmd.splice(index, 1);
 
-                _.forEach(baseCmds, function(cmd) {
-                    adapterBaseCmd.push(cmd);
+                _.forEach(baseCmds, function(cmd, key) {
+                    adapterBaseCmd.splice(parseInt(index, 10) + key, 0, cmd);
                 });
 
                 if(!$scope.$$phase) {
