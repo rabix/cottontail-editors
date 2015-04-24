@@ -100,13 +100,6 @@ angular.module('registryApp.app')
 //                $scope.view.userRepos = result[1].list;
             });
 
-        if ($scope.view.mode === 'edit') {
-            App.get()
-                .then(function (result) {
-                    $scope.view.workflow = result.message;
-                });
-        }
-
         var toggleState = true;
 
         var toggleAll = function () {
@@ -158,6 +151,8 @@ angular.module('registryApp.app')
             $scope.view.repoTypes.MyApps = result[0].message;
             $scope.view.repoTypes.PublicApps = result[1].message;
 
+            $scope.view.workflow = result[2].message;
+
             $scope.view.loading = false;
         };
 
@@ -168,7 +163,8 @@ angular.module('registryApp.app')
         /* load tools/workflows grouped by repositories */
         $q.all([
             App.getMineAppsByProject(),
-            App.getPublicAppsByProject()
+            App.getPublicAppsByProject(),
+            App.get()
         ]).then(appsLoaded);
 
         /**
