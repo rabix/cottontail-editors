@@ -13,8 +13,17 @@ angular.module('registryApp.dyole')
             },
             link: function(scope, element) {
 
-                var img, preloadImgBase = Globals.base + 'img/rabix/';
-                img = new Image();
+                var images, preloadImgBase = Globals.base + 'img/rabix/';
+                images = {};
+                function NodeImage(src){
+                    this.img = new Image();
+                    this.img.src = src;
+                    return this;
+                }
+
+                images.commandline = new NodeImage(preloadImgBase + 'commandlinenode.png');
+                images.script = new NodeImage(preloadImgBase + 'scriptnode.png');
+                images.workflow = new NodeImage(preloadImgBase + 'workflownode.png');
 
                 var el = element[0];
 
@@ -28,10 +37,11 @@ angular.module('registryApp.dyole')
                  * @returns {boolean}
                  */
                 var handleDragStart = function(e) {
-                    var data = JSON.stringify(scope.drag);
+                    var data = JSON.stringify(scope.drag),
+                        image = images[scope.drag.type.toLowerCase()].img;
                     e.dataTransfer.effectAllowed = 'move';
                     e.dataTransfer.setData('Text', data);
-                    e.dataTransfer.setDragImage(angular.element('<img " src="'+  preloadImgBase + scope.drag.type.toLowerCase() + 'node.png" width="96">')[0], 48, 48);
+                    e.dataTransfer.setDragImage(angular.element('<img " src="' + image.src + '" width="96">')[0], 48, 48);
 
                     this.classList.add('drag');
 
