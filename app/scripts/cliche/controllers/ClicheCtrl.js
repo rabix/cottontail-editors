@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('ClicheCtrl', ['$scope', '$q', '$modal', '$templateCache', '$rootScope', 'App', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload', 'BeforeRedirect', 'Api', 'User', 'lodash', 'HelpMessages', 'Globals', '$window', function($scope, $q, $modal, $templateCache, $rootScope, App, Cliche, Loading, SandBox, BeforeUnload, BeforeRedirect, Api, User, _, HelpMessages, Globals, $window) {
+    .controller('ClicheCtrl', ['$scope', '$q', '$modal', '$templateCache', '$rootScope', 'App', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload', 'BeforeRedirect', 'Api', 'User', 'lodash', 'HelpMessages', 'Globals', '$window', 'HotkeyRegistry', 'hotkeys', function($scope, $q, $modal, $templateCache, $rootScope, App, Cliche, Loading, SandBox, BeforeUnload, BeforeRedirect, Api, User, _, HelpMessages, Globals, $window, HotkeyRegistry, hotkeys) {
         $scope.Loading = Loading;
 
         var cliAdapterWatchers = [],
@@ -463,6 +463,13 @@ angular.module('registryApp.cliche')
         };
 
         /**
+         * Undo previous action
+         */
+        $scope.undoAction = function () {
+            //todo: undo action
+        };
+
+        /**
          * Toggle console visibility
          */
         $scope.toggleConsole = function() {
@@ -794,6 +801,13 @@ angular.module('registryApp.cliche')
             return deferred.promise;
 
         };
+
+        HotkeyRegistry.loadHotkeys([
+            {name: 'save', callback: $scope.updateTool, preventDefault: true},
+            {name: 'run', callback: $scope.runApp, preventDefault: true},
+            {name: 'undo', callback: $scope.undoAction}
+        ]);
+
 
         $scope.$on('$destroy', function() {
 
