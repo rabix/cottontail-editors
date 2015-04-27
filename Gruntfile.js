@@ -333,6 +333,7 @@ module.exports = function (grunt) {
                     '<%= yeoman.app %>/scripts/common/services/SandBox.js',
                     '<%= yeoman.app %>/scripts/common/services/schema-validator.js',
                     '<%= yeoman.app %>/scripts/common/services/Api.js',
+                    '<%= yeoman.app %>/scripts/common/services/HotkeyRegistry.js',
                     '<%= yeoman.app %>/scripts/common/services/HTTPInterceptor.js',
                     '<%= yeoman.app %>/scripts/common/constants/ScriptSchema.js',
                     '<%= yeoman.app %>/scripts/common/constants/ToolSchema.js',
