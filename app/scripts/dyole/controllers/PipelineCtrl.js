@@ -126,9 +126,7 @@ angular.module('registryApp.dyole')
          * @param {MouseEvent} e
          * @param {String} app object
          */
-        $scope.dropNode = function(e, app) {
-
-            app = JSON.parse(app);
+         var dropNode = function(e, app) {
 
             $scope.view.loading = true;
             $scope.view.explanation = false;
@@ -144,9 +142,11 @@ angular.module('registryApp.dyole')
                 }
 
             });
-
-
         };
+
+        var onNodeDroppedOff = $rootScope.$on('node:dropped', function (e, data) {
+            dropNode(data.e, data.app);
+        });
 
         /**
          * Cancel timeout
@@ -287,6 +287,7 @@ angular.module('registryApp.dyole')
 
             cancelTimeout();
             onPipelineChangeOff();
+            onNodeDroppedOff();
             onNodeInfoOff();
             onNodeLabelEditOff();
 

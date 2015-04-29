@@ -108,7 +108,7 @@
                                             <span ng-if="repoType === 'PublicApps'">There are no public apps</span>
                                         </p>
                                     </li>
-                                    <li ng-repeat="(repoName, apps) in repoTypeObj" ng-class="{open: view.repoGroups[repoName]}" ng-show="filterdApps.length > 0 ">
+                                    <li ng-repeat="(repoName, apps) in repoTypeObj" ng-class="{open: view.repoGroups[repoName]}" ng-show="filteredApps.length > 0 ">
 
                                         <span ng-click="toggleRepo(repoName)">
                                             <i class="fa" ng-class="{'fa-plus-square': !view.repoGroups[repoName], 'fa-minus-square': view.repoGroups[repoName]}"></i>
@@ -118,7 +118,7 @@
                                         <ul class="apps-inner-list">
                                             <!--<li ng-if="apps.length !== 0"><span class="label label-info section-name">Apps</span></li>-->
 
-                                            <li ng-repeat="app in filterdApps = (apps | filter:view.searchTerm)">
+                                            <li ng-repeat="app in filteredApps = (apps | filter:view.searchTerm)">
 
                                                 <a href drag="app">
                                                     <i class="fa fa-puzzle-piece"></i>
