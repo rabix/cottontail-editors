@@ -256,6 +256,10 @@ form,
       background-color: #fff;
     }
 
+    &.btn-flush-pipeline {
+      z-index: 20;
+    }
+
     &:active, &:focus {
       outline: none;
       @include box-shadow(none);
