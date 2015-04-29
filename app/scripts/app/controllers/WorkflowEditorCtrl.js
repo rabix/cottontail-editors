@@ -200,10 +200,9 @@ angular.module('registryApp.app')
          * Callback when workflow is changed
          */
         $scope.onWorkflowChange = function (value) {
+            $scope.view.isChanged = value.value;
 
-            $scope.view.isChanged = value;
-
-            if (!value) {
+            if (!value.value) {
                 $scope.view.saving = false;
                 $scope.view.loading = false;
 
@@ -211,12 +210,18 @@ angular.module('registryApp.app')
                 $scope.view.json = {};
             }
 
+            $scope.$apply();
         };
 
         /**
          * Initiate workflow save
          */
         $scope.save = function () {
+
+            if (!$scope.view.isChanged) {
+                return;
+            }
+
             BeforeRedirect.setReload(true);
             $scope.view.saving = true;
             $scope.view.loading = true;
@@ -226,19 +231,7 @@ angular.module('registryApp.app')
             App.update(workflow, 'workflow').then(function(data) {
 
                 var rev = data.message['sbg:revision'];
-                var url, arr = window.location.href.split('/');
-
-                if (arr[arr.length-1] === '') {
-                    arr.pop()
-                }
-
-                arr.pop();
-                arr.push(rev.toString());
-
-                url = arr.join('/');
-                prompt = false;
-                window.location.href = url;
-
+                redirectTo(rev);
             });
         };
 

@@ -22,7 +22,7 @@
             <div class="actions pull-right">
 
                 <button class="btn btn-default" ng-click="editMetadata()" ng-disabled="view.saving" ><i class="fa fa-pencil"></i> Metadata</button>
-                <button ng-if="view.user" ng-click="save()" class="btn btn-default" ng-disabled="view.saving">
+                <button ng-if="view.user" ng-disabled="!view.isChanged" ng-click="save()" class="btn btn-default" ng-disabled="view.saving">
                     <i class="fa fa-save"></i>
                    Save
                 </button>

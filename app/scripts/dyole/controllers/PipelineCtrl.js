@@ -187,8 +187,8 @@ angular.module('registryApp.dyole')
         /**
          * Track pipeline change
          */
-        var onPipelineChangeOff = $rootScope.$on('pipeline:change', function () {
-            $scope.pipelineChangeFn({value: true});
+        var onPipelineChangeOff = $rootScope.$on('pipeline:change', function (isDisplay) {
+            $scope.pipelineChangeFn({value: {value: true, isDisplay: isDisplay}});
         });
 
         /**
