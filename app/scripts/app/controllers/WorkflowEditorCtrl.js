@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('registryApp.app')
-    .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$modal', '$templateCache', 'Loading', 'App', 'User', 'Repo', 'BeforeRedirect', 'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload', 'Api', '$window', 'HotkeyRegistry', 'Chronicle', function ($scope, $rootScope, $q, $modal, $templateCache, Loading, App, User, Repo, BeforeRedirect, Helper, PipelineService, _, Globals, BeforeUnload, Api, $window, HotkeyRegistry, Chronicle) {
+    .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$modal', '$templateCache', 'Loading', 'App', 'User', 'Repo', 'BeforeRedirect', 'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload', 'Api', 'HotkeyRegistry', 'Chronicle', function ($scope, $rootScope, $q, $modal, $templateCache, Loading, App, User, Repo, BeforeRedirect, Helper, PipelineService, _, Globals, BeforeUnload, Api, HotkeyRegistry, Chronicle) {
         var PipelineInstance = null,
             prompt = false,
             onBeforeUnloadOff = BeforeUnload.register(function() { return 'Please save your changes before leaving.'; }, function() {return prompt});
