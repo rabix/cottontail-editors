@@ -725,7 +725,6 @@ angular.module('registryApp.cliche')
             }
         };
 
-
         $scope.redoAction = function () {
             $scope.chron.redo();
             reInitCliche();
@@ -741,6 +740,13 @@ angular.module('registryApp.cliche')
         $scope.chron = Chronicle.record('view.tool', $scope, true);
         // todo: optimize this watch because it's the heaviest
         // maybe adding lazy binding?
+
+        $scope.view.canUndo = function () {
+            return $scope.chron ? $scope.chron.currArchivePos > 1 : false;
+        };
+        $scope.view.canRedo = function () {
+            return $scope.chron ? $scope.chron.currArchivePos !== $scope.chron.archive.length - 1 : false;
+        };
 
         $scope.$on('$destroy', function() {
 

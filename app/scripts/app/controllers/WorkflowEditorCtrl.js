@@ -497,6 +497,13 @@ angular.module('registryApp.app')
             // redo action;
         };
 
+        $scope.view.canUndo = function () {
+            return $scope.chron ? $scope.chron.currArchivePos > 1 : false;
+        };
+        $scope.view.canRedo = function () {
+            return $scope.chron ? $scope.chron.currArchivePos !== $scope.chron.archive.length - 1 : false;
+        };
+
         HotkeyRegistry.loadHotkeys([
             {name: 'save', callback: $scope.save, preventDefault: true},
             {name: 'run', callback: $scope.runWorkflow, preventDefault: true},
