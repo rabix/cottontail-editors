@@ -20,6 +20,11 @@ angular.module('registryApp.common')
 				name: 'run',
 				shortcut: 'ctrl+shift+r',
 				desc: 'Run'
+			},
+			{
+				name: 'redo',
+				shortcut: 'ctrl+shift+z',
+				desc: 'Redo previous action'
 			}
 		];
 

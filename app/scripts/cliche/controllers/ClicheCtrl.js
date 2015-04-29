@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('ClicheCtrl', ['$scope', '$q', '$modal', '$templateCache', '$rootScope', 'App', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload', 'BeforeRedirect', 'Api', 'User', 'lodash', 'HelpMessages', 'Globals', '$window', 'HotkeyRegistry', 'hotkeys', function($scope, $q, $modal, $templateCache, $rootScope, App, Cliche, Loading, SandBox, BeforeUnload, BeforeRedirect, Api, User, _, HelpMessages, Globals, $window, HotkeyRegistry, hotkeys) {
+    .controller('ClicheCtrl', ['$scope', '$q', '$modal', '$templateCache', '$rootScope', 'App', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload', 'BeforeRedirect', 'Api', 'User', 'lodash', 'HelpMessages', 'Globals', '$window', 'HotkeyRegistry', 'Chronicle', function($scope, $q, $modal, $templateCache, $rootScope, App, Cliche, Loading, SandBox, BeforeUnload, BeforeRedirect, Api, User, _, HelpMessages, Globals, $window, HotkeyRegistry, Chronicle) {
         $scope.Loading = Loading;
 
         var cliAdapterWatchers = [],
@@ -461,13 +461,7 @@ angular.module('registryApp.cliche')
         $scope.runApp = function () {
             //todo: run app
         };
-
-        /**
-         * Undo previous action
-         */
-        $scope.undoAction = function () {
-            //todo: undo action
-        };
+        
 
         /**
          * Toggle console visibility
@@ -619,26 +613,6 @@ angular.module('registryApp.cliche')
                     tool = Cliche.getTool(),
                     job = Cliche.getJob();
 
-//                Tool.create(repoId, tool, job, $scope.view.type)
-//                    .then(function(result) {
-//
-//                        $scope.view.loading = false;
-//
-//                        var modalInstance = $modal.open({
-//                            template: $templateCache.get('views/cliche/partials/app-save-response.html'),
-//                            controller: 'ModalCtrl',
-//                            backdrop: 'static',
-//                            resolve: { data: function () { return { trace: result }; }}
-//                        });
-//
-//                        modalInstance.result.then(function() {
-//                            redirectTo('cliche-edit', {type: $scope.view.type, id: result.app._id, revision: 'latest'});
-//                        });
-//
-//                    }, function (error) {
-//                        $scope.view.loading = false;
-//                        $rootScope.$broadcast('httpError', {message: error});
-//                    });
             });
 
         };
@@ -683,77 +657,6 @@ angular.module('registryApp.cliche')
             return deferred.promise;
 
         };
-
-        /**
-         * Fork the current tool
-         */
-        //$scope.forkTool = function () {
-        //
-        //    var modalInstance = $modal.open({
-        //        controller: 'PickRepoModalCtrl',
-        //        template: $templateCache.get('views/repo/pick-repo-name.html'),
-        //        windowClass: 'modal-confirm',
-        //        resolve: {data: function () { return {repos: $scope.view.repos, type: 'save', pickName: true};}}
-        //
-        //    });
-        //
-        //    modalInstance.result.then(function(data) {
-        //
-        //        $scope.view.loading = true;
-        //
-        //        var repoId = data.repoId,
-        //            name = data.name,
-        //            tool = Cliche.getTool(),
-        //            job = Cliche.getJob();
-        //
-        //        Tool.fork(repoId, name, tool, job, $scope.view.type).then(function (result) {
-        //
-        //            $scope.view.loading = false;
-        //
-        //            redirectTo('cliche-edit', {type: $scope.view.type, id: result.app._id, revision: 'latest'});
-        //
-        //        }, function(error) {
-        //            $scope.view.loading = false;
-        //            $rootScope.$broadcast('httpError', {json: error});
-        //        });
-        //
-        //    });
-        //
-        //    return modalInstance;
-        //
-        //};
-
-        /**
-         * Delete tool revision
-         */
-        //$scope.deleteRevision = function () {
-        //
-        //    var modalInstance = $modal.open({
-        //        template: $templateCache.get('views/partials/confirm-delete.html'),
-        //        controller: 'ModalCtrl',
-        //        windowClass: 'modal-confirm',
-        //        resolve: {data: function () { return {}; }}
-        //    });
-        //
-        //    modalInstance.result.then(function () {
-        //
-        //        $scope.view.loading = true;
-        //
-        //        Tool.deleteRevision($scope.view.revision._id).then(function () {
-        //
-        //            $scope.view.loading = false;
-        //
-        //            redirectTo('apps');
-        //
-        //        }, function() {
-        //            $scope.view.loading = false;
-        //        });
-        //    });
-        //
-        //    return modalInstance;
-        //
-        //};
-       
 
         /**
          * Switch to another revision of the app
@@ -802,12 +705,42 @@ angular.module('registryApp.cliche')
 
         };
 
+        function reInitCliche() {
+            Cliche.setTool($scope.view.tool);
+            setUpCliche();
+            prepareRequirements();
+            setUpCategories();
+            Cliche.generateCommand()
+                .then(outputCommand, outputError);
+        }
+
+        /**
+         * Undo previous action
+         */
+        $scope.undoAction = function () {
+            if ($scope.chron.currArchivePos > 1) {
+                $scope.chron.undo();
+                reInitCliche();
+
+            }
+        };
+
+
+        $scope.redoAction = function () {
+            $scope.chron.redo();
+            reInitCliche();
+        };
+
         HotkeyRegistry.loadHotkeys([
             {name: 'save', callback: $scope.updateTool, preventDefault: true},
             {name: 'run', callback: $scope.runApp, preventDefault: true},
-            {name: 'undo', callback: $scope.undoAction}
+            {name: 'undo', callback: $scope.undoAction, preventDefault: true},
+            {name: 'redo', callback: $scope.redoAction, preventDefault: true}
         ]);
 
+        $scope.chron = Chronicle.record('view.tool', $scope, true);
+        // todo: optimize this watch because it's the heaviest
+        // maybe adding lazy binding?
 
         $scope.$on('$destroy', function() {
 
