@@ -122,6 +122,8 @@ angular.module('registryApp.dyole')
 
                         _self.pipelineWrap.push(node.render().el);
 
+                        _self.Event.trigger('pipeline:change');
+
                     });
 
                     this.Event.subscribe('node:deselect', function () {
