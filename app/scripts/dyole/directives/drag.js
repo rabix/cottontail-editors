@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.dyole')
-    .directive('drag', ['Globals', '$rootScope', function (Globals, $rootScope) {
+    .directive('drag', ['Globals', '$rootScope', 'Notification', function (Globals, $rootScope, Notification) {
         return {
             scope: {
                 drag: '='
@@ -94,6 +94,9 @@ angular.module('registryApp.dyole')
 
                         if (x > rect.left && y > rect.top && x < rect.right && y < rect.bottom) {
                             $rootScope.$broadcast('node:dropped', {e: e, app: scope.drag});
+                        } else {
+                            // Notify user
+                            Notification.error({message: 'Node can only be dropped on canvas', delay: 2000});
                         }
 
                         $elem.removeClass('drag');

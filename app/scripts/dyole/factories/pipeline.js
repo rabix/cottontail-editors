@@ -69,8 +69,6 @@ angular.module('registryApp.dyole')
                  */
                 this.currentScale = this.model.display.canvas.zoom || 1.0;
 
-                console.log('Pipeline model: ', this.model);
-
                 this._initCanvas();
                 this._attachEvents();
                 this._generateNodes();
@@ -108,7 +106,6 @@ angular.module('registryApp.dyole')
                      * @param type {string}
                      */
                     this.Event.subscribe('pipeline:change', function (isDisplay) {
-                        console.log('***** PIPELINE CHANGED *****', isDisplay);
                         $rootScope.$broadcast('pipeline:change', !!isDisplay);
                     });
 
@@ -139,7 +136,6 @@ angular.module('registryApp.dyole')
                     });
 
                     this.Event.subscribe('node:select', function (model) {
-                        console.log('subscribeovo sam se jednom?');
 
                         if (!model.softwareDescription || model.softwareDescription.repo_name !== 'system') {
                             $rootScope.$broadcast('node:select', model, _self.exposed, _self.values);
@@ -174,8 +170,6 @@ angular.module('registryApp.dyole')
                     this.Event.subscribe('connection:destroyed', function (model) {
                         var endNode = _self.nodes[model.end_node],
                             startNode = _self.nodes[model.start_node];
-
-                        console.log('connection:destroyed', model);
 
                         if (startNode && Common.checkSystem(startNode.model)) {
                             startNode.removeNode();
@@ -1026,8 +1020,6 @@ angular.module('registryApp.dyole')
                     var _id = model.id || this._generateNodeId(model);
 
                     model.id = _id;
-
-                    console.log('Added node: ', _id);
 
                     this.model.schemas[model.id] = rawModel;
 

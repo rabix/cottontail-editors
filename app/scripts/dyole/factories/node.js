@@ -887,7 +887,6 @@ angular.module('registryApp.dyole')
 
                 this.selected = true;
 
-                console.log('__select__', this.model.id);
                 this.Pipeline.Event.trigger('node:select', this.model);
             },
 
@@ -898,8 +897,6 @@ angular.module('registryApp.dyole')
                 this._innerBorder.attr({
                     fill: this.constraints.fill
                 });
-
-                console.log('deselect');
 
                 this.selected = false;
             },
@@ -916,7 +913,7 @@ angular.module('registryApp.dyole')
 
                 _.forEach(this.Pipeline.exposed, function (val, ni, obj) {
                     var nodeId = ni.split(Const.exposedSeparator)[0];
-                    console.log(nodeId, ni);
+
                     if (nodeId === id) {
                         obj[ni] = null;
                         delete obj[ni];

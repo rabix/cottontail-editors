@@ -6,7 +6,7 @@
 
 'use strict';
 
-angular.module('registryApp.common', ['cfp.hotkeys', 'Chronicle'])
+angular.module('registryApp.common', ['cfp.hotkeys', 'Chronicle', 'ui-notification'])
 	.config(['$httpProvider', function($httpProvider) {
 
 		$httpProvider.interceptors.push('HTTPInterceptor');
