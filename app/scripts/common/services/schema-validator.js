@@ -27,7 +27,7 @@ angular
             } else {
                 var message = error.message;
                 message += '\r\n at \r\n';
-                message += error.dataPath;
+                message += error.dataPath || '/';
                 message += '\r\n';
                 messageArray.push({level: level, message: message});
             }

@@ -5,7 +5,7 @@
 'use strict';
 
 angular.module('registryApp.dyole')
-    .factory('pipeline', ['event', 'node', 'connection', '$rootScope', 'systemNodeModel', 'FormaterD2', 'Const', 'common', 'lodash', function (Event, Node, Connection, $rootScope, systemNodeModel, Formater, Const, Common, _) {
+    .factory('pipeline', ['event', 'node', 'connection', '$rootScope', 'systemNodeModel', 'FormaterD2', 'Const', 'common', 'lodash', 'SchemaValidator', 'Notification', function (Event, Node, Connection, $rootScope, systemNodeModel, Formater, Const, Common, _, Validator, Notification) {
             /** Temporary hack!! **/
             var initWidth;
 
@@ -990,40 +990,66 @@ angular.module('registryApp.dyole')
                  */
                 addNode: function (nodeModel, clientX, clientY, rawCoords) {
 
-                    var rawModel = angular.copy(nodeModel.json || nodeModel),
+                    var _self = this,
+                        rawModel = angular.copy(nodeModel.json || nodeModel),
                         model;
 
-                    if (nodeModel.type && nodeModel.type === 'workflow') {
-                        model = this._transformWorkflowModel(nodeModel);
-                    } else {
-                        model = this._transformModel(nodeModel);
+                    if (typeof rawModel['@type'] !== 'string') {
+                        Notification.error('App not valid: Missing @type property');
+                        return false;
                     }
 
-                    var zoom = this.getEl().getScale().x;
+                    var type;
 
-                    var canvas = this._getOffset(this.$parent[0]);
-
-                    rawCoords = rawCoords || false;
-
-                    var x = ( clientX - canvas.left )  - this.pipelineWrap.getTranslation().x,
-                        y = ( clientY - canvas.top  ) - this.pipelineWrap.getTranslation().y;
-
-                    if (rawCoords) {
-                        x = clientX - this.pipelineWrap.getTranslation().x;
-                        y = clientY - this.pipelineWrap.getTranslation().y;
+                    switch(rawModel['@type']) {
+                        case 'Workflow':
+                            type = 'workflow';
+                            break;
+                        case 'CommandLine':
+                            type = 'tool';
+                            break;
+                        case 'Script':
+                            type = 'script';
+                            break;
                     }
 
+                    Validator.validate(type, rawModel)
+                        .then(function () {
+                            if (nodeModel.type && nodeModel.type === 'workflow') {
+                                model = _self._transformWorkflowModel(nodeModel);
+                            } else {
+                                model = _self._transformModel(nodeModel);
+                            }
 
-                    model.x = x / zoom;
-                    model.y = y / zoom;
+                            var zoom = _self.getEl().getScale().x;
 
-                    var _id = model.id || this._generateNodeId(model);
+                            var canvas = _self._getOffset(_self.$parent[0]);
 
-                    model.id = _id;
+                            rawCoords = rawCoords || false;
 
-                    this.model.schemas[model.id] = rawModel;
+                            var x = ( clientX - canvas.left )  - _self.pipelineWrap.getTranslation().x,
+                                y = ( clientY - canvas.top  ) - _self.pipelineWrap.getTranslation().y;
 
-                    this.Event.trigger('node:add', model);
+                            if (rawCoords) {
+                                x = clientX - _self.pipelineWrap.getTranslation().x;
+                                y = clientY - _self.pipelineWrap.getTranslation().y;
+                            }
+
+
+                            model.x = x / zoom;
+                            model.y = y / zoom;
+
+                            var _id = model.id || _self._generateNodeId(model);
+
+                            model.id = _id;
+
+                            _self.model.schemas[model.id] = rawModel;
+
+                            _self.Event.trigger('node:add', model);
+
+                        }, function (trace) {
+                            Notification.error('App not valid:' + trace);
+                        });
                 },
 
                   /**

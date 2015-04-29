@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.dyole')
-    .controller('PipelineCtrl', ['$scope', '$rootScope', '$element', '$window', '$timeout', '$injector', 'pipeline', 'App', 'rawPipeline', '$modal', '$templateCache', 'PipelineService', 'lodash', function ($scope, $rootScope, $element, $window, $timeout, $injector, pipeline, App, rawPipeline, $modal, $templateCache, PipelineService, _) {
+    .controller('PipelineCtrl', ['$scope', '$rootScope', '$element', '$window', '$timeout', '$injector', 'pipeline', 'App', 'rawPipeline', '$modal', '$templateCache', 'PipelineService', 'lodash', 'Notification', function ($scope, $rootScope, $element, $window, $timeout, $injector, pipeline, App, rawPipeline, $modal, $templateCache, PipelineService, _, Notification) {
 
         var Pipeline;
         var selector = '.pipeline';
@@ -139,6 +139,7 @@ angular.module('registryApp.dyole')
                     Pipeline.addNode(result.message, e.clientX, e.clientY);
                 } else {
                     console.error('App does not exist: Message: %s, Status: %s', result.message, result.status);
+                    Notification.error('App does not exist: Message: '+ result.message +', Status: ' + result.status);
                 }
 
             });
