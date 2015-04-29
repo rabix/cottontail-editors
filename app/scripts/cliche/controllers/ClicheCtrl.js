@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('ClicheCtrl', ['$scope', '$q', '$modal', '$templateCache', '$rootScope', 'App', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload', 'BeforeRedirect', 'Api', 'User', 'lodash', 'HelpMessages', 'Globals', 'HotkeyRegistry', 'Chronicle', function($scope, $q, $modal, $templateCache, $rootScope, App, Cliche, Loading, SandBox, BeforeUnload, BeforeRedirect, Api, User, _, HelpMessages, Globals, HotkeyRegistry, Chronicle) {
+    .controller('ClicheCtrl', ['$scope', '$q', '$modal', '$templateCache', '$rootScope', 'App', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload', 'BeforeRedirect', 'Api', 'User', 'lodash', 'HelpMessages', 'Globals', 'HotkeyRegistry', 'Chronicle', 'Notification', function($scope, $q, $modal, $templateCache, $rootScope, App, Cliche, Loading, SandBox, BeforeUnload, BeforeRedirect, Api, User, _, HelpMessages, Globals, HotkeyRegistry, Chronicle, Notification) {
         $scope.Loading = Loading;
 
         var cliAdapterWatchers = [],
@@ -625,6 +625,10 @@ angular.module('registryApp.cliche')
         $scope.updateTool = function() {
             var deferred = $q.defer();
 
+            if ($scope.view.loading) {
+                return false;
+            }
+
             $scope.view.loading = true;
 
             var tool = Cliche.getTool();
@@ -718,23 +722,30 @@ angular.module('registryApp.cliche')
          * Undo previous action
          */
         $scope.undoAction = function () {
-            if ($scope.chron.currArchivePos > 1) {
+            if ($scope.view.canUndo()) {
                 $scope.chron.undo();
                 reInitCliche();
-
+                Notification({message: 'Undoing', delay: 500});
+            } else {
+                Notification.warning({message: 'No more actions to undo. End of history queue.', delay: 1000});
             }
         };
 
         $scope.redoAction = function () {
-            $scope.chron.redo();
-            reInitCliche();
+            if ($scope.view.canRedo()) {
+                $scope.chron.redo();
+                reInitCliche();
+                Notification({message: 'Redoing', delay: 500});
+            } else {
+                Notification.warning({message: 'No more actions to redo', delay: 1000});
+            }
         };
 
         HotkeyRegistry.loadHotkeys([
             {name: 'save', callback: $scope.updateTool, preventDefault: true},
             {name: 'run', callback: $scope.runApp, preventDefault: true},
-            {name: 'undo', callback: $scope.undoAction, preventDefault: true},
-            {name: 'redo', callback: $scope.redoAction, preventDefault: true}
+            {name: 'undo', callback: $scope.undoAction, preventDefault: true, allowIn: ['INPUT', 'SELECT', 'TEXTAREA']},
+            {name: 'redo', callback: $scope.redoAction, preventDefault: true, allowIn: ['INPUT', 'SELECT', 'TEXTAREA']}
         ]);
 
         $scope.chron = Chronicle.record('view.tool', $scope, true);

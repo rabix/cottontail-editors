@@ -164,6 +164,7 @@ angular.module('registryApp.common')
             }],
             link: function(scope, element) {
                 var el = angular.element(element);
+                el.find('input').focus();
 
                 function runHandler(event) {
 
