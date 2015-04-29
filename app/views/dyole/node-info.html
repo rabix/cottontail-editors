@@ -19,6 +19,10 @@
         <div class="tabs right flex-one modal-tabs" ng-switch="view.tab">
             <div class="tab" ng-switch-when="info">
                 <p>
+                    <strong>Type:</strong>
+                    <span> {{ ::data['@type'] }} </span>
+                </p>
+                <p>
                     <strong>Author:</strong>
                     <span> {{ ::data['sbg:createdBy'] }} </span>
                 </p>
