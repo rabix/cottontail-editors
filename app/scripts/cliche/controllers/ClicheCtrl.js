@@ -319,7 +319,7 @@ angular.module('registryApp.cliche')
          * @param revisionId
          */
         var redirectTo = function(revisionId) {
-            $window.location.pathname = '/rabix/' + Globals.appType + '/' + Globals.projectId + '/' + Globals.appName + '/' + revisionId;
+            $window.location.pathname = '/rabix/u/' + Globals.projectOwner + '/' + Globals.projectSlug + '/apps/' + Globals.appName + '/edit?type=' + Globals.appType + '&rev=' + revisionId;
         };
 
         /**

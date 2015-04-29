@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('registryApp.app')
-    .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$modal', '$templateCache', 'Loading', 'App', 'User', 'Repo', 'BeforeRedirect', 'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload', 'Api', '$window', function ($scope, $rootScope, $q, $modal, $templateCache, Loading, App, User, Repo, BeforeRedirect, Helper, PipelineService, _, Globals, BeforeUnload, Api, $window) {
+    .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$modal', '$templateCache', 'Loading', 'App', 'User', 'Repo', 'BeforeRedirect', 'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload', 'Api', '$window', 'HotkeyRegistry', 'Chronicle', function ($scope, $rootScope, $q, $modal, $templateCache, Loading, App, User, Repo, BeforeRedirect, Helper, PipelineService, _, Globals, BeforeUnload, Api, $window, HotkeyRegistry, Chronicle) {
         var PipelineInstance = null,
             prompt = false,
             onBeforeUnloadOff = BeforeUnload.register(function() { return 'Please save your changes before leaving.'; }, function() {return prompt});
@@ -304,7 +304,7 @@ angular.module('registryApp.app')
          */
         var redirectTo = function(revisionId) {
             prompt = false;
-            $window.location.pathname = '/rabix/' + Globals.appType + '/' + Globals.projectId + '/' + Globals.appName + '/' + revisionId;
+            $window.location.pathname = '/rabix/u/' + Globals.projectOwner + '/' + Globals.projectSlug + '/apps/' + Globals.appName + '/edit\?type=' + Globals.appType + '&rev=' + revisionId;
         };
 
         var onNodeSelectOff = $rootScope.$on('node:select', onNodeSelect);
@@ -473,6 +473,23 @@ angular.module('registryApp.app')
                 PipelineInstance.getUrl({url: App.getAppUrl()});
             });
         };
+
+        //$scope.chron = Chronicle.record('view.workflow', $scope, true);
+
+        $scope.undoAction = function () {
+            // undo action
+        };
+
+        $scope.redoAction = function () {
+            // redo action;
+        };
+
+        HotkeyRegistry.loadHotkeys([
+            {name: 'save', callback: $scope.save, preventDefault: true},
+            {name: 'run', callback: $scope.runWorkflow, preventDefault: true},
+            {name: 'undo', callback: $scope.undoAction, preventDefault: true},
+            {name: 'redo', callback: $scope.redoAction, preventDefault: true}
+        ]);
 
         $scope.$on('$destroy', function () {
             onNodeSelectOff();
