@@ -446,6 +446,12 @@ legend {
 
         & > i {
           color: $sidebar-blue;
+          vertical-align: middle;
+        }
+
+        & > span {
+          display: inline-block;
+          vertical-align: middle;
         }
 
         &.drag {

@@ -45,18 +45,22 @@ angular.module('registryApp.dyole')
                     e.preventDefault();
                     e.stopPropagation();
 
-                    image = images[scope.drag.type.toLowerCase()].img;
-                    $img = $('<img/>').attr('src', image.src).width(96).height(96);
-                    $img.css({
-                        position: 'absolute',
-                        'z-index': 100,
-                        top: e.clientY - $img.height() / 2 + $(window).scrollTop(),
-                        left: e.clientX - $img.width() / 2
-                    });
-                    $img.appendTo('body');
-                    mousedown = true;
+                    if (e.which === 1 ) {
 
-                    $elem.addClass('drag');
+                        image = images[scope.drag.type.toLowerCase()].img;
+                        $img = $('<img/>').attr('src', image.src).width(96).height(96);
+                        $img.css({
+                            position: 'absolute',
+                            'z-index': 100,
+                            top: e.clientY - $img.height() / 2 + $(window).scrollTop(),
+                            left: e.clientX - $img.width() / 2
+                        });
+                        $img.appendTo('body');
+                        mousedown = true;
+
+                        $elem.addClass('drag');
+
+                    }
                 }
 
                 /**

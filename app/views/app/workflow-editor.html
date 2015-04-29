@@ -121,8 +121,8 @@
                                             <li ng-repeat="app in filteredApps = (apps | filter:view.searchTerm)">
 
                                                 <a href drag="app">
-                                                    <i class="fa fa-puzzle-piece"></i>
-                                                    {{ ::app.label }} <small>(type: {{ ::app.type }} )</small>
+                                                    <i class="fa"><img ng-src="{{ view.globals.base }}/img/rabix/{{ ::app.type }}-hex.png" alt=""/></i>
+                                                    <span> {{ ::app.label }} </span>
                                                     <!--<div class="pull-right">-->
                                                         <!--<span class="label label-primary"><i class="fa fa-tag"></i> v{{ ::app['sbg:revision'] }} </span>-->
                                                     <!--</div>-->
