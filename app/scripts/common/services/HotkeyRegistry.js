@@ -85,7 +85,7 @@ angular.module('registryApp.common')
 			 */
 			function initKey(config) {
 				var hotkey = _.find(registry, {name: config.name});
-				addHotkey(hotkey.shortcut, hotkey.desc, config.callback, config.preventDefault || null, null, config.context || window);
+				addHotkey(hotkey.shortcut, hotkey.desc, config.callback, config.preventDefault || null, config.allowIn, config.context || window);
 			}
 
 			if (_.isArray(conf)) {
