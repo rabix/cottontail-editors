@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.dyole')
-    .controller('PipelineCtrl', ['$scope', '$rootScope', '$element', '$window', '$timeout', '$injector', 'pipeline', 'App', 'rawPipeline', '$modal', '$templateCache', 'PipelineService', 'lodash', 'Notification', function ($scope, $rootScope, $element, $window, $timeout, $injector, pipeline, App, rawPipeline, $modal, $templateCache, PipelineService, _, Notification) {
+    .controller('PipelineCtrl', ['$scope', '$rootScope', '$element', '$window', '$timeout', '$injector', 'pipeline', 'App', 'rawPipeline', '$modal', '$templateCache', 'PipelineService', 'lodash', 'Notification', 'HotkeyRegistry', function ($scope, $rootScope, $element, $window, $timeout, $injector, pipeline, App, rawPipeline, $modal, $templateCache, PipelineService, _, Notification, HotkeyRegistry) {
 
         var Pipeline;
         var selector = '.pipeline';
@@ -23,7 +23,7 @@ angular.module('registryApp.dyole')
          */
         var initPipeline = function (obj) {
 
-            $scope.view.explanation = !obj || (obj.steps && obj.steps.length === 0) || (obj.relations && obj.relations.length === 0);
+            $scope.view.explanation = !obj || (obj.steps && obj.steps.length === 0) || (obj.dataLinks && obj.dataLinks.length === 0);
 
             Pipeline = pipeline.getInstance({
                 model: typeof obj.steps !== 'undefined' ? obj || rawPipeline : rawPipeline,
@@ -303,7 +303,12 @@ angular.module('registryApp.dyole')
         var validate = function () {
             return App.validateJson(Pipeline.getJSON());
         };
-        
+
+        HotkeyRegistry.loadHotkeys([
+            {name: 'delete', callback: Pipeline.deleteSelected, preventDefault: true, context: Pipeline},
+            {name: 'backspace delete', callback: Pipeline.deleteSelected, preventDefault: true, context: Pipeline}
+        ]);
+
         $scope.pipelineActions = {
             //TODO: Add disabling buttons logic
             zoomIn: function () {

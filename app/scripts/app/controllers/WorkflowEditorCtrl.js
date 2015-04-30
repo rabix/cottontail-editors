@@ -69,8 +69,6 @@ angular.module('registryApp.app')
 
         $scope.view.searchTerm = '';
 
-        $scope.view.searchTerm = '';
-
 //        $scope.view.appRevisions = {};
 
         /**

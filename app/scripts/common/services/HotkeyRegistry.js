@@ -3,7 +3,7 @@
  */
 
 angular.module('registryApp.common')
-	.service('HotkeyRegistry', ['hotkeys', function (hotkeys) {
+	.service('HotkeyRegistry', ['hotkeys', 'lodash', function (hotkeys, _) {
 
 		var registry = [
 			{
@@ -25,22 +25,35 @@ angular.module('registryApp.common')
 				name: 'redo',
 				shortcut: 'ctrl+shift+z',
 				desc: 'Redo previous action'
+			},
+			{
+				name: 'delete',
+				shortcut: 'del',
+				desc: 'Delete item'
+			},
+			{
+				name: 'backspace delete',
+				shortcut: 'backspace',
+				desc: 'Delete item'
 			}
 		];
 
 		/**
 		 * Add hotkey
+         *
 		 * @param shortcut {String}
 		 * @param desc {String}
 		 * @param callback {Function}
 		 * @param [preventDefault] {Boolean}
 		 * @param [allowIn] {Array}
+		 * @param context {Object}
 		 */
-		function addHotkey (shortcut, desc, callback, preventDefault, allowIn) {
+		function addHotkey (shortcut, desc, callback, preventDefault, allowIn, context) {
 			var config = {
 				combo: shortcut,
 				description: desc,
-				callback: callback
+				callback: callback,
+                context: context || window
 			};
 
 			if (!_.isUndefined(allowIn)) {
@@ -51,7 +64,7 @@ angular.module('registryApp.common')
 			    config.callback = function(event) {
 				    !preventDefault || event.preventDefault();
 
-					callback.call();
+					callback.call(context);
 			    }
 		    } else {
 			    config.callback = function () {};
@@ -62,9 +75,9 @@ angular.module('registryApp.common')
 
 		/**
 		 *
-		 * @param config {Object | Object[]}
+		 * @param conf {Object | Object[]}
 		 */
-		function loadHotkeys(config) {
+		function loadHotkeys(conf) {
 
 			/**
 			 * formats key and sends to be added
@@ -72,15 +85,15 @@ angular.module('registryApp.common')
 			 */
 			function initKey(config) {
 				var hotkey = _.find(registry, {name: config.name});
-				addHotkey(hotkey.shortcut, hotkey.desc, config.callback, config.preventDefault || null);
+				addHotkey(hotkey.shortcut, hotkey.desc, config.callback, config.preventDefault || null, null, config.context || window);
 			}
 
-			if (_.isArray(config)) {
-				_.forEach(config, function(c) {
+			if (_.isArray(conf)) {
+				_.forEach(conf, function(c) {
 					initKey(c);
 				})
 			} else {
-				initKey(config);
+				initKey(conf);
 			}
 		}
 

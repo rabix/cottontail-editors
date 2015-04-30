@@ -1054,6 +1054,12 @@ angular.module('registryApp.dyole')
                         });
                 },
 
+                deleteSelected: function () {
+                    _.forEach(this.selectedNodes, function (node) {
+                        node.removeNode();
+                    });
+                },
+
                   /**
                  * Adjust canvas dimensions to fit the parent
                  */
