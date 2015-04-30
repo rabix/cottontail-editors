@@ -337,6 +337,11 @@ angular.module('registryApp.dyole')
                         start, move, end, startCoords;
 
                     start = function startDragging(x, y, event) {
+
+                        if (event.which !== 1) {
+                            return;
+                        }
+
                         startCoords = canvas.getTranslation();
 
                         startCoords.x = startCoords.x * currentZoomLevel.x;
@@ -345,7 +350,11 @@ angular.module('registryApp.dyole')
                         //                globals.vents.trigger('inPlaceEdit:destroy');
                     };
 
-                    move = function onMove(x, y) {
+                    move = function onMove(x, y, dx, dy, event) {
+
+                        if (event.which !== 1) {
+                            return;
+                        }
 
                         var translation = startCoords,
                             canvasEmpty = Object.keys(_self.nodes).length === 0;
@@ -361,7 +370,7 @@ angular.module('registryApp.dyole')
 
                     };
 
-                    end = function endDragging(/*x, y, event*/) {
+                    end = function endDragging() {
 
                         // clone translation object
                         var can, canvasTranslation = angular.copy(canvas.getTranslation());
