@@ -335,7 +335,7 @@ angular.module('registryApp.dyole')
 
             var methods = {
                 flush: $scope.flush,
-                dropNode: $scope.dropNode,
+                dropNode: dropNode,
                 getUrl: getUrl,
                 fork: fork,
                 format: format,

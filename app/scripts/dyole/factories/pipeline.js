@@ -1074,8 +1074,10 @@ angular.module('registryApp.dyole')
                  */
                 adjustSize: function (showSidebar) {
 
+                    var width;
+
                     if(_.isUndefined(showSidebar)) {
-                        var width = this.$parent[0].offsetWidth - 10;
+                        width = this.$parent[0].offsetWidth - 10;
                     } else if (showSidebar) {
                         width = initWidth;
                     } else {
