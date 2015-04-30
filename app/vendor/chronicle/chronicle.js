@@ -2,6 +2,7 @@
   "use strict";
   //Set this to change what the maxiumum number of characters an undo will be to a string if using the string specific saving
   var MAX_STRING_CHANGE_SIZE = 15;
+  var MAX_ARCHIVE_SIZE = 15;
   var isDefined = angular.isDefined,
     isUndefined = angular.isUndefined,
     isFunction = angular.isFunction,
@@ -421,7 +422,13 @@
         }
 
         if (shouldBeAdded){
+          if (this.archive.length === MAX_ARCHIVE_SIZE) {
+            this.archive.splice(0, 1);
+          }
+          // if above max capacity then remove first one from list
+
           this.newEntry(tooSim, parsedUnequalVariable);
+
         }
       };
 
