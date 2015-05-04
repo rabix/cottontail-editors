@@ -22,12 +22,12 @@
                         <i class="fa" ng-class="{DIRECTORY:'folder', FILE:'fa-file-code-o'}[file.type]" ></i>
                         {{ ::file.name }}
                     </td>
-                    <td>{{ ::file.storage_node.uploaded_size | convertMbs }} MB</td>
-                    <td>{{ ::file.attrs.metadata.value.file_type }}</td>
-                    <td>{{ ::file.storage_node.time_created }}</td>
+                    <td>{{ ::file.storage_node.uploaded_size | convertMbs | defined }} MB</td>
+                    <td>{{ ::file.attrs.metadata.value.file_type | defined}}</td>
+                    <td>{{ ::file.storage_node.time_created | defined}}</td>
                     <td>/</td>
-                    <td>{{ ::file.attrs.metadata.value.sample }}</td>
-                    <td>{{ ::file.attrs.metadata.value.library }}</td>
+                    <td>{{ ::file.attrs.metadata.value.sample | defined}}</td>
+                    <td>{{ ::file.attrs.metadata.value.library | defined}}</td>
                     <td>/</td>
                     <td>/</td>
                 </tr>
