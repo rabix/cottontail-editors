@@ -16,7 +16,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="file in files track by $index">
+                <tr ng-class="{true: 'active'}[file.selected]" ng-repeat="file in files track by $index">
                     <td>
                         <span class="select-file"><input ng-model="file.selected" ng-change="onFileSelect(file.id, file.selected)" label="Select file" type="checkbox"/></span>
                         <i class="fa" ng-class="{DIRECTORY:'folder', FILE:'fa-file-code-o'}[file.type]" ></i>
