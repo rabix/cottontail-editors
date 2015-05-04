@@ -16,6 +16,7 @@ angular.module('integration')
         var sessionId = Globals.user.sessionId;
         var brood = Globals.apiUrls.brood;
         var broodAppUrl = brood + 'apps';
+        var vaporUrl = Globals.apiUrls.vaporStore;
         var projectOwner = Globals.projectOwner;
         var projectSlug = Globals.projectSlug;
         var appName = Globals.appName;
@@ -58,6 +59,12 @@ angular.module('integration')
 
         self.getLatest = $resource(broodAppUrl  + '/' + projectOwner + '/' + projectSlug + '/' + appName, {}, {
             'get': {method: 'GET', headers: headers}
+        });
+
+        self.files = $resource(vaporUrl + '/fs/ls?session_id=' + sessionId + '&path=/Projects/' + Globals.projectId + '&depth=1', {}, {
+        });
+
+        self.fileStats = $resource(vaporUrl + '/fs/stat?session_id=' + sessionId + '&path=/Projects/' + Globals.projectId + '/:file&depth=1', {file: '@file'}, {
         });
 
         return self;

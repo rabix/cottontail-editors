@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('registryApp.app')
-    .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$modal', '$templateCache', 'Loading', 'App', 'User', 'Repo', 'BeforeRedirect', 'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload', 'Api', 'HotkeyRegistry', 'Chronicle', 'Notification', function ($scope, $rootScope, $q, $modal, $templateCache, Loading, App, User, Repo, BeforeRedirect, Helper, PipelineService, _, Globals, BeforeUnload, Api, HotkeyRegistry, Chronicle, Notification) {
+    .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$modal', '$templateCache', 'Loading', 'App', 'User', 'Repo', 'File', 'BeforeRedirect', 'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload', 'Api', 'HotkeyRegistry', 'Chronicle', 'Notification', function ($scope, $rootScope, $q, $modal, $templateCache, Loading, App, User, Repo, File, BeforeRedirect, Helper, PipelineService, _, Globals, BeforeUnload, Api, HotkeyRegistry, Chronicle, Notification) {
         var PipelineInstance = null,
             prompt = false,
             onBeforeUnloadOff = BeforeUnload.register(function() { return 'Please save your changes before leaving.'; }, function() {return prompt});
@@ -522,5 +522,33 @@ angular.module('registryApp.app')
             PipelineService.removeInstance($scope.view.id);
 
         });
+        
+        $scope.openFilePicker = function () {
+
+            File.getFiles().then(function (files) {
+
+                var filtered = {};
+
+                _.forEach(files, function(file, name) {
+                    if (!_.contains(['$promise', '$resolved'], name)) {
+                        filtered[name] = file;
+                    }
+                });
+
+                var modalInstance = $modal.open({
+                    template: $templateCache.get('views/partials/chose-file.html'),
+                    controller: 'ChoseFileCtrl',
+                    size: 'lg',
+                    windowClass: 'file-picker-modal',
+                    resolve: {data: function () {return {files: filtered};}}
+                });
+
+                modalInstance.result.then(function (result) {
+                    console.log('*** Files Chosen: ', result);
+                });
+
+            });
+
+        };
 
     }]);
