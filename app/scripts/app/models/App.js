@@ -13,7 +13,6 @@ angular.module('registryApp.app')
         self.getTools = function() {
 
             return Api.apps.get({}).$promise;
-
         };
 
         /**
@@ -40,7 +39,6 @@ angular.module('registryApp.app')
         /**
          * Get tool
          *
-         * @param revision
          * @returns {object} $promise
          */
         self.get = function() {

@@ -1,3 +1,37 @@
 <div class="file-picker">
-
+    <div class="file-picker-holder">
+        <table class="table">
+            <caption>My Files</caption>
+            <thead>
+                <tr>
+                    <th>File name</th>
+                    <th>Size</th>
+                    <th>File type</th>
+                    <th>Created On</th>
+                    <th>Task ID</th>
+                    <th>Sample ID</th>
+                    <th>Library ID</th>
+                    <th>Lane/slide</th>
+                    <th>Chunk number</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="file in files track by $index">
+                    <td>
+                        <span class="select-file"><input ng-model="file.selected" ng-change="onFileSelect(file.id, file.selected)" label="Select file" type="checkbox"/></span>
+                        <i class="fa" ng-class="{DIRECTORY:'folder', FILE:'fa-file-code-o'}[file.type]" ></i>
+                        {{ ::file.name }}
+                    </td>
+                    <td>{{ ::file.storage_node.uploaded_size | convertMbs }} MB</td>
+                    <td>{{ ::file.attrs.metadata.value.file_type }}</td>
+                    <td>{{ ::file.storage_node.time_created }}</td>
+                    <td>/</td>
+                    <td>{{ ::file.attrs.metadata.value.sample }}</td>
+                    <td>{{ ::file.attrs.metadata.value.library }}</td>
+                    <td>/</td>
+                    <td>/</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
