@@ -455,7 +455,8 @@ module.exports = function (grunt) {
                     'bower_components/ng-prettyjson/dist/ng-prettyjson.min.js',
 
                     'bower_components/angular-marked/angular-marked.js',
-                    'bower_components/ng-tags-input/ng-tags-input.js'
+                    'bower_components/ng-tags-input/ng-tags-input.js',
+                    'bower_components/chronicle/chronicle.js'
                 ],
                 dest: 'dist/scripts/vendor.js'
             }

@@ -26,12 +26,12 @@
                     <strong>Author:</strong>
                     <span> {{ ::data['sbg:createdBy'] }} </span>
                 </p>
-                <p>
+                <div>
                     <strong>Description{{ ::data.description.length ? '' : ':'}}</strong>
                     <div class="form-group" ng-class="{ 'format': data.description.length}">
                         <div class="markdown-body" marked="data.description"></div>
                     </div>
-                </p>
+                </div>
             </div>
 
             <div ng-switch-when="inputs">
