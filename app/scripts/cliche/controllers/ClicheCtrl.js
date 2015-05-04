@@ -741,7 +741,7 @@ angular.module('registryApp.cliche')
             }
         };
 
-        HotkeyRegistry.loadHotkeys([
+        var unloadHotkeys = HotkeyRegistry.loadHotkeys([
             {name: 'save', callback: $scope.updateTool, preventDefault: true},
             {name: 'run', callback: $scope.runApp, preventDefault: true},
             {name: 'undo', callback: $scope.undoAction, preventDefault: true, allowIn: ['INPUT', 'SELECT', 'TEXTAREA']},
@@ -764,6 +764,7 @@ angular.module('registryApp.cliche')
             onBeforeUnloadOff();
             onBeforeUnloadOff = undefined;
 
+            unloadHotkeys();
         });
 
     }]);

@@ -502,7 +502,7 @@ angular.module('registryApp.app')
             return $scope.chron ? $scope.chron.currArchivePos !== $scope.chron.archive.length - 1 : false;
         };
 
-        HotkeyRegistry.loadHotkeys([
+        var unloadHotkeys = HotkeyRegistry.loadHotkeys([
             {name: 'save', callback: $scope.save, preventDefault: true},
             {name: 'run', callback: $scope.runWorkflow, preventDefault: true},
             {name: 'undo', callback: $scope.undoAction, preventDefault: true},
@@ -518,6 +518,8 @@ angular.module('registryApp.app')
 
             onBeforeUnloadOff();
             onBeforeUnloadOff = undefined;
+
+            unloadHotkeys();
 
             PipelineService.removeInstance($scope.view.id);
 
