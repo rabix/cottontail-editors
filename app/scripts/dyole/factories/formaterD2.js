@@ -91,7 +91,8 @@ angular.module('registryApp.dyole')
                         destination: ''
                     };
 
-                    var input_id = '#' + ids.split(Const.exposedSeparator)[1];
+                    var input_id = ids;
+
                     dataLink.destination = ids.replace(Const.exposedSeparator, '/');
 
                     _self._createWorkflowInput(input_id, schema, workflow);
@@ -111,7 +112,7 @@ angular.module('registryApp.dyole')
                     '@id': id
                 };
 
-                model = _.extend(model, schema);
+                model = _.extend(schema, model);
 
                 if (model.name) {
                     delete model.name;
@@ -681,7 +682,7 @@ angular.module('registryApp.dyole')
                if (key.indexOf('sbg') !== -1) {
                    model[key] = val;
                }
-            })
+            });
 
             return model;
         };
@@ -725,8 +726,6 @@ angular.module('registryApp.dyole')
 
                 //clone schemas to create nodes to manipulate on them
                 nodes = _.toArray(_.clone(schemas, true));
-
-//        _formatter.createNodeIds(nodes);
 
                 display = _helper.fixDisplay(json.display, nodes);
 

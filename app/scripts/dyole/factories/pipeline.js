@@ -346,8 +346,6 @@ angular.module('registryApp.dyole')
 
                         startCoords.x = startCoords.x * currentZoomLevel.x;
                         startCoords.y = startCoords.y * currentZoomLevel.y;
-
-                        //                globals.vents.trigger('inPlaceEdit:destroy');
                     };
 
                     move = function onMove(x, y, dx, dy, event) {
