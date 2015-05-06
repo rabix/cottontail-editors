@@ -442,6 +442,7 @@ module.exports = function (grunt) {
             vendor: {
                 src: [
                     '<%= yeoman.app %>/vendor/jsandbox/src/jsandbox.js',
+                    '<%= yeoman.app %>/vendor/angular-ui-sortable/sorbale.min.js',
 
                     'bower_components/jquery/dist/jquery.js',
 

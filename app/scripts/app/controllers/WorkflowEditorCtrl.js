@@ -524,33 +524,43 @@ angular.module('registryApp.app')
             PipelineService.removeInstance($scope.view.id);
 
         });
-        
-        $scope.openFilePicker = function () {
 
-            File.getFiles().then(function (files) {
+        // File store cache
+        var fileCache;
 
-                var filtered = {};
+        var _openFilePicker = function (files) {
+            var filtered = {};
 
-                _.forEach(files, function(file, name) {
-                    if (!_.contains(['$promise', '$resolved'], name)) {
-                        filtered[name] = file;
-                    }
-                });
-
-                var modalInstance = $modal.open({
-                    template: $templateCache.get('views/partials/chose-file.html'),
-                    controller: 'ChoseFileCtrl',
-                    size: 'lg',
-                    windowClass: 'file-picker-modal',
-                    resolve: {data: function () {return {files: filtered};}}
-                });
-
-                modalInstance.result.then(function (result) {
-                    console.log('*** Files Chosen: ', result);
-                });
-
+            _.forEach(files, function(file, name) {
+                if (!_.contains(['$promise', '$resolved'], name)) {
+                    filtered[name] = file;
+                }
             });
 
+            var modalInstance = $modal.open({
+                template: $templateCache.get('views/partials/chose-file.html'),
+                controller: 'ChoseFileCtrl',
+                size: 'lg',
+                windowClass: 'file-picker-modal',
+                resolve: {data: function () {return {files: filtered};}}
+            });
+
+            modalInstance.result.then(function (result) {
+                console.log('*** Files Chosen: ', result);
+            });
         };
+
+        $scope.openFilePicker = function () {
+
+            if (typeof fileCache !== 'undefined') {
+                _openFilePicker(fileCache);
+            } else {
+                File.getFiles().then(function (files) {
+                    _openFilePicker(files);
+                });
+            }
+
+        };
+
 
     }]);
