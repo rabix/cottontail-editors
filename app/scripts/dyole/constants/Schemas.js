@@ -17,6 +17,7 @@ angular.module('registryApp.dyole')
         schemas: {}
     })
     .constant('systemNodeModel', {
+        '@type': 'CommandLine',
         '@id': null,
         'label': 'System app',
         'softwareDescription': {

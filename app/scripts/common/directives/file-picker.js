@@ -12,7 +12,7 @@ angular.module('registryApp.common')
         $scope.view.searchTerm = '';
 
         angular.forEach($scope.view.files, function(file, index) {
-            if (file && file.attrs && file.attrs.metadata !== 'undefined' && typeof file.attrs.metadata.value === 'string') {
+            if (file && file.attrs && typeof file.attrs.metadata !== 'undefined' && typeof file.attrs.metadata.value === 'string') {
                 file.attrs.metadata.value = JSON.parse(file.attrs.metadata.value);
             } else {
                 file.attrs.metadata = {};
@@ -36,11 +36,24 @@ angular.module('registryApp.common')
 
         $scope.toggleSelect = function (file) {
 
+            if (file.type === 'DIRECTORY') {
+                return false;
+            }
+
             file.selected = typeof file.selected === 'undefined' ? false : file.selected;
             file.selected = !file.selected;
 
             $scope.onFileSelect(file);
-        }
+        };
+
+        $scope.onKeyDown = function ($event) {
+            if ($event.which === 27) {
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.view.searchTerm = '';
+            }
+        };
+
     }])
     .directive('filePicker', ['$templateCache', function ($templateCache) {
         return {

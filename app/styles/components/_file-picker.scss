@@ -1,6 +1,9 @@
 .file-picker {
 
   .select-file {
+
+    @extend %ellipsis;
+
     span {
       input[type="checkbox"] {
         margin: -1px 4px 0 0;
@@ -15,6 +18,10 @@
 
   tbody tr {
     cursor: pointer;
+
+    td.select-file {
+      max-width: 260px;
+    }
   }
 }
 

@@ -2,7 +2,7 @@
     <div class="file-picker-toolbar row">
         <form class="search-form col-xs-3" ng-submit="" novalidate>
             <div class="input-group">
-                <input type="text" class="form-control" ng-model="view.searchTerm" placeholder="Search files.." required>
+                <input ng-keydown="onKeyDown($event)" type="text" class="form-control" ng-model="view.searchTerm" placeholder="Search files.." required>
                 <span class="input-group-btn">
                     <!--<button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>-->
                     <button ng-disabled="view.searchTerm | isEmpty" class="btn btn-expression btn-default" ng-click="view.searchTerm = ''"><i class="fa fa-ban"></i></button>
@@ -27,23 +27,23 @@
         <tbody>
             <tr ng-class="{'active': file.selected }" ng-repeat="file in view.files | filter:view.searchTerm"
                 ng-click="toggleSelect(file)">
-                <td class="select-file">
+                <td class="select-file" title="{{ ::file.name }}">
                     <span>
-                        <input ng-model="file.selected" ng-change="toggleSelect(file)" label="Select file"
+                        <input ng-if="file.type === 'FILE'" ng-model="file.selected" ng-change="toggleSelect(file)" label="Select file"
                                type="checkbox"/>
-                        <i class="fa" ng-class="{DIRECTORY:'folder', FILE:'fa-file-code-o'}[file.type]"></i>
+                        <i class="fa" ng-class="{DIRECTORY: 'fa-folder', FILE:'fa-file-code-o'}[file.type]"></i>
                         {{ ::file.name }}
                     </span>
 
                 </td>
-                <td>{{ ::file.storage_node.uploaded_size | convertBits | defined }}</td>
+                <td><span>{{ ::file.storage_node.uploaded_size | convertBits | defined }}</span></td>
                 <td>{{ ::file.attrs.metadata.value.file_type | defined }}</td>
                 <td>{{ ::file.storage_node.time_created | defined }}</td>
-                <td>/</td>
+                <td>-</td>
                 <td>{{ ::file.attrs.metadata.value.sample | defined }}</td>
                 <td>{{ ::file.attrs.metadata.value.library | defined }}</td>
-                <td>/</td>
-                <td>/</td>
+                <td>-</td>
+                <td>-</td>
             </tr>
         </tbody>
     </table>

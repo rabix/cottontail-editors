@@ -7,6 +7,10 @@ angular.module('registryApp.common')
         return function(size) {
             var units, i, len;
 
+            if (typeof size === 'undefined') {
+                return 'Directory';
+            }
+
             if (typeof size === 'string') {
                 size = Number(size);
             }
@@ -14,7 +18,7 @@ angular.module('registryApp.common')
             if (size < 0) {
                 throw Error('Invalid file size.');
             }
-
+            console.log(size);
             units =  ['KB', 'MB', 'GB', 'TB'];
 
             for (i = 0, len = units.length; i < len; i++) {

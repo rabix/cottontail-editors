@@ -1003,7 +1003,7 @@ angular.module('registryApp.dyole')
                         rawModel = angular.copy(nodeModel.json || nodeModel),
                         model;
 
-                    if (typeof rawModel['@type'] !== 'string') {
+                    if (typeof rawModel['@type'] !== 'string' && !Common.checkSystem(rawModel)) {
                         Notification.error('App not valid: Missing @type property');
                         return false;
                     }
@@ -1022,39 +1022,49 @@ angular.module('registryApp.dyole')
                             break;
                     }
 
+                    var _createNode = function () {
+                        if (nodeModel.type && nodeModel.type === 'workflow') {
+                            model = _self._transformWorkflowModel(nodeModel);
+                        } else {
+                            model = _self._transformModel(nodeModel);
+                        }
+
+                        var zoom = _self.getEl().getScale().x;
+
+                        var canvas = _self._getOffset(_self.$parent[0]);
+
+                        rawCoords = rawCoords || false;
+
+                        var x = ( clientX - canvas.left )  - _self.pipelineWrap.getTranslation().x,
+                            y = ( clientY - canvas.top  ) - _self.pipelineWrap.getTranslation().y;
+
+                        if (rawCoords) {
+                            x = clientX - _self.pipelineWrap.getTranslation().x;
+                            y = clientY - _self.pipelineWrap.getTranslation().y;
+                        }
+
+
+                        model.x = x / zoom;
+                        model.y = y / zoom;
+
+                        var _id = model.id || _self._generateNodeId(model);
+
+                        model.id = _id;
+
+                        _self.model.schemas[model.id] = rawModel;
+
+                        _self.Event.trigger('node:add', model);
+                    };
+
+                    if (Common.checkSystem) {
+                        _createNode();
+
+                        return;
+                    }
                     Validator.validate(type, rawModel)
                         .then(function () {
-                            if (nodeModel.type && nodeModel.type === 'workflow') {
-                                model = _self._transformWorkflowModel(nodeModel);
-                            } else {
-                                model = _self._transformModel(nodeModel);
-                            }
 
-                            var zoom = _self.getEl().getScale().x;
-
-                            var canvas = _self._getOffset(_self.$parent[0]);
-
-                            rawCoords = rawCoords || false;
-
-                            var x = ( clientX - canvas.left )  - _self.pipelineWrap.getTranslation().x,
-                                y = ( clientY - canvas.top  ) - _self.pipelineWrap.getTranslation().y;
-
-                            if (rawCoords) {
-                                x = clientX - _self.pipelineWrap.getTranslation().x;
-                                y = clientY - _self.pipelineWrap.getTranslation().y;
-                            }
-
-
-                            model.x = x / zoom;
-                            model.y = y / zoom;
-
-                            var _id = model.id || _self._generateNodeId(model);
-
-                            model.id = _id;
-
-                            _self.model.schemas[model.id] = rawModel;
-
-                            _self.Event.trigger('node:add', model);
+                            _createNode();
 
                         }, function (trace) {
                             Notification.error('App not valid:' + trace);
