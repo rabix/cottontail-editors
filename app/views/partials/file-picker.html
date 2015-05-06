@@ -1,36 +1,40 @@
 <div class="file-picker">
     <div class="file-picker-holder">
         <table class="table">
-            <caption>My Files</caption>
             <thead>
-                <tr>
-                    <th>File name</th>
-                    <th>Size</th>
-                    <th>File type</th>
-                    <th>Created On</th>
-                    <th>Task ID</th>
-                    <th>Sample ID</th>
-                    <th>Library ID</th>
-                    <th>Lane/slide</th>
-                    <th>Chunk number</th>
-                </tr>
+            <tr>
+                <th>File name</th>
+                <th>Size</th>
+                <th>File type</th>
+                <th>Created On</th>
+                <th>Task ID</th>
+                <th>Sample ID</th>
+                <th>Library ID</th>
+                <th>Lane/slide</th>
+                <th>Chunk number</th>
+            </tr>
             </thead>
             <tbody>
-                <tr ng-class="{true: 'active'}[file.selected]" ng-repeat="file in view.files">
-                    <td>
-                        <span class="select-file"><input ng-model="file.selected" ng-change="onFileSelect(file.id, file.selected)" label="Select file" type="checkbox"/></span>
-                        <i class="fa" ng-class="{DIRECTORY:'folder', FILE:'fa-file-code-o'}[file.type]" ></i>
+            <tr ng-class="{'active': file.selected }" ng-repeat="file in view.files track by $index"
+                ng-click="toggleSelect(file, $event)">
+                <td class="select-file">
+                    <span>
+                        <input ng-model="file.selected" ng-change="toggleSelect(file, $event)" label="Select file"
+                               type="checkbox"/>
+                        <i class="fa" ng-class="{DIRECTORY:'folder', FILE:'fa-file-code-o'}[file.type]"></i>
                         {{ ::file.name }}
-                    </td>
-                    <td>{{ ::file.storage_node.uploaded_size | convertMbs | defined }} MB</td>
-                    <td>{{ ::file.attrs.metadata.value['file_type'] | defined}}</td>
-                    <td>{{ ::file.storage_node.time_created | defined}}</td>
-                    <td>/</td>
-                    <td>{{ ::file.attrs.metadata.value.sample | defined}}</td>
-                    <td>{{ ::file.attrs.metadata.value.library | defined}}</td>
-                    <td>/</td>
-                    <td>/</td>
-                </tr>
+                    </span>
+
+                </td>
+                <td>{{ ::file.storage_node.uploaded_size | convertMbs | defined }} MB</td>
+                <td>{{ ::file.attrs.metadata.value.file_type | defined}}</td>
+                <td>{{ ::file.storage_node.time_created | defined}}</td>
+                <td>/</td>
+                <td>{{ ::file.attrs.metadata.value.sample | defined}}</td>
+                <td>{{ ::file.attrs.metadata.value.library | defined}}</td>
+                <td>/</td>
+                <td>/</td>
+            </tr>
             </tbody>
         </table>
     </div>
