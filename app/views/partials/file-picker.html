@@ -16,14 +16,14 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-class="{true: 'active'}[file.selected]" ng-repeat="file in files track by $index">
+                <tr ng-class="{true: 'active'}[file.selected]" ng-repeat="file in view.files">
                     <td>
                         <span class="select-file"><input ng-model="file.selected" ng-change="onFileSelect(file.id, file.selected)" label="Select file" type="checkbox"/></span>
                         <i class="fa" ng-class="{DIRECTORY:'folder', FILE:'fa-file-code-o'}[file.type]" ></i>
                         {{ ::file.name }}
                     </td>
                     <td>{{ ::file.storage_node.uploaded_size | convertMbs | defined }} MB</td>
-                    <td>{{ ::file.attrs.metadata.value.file_type | defined}}</td>
+                    <td>{{ ::file.attrs.metadata.value['file_type'] | defined}}</td>
                     <td>{{ ::file.storage_node.time_created | defined}}</td>
                     <td>/</td>
                     <td>{{ ::file.attrs.metadata.value.sample | defined}}</td>

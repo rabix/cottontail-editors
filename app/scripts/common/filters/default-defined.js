@@ -5,7 +5,7 @@
 angular.module('registryApp.common')
     .filter('defined', [function() {
         return function(str) {
-
+            console.log(str);
             return str || '/';
         };
     }]);

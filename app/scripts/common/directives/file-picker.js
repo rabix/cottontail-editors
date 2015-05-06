@@ -18,7 +18,7 @@ angular.module('registryApp.common')
                 file.attrs.metadata.value = {};
             }
         });
-        
+
         $scope.onFileSelect = function (id, selected) {
             console.log('File input click: ', id, selected);
             if (selected) {
