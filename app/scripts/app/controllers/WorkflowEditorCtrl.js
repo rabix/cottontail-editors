@@ -522,8 +522,8 @@ angular.module('registryApp.app')
             });
 
             var modalInstance = $modal.open({
-                template: $templateCache.get('views/partials/chose-file.html'),
-                controller: 'ChoseFileCtrl',
+                template: $templateCache.get('views/partials/choose-file.html'),
+                controller: 'ChooseFileCtrl',
                 size: 'lg',
                 windowClass: 'file-picker-modal',
                 resolve: {data: function () {return {files: filtered};}}

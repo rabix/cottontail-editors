@@ -18,5 +18,8 @@ $panel-border-radius: 0;
 $table-cell-padding: 12px 8px;
 $table-bg-active: #F3F8FC;
 
+// modal overrides
+$modal-xl: 1100px;
+
 @import "../../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap/variables";
 @import 'overrides/sbg-variables';

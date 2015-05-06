@@ -17,3 +17,9 @@
     cursor: pointer;
   }
 }
+
+.file-picker-modal {
+  .modal-dialog {
+    width: $modal-xl;
+  }
+}
