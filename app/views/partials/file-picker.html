@@ -15,10 +15,10 @@
         </thead>
         <tbody>
             <tr ng-class="{'active': file.selected }" ng-repeat="file in view.files track by $index"
-                ng-click="toggleSelect(file, $event)">
+                ng-click="toggleSelect(file)">
                 <td class="select-file">
                     <span>
-                        <input ng-model="file.selected" ng-change="toggleSelect(file, $event)" label="Select file"
+                        <input ng-model="file.selected" ng-change="toggleSelect(file)" label="Select file"
                                type="checkbox"/>
                         <i class="fa" ng-class="{DIRECTORY:'folder', FILE:'fa-file-code-o'}[file.type]"></i>
                         {{ ::file.name }}

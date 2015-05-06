@@ -19,7 +19,7 @@ angular.module('registryApp.common')
             }
         });
 
-        $scope.onFileSelect = function (file, $e) {
+        $scope.onFileSelect = function (file) {
             var id = file.id;
             var selected = file.selected;
             console.log('File input click: ', id, selected);
@@ -33,7 +33,7 @@ angular.module('registryApp.common')
         };
 
 
-        $scope.toggleSelect = function (file, $e) {
+        $scope.toggleSelect = function (file) {
 
             file.selected = typeof file.selected === 'undefined' ? false : file.selected;
             file.selected = !file.selected;
