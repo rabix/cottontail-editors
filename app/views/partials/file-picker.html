@@ -1,4 +1,15 @@
 <div class="file-picker">
+    <div class="file-picker-toolbar row">
+        <form class="search-form col-xs-3" ng-submit="" novalidate>
+            <div class="input-group">
+                <input type="text" class="form-control" ng-model="view.searchTerm" placeholder="Search files.." required>
+                <span class="input-group-btn">
+                    <!--<button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>-->
+                    <button ng-disabled="view.searchTerm | isEmpty" class="btn btn-expression btn-default" ng-click="view.searchTerm = ''"><i class="fa fa-ban"></i></button>
+                </span>
+            </div>
+        </form>
+    </div>
     <table class="table table-hover">
         <thead>
             <tr>
@@ -14,7 +25,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-class="{'active': file.selected }" ng-repeat="file in view.files track by $index"
+            <tr ng-class="{'active': file.selected }" ng-repeat="file in view.files | filter:view.searchTerm"
                 ng-click="toggleSelect(file)">
                 <td class="select-file">
                     <span>
@@ -25,14 +36,14 @@
                     </span>
 
                 </td>
-                <td>{{ ::file.storage_node.uploaded_size | convertMbs | defined }} MB</td>
-                <td>{{ ::file.attrs.metadata.value.file_type | defined}}</td>
-                <td>{{ ::file.storage_node.time_created | defined}}</td>
-                <td>-</td>
-                <td>{{ ::file.attrs.metadata.value.sample | defined}}</td>
-                <td>{{ ::file.attrs.metadata.value.library | defined}}</td>
-                <td>-</td>
-                <td>-</td>
+                <td>{{ ::file.storage_node.uploaded_size | convertBits | defined }}</td>
+                <td>{{ ::file.attrs.metadata.value.file_type | defined }}</td>
+                <td>{{ ::file.storage_node.time_created | defined }}</td>
+                <td>/</td>
+                <td>{{ ::file.attrs.metadata.value.sample | defined }}</td>
+                <td>{{ ::file.attrs.metadata.value.library | defined }}</td>
+                <td>/</td>
+                <td>/</td>
             </tr>
         </tbody>
     </table>

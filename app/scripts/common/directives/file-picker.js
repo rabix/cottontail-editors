@@ -8,7 +8,8 @@ angular.module('registryApp.common')
     .controller('FilePickerCtrl', ['$scope', 'lodash',function ($scope, _) {
 
         $scope.view = {};
-        $scope.view.files = _.clone($scope.files, true);
+        $scope.view.files = _.toArray(_.clone($scope.files, true));
+        $scope.view.searchTerm = '';
 
         angular.forEach($scope.view.files, function(file, index) {
             if (file && file.attrs && file.attrs.metadata !== 'undefined' && typeof file.attrs.metadata.value === 'string') {
