@@ -1,7 +1,6 @@
 <div class="file-picker">
-    <div class="file-picker-holder">
-        <table class="table">
-            <thead>
+    <table class="table table-hover">
+        <thead>
             <tr>
                 <th>File name</th>
                 <th>Size</th>
@@ -13,8 +12,8 @@
                 <th>Lane/slide</th>
                 <th>Chunk number</th>
             </tr>
-            </thead>
-            <tbody>
+        </thead>
+        <tbody>
             <tr ng-class="{'active': file.selected }" ng-repeat="file in view.files track by $index"
                 ng-click="toggleSelect(file, $event)">
                 <td class="select-file">
@@ -29,13 +28,12 @@
                 <td>{{ ::file.storage_node.uploaded_size | convertMbs | defined }} MB</td>
                 <td>{{ ::file.attrs.metadata.value.file_type | defined}}</td>
                 <td>{{ ::file.storage_node.time_created | defined}}</td>
-                <td>/</td>
+                <td>-</td>
                 <td>{{ ::file.attrs.metadata.value.sample | defined}}</td>
                 <td>{{ ::file.attrs.metadata.value.library | defined}}</td>
-                <td>/</td>
-                <td>/</td>
+                <td>-</td>
+                <td>-</td>
             </tr>
-            </tbody>
-        </table>
-    </div>
+        </tbody>
+    </table>
 </div>

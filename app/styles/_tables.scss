@@ -261,3 +261,60 @@
 @-ms-keyframes rotate {
   @include rotate-rule(-ms-);
 }
+
+.table {
+  thead {
+    tr {
+      th {
+        &.center {
+          text-align: center;
+        }
+        &.right {
+          text-align: right;
+        }
+      }
+    }
+  }
+  tbody {
+    tr {
+      border-left: 1px solid transparent;
+      border-right: 1px solid transparent;
+      td {
+        &.center {
+          text-align: center;
+        }
+        &.right {
+          text-align: right;
+        }
+        .version {
+          color: #555;
+          &:hover {
+            text-decoration: none;
+          }
+        }
+      }
+    }
+  }
+  &.table-hover {
+    tr {
+      td, th {
+        vertical-align: middle !important;
+      }
+    }
+    tbody {
+      tr {
+        &:hover {
+          background-color: #fcfcfc;
+          td {
+            background-color: transparent;
+          }
+          &.empty {
+            background-image: none;
+            border-left-color: transparent;
+            border-right-color: transparent;
+          }
+        }
+      }
+    }
+  }
+}

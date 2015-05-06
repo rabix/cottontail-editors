@@ -30,3 +30,97 @@
     }
   }
 }
+
+/* Modal override */
+.modal {
+
+  &.modal-prop {
+    .modal-dialog {
+      .main-actions {
+        text-align: right;
+        margin: 10px -15px -15px;
+        border-top: 1px solid #ddd;
+        padding: 10px;
+      }
+    }
+  }
+
+  &.modal-markdown {
+    textarea {
+      height: 300px;
+    }
+    .markdown-body {
+      height: 300px;
+      overflow: auto;
+      padding: 10px;
+      border: 1px solid #eee;
+    }
+  }
+
+  .actions {
+    .btn {
+      margin-left: 10px;
+    }
+  }
+}
+
+/* Modal content override */
+.modal-content {
+  @include border-radius(0);
+}
+
+/* Modal header override */
+.modal-header {
+  .close {
+    margin-top: 0;
+  }
+  .modal-title {
+    .checkbox {
+      font-size: 14px;
+      margin-left: 30px;
+      font-weight: normal;
+    }
+  }
+}
+
+/* Modal body override */
+.modal-body {
+  &.alert {
+    margin: 0;
+    .messages {
+      margin-bottom: 20px;
+    }
+  }
+
+  .tabs {
+    overflow: hidden;
+    margin-top: 10px;
+
+    &.loading {
+      @extend %loading-abs;
+    }
+
+    .nav.nav-tabs {
+      .form-li {
+        width: 300px;
+        margin-right: 10px;
+        float: right;
+      }
+    }
+
+    .content {
+      overflow-y: auto;
+      min-height: 100px;
+      max-height: 500px;
+      @extend %scrollbar;
+    }
+  }
+}
+
+/* Modal footer override */
+.modal-footer {
+  & > .btn,
+  & > .copy-btn {
+    margin-left: 5px;
+  }
+}
