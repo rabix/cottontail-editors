@@ -379,7 +379,7 @@ angular.module('registryApp.app')
             });
 
             modalInstance.result.then(function(result) {
-                $scope.view.workflow.description = result;
+                $scope.view.workflow = result;
             });
 
         };

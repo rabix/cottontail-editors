@@ -40,8 +40,7 @@ angular.module('registryApp.dyole')
          * Close the modal window
          */
         $scope.edit = function () {
-            _.assign(data.tool, $scope.view.tool);
-            $modalInstance.dismiss(data.tool);
+            $modalInstance.close($scope.view.tool);
         };
 
         /**
