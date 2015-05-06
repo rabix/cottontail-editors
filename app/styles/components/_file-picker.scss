@@ -4,6 +4,11 @@
 
   }
 
+  thead th {
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
   tbody tr {
     cursor: pointer;
   }
