@@ -509,22 +509,6 @@ angular.module('registryApp.app')
             {name: 'redo', callback: $scope.redoAction, preventDefault: true}
         ]);
 
-        $scope.$on('$destroy', function () {
-            onNodeSelectOff();
-            onNodeDeselectOff();
-
-            onBeforeRedirectOff();
-            onBeforeRedirectOff = undefined;
-
-            onBeforeUnloadOff();
-            onBeforeUnloadOff = undefined;
-
-            unloadHotkeys();
-
-            PipelineService.removeInstance($scope.view.id);
-
-        });
-
         // File store cache
         var fileCache;
 
@@ -556,11 +540,27 @@ angular.module('registryApp.app')
                 _openFilePicker(fileCache);
             } else {
                 File.getFiles().then(function (files) {
+                    fileCache = files;
                     _openFilePicker(files);
                 });
             }
 
         };
 
+        $scope.$on('$destroy', function () {
+            onNodeSelectOff();
+            onNodeDeselectOff();
+
+            onBeforeRedirectOff();
+            onBeforeRedirectOff = undefined;
+
+            onBeforeUnloadOff();
+            onBeforeUnloadOff = undefined;
+
+            unloadHotkeys();
+
+            PipelineService.removeInstance($scope.view.id);
+
+        });
 
     }]);
