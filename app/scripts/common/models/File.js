@@ -18,16 +18,17 @@ angular.module('registryApp.app')
             config = config || {};
             config.limit = config.limit || 0;
             config.offset = config.offset || 5;
+            config.folders = config.folders || true;
 
             if (typeof config.path !== 'undefined') {
                 path += config.path;
             }
 
             var query = {
-                query: 'IN \"/Projects/' + path + '\" WHERE (type = \"DIRECTORY\" OR ((type = \"FILE\" AND attr(\"vis_details\") = \"\" AND (state = \"AVAILABLE\" OR (state = \"UPLOADING\" AND attr(\"produced_by_task\") = \"\"))))) ORDER BY type ASC, name ASC LIMIT ' + config.limit + ', ' + config.offset
+                query: 'IN \"/Projects/' + path + '\" WHERE (' + ( config.folders ? 'type = \"DIRECTORY\" OR ' : '' ) + '((type = \"FILE\" AND attr(\"vis_details\") = \"\" AND (state = \"AVAILABLE\" OR (state = \"UPLOADING\" AND attr(\"produced_by_task\") = \"\"))))) ORDER BY type ASC, name ASC LIMIT ' + config.limit + ', ' + config.offset
             };
 
-            return Api.filesInProject.post(query).$promise;
+            return Api.filesInProject.post({folders: config.folders}, query).$promise;
         };
 
         /**

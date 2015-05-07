@@ -61,12 +61,12 @@ angular.module('integration')
             'get': {method: 'GET', headers: headers}
         });
 
-        var vs_query_url = vaporUrl + '/v2/query?session_id=' + sessionId + '&direct_descendants_only=true';
+        var vs_query_url = vaporUrl + '/v2/query?session_id=' + sessionId + '&direct_descendants_only=:folders';
 
         self.files = $resource(vaporUrl + '/fs/ls?session_id=' + sessionId + '&path=/Projects/' + Globals.projectId + '&depth=1', {}, {
         });
 
-        self.filesInProject = $resource(vs_query_url, {}, {
+        self.filesInProject = $resource(vs_query_url, {folders: '@folders'}, {
             'post': {
                 method: 'POST',
                 headers: headers
