@@ -513,20 +513,13 @@ angular.module('registryApp.app')
         var fileCache;
 
         var _openFilePicker = function (files) {
-            var filtered = {};
-
-            _.forEach(files, function(file, name) {
-                if (!_.contains(['$promise', '$resolved'], name)) {
-                    filtered[name] = file;
-                }
-            });
 
             var modalInstance = $modal.open({
                 template: $templateCache.get('views/partials/choose-file.html'),
                 controller: 'ChooseFileCtrl',
                 size: 'lg',
                 windowClass: 'file-picker-modal',
-                resolve: {data: function () {return {files: filtered};}}
+                resolve: {data: function () {return {files: files};}}
             });
 
             modalInstance.result.then(function (result) {
@@ -539,9 +532,8 @@ angular.module('registryApp.app')
             if (typeof fileCache !== 'undefined') {
                 _openFilePicker(fileCache);
             } else {
-                File.getFiles().then(function (files) {
-                    fileCache = files;
-                    _openFilePicker(files);
+                File.getFilesInProject().then(function (files) {
+                    _openFilePicker(files.resultSet);
                 });
             }
 
