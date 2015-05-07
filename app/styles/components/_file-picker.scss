@@ -1,5 +1,15 @@
 .file-picker {
 
+  .breadcrumb {
+    a {
+      margin-right: 5px;
+    }
+
+    li.active {
+      font-weight: bold;
+    }
+  }
+
   .select-file {
 
     @extend %ellipsis;

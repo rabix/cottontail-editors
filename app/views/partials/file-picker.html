@@ -11,12 +11,18 @@
             </div>
         </form>
         <div class="col-xs-9">
-            <a href="" ng-click="goToRoot()">
-                Project
-            </a>
-            <a href="" ng-repeat="crumb in breadcrumbs track by $index" ng-click="goToBreadcrumb($index)">
-                {{ ::crumb }}
-            </a>
+            <ol class="breadcrumb">
+                <li ng-class="{active: !breadcrumbs.length}">
+                   <a href="" ng-click="goToRoot()">
+                       Project
+                   </a>
+                </li>
+                <li ng-class="{active: $last}" ng-repeat="crumb in breadcrumbs track by $index">
+                    <a href="" ng-click="goToBreadcrumb($index)">
+                        {{ ::crumb }}
+                    </a>
+                </li>
+            </ol>
         </div>
     </div>
     <div class="table-container">
