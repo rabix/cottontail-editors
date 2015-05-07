@@ -15,7 +15,7 @@ angular.module('registryApp.common')
         $scope.view.page = 1;
         $scope.view.total = 1;
         $scope.view.searchTerm = '';
-        $scope.view.perPage = 5;
+        $scope.view.perPage = 10;
 
         $scope.view.loading = false;
 
