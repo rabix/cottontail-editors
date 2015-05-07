@@ -28,11 +28,23 @@ angular.module('registryApp.common')
 
         $scope.breadcrumbs = [];
 
-        function updateView (files) {
+        var updateView = function(files) {
             $scope.view.page = files.start == 0 ? 1 : $scope.view.page;
             $scope.view.total = files.matching;
             $scope.view.files = files.resultSet;
-        }
+
+            console.log('Updating view', $scope.selectedFiles);
+            _.forEach(files.resultSet, function (file) {
+
+                var exists = _.find($scope.selectedFiles, function (f) {
+                    return f.id === file.id;
+                });
+
+                if (exists) {
+                    file.selected = true;
+                }
+            });
+        };
 
         $scope.goToBreadcrumb = function ($index) {
             var path = '';
@@ -87,16 +99,31 @@ angular.module('registryApp.common')
         $scope.onFileSelect = function (file) {
             var id = file.id;
             var selected = file.selected;
-            console.log('File input click: ', id, selected);
+
             if (selected) {
                 console.log('Calling onSelect with file id: ', id);
-                $scope.onSelect({id: id});
+                onSelect({id: id});
             } else {
                 console.log('Calling onDeSelect with file id: ', id);
-                $scope.onDeSelect({id: id});
+                onDeSelect({id: id});
             }
         };
 
+        var onSelect = function (id) {
+            var exists = _.find($scope.selectedFiles, function (f) {
+                return f.id === id;
+            });
+
+            if (!exists) {
+                $scope.selectedFiles.push(id)
+            }
+        };
+
+        var onDeSelect = function (id) {
+            _.remove($scope.selectedFiles, function (i) {
+                return i === id;
+            });
+        };
 
         $scope.toggleSelect = function (file) {
 
@@ -127,9 +154,7 @@ angular.module('registryApp.common')
             template: $templateCache.get('views/partials/file-picker.html'),
             scope: {
                 files: '=',
-                selectedFiles: '=',
-                onSelect: '&',
-                onDeSelect: '&'
+                selectedFiles: '='
             },
             controller: 'FilePickerCtrl',
             link: function (scope, element, attrs) {

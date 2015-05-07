@@ -5,17 +5,7 @@
 angular.module('registryApp.common')
     .controller('ChooseFileCtrl', ['$scope', '$modalInstance', 'lodash', function ($scope, $modalInstance, _) {
 
-        var selectedFiles = [];
-
-        $scope.onSelect = function (id) {
-            selectedFiles.push(id)
-        };
-
-        $scope.onDeSelect = function (id) {
-            _.remove(selectedFiles, function (i) {
-                return i === id;
-            });
-        };
+        $scope.selectedFiles = [];
 
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
