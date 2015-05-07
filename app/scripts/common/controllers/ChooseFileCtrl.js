@@ -3,11 +3,9 @@
  */
 
 angular.module('registryApp.common')
-    .controller('ChooseFileCtrl', ['$scope', '$modalInstance', 'data', 'lodash', function ($scope, $modalInstance, data, _) {
+    .controller('ChooseFileCtrl', ['$scope', '$modalInstance', 'lodash', function ($scope, $modalInstance, _) {
 
         var selectedFiles = [];
-
-        $scope.files = data.files;
 
         $scope.onSelect = function (id) {
             selectedFiles.push(id)

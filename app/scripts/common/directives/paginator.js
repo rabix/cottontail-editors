@@ -41,7 +41,7 @@ angular.module('registryApp.common')
 
                     var offset = ($scope.page - 1) * $scope.paginator.perPage;
 
-                    $scope.handler({offset: offset});
+                    $scope.handler({limit: offset});
 
                     $scope.paginator.prev = $scope.page > 1;
                     $scope.paginator.next = ($scope.page * $scope.paginator.perPage) < $scope.total;

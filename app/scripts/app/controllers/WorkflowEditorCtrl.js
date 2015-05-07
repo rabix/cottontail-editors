@@ -512,14 +512,13 @@ angular.module('registryApp.app')
         // File store cache
         var fileCache;
 
-        var _openFilePicker = function (files) {
+        $scope.openFilePicker = function () {
 
             var modalInstance = $modal.open({
                 template: $templateCache.get('views/partials/choose-file.html'),
                 controller: 'ChooseFileCtrl',
                 size: 'lg',
-                windowClass: 'file-picker-modal',
-                resolve: {data: function () {return {files: files};}}
+                windowClass: 'file-picker-modal'
             });
 
             modalInstance.result.then(function (result) {
@@ -527,17 +526,6 @@ angular.module('registryApp.app')
             });
         };
 
-        $scope.openFilePicker = function () {
-
-            if (typeof fileCache !== 'undefined') {
-                _openFilePicker(fileCache);
-            } else {
-                File.getFilesInProject().then(function (files) {
-                    _openFilePicker(files.resultSet);
-                });
-            }
-
-        };
 
         $scope.$on('$destroy', function () {
             onNodeSelectOff();

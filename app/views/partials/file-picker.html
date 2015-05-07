@@ -1,4 +1,4 @@
-<div class="file-picker">
+<div class="file-picker" >
     <div class="file-picker-toolbar row">
         <form class="search-form col-xs-3" ng-submit="" novalidate>
             <div class="input-group">
@@ -9,6 +9,14 @@
                 </span>
             </div>
         </form>
+        <div class="col-xs-9">
+            <a href="" ng-click="goToRoot()">
+                Project
+            </a>
+            <a href="" ng-repeat="crumb in breadcrumbs track by $index" ng-click="goToBreadcrumb($index)">
+                {{ ::crumb }}
+            </a>
+        </div>
     </div>
     <table class="table table-hover">
         <thead>
@@ -47,4 +55,6 @@
             </tr>
         </tbody>
     </table>
+    <paginator page="view.page" per-page="{{ ::view.perPage }}" total="view.total" handler="getMoreFiles(limit)"></paginator>
+
 </div>

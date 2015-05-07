@@ -13,15 +13,18 @@ angular.module('registryApp.app')
             return Api.files.get({}).$promise;
         };
 
-        self.getFilesInProject = function (nest) {
+        self.getFilesInProject = function (config) {
             var path = Globals.projectId;
+            config = config || {};
+            config.limit = config.limit || 0;
+            config.offset = config.offset || 5;
 
-            if (typeof nest !== 'undefined') {
-                path += nest;
+            if (typeof config.path !== 'undefined') {
+                path += config.path;
             }
 
             var query = {
-                query: 'IN \"/Projects/' + path + '\" WHERE (type = \"DIRECTORY\" OR ((type = \"FILE\" AND attr(\"vis_details\") = \"\" AND (state = \"AVAILABLE\" OR (state = \"UPLOADING\" AND attr(\"produced_by_task\") = \"\"))))) ORDER BY type ASC, name ASC LIMIT 0, 50'
+                query: 'IN \"/Projects/' + path + '\" WHERE (type = \"DIRECTORY\" OR ((type = \"FILE\" AND attr(\"vis_details\") = \"\" AND (state = \"AVAILABLE\" OR (state = \"UPLOADING\" AND attr(\"produced_by_task\") = \"\"))))) ORDER BY type ASC, name ASC LIMIT ' + config.limit + ', ' + config.offset
             };
 
             return Api.filesInProject.post(query).$promise;
