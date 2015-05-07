@@ -102,20 +102,20 @@ angular.module('registryApp.common')
 
             if (selected) {
                 console.log('Calling onSelect with file id: ', id);
-                onSelect({id: id});
+                onSelect(file);
             } else {
                 console.log('Calling onDeSelect with file id: ', id);
-                onDeSelect({id: id});
+                onDeSelect(file);
             }
         };
 
-        var onSelect = function (id) {
+        var onSelect = function (file) {
             var exists = _.find($scope.selectedFiles, function (f) {
-                return f.id === id;
+                return f.id === file.id;
             });
 
             if (!exists) {
-                $scope.selectedFiles.push(id)
+                $scope.selectedFiles.push(file)
             }
         };
 
