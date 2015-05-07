@@ -17,6 +17,8 @@ angular.module('registryApp.common')
         $scope.view.searchTerm = '';
         $scope.view.perPage = 5;
 
+        $scope.view.loading = false;
+
         angular.forEach($scope.view.files, function(file) {
             if (file && file.attrs && typeof file.attrs.metadata !== 'undefined' && typeof file.attrs.metadata.value === 'string') {
                 file.attrs.metadata.value = JSON.parse(file.attrs.metadata.value);
@@ -32,6 +34,8 @@ angular.module('registryApp.common')
             $scope.view.page = files.start == 0 ? 1 : $scope.view.page;
             $scope.view.total = files.matching;
             $scope.view.files = files.resultSet;
+            $scope.view.loading = false;
+        
 
             console.log('Updating view', $scope.selectedFiles);
             _.forEach(files.resultSet, function (file) {
@@ -55,12 +59,15 @@ angular.module('registryApp.common')
 
             $scope.breadcrumbs.splice($index + 1);
 
+            $scope.view.loading = true;
             File.getFilesInProject({limit: $scope.view.limit, offset: $scope.view.perPage, path: path}).then(function(files) {
                 updateView(files);
             });
         };
 
         $scope.goToRoot = function () {
+
+            $scope.view.loading = true;
             File.getFilesInProject({offset: $scope.view.perPage}).then(function (files) {
                 updateView(files);
             });
@@ -68,6 +75,8 @@ angular.module('registryApp.common')
         };
 
         $scope.getMoreFiles = function (limit) {
+
+            $scope.view.loading = true;
             File.getFilesInProject({limit: limit}).then(function (files) {
                 updateView(files);
             });

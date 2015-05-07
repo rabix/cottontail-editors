@@ -1,4 +1,5 @@
 <div class="file-picker" >
+    <content-loading load="view.loading"></content-loading>
     <div class="file-picker-toolbar row">
         <form class="search-form col-xs-3" ng-submit="" novalidate>
             <div class="input-group">
@@ -18,8 +19,9 @@
             </a>
         </div>
     </div>
-    <table class="table table-hover">
-        <thead>
+    <div class="table-container">
+        <table class="table table-hover">
+            <thead>
             <tr>
                 <th>File name</th>
                 <th>Size</th>
@@ -31,8 +33,8 @@
                 <th>Lane/slide</th>
                 <th>Chunk number</th>
             </tr>
-        </thead>
-        <tbody>
+            </thead>
+            <tbody>
             <tr ng-class="{'active': file.selected }" ng-repeat="file in view.files | filter:view.searchTerm"
                 ng-click="toggleSelect(file)">
                 <td class="select-file" title="{{ ::file.name }}">
@@ -53,8 +55,10 @@
                 <td>-</td>
                 <td>-</td>
             </tr>
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
+
     <paginator page="view.page" per-page="{{ ::view.perPage }}" total="view.total" handler="getMoreFiles(limit)"></paginator>
 
 </div>
