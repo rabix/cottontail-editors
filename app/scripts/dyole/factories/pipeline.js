@@ -1163,7 +1163,8 @@ angular.module('registryApp.dyole')
                 getJSON: function () {
                     var json = angular.copy(this.model),
                         exposed = angular.copy(this.exposed),
-                        values = angular.copy(this.values);
+                        values = angular.copy(this.values),
+                        suggestedValues = angular.copy(this.suggestedValues);
 
                     this._prepareExposedValues(exposed, values);
 
@@ -1192,7 +1193,7 @@ angular.module('registryApp.dyole')
                     json.display.canvas.x = this.getEl().getTranslation().x;
                     json.display.canvas.y = this.getEl().getTranslation().y;
 
-                    return Formater.toRabixSchema(json, exposed, values);
+                    return Formater.toRabixSchema(json, exposed, values, suggestedValues);
                 },
 
                 /**

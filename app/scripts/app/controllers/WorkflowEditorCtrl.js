@@ -302,6 +302,16 @@ angular.module('registryApp.app')
             $scope.view.exposed = exposed;
             $scope.view.suggestedValues = suggestedValues;
 
+            _.forEach($scope.view.suggestedValues, function(sugValue, keyName) {
+                var appId = keyName.split(Const.exposedSeparator)[0];
+                var inputId = '#' + keyName.split(Const.exposedSeparator)[1];
+
+                if (!$scope.view.values[appId]) {
+                    $scope.view.values[appId] = {};
+                    $scope.view.values[appId][inputId] = sugValue;
+                }
+            });
+
             $scope.view.required = $scope.view.json.inputs.required;
 
             // TODO: think about this when implementing multi select of nodes
@@ -319,6 +329,19 @@ angular.module('registryApp.app')
          * Track node deselect
          */
         var onNodeDeselect = function () {
+
+            _.forEach($scope.view.suggestedValues, function(sugValue, keyName) {
+                var appId = keyName.split(Const.exposedSeparator)[0];
+                var inputId = '#' + keyName.split(Const.exposedSeparator)[1];
+
+                if ($scope.view.values[appId] && $scope.view.values[appId][inputId]) {
+                    delete $scope.view.values[appId][inputId];
+
+                    if (!_.isUndefined($scope.view.values[appId]) && _.isEmpty($scope.view.values[appId])) {
+                        delete $scope.view.values[appId];
+                    }
+                }
+            });
 
             $scope.view.json = {};
 

@@ -55,7 +55,7 @@ angular.module('registryApp.dyole')
              * @param workflow
              * @returns {Array}
              */
-            toRabixRelations: function (relations, exposed, workflow) {
+            toRabixRelations: function (relations, exposed, workflow, suggestedValues) {
                 var _self = this,
                     dataLinks = [];
 
@@ -92,6 +92,10 @@ angular.module('registryApp.dyole')
                     };
 
                     var input_id = ids;
+
+                    if (typeof suggestedValues[ids] !== 'undefined') {
+                        schema.suggestedValue = suggestedValues[ids];
+                    }
 
                     dataLink.destination = ids.replace(Const.exposedSeparator, '/');
 
@@ -309,7 +313,7 @@ angular.module('registryApp.dyole')
 
             },
 
-            toPipelineRelations: function (schemas, dataLinks, exposed, workflow) {
+            toPipelineRelations: function (schemas, dataLinks, exposed, workflow, suggestedValues) {
 
                 var relations = [];
 
@@ -378,8 +382,14 @@ angular.module('registryApp.dyole')
                             });
 
                             if (typeof ex !== 'undefined') {
+                                var keyName = dest[0] + Const.exposedSeparator + dest[1];
                                 //remove # with slice in front of input id (cliche form builder required)
-                                exposed[dest[0] + Const.exposedSeparator + dest[1]] = ex;
+                                exposed[keyName] = ex;
+
+                                if (typeof ex.suggestedValue !== 'undefined') {
+                                    suggestedValues[keyName] = ex.suggestedValue;
+                                }
+
                             } else {
                                 console.error('Param exposed but not set in workflow inputs');
                             }
@@ -694,12 +704,12 @@ angular.module('registryApp.dyole')
          */
         var fd2 = {
 
-            toRabixSchema: function (p, exposed, values) {
+            toRabixSchema: function (p, exposed, values, suggestedValues) {
                 var json = _.clone(p, true),
                     model = _.clone(RabixModel, true);
 
                 model.display = json.display;
-                model.dataLinks = _formatter.toRabixRelations(json.relations, exposed, model);
+                model.dataLinks = _formatter.toRabixRelations(json.relations, exposed, model, suggestedValues);
                 model.steps = _formatter.createSteps(json.schemas, json.relations);
 
                 _formatter.addValuesToSteps(model.steps, values);
@@ -717,6 +727,7 @@ angular.module('registryApp.dyole')
                 var json = _.clone(p, true),
                     relations, nodes, schemas, display,
                     exposed = {},
+                    suggestedValues = {},
                     values = {};
 
                 schemas = _formatter.createSchemasFromSteps(json.steps, values);
@@ -729,11 +740,12 @@ angular.module('registryApp.dyole')
 
                 display = _helper.fixDisplay(json.display, nodes);
 
-                relations = _formatter.toPipelineRelations(schemas, json.dataLinks, exposed, json);
+                relations = _formatter.toPipelineRelations(schemas, json.dataLinks, exposed, json, suggestedValues);
 
                 var model = {
                     exposed: exposed,
                     values: values,
+                    suggestedValues: suggestedValues,
                     display: display,
                     nodes: nodes,
                     schemas: schemas,
