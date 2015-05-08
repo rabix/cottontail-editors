@@ -330,6 +330,7 @@ module.exports = function (grunt) {
                     '<%= yeoman.app %>/scripts/common/directives/focus-here.js',
                     '<%= yeoman.app %>/scripts/common/directives/content-loading.js',
                     '<%= yeoman.app %>/scripts/common/directives/file-picker.js',
+                    '<%= yeoman.app %>/scripts/common/directives/selected-files.js',
                     '<%= yeoman.app %>/scripts/common/services/BeforeUnload.js',
                     '<%= yeoman.app %>/scripts/common/services/BeforeRedirect.js',
                     '<%= yeoman.app %>/scripts/common/services/Helper.js',
