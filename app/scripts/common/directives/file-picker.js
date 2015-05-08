@@ -33,6 +33,9 @@ angular.module('registryApp.common')
         var getFiles = function (config) {
             $scope.view.loading = true;
 
+            config = config || {};
+            config.folders = $scope.showFolders;
+
             File.getFilesInProject(config).then(function(files) {
                 updateView(files);
                 $scope.view.loading = false;
@@ -73,10 +76,7 @@ angular.module('registryApp.common')
 
         $scope.goToRoot = function () {
 
-            $scope.view.loading = true;
-            File.getFilesInProject({offset: $scope.view.perPage}).then(function (files) {
-                updateView(files);
-            });
+            getFiles({offset: $scope.view.perPage});
             $scope.breadcrumbs = [];
         };
 
@@ -149,7 +149,8 @@ angular.module('registryApp.common')
             template: $templateCache.get('views/partials/file-picker.html'),
             scope: {
                 files: '=',
-                selectedFiles: '='
+                selectedFiles: '=',
+                showFolders: '='
             },
             controller: 'FilePickerCtrl',
             link: function (scope, element, attrs) {
