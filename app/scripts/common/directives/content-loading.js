@@ -12,11 +12,6 @@ angular.module('registryApp.common')
 			scope: {
 				load: '='
 			},
-			template: '<div class="content-loading" ng-class="{\'show\': load}"></div>',
-			link: function (scope) {
-				console.log(scope.load);
-				
-
-			}
+			template: '<div class="content-loading" ng-class="{\'show\': load}"></div>'
 		}
 	}]);

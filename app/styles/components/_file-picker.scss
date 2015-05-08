@@ -22,7 +22,7 @@
   }
 
   .table-container {
-    min-height: 300px;
+    min-height: 440px;
     margin-bottom: 10px;
   }
 
@@ -43,5 +43,17 @@
 .file-picker-modal {
   .modal-dialog {
     width: $modal-xl;
+  }
+}
+
+.selected-files {
+  .dropdown-toggle {
+    position: relative;
+    .fa-file {
+      margin-right: 3px;
+    }
+    .label {
+      padding: .4em .6em;
+    }
   }
 }
