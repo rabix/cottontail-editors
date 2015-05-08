@@ -18,7 +18,7 @@ angular.module('registryApp.common')
             if (size < 0) {
                 throw Error('Invalid file size.');
             }
-            console.log(size);
+
             units =  ['KB', 'MB', 'GB', 'TB'];
 
             for (i = 0, len = units.length; i < len; i++) {

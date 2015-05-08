@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('registryApp.app')
-    .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$modal', '$templateCache', 'Loading', 'App', 'User', 'Repo', 'File', 'BeforeRedirect', 'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload', 'Api', 'HotkeyRegistry', 'Chronicle', 'Notification', function ($scope, $rootScope, $q, $modal, $templateCache, Loading, App, User, Repo, File, BeforeRedirect, Helper, PipelineService, _, Globals, BeforeUnload, Api, HotkeyRegistry, Chronicle, Notification) {
+    .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$modal', '$templateCache', 'Loading', 'App', 'User', 'Repo', 'Const', 'BeforeRedirect', 'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload', 'Api', 'HotkeyRegistry', 'Chronicle', 'Notification', function ($scope, $rootScope, $q, $modal, $templateCache, Loading, App, User, Repo, Const, BeforeRedirect, Helper, PipelineService, _, Globals, BeforeUnload, Api, HotkeyRegistry, Chronicle, Notification) {
         var PipelineInstance = null,
             prompt = false,
             onBeforeUnloadOff = BeforeUnload.register(function() { return 'Please save your changes before leaving.'; }, function() {return prompt});
@@ -254,6 +254,8 @@ angular.module('registryApp.app')
         $scope.onExpose = function (appName, key) {
 
             if (!_.isUndefined($scope.view.values[appName]) && !_.isUndefined($scope.view.values[appName][key])) {
+
+                $scope.view.suggestedValues[appName + Const.exposedSeparator + key.slice(1)] = $scope.view.values[appName][key];
                 delete $scope.view.values[appName][key];
             }
 
@@ -261,11 +263,30 @@ angular.module('registryApp.app')
                 delete $scope.view.values[appName];
             }
 
+            console.log($scope.view.suggestedValues);
             console.log($scope.view.exposed);
             console.log($scope.view.values);
 
             $scope.onWorkflowChange({value: true, isDisplay: false});
 
+        };
+        
+        $scope.onUnExpose = function (appName, key, value) {
+            var keyName = appName + Const.exposedSeparator + key.slice(1);
+
+            if ($scope.view.suggestedValues[keyName]) {
+                delete $scope.view.suggestedValues[keyName];
+            }
+
+            if (value) {
+
+                if (typeof $scope.view.values[appName] === 'undefined') {
+                    $scope.view.values[appName] = {};
+                }
+
+                $scope.view.values[appName][key] = value;
+
+            }
         };
 
         // think about this when implementing multi select of nodes
@@ -273,12 +294,13 @@ angular.module('registryApp.app')
         /**
          * Track node select
          */
-        var onNodeSelect = function (e, model, exposed, values) {
+        var onNodeSelect = function (e, model, exposed, values, suggestedValues) {
 
             $scope.view.json = model;
 
             $scope.view.values = values;
             $scope.view.exposed = exposed;
+            $scope.view.suggestedValues = suggestedValues;
 
             $scope.view.required = $scope.view.json.inputs.required;
 

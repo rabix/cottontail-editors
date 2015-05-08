@@ -37,6 +37,7 @@ angular.module('registryApp.dyole')
                  */
                 this.exposed = this.model.exposed || {};
                 this.values = this.model.values || {};
+                this.suggestedValues = this.model.suggestedValues || {};
 
                 /**
                  * Clone event object for every pipeline
@@ -63,6 +64,7 @@ angular.module('registryApp.dyole')
                 // flag for temporary connection
                 this.tempConnectionActive = false;
 
+                this._fixDisplay();
                 /**
                  * Save ref to the current canvas scale
                  * @type {*|number}
@@ -140,7 +142,7 @@ angular.module('registryApp.dyole')
                     this.Event.subscribe('node:select', function (model) {
 
                         if (!model.softwareDescription || model.softwareDescription.repo_name !== 'system') {
-                            $rootScope.$broadcast('node:select', model, _self.exposed, _self.values);
+                            $rootScope.$broadcast('node:select', model, _self.exposed, _self.values, _self.suggestedValues);
                         }
 
                     });
@@ -240,6 +242,26 @@ angular.module('registryApp.dyole')
 
                         });
                     });
+                },
+
+                _fixDisplay: function (model) {
+
+                    if (typeof this.model.display === 'undefined') {
+                        this.model.display = {};
+                    }
+
+                    if (typeof this.model.display.canvas === 'undefined') {
+                        this.model.display.canvas = {
+                            x: 0,
+                            y: 0,
+                            zoom: 1
+                        };
+                    }
+
+                    if (typeof this.model.display.nodes === 'undefined') {
+                        this.model.display.nodes = {};
+                    }
+
                 },
 
                 /**

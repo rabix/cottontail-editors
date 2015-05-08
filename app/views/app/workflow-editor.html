@@ -170,7 +170,8 @@
                                     app-name="{{ ::view.json.id }}"
                                     exposed="view.exposed"
                                     ignore-files="true"
-                                    handle-expose="onExpose(appName, property['@id'])">
+                                    handle-expose="onExpose(appName, property['@id'])"
+                                    on-un-expose="onUnExpose(appName, property['@id'], value)">
                             </input-field>
 
                             <p class="alert alert-info" ng-if="view.json.inputs.length === 0">There are no params that can be exposed.</p>

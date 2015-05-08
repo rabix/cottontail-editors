@@ -171,6 +171,11 @@ angular.module('registryApp.cliche')
                 $scope.handleExpose({appName: $scope.appName, key: $scope.view.name});
             } else {
                 delete $scope.exposed[keyName];
+
+                if (typeof $scope.onUnExpose === 'function') {
+                    $scope.onUnExpose({appName: $scope.appName, key: $scope.view.name, value: $scope.view.model});
+                }
+
                 $scope.isDisabled = false;
             }
 
@@ -191,7 +196,8 @@ angular.module('registryApp.cliche')
                 appName: '@',
                 exposed: '=?',
                 isDisabled: '=?',
-                handleExpose: '&'
+                handleExpose: '&',
+                onUnExpose: '&'
             },
             controller: 'InputFieldCtrl',
             compile: function(element) {
