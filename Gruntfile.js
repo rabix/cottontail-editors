@@ -444,9 +444,6 @@ module.exports = function (grunt) {
             },
             vendor: {
                 src: [
-                    '<%= yeoman.app %>/vendor/jsandbox/src/jsandbox.js',
-                    '<%= yeoman.app %>/vendor/angular-ui-sortable/sortable.min.js',
-
                     'bower_components/jquery/dist/jquery.js',
 
                     'bower_components/angular/angular.js',
@@ -461,7 +458,14 @@ module.exports = function (grunt) {
 
                     'bower_components/angular-marked/angular-marked.js',
                     'bower_components/ng-tags-input/ng-tags-input.js',
-                    'bower_components/chronicle/chronicle.js'
+
+                    'bower_components/angular-ui-notification/dist/angular-ui-notification.min.js',
+//                    'bower_components/chronicle/chronicle.js',
+
+                    '<%= yeoman.app %>/vendor/chronicle/chronicle.js',
+                    '<%= yeoman.app %>/vendor/jsandbox/src/jsandbox.js',
+                    '<%= yeoman.app %>/vendor/angular-ui-sortable/sortable.min.js'
+
                 ],
                 dest: 'dist/scripts/vendor.js'
             }
