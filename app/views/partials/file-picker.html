@@ -14,7 +14,7 @@
             <selected-files selected-files="selectedFiles" files="view.files"></selected-files>
         </div>
         <div class="col-xs-8">
-            <ol class="breadcrumb">
+            <ol ng-if="showFolders" class="breadcrumb">
                 <li ng-class="{active: !breadcrumbs.length}">
                    <a href="" ng-click="goToRoot()">
                        Project
