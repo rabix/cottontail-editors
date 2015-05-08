@@ -11,14 +11,11 @@
   }
 
   .select-file {
-
     @extend %ellipsis;
+  }
 
-    span {
-      input[type="checkbox"] {
-        margin: -1px 4px 0 0;
-      }
-    }
+  input[type="checkbox"] {
+    margin: -1px 4px 0 0;
   }
 
   .table-container {
@@ -54,6 +51,16 @@
     }
     .label {
       padding: .4em .6em;
+    }
+  }
+
+  li {
+    &:last-of-type {
+      border-bottom: none;
+    }
+    border-bottom: 1px solid #d8d8d8;
+    a {
+      padding: 10px 15px;
     }
   }
 }

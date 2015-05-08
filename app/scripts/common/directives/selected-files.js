@@ -38,21 +38,22 @@ angular.module('registryApp.common')
 		};
 
 		function removeSelected (file) {
+			debugger;
 			file.selected = false;
 			_.remove($scope.selectedFiles, function (f) {
-				return f.id === file.id;
+				return f.name === file.name;
 			});
 		}
 
 		function selectFile (file) {
 			var exists = _.find($scope.selectedFiles, function (f) {
-				return f.id === file.id;
+				return f.name === file.name;
 			});
 
 			if (!exists) {
 				$scope.selectedFiles.push(file)
 			}
-		};
+		}
 	}])
 	.directive('selectedFiles', [function() {
 		return {
