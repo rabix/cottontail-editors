@@ -18,7 +18,7 @@ angular.module('registryApp.app')
             config = config || {};
             config.limit = config.limit || 0;
             config.offset = config.offset || 5;
-            config.folders = config.folders || true;
+            config.folders = config.folders || false;
 
             if (typeof config.path !== 'undefined') {
                 path += config.path;

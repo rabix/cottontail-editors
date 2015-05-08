@@ -12,7 +12,7 @@ angular.module('registryApp.common')
         };
 
         $scope.choose = function() {
-            $modalInstance.close(selectedFiles);
+            $modalInstance.close($scope.selectedFiles);
         };
 
     }]);

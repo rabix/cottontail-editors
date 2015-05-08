@@ -29,6 +29,15 @@ angular.module('registryApp.common')
         });
 
         $scope.breadcrumbs = [];
+        
+        var getFiles = function (config) {
+            $scope.view.loading = true;
+
+            File.getFilesInProject(config).then(function(files) {
+                updateView(files);
+                $scope.view.loading = false;
+            });
+        };
 
         var updateView = function(files) {
             $scope.view.page = files.start == 0 ? 1 : $scope.view.page;
@@ -59,10 +68,7 @@ angular.module('registryApp.common')
 
             $scope.breadcrumbs.splice($index + 1);
 
-            $scope.view.loading = true;
-            File.getFilesInProject({limit: $scope.view.limit, offset: $scope.view.perPage, path: path}).then(function(files) {
-                updateView(files);
-            });
+            getFiles({limit: $scope.view.limit, offset: $scope.view.perPage, path: path});
         };
 
         $scope.goToRoot = function () {
@@ -75,11 +81,8 @@ angular.module('registryApp.common')
         };
 
         $scope.getMoreFiles = function (limit) {
-
-            $scope.view.loading = true;
-            File.getFilesInProject({limit: limit}).then(function (files) {
-                updateView(files);
-            });
+            console.log(limit);
+            getFiles({limit: limit});
         };
 
         $scope.goToFolder = function (folderName) {
