@@ -343,7 +343,10 @@ module.exports = function (grunt) {
                     '<%= yeoman.app %>/scripts/common/constants/ToolSchema.js',
                     '<%= yeoman.app %>/scripts/common/constants/WorkflowSchema.js',
                     '<%= yeoman.app %>/scripts/common/constants/HelpMessages.js',
-                    '<%= yeoman.app %>/scripts/common/controllers/ModalJSONCtrl.js'
+                    '<%= yeoman.app %>/scripts/common/controllers/ModalJSONCtrl.js',
+                    '<%= yeoman.app %>/scripts/common/controllers/ChooseFileCtrl.js',
+                    '<%= yeoman.app %>/scripts/common/filters/convert-bits.js',
+                    '<%= yeoman.app %>/scripts/common/filters/default-defined.js'
                 ],
                 dest: 'dist/scripts/util.js'
             },
