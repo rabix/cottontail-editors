@@ -82,7 +82,7 @@ angular.module('registryApp.common')
 
         $scope.getMoreFiles = function (limit) {
             console.log(limit);
-            getFiles({limit: limit});
+            getFiles({limit: limit, offset: $scope.view.perPage});
         };
 
         $scope.goToFolder = function (folderName) {
