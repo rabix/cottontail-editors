@@ -88,23 +88,6 @@ angular.module('registryApp.common')
         };
 
 
-        /**
-         * Goes to a folder/root and loads files
-         * @param config {Object}
-         */
-        $scope.goTo = function (config) {
-            var c = {};
-            c.limit = config.limit || $scope.view.limit;
-            c.offset = config.offset || $scope.view.perPage;
-            c.path = config.path || '';
-
-            File.getFilesInProject(c).then(function (files) {
-                $scope.view.files = files.resultSet;
-                $scope.view.total = files.matching
-            });
-
-        };
-
         $scope.onFileSelect = function (file) {
             var id = file.id;
             var selected = file.selected;
@@ -128,9 +111,9 @@ angular.module('registryApp.common')
             }
         };
 
-        var onDeSelect = function (id) {
-            _.remove($scope.selectedFiles, function (i) {
-                return i === id;
+        var onDeSelect = function (file) {
+            _.remove($scope.selectedFiles, function (f) {
+                return f.id === file.id;
             });
         };
 

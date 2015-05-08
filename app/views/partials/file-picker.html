@@ -10,7 +10,10 @@
                 </span>
             </div>
         </form>
-        <div class="col-xs-9">
+        <div class="col-xs-1">
+            <selected-files selected-files="selectedFiles" files="view.files"></selected-files>
+        </div>
+        <div class="col-xs-8">
             <ol class="breadcrumb">
                 <li ng-class="{active: !breadcrumbs.length}">
                    <a href="" ng-click="goToRoot()">
