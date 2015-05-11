@@ -43,7 +43,11 @@ angular.module('registryApp.app')
          */
         self.get = function() {
 
-            return Api.apps.get({revision: revision}).$promise;
+            if (!_.isNaN(revision)) {
+                return Api.apps.get({revision: revision}).$promise;
+            } else {
+                return Api.apps.get().$promise;
+            }
         };
 
         self.getApp = function(projectOwner, projectSlug, appName) {
