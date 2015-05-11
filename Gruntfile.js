@@ -315,6 +315,7 @@ module.exports = function (grunt) {
                     '<%= yeoman.app %>/scripts/common/common.config.js',
                     '<%= yeoman.app %>/scripts/common/controllers/MarkdownCtrl.js',
                     '<%= yeoman.app %>/scripts/common/controllers/ModalCtrl.js',
+                    '<%= yeoman.app %>/scripts/common/controllers/ModalTabsCtrl.js',
                     '<%= yeoman.app %>/scripts/common/controllers/ExpressionCtrl.js',
                     '<%= yeoman.app %>/scripts/common/directives/copy.js',
                     '<%= yeoman.app %>/scripts/common/directives/loading.js',
