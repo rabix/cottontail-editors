@@ -746,7 +746,7 @@ angular.module('registryApp.cliche')
                 toolJSON.cliAdapter = {
                     argAdapters: [],
                     stdout: '',
-                    baseCmd: [],
+                    baseCmd: [''],
                     stdin: ''
                 };
             }
