@@ -742,7 +742,14 @@ angular.module('registryApp.cliche')
          */
         var generateCommand = function() {
 
-            if (!toolJSON.cliAdapter) { return false; }
+            if (!toolJSON.cliAdapter) {
+                toolJSON.cliAdapter = {
+                    argAdapters: [],
+                    stdout: '',
+                    baseCmd: [],
+                    stdin: ''
+                };
+            }
 
             return prepareProperties(toolJSON.inputs, jobJSON.inputs)
                 /* go through arguments and concat then with inputs */
