@@ -346,7 +346,8 @@ module.exports = function (grunt) {
                     '<%= yeoman.app %>/scripts/common/controllers/ModalJSONCtrl.js',
                     '<%= yeoman.app %>/scripts/common/controllers/ChooseFileCtrl.js',
                     '<%= yeoman.app %>/scripts/common/filters/convert-bits.js',
-                    '<%= yeoman.app %>/scripts/common/filters/default-defined.js'
+                    '<%= yeoman.app %>/scripts/common/filters/default-defined.js',
+                    '<%= yeoman.app %>/scripts/common/models/File.js'
                 ],
                 dest: 'dist/scripts/util.js'
             },
