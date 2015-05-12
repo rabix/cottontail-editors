@@ -492,7 +492,6 @@ angular.module('registryApp.dyole')
                         });
                     } else {
                         suggestedValue.push(schema.suggestedValue);
-
                     }
 
                     delete schema.suggestedValue;
