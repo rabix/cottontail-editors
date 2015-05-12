@@ -40,11 +40,8 @@ Raphael.fn.button = function (config, cb) {
                 fake = new Image();
                 fake.src = conf.image.url;
 
-
-
                 $(fake).load(function () {
                     if (group) {
-                        console.log(fake.width, fake.height);
                         width = conf.image.width || fake.width;
                         height = conf.image.height ||  fake.height;
 

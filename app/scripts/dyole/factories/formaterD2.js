@@ -254,6 +254,14 @@ angular.module('registryApp.dyole')
 
                         internalType = type === 'input' ? 'outputs' : 'inputs';
 
+                        if (typeof schema.suggestedValue !== 'undefined' && _.isArray(schema.suggestedValue)) {
+                            var values = schema[internalType][0].suggestedValue = [];
+
+                            _.forEach(schema.suggestedValue, function (val) {
+                                values.push(val.id);
+                            });
+                        }
+
                         workflow[type + 's'].push(schema[internalType][0]);
                     }
                 });
@@ -455,8 +463,19 @@ angular.module('registryApp.dyole')
                     output: '###*Output*' + '\n' + 'Uploads resulting files from processing cluster to user storage.'
                 };
 
+                var suggestedValues = [];
+
+                if (typeof schema.suggestedValue !== 'undefined' && _.isArray(schema.suggestedValue)) {
+                    _.forEach(schema.suggestedValue, function (value) {
+                        suggestedValues.push({id: value});
+                    });
+                    delete schema.suggestedValue;
+                }
+
+
                 var model = {
                     '@id': id,
+                    'suggestedValue': suggestedValues,
                     description: descriptions[type],
                     'sbg:createdBy': 'SBG',
                     'label': schema.label || 'Rabix System app',

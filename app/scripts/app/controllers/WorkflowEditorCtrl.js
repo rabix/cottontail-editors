@@ -554,24 +554,6 @@ angular.module('registryApp.app')
             {name: 'redo', callback: $scope.redoAction, preventDefault: true}
         ]);
 
-        // File store cache
-        var fileCache;
-
-        $scope.openFilePicker = function () {
-
-            var modalInstance = $modal.open({
-                template: $templateCache.get('views/partials/choose-file.html'),
-                controller: 'ChooseFileCtrl',
-                size: 'lg',
-                windowClass: 'file-picker-modal'
-            });
-
-            modalInstance.result.then(function (result) {
-                console.log('*** Files Chosen: ', result);
-            });
-        };
-
-
         $scope.$on('$destroy', function () {
             onNodeSelectOff();
             onNodeDeselectOff();
