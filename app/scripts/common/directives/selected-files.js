@@ -38,16 +38,15 @@ angular.module('registryApp.common')
 		};
 
 		function removeSelected (file) {
-			debugger;
 			file.selected = false;
 			_.remove($scope.selectedFiles, function (f) {
-				return f.name === file.name;
+				return f.id === file.id;
 			});
 		}
 
 		function selectFile (file) {
 			var exists = _.find($scope.selectedFiles, function (f) {
-				return f.name === file.name;
+				return f.id === file.id;
 			});
 
 			if (!exists) {
@@ -64,9 +63,6 @@ angular.module('registryApp.common')
 				files: '='
 			},
 			templateUrl: 'views/partials/selected-files.html',
-			controller: 'SelectedFilesCtrl',
-			link: function (scope) {
-				console.log(scope.files);
-			}
+			controller: 'SelectedFilesCtrl'
 		}
 	}]);
