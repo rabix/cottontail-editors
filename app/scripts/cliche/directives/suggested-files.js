@@ -12,6 +12,10 @@ angular.module('registryApp.cliche')
         $scope.view.required = Cliche.isRequired($scope.model);
         $scope.view.model = $scope.model.suggestedValue || [];
 
+        var schema = $scope.model.outputs[0].schema;
+        var type = Cliche.parseType(schema);
+        var isArray = type === 'array';
+
         $scope.openFilePicker = function () {
 
             var modalInstance = $modal.open({
@@ -22,7 +26,8 @@ angular.module('registryApp.cliche')
                 resolve: {
                     data: function () {
                         return {
-                            selectedFiles: $scope.view.model
+                            selectedFiles: $scope.view.model,
+                            selectOne: isArray
                         }
                     }
                 }

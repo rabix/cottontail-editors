@@ -65,7 +65,7 @@ angular.module('registryApp.dyole')
                         destination: ''
                     };
 
-                    if (typeof rel.position !== 'undefiend') {
+                    if (typeof rel.position !== 'undefined') {
                         dataLink.position = rel.position;
                     }
 
@@ -254,12 +254,28 @@ angular.module('registryApp.dyole')
 
                         internalType = type === 'input' ? 'outputs' : 'inputs';
 
-                        if (typeof schema.suggestedValue !== 'undefined' && _.isArray(schema.suggestedValue)) {
+                        if (typeof schema.suggestedValue !== 'undefined') {
                             var values = schema[internalType][0].suggestedValue = [];
 
-                            _.forEach(schema.suggestedValue, function (val) {
-                                values.push(val.id);
-                            });
+                            var s = schema[internalType][0].schema[1] || schema[internalType][0].schema[0];
+                            var isArray = s.type && s.type === 'array';
+
+                            if (isArray) {
+                                _.forEach(schema.suggestedValue, function (val) {
+                                    values.push({
+                                        class: 'File',
+                                        name: val.name,
+                                        path: val.id
+                                    });
+                                });
+                            } else {
+                                schema[internalType][0].suggestedValue = {
+                                    class: 'File',
+                                    name: schema.suggestedValue[0].name,
+                                    path: schema.suggestedValue[0].id
+                                };
+                            }
+
                         }
 
                         workflow[type + 's'].push(schema[internalType][0]);
@@ -463,19 +479,29 @@ angular.module('registryApp.dyole')
                     output: '###*Output*' + '\n' + 'Uploads resulting files from processing cluster to user storage.'
                 };
 
-                var suggestedValues = [];
+                var suggestedValue = [];
 
-                if (typeof schema.suggestedValue !== 'undefined' && _.isArray(schema.suggestedValue)) {
-                    _.forEach(schema.suggestedValue, function (value) {
-                        suggestedValues.push({id: value});
-                    });
+                if (typeof schema.suggestedValue !== 'undefined') {
+
+                    var s = schema.schema[1] || schema.schema[0];
+                    var isArray = s.type && s.type === 'array';
+
+                    if (isArray) {
+                        _.forEach(schema.suggestedValue, function (value) {
+                            suggestedValue.push(value);
+                        });
+                    } else {
+                        suggestedValue.push(schema.suggestedValue);
+
+                    }
+
                     delete schema.suggestedValue;
                 }
 
 
                 var model = {
                     '@id': id,
-                    'suggestedValue': suggestedValues,
+                    'suggestedValue': suggestedValue,
                     description: descriptions[type],
                     'sbg:createdBy': 'SBG',
                     'label': schema.label || 'Rabix System app',
