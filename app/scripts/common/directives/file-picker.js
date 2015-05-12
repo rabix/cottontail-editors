@@ -109,15 +109,27 @@ angular.module('registryApp.common')
                 return f.id === file.id;
             });
 
-            if (!exists) {
-                $scope.selectedFiles.push(file)
+            if (!exists && !$scope.selectOne) {
+                $scope.selectedFiles.push(file);
+            }
+
+            if ($scope.selectOne) {
+                _.forEach($scope.selectedFiles, function(f) {
+                    f.selected = false;
+                });
+                $scope.selectedFiles.length = 0;
+                $scope.selectedFiles.push(file);
             }
         };
 
         var onDeSelect = function (file) {
-            _.remove($scope.selectedFiles, function (f) {
+            var selected = _.remove($scope.selectedFiles, function (f) {
                 return f.id === file.id;
             });
+
+            _.forEach(selected, function (f) {
+                f.selected = false;
+            })
         };
 
         $scope.toggleSelect = function (file) {
@@ -150,7 +162,8 @@ angular.module('registryApp.common')
             scope: {
                 files: '=',
                 selectedFiles: '=',
-                showFolders: '='
+                showFolders: '=',
+                selectOne: '='
             },
             controller: 'FilePickerCtrl',
             link: function (scope, element, attrs) {

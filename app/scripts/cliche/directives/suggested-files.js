@@ -27,7 +27,7 @@ angular.module('registryApp.cliche')
                     data: function () {
                         return {
                             selectedFiles: $scope.view.model,
-                            selectOne: isArray
+                            selectOne: !isArray
                         }
                     }
                 }
