@@ -1185,6 +1185,10 @@ angular.module('registryApp.dyole')
                             json.schemas[nodeId].scatter = node.scatter;
                         }
 
+                        if (typeof node.suggestedValue !== 'undefiend') {
+                            json.schemas[nodeId].suggestedValue = node.suggestedValue;
+                        }
+
                         delete node.x;
                         delete node.y;
                         delete node.id;

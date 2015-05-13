@@ -36,6 +36,7 @@ angular.module('registryApp.common')
             config = config || {};
             config.folders = $scope.showFolders;
 
+
             File.getFilesInProject(config).then(function(files) {
                 updateView(files);
                 $scope.view.loading = false;

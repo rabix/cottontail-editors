@@ -262,6 +262,7 @@ angular.module('registryApp.dyole')
 
                             if (isArray) {
                                 _.forEach(schema.suggestedValue, function (val) {
+                                    console.log('Name %s, id %s',val.name, val.id);
                                     values.push({
                                         class: 'File',
                                         name: val.name,
@@ -269,6 +270,8 @@ angular.module('registryApp.dyole')
                                     });
                                 });
                             } else {
+                                console.log('Name %s, id %s',schema.suggestedValue[0].name, schema.suggestedValue[0].id);
+
                                 schema[internalType][0]['sbg:suggestedValue'] = {
                                     class: 'File',
                                     name: schema.suggestedValue[0].name,
@@ -489,9 +492,11 @@ angular.module('registryApp.dyole')
 
                     if (isArray) {
                         _.forEach(schema['sbg:suggestedValue'], function (value) {
+                            value.id = value.path;
                             suggestedValue.push(value);
                         });
                     } else {
+                        schema['sbg:suggestedValue'].id = schema['sbg:suggestedValue'].path;
                         suggestedValue.push(schema['sbg:suggestedValue']);
                     }
 
@@ -759,7 +764,7 @@ angular.module('registryApp.dyole')
 
                 _formatter.addValuesToSteps(model.steps, values);
 
-                _formatter.createWorkflowInOut(model, json.nodes, json.relations);
+                _formatter.createWorkflowInOut(model, json.schemas, json.relations);
 
                 model = _mergeSBGProps(json, model);
                 model['@id'] = model['@id'] || json['@id'];
