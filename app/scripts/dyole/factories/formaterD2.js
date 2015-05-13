@@ -94,7 +94,7 @@ angular.module('registryApp.dyole')
                     var input_id = ids;
 
                     if (typeof suggestedValues[ids] !== 'undefined') {
-                        schema.suggestedValue = suggestedValues[ids];
+                        schema['sbg:suggestedValue'] = suggestedValues[ids];
                     }
 
                     dataLink.destination = ids.replace(Const.exposedSeparator, '/');
@@ -254,8 +254,8 @@ angular.module('registryApp.dyole')
 
                         internalType = type === 'input' ? 'outputs' : 'inputs';
 
-                        if (typeof schema.suggestedValue !== 'undefined') {
-                            var values = schema[internalType][0].suggestedValue = [];
+                        if (typeof schema.suggestedValue !== 'undefined' && _.isArray(schema.suggestedValue) && schema.suggestedValue.length > 0) {
+                            var values = schema[internalType][0]['sbg:suggestedValue'] = [];
 
                             var s = schema[internalType][0].schema[1] || schema[internalType][0].schema[0];
                             var isArray = s.type && s.type === 'array';
@@ -269,7 +269,7 @@ angular.module('registryApp.dyole')
                                     });
                                 });
                             } else {
-                                schema[internalType][0].suggestedValue = {
+                                schema[internalType][0]['sbg:suggestedValue'] = {
                                     class: 'File',
                                     name: schema.suggestedValue[0].name,
                                     path: schema.suggestedValue[0].id
@@ -410,8 +410,9 @@ angular.module('registryApp.dyole')
                                 //remove # with slice in front of input id (cliche form builder required)
                                 exposed[keyName] = ex;
 
-                                if (typeof ex.suggestedValue !== 'undefined') {
-                                    suggestedValues[keyName] = ex.suggestedValue;
+                                var sugValue = ex['sbg:suggestedValue'];
+                                if (typeof sugValue !== 'undefined') {
+                                    suggestedValues[keyName] = sugValue;
                                 }
 
                             } else {
@@ -481,20 +482,20 @@ angular.module('registryApp.dyole')
 
                 var suggestedValue = [];
 
-                if (typeof schema.suggestedValue !== 'undefined') {
+                if (typeof schema['sbg:suggestedValue'] !== 'undefined') {
 
                     var s = schema.schema[1] || schema.schema[0];
                     var isArray = s.type && s.type === 'array';
 
                     if (isArray) {
-                        _.forEach(schema.suggestedValue, function (value) {
+                        _.forEach(schema['sbg:suggestedValue'], function (value) {
                             suggestedValue.push(value);
                         });
                     } else {
-                        suggestedValue.push(schema.suggestedValue);
+                        suggestedValue.push(schema['sbg:suggestedValue']);
                     }
 
-                    delete schema.suggestedValue;
+                    delete schema['sbg:suggestedValue'];
                 }
 
 
@@ -758,7 +759,7 @@ angular.module('registryApp.dyole')
 
                 _formatter.addValuesToSteps(model.steps, values);
 
-                _formatter.createWorkflowInOut(model, json.schemas, json.relations);
+                _formatter.createWorkflowInOut(model, json.nodes, json.relations);
 
                 model = _mergeSBGProps(json, model);
                 model['@id'] = model['@id'] || json['@id'];

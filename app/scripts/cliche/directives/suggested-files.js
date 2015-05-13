@@ -45,11 +45,9 @@ angular.module('registryApp.cliche')
             });
         };
 
-        $scope.view.model = $scope.suggestedFiles;
-
         $scope.$watch('view.model', function(n, o) {
             if (n !== o) {
-                $scope.model.suggestedValue = n;
+                $scope.model.suggestedValue = $scope.view.model;
             }
         });
 
