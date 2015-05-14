@@ -442,7 +442,7 @@ angular.module('registryApp.dyole')
 
                     _.each(this.model.nodes, function (nodeModel) {
 
-                        var nodeId = nodeModel.id || nodeModel['@id'];
+                        var nodeId = nodeModel.id;
                         // schema is not merged because nodes is a copy of schema with modified inputs and outputs for displaying on canvas
                         // schema is only used for tool execution
                         var model = _.extend(nodeModel, _self.model.display.nodes[nodeId]);
@@ -541,16 +541,14 @@ angular.module('registryApp.dyole')
                     model[internalType].push({
                         'label': terId,
                         'id': terId,
-                        '@id': terId,
-                        'depth': 0,
-						'schema': terminal.model.schema
+						'type': terminal.model.type
                     });
 
                     terminalId = terId;
 
                     var _id = model.id || this._generateNodeId(model);
 
-                    model.id = model['@id'] = _id;
+                    model.id = _id;
 
                     this.addNode(model, x, y, true);
                     this._connectSystemNode(terminal, _id, isInput, terminalId);
@@ -1025,21 +1023,21 @@ angular.module('registryApp.dyole')
                         rawModel = angular.copy(nodeModel.json || nodeModel),
                         model;
 
-                    if (typeof rawModel['@type'] !== 'string' && !Common.checkSystem(rawModel)) {
-                        Notification.error('App not valid: Missing @type property');
+                    if (typeof rawModel['class'] !== 'string' && !Common.checkSystem(rawModel)) {
+                        Notification.error('App not valid: Missing class property');
                         return false;
                     }
 
                     var type;
 
-                    switch(rawModel['@type']) {
+                    switch(rawModel['class']) {
                         case 'Workflow':
                             type = 'workflow';
                             break;
-                        case 'CommandLine':
+                        case 'CommandLineTool':
                             type = 'tool';
                             break;
-                        case 'Script':
+                        case 'ExpressionTool':
                             type = 'script';
                             break;
                     }
@@ -1083,6 +1081,7 @@ angular.module('registryApp.dyole')
 
                         return;
                     }
+
                     Validator.validate(type, rawModel)
                         .then(function () {
 
@@ -1174,7 +1173,7 @@ angular.module('registryApp.dyole')
                     json.display.nodes = {};
 
                     _.each(json.nodes, function (node) {
-                        var nodeId = node.id || node['@id'];
+                        var nodeId = node.id;
 
                         json.display.nodes[nodeId] = {
                             x: node.x,
@@ -1191,7 +1190,6 @@ angular.module('registryApp.dyole')
 
                         delete node.x;
                         delete node.y;
-                        delete node.id;
                     });
 
                     json.display.canvas.x = this.getEl().getTranslation().x;

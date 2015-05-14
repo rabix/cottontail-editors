@@ -33,8 +33,8 @@ angular.module('registryApp.dyole')
                 }
 
                 // preload each image
-                images.commandline = new NodeImage(preloadImgBase + 'commandlinenode.png');
-                images.script = new NodeImage(preloadImgBase + 'scriptnode.png');
+                images.commandlinetool = new NodeImage(preloadImgBase + 'commandlinetoolnode.png');
+                images.expressiontool = new NodeImage(preloadImgBase + 'expressiontoolnode.png');
                 images.workflow = new NodeImage(preloadImgBase + 'workflownode.png');
 
                 /**

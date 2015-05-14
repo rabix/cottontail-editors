@@ -131,7 +131,7 @@ var Schema = {
                         {
                             type: 'object',
                             properties: {
-                                '@type': {
+                                'class': {
                                     type: 'string'
                                 },
                                 lang: {
@@ -154,10 +154,10 @@ var Schema = {
         }
     },
     properties: {
-        '@id': {
+        'id': {
             type: 'string'
         },
-        '@type': {
+        'class': {
             type: 'string',
             enum: ['Workflow']
         },
@@ -190,7 +190,7 @@ var Schema = {
             items: {
                 type: 'object',
                 properties: {
-                    app: {
+                    impl: {
                         oneOf: [{
                             type: 'object',
                             properties: {},
@@ -199,7 +199,7 @@ var Schema = {
                             type: 'string'
                         }]
                     },
-                    '@id': {
+                    'id': {
                         type: 'string',
                         format: 'validateId'
                     },
@@ -208,12 +208,12 @@ var Schema = {
                         items: {
                             type: 'object',
                             properties: {
-                                '@id': {
+                                'id': {
                                     type: 'string',
                                     format: 'validateId'
                                 }
                             },
-                            required: ['@id']
+                            required: ['id']
                         }
                     },
                     outputs: {
@@ -221,16 +221,16 @@ var Schema = {
                         items: {
                             type: 'object',
                             properties: {
-                                '@id': {
+                                'id': {
                                     type: 'string',
                                     format: 'validateId'
                                 }
                             },
-                            required: ['@id']
+                            required: ['id']
                         }
                     }
                 },
-                required: ['inputs', 'outputs', '@id', 'app']
+                required: ['inputs', 'outputs', 'id', 'impl']
             }
         },
         inputs: {
@@ -238,15 +238,12 @@ var Schema = {
             items: {
                 type: 'object',
                 properties: {
-                    schema: {
+                    type: {
                         $ref: '#/definitions/schemaDef'
                     },
-                    '@id': {
+                    'id': {
                         type: 'string',
                         format: 'validateId'
-                    },
-                    depth: {
-                        type: 'number'
                     },
                     name: {
                         type: 'string'
@@ -255,7 +252,7 @@ var Schema = {
                         $ref: '#/definitions/adapterDef'
                     }
                 },
-                required: ['schema', '@id', 'depth']
+                required: ['type', 'id']
             }
         },
         outputs: {
@@ -263,22 +260,19 @@ var Schema = {
             items: {
                 type: 'object',
                 properties: {
-                    '@id': {
+                    'id': {
                         type: 'string',
                         format: 'validateId'
                     },
-                    depth: {
-                        type: 'number'
-                    },
-                    schema: {
+                    type: {
                         $ref: '#/definitions/schemaDef'
                     }
                 },
-                required: ['schema', '@id', 'depth']
+                required: ['type', 'id']
             }
         }
     },
-    required: ['@id', '@type', '@context', 'label', 'inputs', 'outputs']
+    required: ['id', 'class', '@context', 'label', 'inputs', 'outputs']
 };
 
 /**
