@@ -74,8 +74,14 @@ angular.module('registryApp.cliche')
             if (type === 'script') {
 
                 transformed['class'] = 'ExpressionTool';
-                transformed.transform = getTransformSchema();
-                delete transformed.cliAdapter;
+                transformed.transform = getTransformSchema();ss
+
+                // ex cli adapter stuff;
+                delete transformed.baseCommand;
+                delete transformed.stdin;
+                delete transformed.stdout;
+                delete transformed.argAdapters;
+                // requirements
                 delete transformed.requirements;
 
             } else {
@@ -84,8 +90,15 @@ angular.module('registryApp.cliche')
 
                 delete transformed.transform;
 
-                if (angular.isUndefined(transformed.cliAdapter)) {
-                    transformed.cliAdapter = angular.copy(rawTool.cliAdapter);
+                if (angular.isUndefined(transformed.baseCommand) ||
+                    angular.isUndefined(transformed.stdin) ||
+                    angular.isUndefined(transformed.stdout) ||
+                    angular.isUndefined(transformed.argAdapters)) {
+
+                    transformed.baseCommand = angular.copy(rawTool.baseCommand);
+                    transformed.stdin = angular.copy(rawTool.stdin);
+                    transformed.stdout = angular.copy(rawTool.stdout);
+                    transformed.argAdapters = angular.copy(rawTool.argAdapters);
                 }
                 if (angular.isUndefined(transformed.requirements)) {
                     transformed.requirements = angular.copy(rawTool.requirements);
@@ -349,7 +362,7 @@ angular.module('registryApp.cliche')
             if (mode === 'edit') {
                 deferred.resolve();
             } else if (mode === 'add') {
-                toolJSON.cliAdapter.argAdapters.push(arg);
+                toolJSON.argAdapters.push(arg);
                 deferred.resolve();
             } else {
                 deferred.reject('Unknown mode "' + mode + '"');
@@ -384,7 +397,7 @@ angular.module('registryApp.cliche')
          */
         var deleteArg = function(index) {
 
-            toolJSON.cliAdapter.argAdapters.splice(index, 1);
+            toolJSON.argAdapters.splice(index, 1);
 
         };
 
