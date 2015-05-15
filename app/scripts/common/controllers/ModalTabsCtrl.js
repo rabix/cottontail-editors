@@ -56,7 +56,7 @@ angular.module('registryApp.common')
 
         var _filterInputs = function () {
             var inputs = [],
-                filter = ['file', 'directory'];
+                filter = ['file', 'File', 'directory'];
 
             _.each(inputRefs, function (input) {
 

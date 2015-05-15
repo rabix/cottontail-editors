@@ -248,7 +248,7 @@ angular.module('registryApp.dyole')
 
             _filterInputs: function () {
                 var inputs = [],
-                    filter = ['file', 'directory'];
+                    filter = ['File', 'file', 'directory'];
 
                 function checkType(schema, type) {
 
@@ -745,7 +745,7 @@ angular.module('registryApp.dyole')
                 if (this.model.softwareDescription && this.model.softwareDescription.repo_name === 'system') {
 
                     // Genereta id first(Check for id conflict)
-                    name = this.Pipeline._generateNodeId({name: name});
+                    name = Common.generateNodeId({name: name}, this.Pipeline.nodes);
 
 
                     this.model.label = name;

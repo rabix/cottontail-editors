@@ -14,7 +14,7 @@ angular.module('registryApp.dyole')
         /**
          * Bare Rabix schema model
          *
-         * @type {{class: string, @context: string, steps: Array, dataLinks: Array}}
+         * @type {{class: string, @context: string, steps: Array, dataLinks: Array, inputs: Array, outputs: Array}}
          */
         var RabixModel = {
             'class': 'Workflow',
@@ -252,7 +252,7 @@ angular.module('registryApp.dyole')
                         if (typeof schema.suggestedValue !== 'undefined' && _.isArray(schema.suggestedValue) && schema.suggestedValue.length > 0) {
                             var values = schema[internalType][0]['sbg:suggestedValue'] = [];
 
-                            var s = schema[internalType][0].schema[1] || schema[internalType][0].schema[0];
+                            var s = schema[internalType][0].type[1] || schema[internalType][0].type[0];
                             var isArray = s.type && s.type === 'array';
 
                             if (isArray) {
@@ -314,7 +314,7 @@ angular.module('registryApp.dyole')
                 _.forEach(workflow.inputs, function (input) {
                     var id = input['id'];
 
-                    if (_common.checkTypeFile(input.schema[1] || input.schema[0])) {
+                    if (_common.checkTypeFile(input.type[1] || input.type[0])) {
                         system[id] = _self._generateIOSchema('input', input, id);
                     }
                 });
@@ -326,7 +326,7 @@ angular.module('registryApp.dyole')
                 _.forEach(workflow.outputs, function (output) {
                     var id = output['id'];
 
-                    if (_common.checkTypeFile(output.schema[1] || output.schema[0])) {
+                    if (_common.checkTypeFile(output.type[1] || output.type[0])) {
                         system[id] = _self._generateIOSchema('output', output, id);
                     }
                 });
@@ -351,7 +351,7 @@ angular.module('registryApp.dyole')
                     });
 
                     if (typeof input !== 'undefined') {
-                        schema = input.schema[1] || input.schema[0];
+                        schema = input.type[1] || input.type[0];
 
                         return _common.checkTypeFile(schema);
                     } else {
@@ -483,7 +483,7 @@ angular.module('registryApp.dyole')
 
                 if (typeof schema['sbg:suggestedValue'] !== 'undefined') {
 
-                    var s = schema.schema[1] || schema.schema[0];
+                    var s = schema.type[1] || schema.type[0];
                     var isArray = s.type && s.type === 'array';
 
                     if (isArray) {

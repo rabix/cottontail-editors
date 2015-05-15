@@ -531,7 +531,7 @@ angular.module('registryApp.dyole')
                         output: '###*Output*' + '\n' + 'Uploads resulting files from processing cluster to user storage.'
                     };
 
-                    terId  = this._generateNodeId({label: type});
+                    terId  = Common.generateNodeId({label: type}, this.nodes);
 
                     model.label = terId;
                     model.description = descriptions[type];
@@ -546,59 +546,12 @@ angular.module('registryApp.dyole')
 
                     terminalId = terId;
 
-                    var _id = model.id || this._generateNodeId(model);
+                    var _id = Common.generateNodeId(model, this.nodes);
 
                     model.id = _id;
 
                     this.addNode(model, x, y, true);
                     this._connectSystemNode(terminal, _id, isInput, terminalId);
-                },
-
-                /**
-                 * Generate node id
-                 * Node id is represented as unique string for easier manual json formating later
-                 *
-                 * @param model
-                 * @returns {string}
-                 * @private
-                 */
-                _generateNodeId: function (model) {
-                    var _id, check = true, name = (model.softwareDescription && model.softwareDescription.label) ? model.softwareDescription.label : model.label || model.name,
-                        n = 0;
-
-                    if (name.charAt(0) !== '#') {
-                        name = '#' + name;
-                    }
-
-                    while (check) {
-
-                        if (n === 0) {
-                            check = this._checkIdAvailable(name);
-                        } else {
-                            check = this._checkIdAvailable(name + '_' + n);
-                        }
-
-                        n = check ? n + 1 : n;
-                    }
-
-                    if (n === 0) {
-                        _id = name;
-                    } else {
-                        _id = name + '_' + n;
-                    }
-
-                    return _id;
-                },
-
-                /**
-                 * Check if id is available
-                 *
-                 * @param id
-                 * @returns {boolean}
-                 * @private
-                 */
-                _checkIdAvailable: function (id) {
-                    return !!this.nodes[id];
                 },
 
                 /**
@@ -1067,7 +1020,13 @@ angular.module('registryApp.dyole')
                         model.x = x / zoom;
                         model.y = y / zoom;
 
-                        var _id = model.id || _self._generateNodeId(model);
+                        // Cache App id to place it in step.impl
+                        // and use generated id from label
+                        if (model.id) {
+                            model.appId = model.id;
+                        }
+
+                        var _id = Common.generateNodeId(model, _self.nodes);
 
                         model.id = _id;
 

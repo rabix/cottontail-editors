@@ -115,7 +115,7 @@ angular.module('registryApp.cliche')
                     inputScheme.push(innerScheme);
                 });
                 break;
-            case 'file':
+            case 'File' || 'file':
                 _.each($scope.model, function(value) {
                     inputScheme.push(getFileScheme(value));
                 });

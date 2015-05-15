@@ -145,7 +145,7 @@ angular.module('registryApp.cliche')
             if (n !== o) {
                 if (n === 'array') {
                     if (!$scope.view.items) { $scope.view.items = {}; }
-                    $scope.view.items.type = 'file';
+                    $scope.view.items.type = 'File';
                 } else {
                     delete $scope.view.items;
                 }
