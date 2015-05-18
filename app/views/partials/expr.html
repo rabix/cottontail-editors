@@ -12,6 +12,7 @@
             <a href
                class="btn btn-expression"
                tooltip="{{ view.transform.script || 'There is no expression defined. Click to add it' }}"
+               tooltip-placement="top"
                tooltip-append-to-body="true"
                ng-click="editExpression()"
                ng-class="{'btn-warning': (view.mode === 'transform'), 'btn-default': (view.mode === 'literal')}">
