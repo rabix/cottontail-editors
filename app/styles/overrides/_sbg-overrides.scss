@@ -11,14 +11,24 @@
   @extend .flex-one;
 }
 
-#content, .cliche-editor, .dyole-editor, .container-fluid, .main, .page {
+// Override header stretching to half the screen
+#header {
+  flex: none;
+}
+
+// Remove unnecessary template header
+#fixed_header {
+  display: none;
+}
+
+// make every content container flex-y and stretch to 100% height
+#layout, #main, #fixed_content, #content, .cliche-editor, .dyole-editor, .container-fluid, .main, .page {
   width: 100%;
   max-width: 100%;
   padding: 0;
   @extend .flex-box-column;
   @extend .flex-one;
 }
-
 
 /* forms */
 
