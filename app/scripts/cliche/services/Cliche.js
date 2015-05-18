@@ -74,7 +74,7 @@ angular.module('registryApp.cliche')
             if (type === 'script') {
 
                 transformed['class'] = 'ExpressionTool';
-                transformed.transform = getTransformSchema();ss
+                transformed.transform = getTransformSchema();
 
                 // ex cli adapter stuff;
                 delete transformed.baseCommand;
