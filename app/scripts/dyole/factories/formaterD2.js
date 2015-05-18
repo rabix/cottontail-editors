@@ -14,10 +14,10 @@ angular.module('registryApp.dyole')
         /**
          * Bare Rabix schema model
          *
-         * @type {{@type: string, @context: string, steps: Array, dataLinks: Array}}
+         * @type {{class: string, @context: string, steps: Array, dataLinks: Array, inputs: Array, outputs: Array}}
          */
         var RabixModel = {
-            '@type': 'Workflow',
+            'class': 'Workflow',
             '@context': 'https://raw.githubusercontent.com/common-workflow-language/common-workflow-language/draft2/specification/context.json',
             'steps': [],
             'dataLinks': [],
@@ -113,17 +113,13 @@ angular.module('registryApp.dyole')
             _createWorkflowInput: function (id, schema, workflow) {
 
                 var model = {
-                    '@id': id
+                    'id': id
                 };
 
                 model = _.extend(schema, model);
 
                 if (model.name) {
                     delete model.name;
-                }
-
-                if (model.id) {
-                    delete model.id;
                 }
 
                 workflow.inputs.push(model);
@@ -146,8 +142,8 @@ angular.module('registryApp.dyole')
                     var schema = schemas[rel.end_node],
                         id = rel.end_node,
                         step = {
-                            '@id': id,
-                            app: schema.ref || schema,
+                            'id': id,
+                            impl: schema.ref || schema,
                             inputs: [],
                             outputs: []
                         };
@@ -161,21 +157,22 @@ angular.module('registryApp.dyole')
                         delete schema.ref;
                     }
 
-                    if (schema.id) {
-                        delete schema.id;
+                    if (step.impl.appId) {
+                        step.impl.id = step.impl.appId;
+                        delete step.impl.appId;
                     }
 
                     if (!_common.checkSystem(schema)) {
 
                         _.forEach(schema.inputs, function (input) {
                             step.inputs.push({
-                                '@id': id + '/' + input['@id'].slice(1, input['@id'].length)
+                                'id': id + '/' + input['id'].slice(1, input['id'].length)
                             });
                         });
 
                         _.forEach(schema.outputs, function (output) {
                             step.outputs.push({
-                                '@id': id + '/' + output['@id'].slice(1, output['@id'].length)
+                                'id': id + '/' + output['id'].slice(1, output['id'].length)
                             });
                         });
 
@@ -202,14 +199,14 @@ angular.module('registryApp.dyole')
                     if (typeof stepId !== 'undefined') {
 
                         var step = _.find(steps, function (s) {
-                            return s['@id'] === stepId;
+                            return s['id'] === stepId;
                         });
 
                         if (typeof step !== 'undefined') {
                             _.forEach(inputs, function (val, input_id) {
 
                                 var inp = _.find(step.inputs, function (i) {
-                                    return i['@id'] === step['@id'] + '/' + input_id.slice(1);
+                                    return i['id'] === step['id'] + '/' + input_id.slice(1);
                                 });
 
                                 if (typeof inp !== 'undefined') {
@@ -243,13 +240,11 @@ angular.module('registryApp.dyole')
                         _.forEach(schema.inputs, function (inp) {
                             delete inp.label;
                             delete inp.name;
-                            delete inp.id;
                         });
 
                         _.forEach(schema.outputs, function (out) {
                             delete out.label;
                             delete out.name;
-                            delete out.id;
                         });
 
                         internalType = type === 'input' ? 'outputs' : 'inputs';
@@ -257,7 +252,7 @@ angular.module('registryApp.dyole')
                         if (typeof schema.suggestedValue !== 'undefined' && _.isArray(schema.suggestedValue) && schema.suggestedValue.length > 0) {
                             var values = schema[internalType][0]['sbg:suggestedValue'] = [];
 
-                            var s = schema[internalType][0].schema[1] || schema[internalType][0].schema[0];
+                            var s = schema[internalType][0].type[1] || schema[internalType][0].type[0];
                             var isArray = s.type && s.type === 'array';
 
                             if (isArray) {
@@ -296,7 +291,7 @@ angular.module('registryApp.dyole')
              */
             _checkStepExists: function (steps, id) {
                 var exists = _.find(steps, function (step) {
-                    return step['@id'] === id;
+                    return step['id'] === id;
                 });
 
                 return typeof exists !== 'undefined';
@@ -317,9 +312,9 @@ angular.module('registryApp.dyole')
                 }
 
                 _.forEach(workflow.inputs, function (input) {
-                    var id = input['@id'];
+                    var id = input['id'];
 
-                    if (_common.checkTypeFile(input.schema[1] || input.schema[0])) {
+                    if (_common.checkTypeFile(input.type[1] || input.type[0])) {
                         system[id] = _self._generateIOSchema('input', input, id);
                     }
                 });
@@ -329,9 +324,9 @@ angular.module('registryApp.dyole')
                 }
 
                 _.forEach(workflow.outputs, function (output) {
-                    var id = output['@id'];
+                    var id = output['id'];
 
-                    if (_common.checkTypeFile(output.schema[1] || output.schema[0])) {
+                    if (_common.checkTypeFile(output.type[1] || output.type[0])) {
                         system[id] = _self._generateIOSchema('output', output, id);
                     }
                 });
@@ -352,11 +347,11 @@ angular.module('registryApp.dyole')
                         node = schemas[node_id];
 
                     input = _.find(node.inputs, function (i) {
-                        return i['@id'] === input_id;
+                        return i['id'] === input_id;
                     });
 
                     if (typeof input !== 'undefined') {
-                        schema = input.schema[1] || input.schema[0];
+                        schema = input.type[1] || input.type[0];
 
                         return _common.checkTypeFile(schema);
                     } else {
@@ -405,7 +400,7 @@ angular.module('registryApp.dyole')
                             src = src[0];
 
                             var ex = _.find(workflow.inputs, function (i) {
-                                return i['@id'] === src;
+                                return i['id'] === src;
                             });
 
                             if (typeof ex !== 'undefined') {
@@ -439,27 +434,28 @@ angular.module('registryApp.dyole')
                 var schemas = {};
 
                 _.forEach(steps, function (step) {
-                    var stepId = step['@id'], ref;
+                    var stepId = step['id'], ref;
 
-                    if (typeof step.app === 'string') {
-                        ref = step.app;
-                        step.app = resolveApp(step.app);
-                        step.app.ref = ref;
+                    if (typeof step.impl === 'string') {
+                        ref = step.impl;
+                        step.impl = resolveApp(step.impl);
+                        step.impl.ref = ref;
                     }
 
-                    step.app.id = stepId;
+                    step.impl.appId = step.impl.id;
+                    step.impl.id = stepId;
 
                     if (typeof step.scatter !== 'undefined' && typeof step.scatter=== 'string') {
-                        step.app.scatter = step.scatter;
+                        step.impl.scatter = step.scatter;
                     }
 
-                    schemas[stepId] = step.app;
+                    schemas[stepId] = step.impl;
 
                     // Check if values are set on step inputs
                     // and attach them to values object
                     _.forEach(step.inputs, function (input) {
                         if (input.value) {
-                            var input_id = '#' + input['@id'].split('/')[1],
+                            var input_id = '#' + input['id'].split('/')[1],
                                 obj = values[stepId] = {};
 
                             obj[input_id] = input.value;
@@ -487,7 +483,7 @@ angular.module('registryApp.dyole')
 
                 if (typeof schema['sbg:suggestedValue'] !== 'undefined') {
 
-                    var s = schema.schema[1] || schema.schema[0];
+                    var s = schema.type[1] || schema.type[0];
                     var isArray = s.type && s.type === 'array';
 
                     if (isArray) {
@@ -505,7 +501,7 @@ angular.module('registryApp.dyole')
 
 
                 var model = {
-                    '@id': id,
+                    'id': id,
                     'suggestedValue': suggestedValue,
                     description: descriptions[type],
                     'sbg:createdBy': 'SBG',
@@ -543,7 +539,7 @@ angular.module('registryApp.dyole')
                 }
 
                 _.forEach(nodes, function (node) {
-                    var _id = node['@id'];
+                    var _id = node['id'];
 
                     if (!_id || checkUrl(_id)) {
                         _id = node.label;
@@ -667,7 +663,7 @@ angular.module('registryApp.dyole')
 
                 _.forEach(nodes, function (node) {
 
-                    var nodeId = node['@id'],
+                    var nodeId = node['id'],
                         dis = display.nodes[nodeId],
                         coords;
 
@@ -767,7 +763,7 @@ angular.module('registryApp.dyole')
                 _formatter.createWorkflowInOut(model, json.schemas, json.relations);
 
                 model = _mergeSBGProps(json, model);
-                model['@id'] = model['@id'] || json['@id'];
+                model['id'] = model['id'] || json['id'];
                 model.label = model.label || json.label;
 
                 return model;
@@ -802,9 +798,10 @@ angular.module('registryApp.dyole')
                     relations: relations
                 };
 
-                model['@id'] = model['@id'] || json['@id'];
+                model['id'] = model['id'] || json['id'];
                 model.label = model.label || json.label;
                 model = _mergeSBGProps(json, model);
+
                 return model;
             }
         };

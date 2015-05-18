@@ -73,19 +73,32 @@ angular.module('registryApp.cliche')
 
             if (type === 'script') {
 
-                transformed['@type'] = 'Script';
+                transformed['class'] = 'ExpressionTool';
                 transformed.transform = getTransformSchema();
-                delete transformed.cliAdapter;
+
+                // ex cli adapter stuff;
+                delete transformed.baseCommand;
+                delete transformed.stdin;
+                delete transformed.stdout;
+                delete transformed.argAdapters;
+                // requirements
                 delete transformed.requirements;
 
             } else {
 
-                transformed['@type'] = 'CommandLine';
+                transformed['class'] = 'CommandLineTool';
 
                 delete transformed.transform;
 
-                if (angular.isUndefined(transformed.cliAdapter)) {
-                    transformed.cliAdapter = angular.copy(rawTool.cliAdapter);
+                if (angular.isUndefined(transformed.baseCommand) ||
+                    angular.isUndefined(transformed.stdin) ||
+                    angular.isUndefined(transformed.stdout) ||
+                    angular.isUndefined(transformed.argAdapters)) {
+
+                    transformed.baseCommand = angular.copy(rawTool.baseCommand);
+                    transformed.stdin = angular.copy(rawTool.stdin);
+                    transformed.stdout = angular.copy(rawTool.stdout);
+                    transformed.argAdapters = angular.copy(rawTool.argAdapters);
                 }
                 if (angular.isUndefined(transformed.requirements)) {
                     transformed.requirements = angular.copy(rawTool.requirements);
@@ -186,7 +199,7 @@ angular.module('registryApp.cliche')
 
         /**
          * Check if id/name exists
-         * - if "@id" then both inputs and outputs need to be checked
+         * - if "id" then both inputs and outputs need to be checked
          * - if "name" then only current level is checked
          *
          * @param {object} prop
@@ -201,19 +214,19 @@ angular.module('registryApp.cliche')
                 compare,
                 deferred = $q.defer();
 
-            if (prop['@id']) {
+            if (prop['id']) {
 
                 ids = [
-                    [toolJSON['@id']],
-                    _.pluck(toolJSON.inputs, '@id'),
-                    _.pluck(toolJSON.outputs, '@id')
+                    [toolJSON['id']],
+                    _.pluck(toolJSON.inputs, 'id'),
+                    _.pluck(toolJSON.outputs, 'id')
                 ];
 
                 ids = _.reduce(ids, function(fl, a) { return fl.concat(a); }, []);
 
 
                 idName = 'id';
-                compare = prop['@id'];
+                compare = prop['id'];
                 exists = _.contains(ids, compare);
             } else {
                 idName = 'name';
@@ -254,7 +267,7 @@ angular.module('registryApp.cliche')
 
                 _.each(inputs, function(input) {
 
-                    input = isFirstLevel ? input.schema : input;
+                    input = isFirstLevel ? input.type : input;
 
                     var type = parseType(input.type);
 
@@ -349,7 +362,7 @@ angular.module('registryApp.cliche')
             if (mode === 'edit') {
                 deferred.resolve();
             } else if (mode === 'add') {
-                toolJSON.cliAdapter.argAdapters.push(arg);
+                toolJSON.argAdapters.push(arg);
                 deferred.resolve();
             } else {
                 deferred.reject('Unknown mode "' + mode + '"');
@@ -369,7 +382,7 @@ angular.module('registryApp.cliche')
          */
         var deleteProperty = function(key, index, properties) {
 
-            var cmp = key === '@id' ? '#' + index : index;
+            var cmp = key === 'id' ? '#' + index : index;
 
             _.remove(properties, function(prop) {
                 return prop[key] === cmp;
@@ -384,7 +397,7 @@ angular.module('registryApp.cliche')
          */
         var deleteArg = function(index) {
 
-            toolJSON.cliAdapter.argAdapters.splice(index, 1);
+            toolJSON.argAdapters.splice(index, 1);
 
         };
 
@@ -452,8 +465,8 @@ angular.module('registryApp.cliche')
                 return '';
             }
 
-            if (property['@id']) {
-                return property['@id'] ? property['@id'].slice(1) : '';
+            if (property['id']) {
+                return property['id'] ? property['id'].slice(1) : '';
             } else {
                 return property.name;
             }
@@ -539,7 +552,7 @@ angular.module('registryApp.cliche')
 
             var deferred = $q.defer(),
                 SandBox = $injector.get('SandBox'),
-                expr = (transform && transform.value) ? transform.value : null,
+                expr = (transform && transform.script) ? transform.script : null,
                 selfInput = self ? {$self: value} : {};
 
             if (expr) {
@@ -742,22 +755,13 @@ angular.module('registryApp.cliche')
          */
         var generateCommand = function() {
 
-            if (!toolJSON.cliAdapter) {
-                toolJSON.cliAdapter = {
-                    argAdapters: [],
-                    stdout: '',
-                    baseCmd: [''],
-                    stdin: ''
-                };
-            }
-
             return prepareProperties(toolJSON.inputs, jobJSON.inputs)
                 /* go through arguments and concat then with inputs */
                 .then(function (props) {
 
                     var argsPromises = [];
 
-                    _.each(toolJSON.cliAdapter.argAdapters, function(arg, key) {
+                    _.each(toolJSON.argAdapters, function(arg, key) {
 
                         var deferred = $q.defer(),
                             prefix = arg.prefix || '',
@@ -802,7 +806,7 @@ angular.module('registryApp.cliche')
 
                     });
 
-                    _.each(toolJSON.cliAdapter.baseCmd, function (baseCmd) {
+                    _.each(toolJSON.baseCommand, function (baseCmd) {
 
                         var deferred = $q.defer();
 
@@ -818,23 +822,23 @@ angular.module('registryApp.cliche')
 
                     return $q.all(baseCmdPromises)
                         .then(function (cmds) {
-                            return {command: command, baseCmd: cmds.join(' ')};
+                            return {command: command, baseCommand: cmds.join(' ')};
                         }, function (error) { return $q.reject(error); });
 
                 })
                 /* apply transforms on stdin/stdout */
                 .then(function (res) {
                     return $q.all([
-                            applyTransform(toolJSON.cliAdapter.stdin, toolJSON.cliAdapter.stdin),
-                            applyTransform(toolJSON.cliAdapter.stdout, toolJSON.cliAdapter.stdout)
+                            applyTransform(toolJSON.stdin, toolJSON.stdin),
+                            applyTransform(toolJSON.stdout, toolJSON.stdout)
                         ]).then(function(result) {
-                            return {command: res.command, baseCmd: res.baseCmd, stdin: result[0], stdout: result[1]};
+                            return {command: res.command, baseCommand: res.baseCommand, stdin: result[0], stdout: result[1]};
                         }, function (error) { return $q.reject(error); });
                 })
                 /* generate final command */
                 .then(function (result) {
 
-                    consoleCMD = result.baseCmd + ' ' + result.command.join(' ');
+                    consoleCMD = result.baseCommand + ' ' + result.command.join(' ');
 
                     if (result.stdin) {
                         consoleCMD += ' < ' + result.stdin;
@@ -950,30 +954,30 @@ angular.module('registryApp.cliche')
 
             /* check if adapter has empty fields and remove them */
             /* and remove remove adapter property if no adapter is set */
-            if (tmp.adapter) {
-                _(tmp.adapter).keys().forEach(function (key) {
+
+            var adapter = propertyType === 'input' ? 'inputBinding' : 'outputBinding';
+
+            if (tmp[adapter]) {
+                _(tmp[adapter]).keys().forEach(function (key) {
 
                     // _.isEmpty returns true for number values, which we don't want
                     // if there is a number value, then the prop is not empty
-                    if (_.isEmpty(tmp.adapter[key]) && !_.isNumber(tmp.adapter[key])) {
-                        delete tmp.adapter[key];
+                    if (_.isEmpty(tmp[adapter][key]) && !_.isNumber(tmp[adapter][key])) {
+                        delete tmp[adapter][key];
                     }
                 });
 
-                if (_.isEmpty(tmp.adapter)) {
-                    delete tmp.adapter;
+                if (_.isEmpty(tmp[adapter])) {
+                    delete tmp[adapter];
                 }
             }
 
             /* schema for the first level */
-            if (inner.key === '@id') {
+            if (inner.key === 'id') {
                 /* format structure for required property */
-                tmp.schema = inner.required ? [type] : ['null', type];
+                tmp.type = inner.required ? [type] : ['null', type];
                 formatted = tmp;
-                formatted['@id'] = '#' + inner.name;
-
-                //@todo: actually calculate depth instead of hardcoding it
-                formatted.depth = inner.type === 'array' ? 1 : 0;
+                formatted['id'] = '#' + inner.name;
 
             /*
             *  schema for every other level
@@ -982,8 +986,6 @@ angular.module('registryApp.cliche')
             } else {
                 /* format structure for required property */
                 tmp.type = inner.required ? [type] : ['null', type];
-                /* remove schema which was automatically appended to property */
-                delete tmp.schema;
                 formatted = tmp;
                 formatted.name = inner.name;
             }
@@ -1079,7 +1081,7 @@ angular.module('registryApp.cliche')
                 return (toolType === 'tool') ? ['null', defaultTypes[type]] : ['null', defaultTypes[type]];
             }
 
-            if (_.isUndefined(property.schema) && _.isUndefined(property.type)) {
+            if (_.isUndefined(property.type) && _.isUndefined(property.type)) {
                 /*
                 in case of second level inputs where structure is
                 {
@@ -1090,16 +1092,18 @@ angular.module('registryApp.cliche')
                  */
                 return ref ? property : angular.copy(property);
             } else {
-                return ref ? (property.schema || property.type) : (angular.copy(property.schema || property.type));
+                return ref ? (property.type || property.type) : (angular.copy(property.type || property.type));
             }
         };
 
-        var getAdapter = function (property, ref) {
+        var getAdapter = function (property, ref, type) {
             if (_.isEmpty(property)) {
                 return {};
             }
 
-            return ref ? property.adapter : angular.copy(property.adapter);
+            var ad = type + 'Binding';
+
+            return ref ? property[ad] : angular.copy(property[ad]);
         };
 
         return {

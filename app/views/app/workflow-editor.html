@@ -129,7 +129,7 @@
                                             <li ng-repeat="app in filteredApps = (apps | filter:view.searchTerm)">
 
                                                 <a href drag="app">
-                                                    <i class="fa"><img ng-src="{{ view.globals.base }}/img/rabix/{{ ::app.type }}-hex.png" alt=""/></i>
+                                                    <i class="fa"><img ng-src="{{ view.globals.base }}img/rabix/{{ ::app.type }}-hex.png" alt=""/></i>
                                                     <span> {{ ::app.label }} </span>
                                                     <!--<div class="pull-right">-->
                                                         <!--<span class="label label-primary"><i class="fa fa-tag"></i> v{{ ::app['sbg:revision'] }} </span>-->
@@ -158,17 +158,17 @@
 
                             <input-field
                                     ng-if="!view.json.softwareDescription"
-                                    ng-repeat="property in view.json.inputs track by property['@id']"
-                                    ng-model="view.values[view.json.id][property['@id']]"
+                                    ng-repeat="property in view.json.inputs track by property['id']"
+                                    ng-model="view.values[view.json.id][property['id']]"
                                     class="input-field input-field-sm"
-                                    key="@id"
+                                    key="id"
                                     prop="property"
                                     form="form.jobForm"
                                     app-name="{{ ::view.json.id }}"
                                     exposed="view.exposed"
                                     ignore-files="true"
-                                    handle-expose="onExpose(appName, property['@id'])"
-                                    on-un-expose="onUnExpose(appName, property['@id'], value)">
+                                    handle-expose="onExpose(appName, property['id'])"
+                                    on-un-expose="onUnExpose(appName, property['id'], value)">
                             </input-field>
 
                             <!-- For input suggested files -->

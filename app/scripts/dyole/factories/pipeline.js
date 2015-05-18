@@ -442,7 +442,7 @@ angular.module('registryApp.dyole')
 
                     _.each(this.model.nodes, function (nodeModel) {
 
-                        var nodeId = nodeModel.id || nodeModel['@id'];
+                        var nodeId = nodeModel.id;
                         // schema is not merged because nodes is a copy of schema with modified inputs and outputs for displaying on canvas
                         // schema is only used for tool execution
                         var model = _.extend(nodeModel, _self.model.display.nodes[nodeId]);
@@ -531,7 +531,7 @@ angular.module('registryApp.dyole')
                         output: '###*Output*' + '\n' + 'Uploads resulting files from processing cluster to user storage.'
                     };
 
-                    terId  = this._generateNodeId({label: type});
+                    terId  = Common.generateNodeId({label: type}, this.nodes);
 
                     model.label = terId;
                     model.description = descriptions[type];
@@ -541,66 +541,17 @@ angular.module('registryApp.dyole')
                     model[internalType].push({
                         'label': terId,
                         'id': terId,
-                        '@id': terId,
-                        'depth': 0,
-						'schema': terminal.model.schema
+						'type': terminal.model.type
                     });
 
                     terminalId = terId;
 
-                    var _id = model.id || this._generateNodeId(model);
+                    var _id = Common.generateNodeId(model, this.nodes);
 
-                    model.id = model['@id'] = _id;
+                    model.id = _id;
 
                     this.addNode(model, x, y, true);
                     this._connectSystemNode(terminal, _id, isInput, terminalId);
-                },
-
-                /**
-                 * Generate node id
-                 * Node id is represented as unique string for easier manual json formating later
-                 *
-                 * @param model
-                 * @returns {string}
-                 * @private
-                 */
-                _generateNodeId: function (model) {
-                    var _id, check = true, name = (model.softwareDescription && model.softwareDescription.label) ? model.softwareDescription.label : model.label || model.name,
-                        n = 0;
-
-                    if (name.charAt(0) !== '#') {
-                        name = '#' + name;
-                    }
-
-                    while (check) {
-
-                        if (n === 0) {
-                            check = this._checkIdAvailable(name);
-                        } else {
-                            check = this._checkIdAvailable(name + '_' + n);
-                        }
-
-                        n = check ? n + 1 : n;
-                    }
-
-                    if (n === 0) {
-                        _id = name;
-                    } else {
-                        _id = name + '_' + n;
-                    }
-
-                    return _id;
-                },
-
-                /**
-                 * Check if id is available
-                 *
-                 * @param id
-                 * @returns {boolean}
-                 * @private
-                 */
-                _checkIdAvailable: function (id) {
-                    return !!this.nodes[id];
                 },
 
                 /**
@@ -1025,21 +976,21 @@ angular.module('registryApp.dyole')
                         rawModel = angular.copy(nodeModel.json || nodeModel),
                         model;
 
-                    if (typeof rawModel['@type'] !== 'string' && !Common.checkSystem(rawModel)) {
-                        Notification.error('App not valid: Missing @type property');
+                    if (typeof rawModel['class'] !== 'string' && !Common.checkSystem(rawModel)) {
+                        Notification.error('App not valid: Missing class property');
                         return false;
                     }
 
                     var type;
 
-                    switch(rawModel['@type']) {
+                    switch(rawModel['class']) {
                         case 'Workflow':
                             type = 'workflow';
                             break;
-                        case 'CommandLine':
+                        case 'CommandLineTool':
                             type = 'tool';
                             break;
-                        case 'Script':
+                        case 'ExpressionTool':
                             type = 'script';
                             break;
                     }
@@ -1069,7 +1020,13 @@ angular.module('registryApp.dyole')
                         model.x = x / zoom;
                         model.y = y / zoom;
 
-                        var _id = model.id || _self._generateNodeId(model);
+                        // Cache App id to place it in step.impl
+                        // and use generated id from label
+                        if (model.id) {
+                            model.appId = model.id;
+                        }
+
+                        var _id = Common.generateNodeId(model, _self.nodes);
 
                         model.id = _id;
 
@@ -1083,6 +1040,7 @@ angular.module('registryApp.dyole')
 
                         return;
                     }
+
                     Validator.validate(type, rawModel)
                         .then(function () {
 
@@ -1174,7 +1132,7 @@ angular.module('registryApp.dyole')
                     json.display.nodes = {};
 
                     _.each(json.nodes, function (node) {
-                        var nodeId = node.id || node['@id'];
+                        var nodeId = node.id;
 
                         json.display.nodes[nodeId] = {
                             x: node.x,
@@ -1191,7 +1149,6 @@ angular.module('registryApp.dyole')
 
                         delete node.x;
                         delete node.y;
-                        delete node.id;
                     });
 
                     json.display.canvas.x = this.getEl().getTranslation().x;
