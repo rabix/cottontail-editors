@@ -151,6 +151,12 @@ angular.module('registryApp.app')
 
             $scope.view.workflow = result[2].message;
 
+            if ($scope.view.workflow['sbg:validationErrors'] && $scope.view.workflow['sbg:validationErrors'].length > 0) {
+                _.forEach($scope.view.workflow['sbg:validationErrors'], function(err) {
+                    Notification.error('[Workflow Error] ' + err);
+                });
+            }
+
             $scope.view.loading = false;
         };
 
@@ -507,7 +513,7 @@ angular.module('registryApp.app')
                     template: $templateCache.get('views/dyole/json-modal.html'),
                     controller: 'ModalJSONCtrl',
                     resolve: {data: function () {
-                        return {json: workflow.errors, url: false};
+                        return {json: workflow.message, url: false};
                     }}
                 });
             });
