@@ -19,8 +19,6 @@
     "zeroclipboard": "~2.2.0",
     "codemirror": "~4.6.0",
     "github-markdown-css": "~1.2.2",
-    "marked": "~0.3.2",
-    "angular-marked": "~0.0.12",
     "angular-ui-router": "~0.2.13",
     "jjv": "~1.0.2",
     "tv4": "~1.1.9",

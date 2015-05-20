@@ -18,7 +18,6 @@ angular
         'ui.router',
         'ngPrettyJson',
         'LocalForageModule',
-        'hc.marked',
         'registryApp.app',
         'registryApp.cliche',
         'registryApp.dyole',
