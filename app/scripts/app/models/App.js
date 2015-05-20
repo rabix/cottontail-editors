@@ -81,7 +81,7 @@ angular.module('registryApp.app')
         };
 
         self.getAppUrl = function (json) {
-            return Globals.apiUrls.brood + 'apps' + Globals.appUrl;
+            return Globals.apiUrls.brood + 'apps/' + Globals.appUrl;
         };
 
         self.flush = function (type) {
