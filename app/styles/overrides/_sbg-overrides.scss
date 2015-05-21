@@ -30,6 +30,11 @@
   @extend .flex-one;
 }
 
+
+.cliche-editor .page .content {
+  @extend  .flex-one-height;
+}
+
 /* forms */
 
 select, textarea, input[type="text"], input[type="password"], input[type="number"], input[type="date"], input[type="email"], input[type="url"], input[type="tel"], input[type="search"] {

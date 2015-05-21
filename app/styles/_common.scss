@@ -16,6 +16,10 @@
   @include flex(1);
 }
 
+.flex-one-height {
+  @include flex(1 1 0);
+}
+
 %trace-box {
   position: absolute;
   padding: 20px 30px;
