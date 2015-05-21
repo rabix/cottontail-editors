@@ -111,7 +111,7 @@ angular.module('registryApp.app')
             var body = {
                 type: 'RABIX',
                 'project_id': Globals.projectId,
-                'project_slug': Globals.projectSlug,
+                'project_slug': Globals.projectOwner + '/' + Globals.projectSlug,
                 'app_id': Globals.projectOwner + '/' + Globals.projectSlug + '/' + Globals.appName + '/' + Globals.revision
             };
 
