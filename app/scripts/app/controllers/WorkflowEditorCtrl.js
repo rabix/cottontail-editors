@@ -437,6 +437,13 @@ angular.module('registryApp.app')
 
         $scope.runWorkflow = function () {
             // create task and redirect to task page for that task
+            App.createAppTask().then(function (task) {
+                BeforeRedirect.setReload(true);
+                $scope.view.saving = true;
+                $scope.view.loading = true;
+
+                App.redirectToTaskPage(task);
+            });
         };
 
         /**

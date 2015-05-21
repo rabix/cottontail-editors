@@ -5,6 +5,8 @@ angular.module('registryApp.app')
         var self = {};
         var revision = parseInt(Globals.revision);
 
+        var appId = null;
+
         /**
          * Get tools
          *
@@ -94,6 +96,32 @@ angular.module('registryApp.app')
 
         self.getMineAppsByProject = function () {
             return Api.getMineAppsByProject.get({}).$promise;
+        };
+
+        self.createAppTask = function () {
+            /*
+             {
+             "type": "RABIX",
+             "project_id": "a6157d3d-c375-4303-a50e-0ef3143bbb86",
+             "project_slug": "bojan.delic/mytestrabix-project/",
+             "app_id": "luka.stojanovic/picard/picard-clean-sort-dedupe/0"
+             }
+             */
+
+            var body = {
+                type: 'RABIX',
+                'project_id': Globals.projectId,
+                'project_slug': Globals.projectSlug,
+                'app_id': Globals.projectOwner + '/' + Globals.projectSlug + '/' + Globals.appName + '/' + Globals.revision
+            };
+
+            return Api.createAppTask.post({}, body).$promise;
+        };
+
+        self.redirectToTaskPage = function (task) {
+            var url = '/rabix/u/' + Globals.projectOwner + '/' + Globals.projectSlug + '/tasks/' + task.message.platform_id;
+
+            window.location = url;
         };
 
         return self;

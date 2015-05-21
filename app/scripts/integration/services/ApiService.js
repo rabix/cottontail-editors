@@ -30,6 +30,8 @@ angular.module('integration')
             'session-id': sessionId
         };
 
+        var peon = Globals.apiUrls.peon;
+
         self.apps = $resource(broodAppUrl + '/' + projectOwner + '/' + projectSlug + '/' + appName + '/:revision', {revision: '@revision'}, {
             'post': {method: 'POST', headers: headers},
             'update': {method: 'POST', headers: headers},
@@ -74,6 +76,10 @@ angular.module('integration')
         });
 
         self.fileStats = $resource(vaporUrl + '/fs/stat?session_id=' + sessionId + '&path=/Projects/' + Globals.projectId + '/:file&depth=1', {file: '@file'}, {
+        });
+
+        self.createAppTask = $resource(peon, {}, {
+            'post': {method: 'POST', headers: headers}
         });
 
         return self;

@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('ClicheCtrl', ['$scope', '$q', '$modal', '$templateCache', '$rootScope', 'App', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload', 'BeforeRedirect', 'Api', 'User', 'lodash', 'HelpMessages', 'Globals', 'HotkeyRegistry', 'Chronicle', 'Notification', function($scope, $q, $modal, $templateCache, $rootScope, App, Cliche, Loading, SandBox, BeforeUnload, BeforeRedirect, Api, User, _, HelpMessages, Globals, HotkeyRegistry, Chronicle, Notification) {
+    .controller('ClicheCtrl', ['$scope', '$q', '$modal', '$templateCache', '$rootScope', 'App', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload', 'BeforeRedirect', 'Api', 'User', 'lodash', 'HelpMessages', 'Globals', 'HotkeyRegistry', 'Chronicle', 'Notification', 'rawTool', function($scope, $q, $modal, $templateCache, $rootScope, App, Cliche, Loading, SandBox, BeforeUnload, BeforeRedirect, Api, User, _, HelpMessages, Globals, HotkeyRegistry, Chronicle, Notification, rawTool) {
         $scope.Loading = Loading;
 
         var cliAdapterWatchers = [],
@@ -99,7 +99,7 @@ angular.module('registryApp.cliche')
 
                 if (result[0].message) {
 
-                    var tool = result[0].message;
+                    var tool = _.assign(rawTool, result[0].message);
 
                     $scope.view.app = tool;
                     $scope.view.tool = tool;
@@ -463,6 +463,15 @@ angular.module('registryApp.cliche')
          */
         $scope.runApp = function () {
             //todo: run app
+            // create task and redirect to task page for that task
+            App.createAppTask().then(function (task) {
+                BeforeRedirect.setReload(true);
+                $scope.view.saving = true;
+                $scope.view.loading = true;
+
+                App.redirectToTaskPage(task);
+            });
+
         };
         
 
