@@ -234,7 +234,7 @@ angular.module('registryApp.dyole')
                 var connections = Pipeline.getConnections();
 
                 return _.filter(connections, function(connection){
-                    return connection.end_node === model.id || connection.starrt_node === model.id
+                    return connection.end_node === model.id || connection.start_node === model.id
                 });
             };
 
