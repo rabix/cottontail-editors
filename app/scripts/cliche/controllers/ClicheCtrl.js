@@ -104,6 +104,11 @@ angular.module('registryApp.cliche')
                     $scope.view.app = tool;
                     $scope.view.tool = tool;
 
+                    if (tool.class === 'ExpressionTool') {
+                        tool.engine = Cliche.getTransformSchema().engine;
+                        tool.script = tool.script || '';
+                    }
+
                     Cliche.setTool(tool);
                     Cliche.setJob($scope.view.revision.job ? JSON.parse($scope.view.revision.job) : null);
                 }
@@ -291,16 +296,19 @@ angular.module('registryApp.cliche')
             }
 
             if (Globals.appType === 'script') {
-
-                json.transform = Cliche.getTransformSchema();
+                json.engine = Cliche.getTransformSchema().engine;
                 delete json.baseCommand;
                 delete json.stdin;
                 delete json.stdout;
                 delete json.argAdapters;
                 delete json.requirements;
+                delete json.transform;
 
             } else {
                 if (angular.isDefined(json.transform)) { delete json.transform; }
+                if (angular.isDefined(json.engine)) { delete json.engine; }
+                if (angular.isDefined(json.script)) { delete json.script; }
+
             }
 
             Cliche.setTool(json, preserve);
@@ -651,19 +659,14 @@ angular.module('registryApp.cliche')
                     $scope.view.loading = false;
 
                     var newRevision = result.message['sbg:revision'];
-                    var modalInstance = $modal.open({
-                        template: $templateCache.get('views/cliche/partials/app-save-response.html'),
-                        controller: 'ModalCtrl',
-                        backdrop: 'static',
-                        resolve: { data: function () { return { trace: result }; }}
-                    });
+                    BeforeRedirect.setReload(true);
+                    $scope.form.tool.$dirty = false;
+                    Notification.primary('Tool successfully updated');
 
-                    modalInstance.result.then(function() {
-                        redirectTo(newRevision);
-                        $scope.view.loading = true;
-                    });
+                    redirectTo(newRevision);
+                    $scope.view.loading = true;
 
-                    deferred.resolve(modalInstance);
+                    deferred.resolve();
 
                 }, function (error) {
                     $scope.view.loading = false;

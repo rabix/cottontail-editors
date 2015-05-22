@@ -151,6 +151,21 @@ var Schema = {
                     type: 'string'
                 }
             }
+        },
+        expressionDef: {
+            type: 'object',
+            properties: {
+	            'class': {
+	                type: 'string'
+	            },
+	            engine: {
+	                type: 'string'
+	            },
+	            script: {
+	                type: 'string'
+	            }
+            },
+            required: ['class', 'engine', 'script']
         }
     },
     properties: {
@@ -251,7 +266,7 @@ var Schema = {
                     name: {
                         type: 'string'
                     },
-                    adapter: {
+                    inputBinding: {
                         $ref: '#/definitions/adapterDef'
                     }
                 },
@@ -274,20 +289,11 @@ var Schema = {
                 required: ['type', 'id']
             }
         },
-        transform: {
-            type: 'object',
-            properties: {
-                'class': {
-                    type: 'string'
-                },
-                lang: {
-                    type: 'string'
-                },
-                value: {
-                    type: 'string'
-                }
-            },
-            required: ['class', 'lang', 'value']
+        engine: {
+            type: 'string'
+        },
+        script: {
+            type: 'string'
         }
     },
     required: ['id', 'class', '@context', 'label', 'inputs', 'outputs']
