@@ -505,7 +505,8 @@ angular.module('registryApp.cliche')
          */
         $scope.updateResource = function (transform, key) {
 
-            var req = $scope.view['req' + key];
+            //in case field has not yet been defined
+            var req = $scope.view['req' + key] || { class: key };
 
             req.value = transform;
 
