@@ -14,7 +14,7 @@ angular.module('registryApp.dyole')
             link: function(scope, element) {
                 var mousedown = false,
                     $elem = $(element),
-                    $body = $('body'),
+                    $body = $(document),
                     $svg = $('.pipeline'),
                     images = {},
                     preloadImgBase = Globals.base + 'img/rabix/',
@@ -61,6 +61,8 @@ angular.module('registryApp.dyole')
                         $elem.addClass('drag');
 
                     }
+
+                    console.log('handleMouseDown;' + ' mousedown: ', mousedown);
                 }
 
                 /**
@@ -81,6 +83,7 @@ angular.module('registryApp.dyole')
                  * @param e
                  */
                 function handleMouseUp (e) {
+                    console.log('handleMouseUp;' + ' mousedown: ', mousedown);
                     if (mousedown) {
                         mousedown = false;
                         $img.remove();
