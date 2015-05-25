@@ -584,7 +584,7 @@ angular.module('registryApp.cliche')
             var baseCommands = value.split(' ');
             var adapterBaseCmd = $scope.view.tool.baseCommand;
 
-            if (baseCommands.length > 1) {
+            if (baseCommands.length > 0) {
                 adapterBaseCmd.splice(index, 1);
 
                 _.forEach(baseCommands, function(cmd, key) {
