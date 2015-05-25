@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.dyole')
-    .controller('PipelineCtrl', ['$scope', '$rootScope', '$element', '$window', '$timeout', '$injector', 'pipeline', 'App', 'rawPipeline', '$modal', '$templateCache', 'PipelineService', 'lodash', 'Notification', 'HotkeyRegistry', function ($scope, $rootScope, $element, $window, $timeout, $injector, pipeline, App, rawPipeline, $modal, $templateCache, PipelineService, _, Notification, HotkeyRegistry) {
+    .controller('PipelineCtrl', ['$scope', '$rootScope', '$element', '$window', '$timeout', '$injector', 'pipeline', 'App', 'rawPipeline', '$modal', '$templateCache', 'PipelineService', 'lodash', 'Notification', 'HotkeyRegistry', 'rawRabixWorkflow', function ($scope, $rootScope, $element, $window, $timeout, $injector, pipeline, App, rawPipeline, $modal, $templateCache, PipelineService, _, Notification, HotkeyRegistry, rawRabixWorkflow) {
 
         var Pipeline;
         var selector = '.pipeline';
@@ -64,6 +64,8 @@ angular.module('registryApp.dyole')
                 }
 
                 initPipeline(n);
+
+                PipelineService.refresh();
             }
         });
 
@@ -76,9 +78,6 @@ angular.module('registryApp.dyole')
                 $scope.pipeline.name = name;
             }
 
-//            Workflow.fork($scope.pipeline).then(function (pipeline) {
-//                $state.go('workflow-editor', {id: pipeline.id, mode: 'edit'});
-//            });
         };
 
         /**
@@ -93,7 +92,6 @@ angular.module('registryApp.dyole')
         var format = function () {
 
             return Pipeline.getJSON();
-
         };
 
         var getUrl = function (url) {
@@ -104,7 +102,6 @@ angular.module('registryApp.dyole')
 
                     $scope.view = {};
                     $scope.data = data;
-//                        $scope.view.trace = data.trace;
 
                     /**
                      * Close the modal window
@@ -185,6 +182,14 @@ angular.module('registryApp.dyole')
 
         };
 
+        var getEventObj = function () {
+            if (Pipeline) {
+                return Pipeline.Event
+            } else {
+                return false
+            }
+        };
+
         /**
          * Track pipeline change
          */
@@ -210,10 +215,22 @@ angular.module('registryApp.dyole')
             modalInstance.result.then(function () {
                 App.flush();
 
+                var p = Pipeline.getJSON();
+
+
+
                 if (angular.isDefined(Pipeline)) {
+
+                    var raw = angular.copy(rawRabixWorkflow);
+                    raw.id = p.id;
+                    raw.label = p.label;
+
                     Pipeline.destroy();
                     Pipeline = null;
-                    initPipeline({});
+                    initPipeline(raw);
+
+                    PipelineService.refresh();
+
                 }
             }, function () {
                 return false;
@@ -340,7 +357,8 @@ angular.module('registryApp.dyole')
                 fork: fork,
                 format: format,
                 validate: validate,
-                adjustSize: adjustSize
+                adjustSize: adjustSize,
+                getEventObj: getEventObj
             };
 
             PipelineService.setInstance($scope.controllerId, methods);

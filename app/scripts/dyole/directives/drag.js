@@ -62,7 +62,6 @@ angular.module('registryApp.dyole')
 
                     }
 
-                    console.log('handleMouseDown;' + ' mousedown: ', mousedown);
                 }
 
                 /**
@@ -83,7 +82,7 @@ angular.module('registryApp.dyole')
                  * @param e
                  */
                 function handleMouseUp (e) {
-                    console.log('handleMouseUp;' + ' mousedown: ', mousedown);
+
                     if (mousedown) {
                         mousedown = false;
                         $img.remove();

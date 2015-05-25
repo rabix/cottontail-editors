@@ -84,11 +84,17 @@ angular.module('registryApp.app')
             }
         });
 
-        PipelineService.register($scope.view.id, function () {
+        var onInstanceRegister = function () {
             PipelineInstance = PipelineService.getInstance($scope.view.id);
 
+            PipelineInstance.getEventObj().subscribe('controller:node:select', onNodeSelect);
+            PipelineInstance.getEventObj().subscribe('controller:node:deselect', onNodeDeselect);
+
             console.log('Pipeline Instance cached', PipelineInstance);
-        });
+        };
+
+        PipelineService.register($scope.view.id, onInstanceRegister, onInstanceRegister);
+
 
         $q.all([
                 User.getUser()
@@ -215,7 +221,7 @@ angular.module('registryApp.app')
             }
 
             if (!$scope.$$phase) {
-                $scope.$apply();
+                $scope.$digest();
             }
         };
 
@@ -235,12 +241,15 @@ angular.module('registryApp.app')
 
 
             var workflow = PipelineInstance.format();
-            App.update(workflow, 'workflow').then(function(data) {
-
-                var rev = data.message['sbg:revision'];
-                Notification.primary('Pipeline successfully updated.');
-                redirectTo(rev);
-            });
+            App.update(workflow, 'workflow')
+                .then(function(data) {
+                    var rev = data.message['sbg:revision'];
+                    Notification.primary('Workflow successfully updated.');
+                    redirectTo(rev);
+                })
+                .catch(function (trace) {
+                    Notification.error('[Workflow Error] Workflow cannot be saved: ' + trace);
+                });
         };
 
         $scope.toggleSidebar = function() {
@@ -369,8 +378,8 @@ angular.module('registryApp.app')
             window.location = '/rabix/u/' + Globals.projectOwner + '/' + Globals.projectSlug + '/apps/' + Globals.appName + '/edit?type=' + Globals.appType + '&rev=' + revisionId;
         };
 
-        var onNodeSelectOff = $rootScope.$on('node:select', onNodeSelect);
-        var onNodeDeselectOff = $rootScope.$on('node:deselect', onNodeDeselect);
+//        var onNodeSelectOff = $rootScope.$on('node:select', onNodeSelect);
+//        var onNodeDeselectOff = $rootScope.$on('node:deselect', onNodeDeselect);
 
         var onBeforeRedirectOff = BeforeRedirect.register(function () {
 
@@ -568,8 +577,8 @@ angular.module('registryApp.app')
         ]);
 
         $scope.$on('$destroy', function () {
-            onNodeSelectOff();
-            onNodeDeselectOff();
+//            onNodeSelectOff();
+//            onNodeDeselectOff();
 
             onBeforeRedirectOff();
             onBeforeRedirectOff = undefined;

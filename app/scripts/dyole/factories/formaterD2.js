@@ -132,7 +132,7 @@ angular.module('registryApp.dyole')
              * @param relations
              * @returns {Array}
              */
-            createSteps: function (schemas, relations) {
+            createSteps: function (schemas) {
 
                 var _self = this,
                     steps = [];
@@ -756,7 +756,7 @@ angular.module('registryApp.dyole')
 
                 model.display = json.display;
                 model.dataLinks = _formatter.toRabixRelations(json.relations, exposed, model, suggestedValues);
-                model.steps = _formatter.createSteps(json.schemas, json.relations);
+                model.steps = _formatter.createSteps(json.schemas);
 
                 _formatter.addValuesToSteps(model.steps, values);
 

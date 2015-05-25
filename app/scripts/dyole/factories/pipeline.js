@@ -135,15 +135,18 @@ angular.module('registryApp.dyole')
                             }
                         });
 
-                        $rootScope.$broadcast('node:deselect');
+//                        $rootScope.$broadcast('node:deselect');
+                        _self.Event.trigger('controller:node:deselect');
 
                     });
 
                     this.Event.subscribe('node:select', function (model) {
 
                         if (!model.softwareDescription || model.softwareDescription.type !== 'output') {
-                            $rootScope.$broadcast('node:select', model, _self.exposed, _self.values, _self.suggestedValues);
+//                            $rootScope.$broadcast('node:select', model, _self.exposed, _self.values, _self.suggestedValues);
+                            _self.Event.trigger('controller:node:select', {}, model, _self.exposed, _self.values, _self.suggestedValues);
                         }
+
 
                     });
 
