@@ -40,10 +40,10 @@
 
                     <ul ng-repeat="input in view.inputs">
                         <li class="row">
-                            <strong class="col-xs-3">
+                            <strong class="col-xs-8">
                                 {{ ::input["id"] }}
                             </strong>
-                            <div class="checkbox col-xs-9">
+                            <div class="checkbox col-xs-4">
                                 <label for="{{ ::input['id'] }}">
                                     <input id="{{ ::input['id'] }}" type="checkbox" ng-model="inputValues[input['id']]" ng-change="onScatterChange(input['id'], inputValues[input['id']])"/>
                                     Scatter
