@@ -149,7 +149,7 @@ angular.module('registryApp.dyole')
                         };
 
                     if (typeof schema.scatter !== 'undefined' && typeof schema.scatter === 'string') {
-                        step.scatter = schema.scatter;
+                        step.scatter = id + '/' + schema.scatter.slice(1);
                         delete schema.scatter;
                     }
 
@@ -446,7 +446,7 @@ angular.module('registryApp.dyole')
                     step.impl.id = stepId;
 
                     if (typeof step.scatter !== 'undefined' && typeof step.scatter=== 'string') {
-                        step.impl.scatter = step.scatter;
+                        step.impl.scatter = '#' + step.scatter.split('/')[1];
                     }
 
                     schemas[stepId] = step.impl;
