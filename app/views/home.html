@@ -24,7 +24,7 @@
             <p>While editing a tool that belongs to a rabix repository, the "update" button will create a new revision. You can use the URL on the tool page to run the latest revision (using the Python executor) or the URLs from revision pages to run a specific snapshot.</p>
             <h3 id="creating-a-docker-image">Creating a docker image</h3>
             <p>CWL currently only allows docker images for distribution of binaries. To create a docker image for your tool, check out <a href="https://docs.docker.com/articles/basics/">docker documentation</a>. If you are describing someone else's tool, check the <a href="https://registry.hub.docker.com/">docker hub</a> first - someone may have already created an image.</p>
-            <p>For local development, it is enough to specify the image ID. Once you push the image to the docker registry, enter the imageRepo with optional tag (e.g. jsmith/mytoolkit#2.0).</p>
+            <p>For local development, it is enough to specify the image ID. Once you push the image to the docker registry, enter the imageRepo with optional tag (e.g. jsmith/mytoolkit:2.0).</p>
             <h3 id="specifying-required-resources">Specifying required resources</h3>
             <p>You can enter the number of CPU cores and memory (in MB) required to run the tool. A CPU value of zero means that the tool can run multithreaded in any number of cores allocated for the run.
                 If the required memory varies based on inputs or settings, you can use an expression in place of a constant. More on expressions later.</p>

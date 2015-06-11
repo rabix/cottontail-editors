@@ -202,13 +202,10 @@ var Schema = {
                                 type: 'string',
                                 enum: ['DockerRequirement']
                             },
-                            imgRepo: {
+                            dockerPull: {
                                 type: 'string'
                             },
-                            imgTag: {
-                                type: 'string'
-                            },
-                            imgId: {
+                            dockerImageId: {
                                 type: 'string'
                             }
                         },

@@ -48,18 +48,13 @@
                                 <h5>Docker Image Details</h5>
                                 <p>
                                     <strong>Image Id:</strong>
-                                    {{ ::view.docker.imgId }}
-                                    <i ng-if="!view.docker.imgId">Not defined</i>
+                                    {{ ::view.docker.dockerImageId }}
+                                    <i ng-if="!view.docker.dockerImageId">Not defined</i>
                                 </p>
                                 <p>
-                                    <strong>Image Tag:</strong>
-                                    {{ ::view.docker.imgTag }}
-                                    <i ng-if="!view.docker.imgTag">Not defined</i>
-                                </p>
-                                <p>
-                                    <strong>Image Repo:</strong>
-                                    {{ ::view.docker.imgRepo }}
-                                    <i ng-if="!view.docker.imgRepo">Not defined</i>
+                                    <strong>Image Repo[:Tag]:</strong>
+                                    {{ ::view.docker.dockerPull }}
+                                    <i ng-if="!view.docker.dockerPull">Not defined</i>
                                 </p>
                             </section>
 
