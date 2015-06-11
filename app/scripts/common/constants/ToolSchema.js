@@ -201,7 +201,7 @@ var Schema = {
                         properties: {
                             'class': {
                                 type: 'string',
-                                enum: ['CpuRequirement', 'MemRequirement']
+                                enum: ['CPURequirement', 'MemRequirement']
                             },
                             value: {
                                 type: ['number', 'object'],

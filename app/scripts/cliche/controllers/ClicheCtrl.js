@@ -11,7 +11,7 @@ angular.module('registryApp.cliche')
 
         var cliAdapterWatchers = [],
             jobWatcher,
-            reqMap = {CpuRequirement: 'cpu', MemRequirement: 'mem'},
+            reqMap = {CPURequirement: 'cpu', MemRequirement: 'mem'},
             onBeforeUnloadOff = BeforeUnload.register(
                 function() {
                     return 'Please save your changes before leaving.';
@@ -211,7 +211,7 @@ angular.module('registryApp.cliche')
         var prepareRequirements = function() {
 
             $scope.view.reqDockerRequirement = _.find($scope.view.tool.requirements, {'class': 'DockerRequirement'});
-            $scope.view.reqCpuRequirement = _.find($scope.view.tool.requirements, {'class': 'CpuRequirement'});
+            $scope.view.reqCpuRequirement = _.find($scope.view.tool.requirements, {'class': 'CPURequirement'});
             $scope.view.reqMemRequirement = _.find($scope.view.tool.requirements, {'class': 'MemRequirement'});
 
         };
