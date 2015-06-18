@@ -29,8 +29,8 @@ angular.module('registryApp.cliche')
                 imgId: ''
             },
             {
-                'class': 'CpuRequirement',
-                value: 500
+                'class': 'CPURequirement',
+                value: 1
             },
             {
                 'class': 'MemRequirement',
