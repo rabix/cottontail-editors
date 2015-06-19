@@ -24,9 +24,8 @@ angular.module('registryApp.cliche')
         requirements: [
             {
                 'class': 'DockerRequirement',
-                imgRepo: '',
-                imgTag: '',
-                imgId: ''
+                dockerImageId: '',
+                dockerPull: ''
             },
             {
                 'class': 'CPURequirement',
