@@ -14,7 +14,7 @@ angular.module('registryApp.common')
         $scope.view.expr = options.expr || '';
         $scope.view.self = options.self;
 
-        $scope.view.exampleText = 'example: "string" or 100 or [1, 2, 3] or {"key": "value"}';
+        $scope.view.exampleText = 'enter $self value, example: "string" or 100 or [1, 2, 3] or {"key": "value"}';
 
         /**
          * On modal confirm set the appropriate expression and close the modal
