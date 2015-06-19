@@ -138,9 +138,24 @@ angular.module('registryApp.cliche')
 
         $scope.view.model = inputScheme;
 
-        $scope.$watch('view.model', function(n, o) {
+        // TODO: Figure this out for complex props, try to avoid this deep watch
+        var deepWatcher = $scope.$watch('view.model', function(n, o) {
             if (n !== o) { $scope.model = n; }
-        });
+        }, true);
+
+
+//        // TODO: Figure this out for complex props
+//        if ($scope.view.type === 'File') {
+//            $scope.$watch('view.model.path', function(n, o) {
+//                if (n !== o) {
+//                    if (typeof $scope.model !== 'undefined'){
+//                        $scope.model.path = n;
+//                    } else {
+//                        $scope.model = $scope.view.model;
+//                    }
+//                }
+//            });
+//        }
 
         /**
          * Open modal to enter more parameters for the input file
@@ -181,6 +196,13 @@ angular.module('registryApp.cliche')
 
 
         };
+
+        $scope.$on('destroy', function () {
+            if (_.isFunction(deepWatcher)) {
+                deepWatcher.call();
+                deepWatcher = null;
+            }
+        })
 
     }])
     .directive('inputField', ['RecursionHelper', function (RecursionHelper) {
