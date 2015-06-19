@@ -173,14 +173,16 @@ angular.module('registryApp.common')
                     }
                 }
 
+                scope.runHandler = runHandler;
+
                 // only set up event handler if event can be handled
                 if (!_.isUndefined(scope.handleItemBlur) && scope.view.mode === 'literal') {
-                    el.find('input').on('blur keypress', runHandler);
+//                    el.find('input').on('blur keypress', runHandler);
 
                     runHandler({type: 'init'});
 
                     scope.$on('$destroy', function() {
-                        el.off('blur keypress');
+//                        el.off('blur keypress');
                     });
                 }
             }
