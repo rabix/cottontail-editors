@@ -375,7 +375,7 @@ angular.module('registryApp.app')
          */
         var redirectTo = function(revisionId) {
             prompt = false;
-            window.location = '/rabix/u/' + Globals.projectOwner + '/' + Globals.projectSlug + '/apps/' + Globals.appName + '/edit?type=' + Globals.appType + '&rev=' + revisionId;
+            window.location = '/u/' + Globals.projectOwner + '/' + Globals.projectSlug + '/apps/' + Globals.appName + '/edit?type=' + Globals.appType + '&rev=' + revisionId;
         };
 
 //        var onNodeSelectOff = $rootScope.$on('node:select', onNodeSelect);

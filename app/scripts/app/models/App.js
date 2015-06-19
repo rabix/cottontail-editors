@@ -119,7 +119,7 @@ angular.module('registryApp.app')
         };
 
         self.redirectToTaskPage = function (task) {
-            var url = '/rabix/u/' + Globals.projectOwner + '/' + Globals.projectSlug + '/tasks/' + task.message.platform_id;
+            var url = '/u/' + Globals.projectOwner + '/' + Globals.projectSlug + '/tasks/' + task.message.platform_id;
 
             window.location = url;
         };
