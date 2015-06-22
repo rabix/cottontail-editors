@@ -197,7 +197,7 @@ angular.module('registryApp.cliche')
 
         };
 
-        $scope.$on('destroy', function () {
+        $scope.$on('$destroy', function () {
             if (_.isFunction(deepWatcher)) {
                 deepWatcher.call();
                 deepWatcher = null;
