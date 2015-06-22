@@ -605,7 +605,7 @@ angular.module('registryApp.cliche')
                             deferred.reject(error);
                         });
                 } else {
-                    applyTransform(property.adapter.argValue, (_.isObject(val) ? val.path : val), true)
+                    applyTransform(property.inputBinding.argValue, (_.isObject(val) ? val.path : val), true)
                         .then(function (result) {
                             deferred.resolve(result);
                         }, function (error) {
@@ -925,11 +925,11 @@ angular.module('registryApp.cliche')
 
                 var toStrip = ['prefix', 'separator', 'itemSeparator', 'argValue'];
 
-                if (itemType === 'record' && prop.adapter) {
+                if (itemType === 'record' && prop.inputBinding) {
 
                     _.each(toStrip, function(param) {
-                        if (angular.isDefined(prop.adapter[param])) {
-                            delete prop.adapter[param];
+                        if (angular.isDefined(prop.inputBinding[param])) {
+                            delete prop.inputBinding[param];
                         }
                     });
                 }
