@@ -109,7 +109,7 @@
                                 </span>
 
                                 <ul>
-                                    <li ng-if="(repoTypeObj | isEmpty)">
+                                    <li ng-if="(repoTypeObj | isEmpty) || repoTypeObj.apps === 0">
                                         <p class="alert alert-info">
                                             <span ng-if="repoType === 'MyApps' && !view.user"> {{ view.message }}</span>
                                             <span ng-if="repoType === 'MyApps' && view.user">You don't have any apps yet</span>
