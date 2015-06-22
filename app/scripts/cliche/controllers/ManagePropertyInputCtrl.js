@@ -11,7 +11,9 @@ angular.module('registryApp.cliche')
 
         var key = options.key || 'name';
         var idObj = {n: '', o: ''};
-        var cacheAdapter = {};
+        var cacheAdapter = {
+            'sbg:cmdInclude': 'true'
+        };
 
         $scope.view = {};
         $scope.view.key = key;
