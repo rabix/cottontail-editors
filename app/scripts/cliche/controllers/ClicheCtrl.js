@@ -764,7 +764,8 @@ angular.module('registryApp.cliche')
             {name: 'redo', callback: $scope.redoAction, preventDefault: true, allowIn: ['INPUT', 'SELECT', 'TEXTAREA']}
         ]);
 
-        $scope.chron = Chronicle.record('view.tool', $scope, true);
+        //TODO: Fix this - disabled chron for now, causing problems with sbg:fields
+//        $scope.chron = Chronicle.record('view.tool', $scope, true);
         // todo: optimize this watch because it's the heaviest
         // maybe adding lazy binding?
 
