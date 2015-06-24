@@ -8,5 +8,6 @@
 
 angular.module('registryApp.cliche', ['ui.bootstrap', 'registryApp.common', 'registryApp.app', 'registryApp.util', 'registryApp.repo', 'ngPrettyJson', 'markdown', 'ngTagsInput'])
     .constant('Const', {
-        exposedSeparator: '$'
+        exposedSeparator: '$',
+        generalSeparator: '.'
     });

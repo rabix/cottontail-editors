@@ -27,7 +27,8 @@ angular
         'registryApp.util'
     ])
     .constant('Const', {
-        exposedSeparator: '$'
+        exposedSeparator: '$',
+        generalSeparator: '.'
     })
     .config(['$stateProvider', '$urlRouterProvider', '$httpProvider', 'markdownConfig', function ($stateProvider, $urlRouterProvider, $httpProvider, markdownConfig) {
         $stateProvider

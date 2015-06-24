@@ -8,7 +8,8 @@
 
 angular.module('registryApp.dyole', ['registryApp.app', 'ui.bootstrap', 'ui.sortable','registryApp.common', 'registryApp.util', 'registryApp.repo', 'ngPrettyJson', 'markdown', 'ngTagsInput'])
 	.constant('Const', {
-		exposedSeparator: '$'
+		exposedSeparator: '$',
+        generalSeparator: '.'
 	})
 	.config([function() {
 	}]);
