@@ -42,7 +42,7 @@ angular.module('registryApp.cliche')
         baseCommand: [''],
         stdin: '',
         stdout: '',
-        argAdapters: []
+        arguments: []
     })
     .constant('rawTransform', {
         'class': 'Expression',

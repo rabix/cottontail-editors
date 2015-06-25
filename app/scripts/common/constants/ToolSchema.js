@@ -123,7 +123,7 @@ var Schema = {
                 position: {
                     type: 'number'
                 },
-                argValue: {
+                valueFrom: {
                     oneOf: [
                         {
                             type: ['string', 'number']
@@ -283,14 +283,14 @@ var Schema = {
         stdOut: {
             type: ['string', 'object']
         },
-        argAdapters: {
+        arguments: {
             type: 'array',
             items: {
                 $ref: '#/definitions/adapterDef'
             }
         }
     },
-    required: ['id', 'class', '@context', 'baseCommand', 'argAdapters', 'label', 'owner', 'inputs', 'outputs']
+    required: ['id', 'class', '@context', 'baseCommand', 'arguments', 'label', 'owner', 'inputs', 'outputs']
 };
 
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
