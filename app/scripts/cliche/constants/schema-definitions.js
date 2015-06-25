@@ -48,7 +48,7 @@ angular.module('registryApp.cliche')
                         adapter: {type: 'object', def: {
                             position: {type: 'number'},
                             valueFrom: {type: 'object'},
-                            separator: {type: 'string'},
+                            separate: {type: 'boolean'},
                             prefix: {type: 'string'},
                             itemSeparator: {type: ['string', 'object']}
                         }}
