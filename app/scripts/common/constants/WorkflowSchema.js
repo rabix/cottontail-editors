@@ -190,7 +190,7 @@ var Schema = {
             items: {
                 type: 'object',
                 properties: {
-                    impl: {
+                    run: {
                         oneOf: [{
                             type: 'object',
                             properties: {},
@@ -230,7 +230,7 @@ var Schema = {
                         }
                     }
                 },
-                required: ['inputs', 'outputs', 'id', 'impl']
+                required: ['inputs', 'outputs', 'id', 'run']
             }
         },
         inputs: {

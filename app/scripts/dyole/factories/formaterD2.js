@@ -140,7 +140,7 @@ angular.module('registryApp.dyole')
 
                 return model.id;
             },
-            
+
             _checkIdUniqe: function (id, array) {
                 return _.find(array, function (item) {
                     return item.id === id;
@@ -165,7 +165,7 @@ angular.module('registryApp.dyole')
                         id = appId,
                         step = {
                             'id': id,
-                            impl: schema.ref || schema,
+                            run: schema.ref || schema,
                             inputs: [],
                             outputs: []
                         };
@@ -179,9 +179,9 @@ angular.module('registryApp.dyole')
                         delete schema.ref;
                     }
 
-                    if (step.impl.appId) {
-                        step.impl.id = step.impl.appId;
-                        delete step.impl.appId;
+                    if (step.run.appId) {
+                        step.run.id = step.run.appId;
+                        delete step.run.appId;
                     }
 
                     if (!_common.checkSystem(schema)) {
@@ -458,20 +458,20 @@ angular.module('registryApp.dyole')
                 _.forEach(steps, function (step) {
                     var stepId = step['id'], ref;
 
-                    if (typeof step.impl === 'string') {
-                        ref = step.impl;
-                        step.impl = resolveApp(step.impl);
-                        step.impl.ref = ref;
+                    if (typeof step.run === 'string') {
+                        ref = step.run;
+                        step.run = resolveApp(step.run);
+                        step.run.ref = ref;
                     }
 
-                    step.impl.appId = step.impl.id;
-                    step.impl.id = stepId;
+                    step.run.appId = step.run.id;
+                    step.run.id = stepId;
 
                     if (typeof step.scatter !== 'undefined' && typeof step.scatter=== 'string') {
-                        step.impl.scatter = '#' + step.scatter.split(Const.generalSeparator)[1];
+                        step.run.scatter = '#' + step.scatter.split(Const.generalSeparator)[1];
                     }
 
-                    schemas[stepId] = step.impl;
+                    schemas[stepId] = step.run;
 
                     // Check if values are set on step inputs
                     // and attach them to values object

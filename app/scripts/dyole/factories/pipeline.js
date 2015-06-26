@@ -75,7 +75,7 @@ angular.module('registryApp.dyole')
                 this._attachEvents();
                 this._generateNodes();
                 this._generateConnections();
-                
+
                 this._drawScrollbars();
             };
 
@@ -173,7 +173,7 @@ angular.module('registryApp.dyole')
                         _self.createConnection(model);
 
                     });
-                    
+
                     this.Event.subscribe('connection:destroyed', function (model) {
                         var endNode = _self.nodes[model.end_node],
                             startNode = _self.nodes[model.start_node];
@@ -749,7 +749,7 @@ angular.module('registryApp.dyole')
 
                 /**
                  * Transform workflow model
-                 * 
+                 *
                  * @param nodeModel
                  * @returns {*}
                  * @private
@@ -1023,7 +1023,7 @@ angular.module('registryApp.dyole')
                         model.x = x / zoom;
                         model.y = y / zoom;
 
-                        // Cache App id to place it in step.impl
+                        // Cache App id to place it in step.run
                         // and use generated id from label
                         if (model.id) {
                             model.appId = model.id;
@@ -1162,7 +1162,7 @@ angular.module('registryApp.dyole')
 
                 /**
                  * Zooming finished callback
-                 * 
+                 *
                  * @private
                  */
                 _zoomingFinish: function () {
