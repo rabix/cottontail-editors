@@ -14,7 +14,7 @@ angular.module('registryApp.cliche')
         $scope.view.mode = options.mode;
 
         if (_.isUndefined($scope.view.property)) {
-            $scope.view.property = {separator: ' '};
+            $scope.view.property = {separate: true};
         }
 
         /**
@@ -44,7 +44,7 @@ angular.module('registryApp.cliche')
          * @param {*} value
          */
         $scope.updateArgument = function (value) {
-            $scope.view.property.argValue = value;
+            $scope.view.property.valueFrom = value;
         };
 
         /**

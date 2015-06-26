@@ -80,7 +80,7 @@ angular.module('registryApp.cliche')
                 delete transformed.baseCommand;
                 delete transformed.stdin;
                 delete transformed.stdout;
-                delete transformed.argAdapters;
+                delete transformed.arguments;
                 // requirements
                 delete transformed.requirements;
 
@@ -93,12 +93,12 @@ angular.module('registryApp.cliche')
                 if (angular.isUndefined(transformed.baseCommand) ||
                     angular.isUndefined(transformed.stdin) ||
                     angular.isUndefined(transformed.stdout) ||
-                    angular.isUndefined(transformed.argAdapters)) {
+                    angular.isUndefined(transformed.arguments)) {
 
                     transformed.baseCommand = angular.copy(rawTool.baseCommand);
                     transformed.stdin = angular.copy(rawTool.stdin);
                     transformed.stdout = angular.copy(rawTool.stdout);
-                    transformed.argAdapters = angular.copy(rawTool.argAdapters);
+                    transformed.arguments = angular.copy(rawTool.arguments);
                 }
                 if (angular.isUndefined(transformed.requirements)) {
                     transformed.requirements = angular.copy(rawTool.requirements);
@@ -362,7 +362,7 @@ angular.module('registryApp.cliche')
             if (mode === 'edit') {
                 deferred.resolve();
             } else if (mode === 'add') {
-                toolJSON.argAdapters.push(arg);
+                toolJSON.arguments.push(arg);
                 deferred.resolve();
             } else {
                 deferred.reject('Unknown mode "' + mode + '"');
@@ -397,7 +397,7 @@ angular.module('registryApp.cliche')
          */
         var deleteArg = function(index) {
 
-            toolJSON.argAdapters.splice(index, 1);
+            toolJSON.arguments.splice(index, 1);
 
         };
 
@@ -474,24 +474,13 @@ angular.module('registryApp.cliche')
         };
 
         /**
-         * Parse separator for the input value
+         * Parse separation for the input value
          *
-         * @param {string} prefix
-         * @param {string} separator
+         * @param {boolean} separate
          * @returns {string} output
          */
-        var parseSeparator = function(prefix, separator) {
-
-            var output = '';
-
-            if (_.isUndefined(separator) || separator === ' ') {
-                output = (prefix === '') ? '' : ' ';
-            } else {
-                output = (prefix === '') ? '' : separator;
-            }
-
-            return output;
-
+        var parseSeparation = function(separate) {
+            return separate ? ' ' : '';
         };
 
         /**
@@ -532,7 +521,8 @@ angular.module('registryApp.cliche')
 
                     /* generate command */
                     _.each(props, function(prop) {
-                        command.push(prop.prefix + prop.separator + prop.val);
+                        var separation = parseSeparation(prop.separate);
+                        command.push(prop.prefix + separation + prop.val);
                     });
 
                     return command.join(' ');
@@ -577,17 +567,17 @@ angular.module('registryApp.cliche')
          * @param {object} property
          * @param {object} input
          * @param {string} prefix
-         * @param {string} separator
          * @param {string} itemSeparator
          * @returns {string}
          */
-        var parseArrayInput = function(property, input, prefix, separator, itemSeparator) {
+        var parseArrayInput = function(property, input, prefix, itemSeparator) {
 
             var promises = [],
                 joiner = ' ',
                 schema = getSchema('input', property, 'tool', false),
                 type = parseType(schema),
-                items = getItemsRef(type, schema);
+                items = getItemsRef(type, schema),
+                separator = parseSeparation(property.separate);
 
             if (items && items.type !== 'record') {
                 joiner = _.isNull(itemSeparator) ? (' ' + prefix + separator) : itemSeparator;
@@ -605,7 +595,7 @@ angular.module('registryApp.cliche')
                             deferred.reject(error);
                         });
                 } else {
-                    applyTransform(property.inputBinding.argValue, (_.isObject(val) ? val.path : val), true)
+                    applyTransform(property.inputBinding.valueFrom, (_.isObject(val) ? val.path : val), true)
                         .then(function (result) {
                             deferred.resolve(result);
                         }, function (error) {
@@ -661,7 +651,6 @@ angular.module('registryApp.cliche')
                     type = parseType(schema),
                     items = getItemsRef(type, schema),
                     prefix = property.inputBinding.prefix || '',
-                    separator = parseSeparator(prefix, property.inputBinding.separator),
                     itemSeparator = parseItemSeparator(property.inputBinding.itemSeparator),
 
                     prop = _.extend({
@@ -670,7 +659,7 @@ angular.module('registryApp.cliche')
                         val: '',
                         position: property.inputBinding.position || 0,
                         prefix: prefix,
-                        separator: separator
+                        separate: property.inputBinding.separate || false
                     }, property.inputBinding);
 
                 // check that a value has been set inside the job, if not return
@@ -679,7 +668,7 @@ angular.module('registryApp.cliche')
                 switch (type) {
                 case 'array':
                     /* if input is ARRAY */
-                    parseArrayInput(property, inputs[key], prefix, separator, itemSeparator)
+                    parseArrayInput(property, inputs[key], prefix, itemSeparator)
                         .then(function (result) {
                             prop.val = result;
                             deferred.resolve(prop);
@@ -689,7 +678,7 @@ angular.module('registryApp.cliche')
                     break;
                 case ('File' || 'file'):
                     /* if input is FILE */
-                    applyTransform(property.inputBinding.argValue, inputs[key].path || '', true)
+                    applyTransform(property.inputBinding.valueFrom, inputs[key].path || '', true)
                         .then(function (result) {
                             prop.val = result;
                             deferred.resolve(prop);
@@ -709,10 +698,10 @@ angular.module('registryApp.cliche')
                     break;
                 case 'boolean':
                     /* if input is BOOLEAN */
-                    if (property.inputBinding.argValue) {
+                    if (property.inputBinding.valueFrom) {
                         //TODO: this is hack, if bool type has expression defined then it works in the same way as (for example) string input type
                         prop.type = 'string';
-                        applyTransform(property.inputBinding.argValue, inputs[key], true)
+                        applyTransform(property.inputBinding.valueFrom, inputs[key], true)
                             .then(function (result) {
                                 prop.val = result;
                                 deferred.resolve(prop);
@@ -729,7 +718,7 @@ angular.module('registryApp.cliche')
                     break;
                 default:
                     /* if input is anything else (STRING, ENUM, INT, FLOAT) */
-                    applyTransform(property.inputBinding.argValue, inputs[key], true)
+                    applyTransform(property.inputBinding.valueFrom, inputs[key], true)
                         .then(function (result) {
                             prop.val = result;
                             deferred.resolve(prop);
@@ -768,13 +757,13 @@ angular.module('registryApp.cliche')
 
                     var argsPromises = [];
 
-                    _.each(toolJSON.argAdapters, function(arg, key) {
+                    _.each(toolJSON.arguments, function(arg, key) {
 
                         var deferred = $q.defer(),
                             prefix = arg.prefix || '',
                             prop = _.merge({key: 'arg' + key, position: arg.position, prefix: prefix, val: ''}, arg);
 
-                        applyTransform(arg.argValue, arg.argValue)
+                        applyTransform(arg.valueFrom, arg.valueFrom)
                             .then(function (result) {
                                 prop.val = result;
                                 deferred.resolve(prop);
@@ -799,12 +788,12 @@ angular.module('registryApp.cliche')
 
                     _.each(joined, function(arg) {
 
-                        var separator = parseSeparator(arg.prefix, arg.separator),
+                        var separate = parseSeparation(arg.separate),
                             value = _.isUndefined(arg.val) ? '' : arg.val,
                             cmd;
 
                         if (!(arg.type && arg.type !== 'boolean' && (arg.val === '' || _.isNull(arg.val) || _.isUndefined(arg.val)))) {
-                            cmd = arg.prefix + separator + value;
+                            cmd = arg.prefix + separate + value;
 
                             if (!_.isEmpty(cmd)) {
                                 command.push(cmd);
@@ -923,7 +912,7 @@ angular.module('registryApp.cliche')
             var stripParams = function(prop, itemType) {
                 console.trace();
 
-                var toStrip = ['prefix', 'separator', 'itemSeparator', 'argValue'];
+                var toStrip = ['prefix', 'separator', 'itemSeparator', 'valueFrom'];
 
                 if (itemType === 'record' && prop.inputBinding) {
 
@@ -970,7 +959,7 @@ angular.module('registryApp.cliche')
 
                     // _.isEmpty returns true for number values, which we don't want
                     // if there is a number value, then the prop is not empty
-                    if (_.isEmpty(tmp[adapter][key]) && !_.isNumber(tmp[adapter][key])) {
+                    if (_.isEmpty(tmp[adapter][key]) && !_.isNumber(tmp[adapter][key]) && !_.isBoolean(tmp[adapter][key])) {
                         delete tmp[adapter][key];
                     }
                 });

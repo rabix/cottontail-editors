@@ -300,7 +300,7 @@ angular.module('registryApp.cliche')
                 delete json.baseCommand;
                 delete json.stdin;
                 delete json.stdout;
-                delete json.argAdapters;
+                delete json.arguments;
                 delete json.requirements;
                 delete json.transform;
 
@@ -481,7 +481,7 @@ angular.module('registryApp.cliche')
             });
 
         };
-        
+
 
         /**
          * Toggle console visibility
