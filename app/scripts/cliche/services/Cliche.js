@@ -659,7 +659,7 @@ angular.module('registryApp.cliche')
                         val: '',
                         position: property.inputBinding.position || 0,
                         prefix: prefix,
-                        separate: property.inputBinding.separate
+                        separate: property.inputBinding.separate || false
                     }, property.inputBinding);
 
                 // check that a value has been set inside the job, if not return
