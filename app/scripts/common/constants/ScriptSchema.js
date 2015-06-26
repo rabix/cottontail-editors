@@ -123,7 +123,7 @@ var Schema = {
                 position: {
                     type: 'number'
                 },
-                argValue: {
+                valueFrom: {
                     oneOf: [
                         {
                             type: ['string', 'number']
@@ -144,8 +144,8 @@ var Schema = {
                         }
                     ]
                 },
-                separator: {
-                    type: 'string'
+                separate: {
+                    type: 'boolean'
                 },
                 prefix: {
                     type: 'string'

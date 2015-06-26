@@ -17,9 +17,9 @@
             <div class="value">
                 <div class="value">
                     <i class="fa fa-warning error" ng-if="view.exprError" title="{{ view.exprError }}"></i>
-                    {{ prop.argValue.script ? prop.argValue.script : prop.argValue }}
+                    {{ prop.valueFrom.script ? prop.valueFrom.script : prop.valueFrom }}
                 </div>
-                <i ng-if="!prop.argValue">Not defined</i>
+                <i ng-if="!prop.valueFrom">Not defined</i>
             </div>
         </div>
 
@@ -32,9 +32,9 @@
         </div>
 
         <div class="col-md-4 box-col">
-            <strong class="key">Separator:</strong>
+            <strong class="key">Separate:</strong>
             <div class="value">
-                <separator-info type="item" model="prop.separator"></separator-info>
+              <span>{{ prop.separate }}</span>
             </div>
         </div>
 
