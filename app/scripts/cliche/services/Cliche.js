@@ -970,7 +970,7 @@ angular.module('registryApp.cliche')
 
                     // _.isEmpty returns true for number values, which we don't want
                     // if there is a number value, then the prop is not empty
-                    if (_.isEmpty(tmp[adapter][key]) && !_.isNumber(tmp[adapter][key])) {
+                    if (_.isEmpty(tmp[adapter][key]) && !_.isNumber(tmp[adapter][key]) && !_.isBoolean(tmp[adapter][key])) {
                         delete tmp[adapter][key];
                     }
                 });
