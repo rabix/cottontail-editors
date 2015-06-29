@@ -23,7 +23,7 @@ angular.module('registryApp.cliche')
                 $scope.view = {};
 
                 $scope.view.map = Separator.getMap();
-
+                
                 option = _.find($scope.view.map[$scope.type], {value: $scope.model});
 
                 $scope.view.separator = option ? option.name : 'space';

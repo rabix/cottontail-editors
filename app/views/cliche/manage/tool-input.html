@@ -107,11 +107,14 @@
             </div>
             <!-- END Prefix -->
 
-            <div class="col-md-2">
-                <div class="form-group mg-top-20">
-                  <label class="checkbox inline">
-                    <input type="checkbox" ng-model="view.property.inputBinding.separate" is-disabled="view.disabled" />Separate prefix and value on command line
-                  </label>
+            <div class="col-md-3">
+                <div class="form-group">
+
+                    <label class="control-label">
+                        Separate prefix with
+                    </label>
+
+                    <separator type="list" model="view.property.inputBinding.separate" is-disabled="view.disabled"></separator>
                 </div>
             </div>
             <!-- END Separator -->
@@ -119,7 +122,7 @@
             <div ng-if="view.type === 'array'" class="col-md-2">
                 <div class="form-group">
                     <label class="control-label">Item Separator</label>
-                    <separator type="list" model="view.property.inputBinding.itemSeparator" is-disabled="view.disabled"></separator>
+                    <separator type="item" model="view.property.inputBinding.itemSeparator" is-disabled="view.disabled"></separator>
                 </div>
             </div>
             <!-- END Item Separator -->
