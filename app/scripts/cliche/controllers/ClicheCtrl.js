@@ -522,7 +522,7 @@ angular.module('registryApp.cliche')
 
             if (_.isObject(transform)) {
 
-                SandBox.evaluate(transform.value, {})
+                SandBox.evaluate(transform.script, {})
                     .then(function (result) {
                         $scope.view.job.allocatedResources[reqMap[key]] = result;
                     });
