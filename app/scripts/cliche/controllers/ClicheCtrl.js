@@ -120,6 +120,8 @@ angular.module('registryApp.cliche')
                 setUpCategories();
 
                 $scope.toggleConsole();
+                
+                console.log('reqCpuRequirement',$scope.view.reqCpuRequirement);
 
             });
 

@@ -232,7 +232,7 @@ angular.module('registryApp.dyole')
                                 });
 
                                 if (typeof inp !== 'undefined') {
-                                    inp.value = val;
+                                    inp.default = val;
                                 } else {
                                     console.error('Invalid input id to attach values to', input_id);
                                 }
@@ -476,11 +476,11 @@ angular.module('registryApp.dyole')
                     // Check if values are set on step inputs
                     // and attach them to values object
                     _.forEach(step.inputs, function (input) {
-                        if (input.value) {
+                        if (input.default) {
                             var input_id = '#' + input['id'].split(Const.generalSeparator)[1],
                                 obj = values[stepId] = {};
 
-                            obj[input_id] = input.value;
+                            obj[input_id] = input.default;
                         }
                     });
                 });
