@@ -21,6 +21,7 @@ angular.module('registryApp.common')
                 selfType: '=?',
                 selfItemType: '=?',
                 onlyExpr: '@',
+                tooltipMsg: '@',
                 handleItemUpdate: '&',
                 handleItemBlur: '&'
             },
@@ -32,6 +33,7 @@ angular.module('registryApp.common')
                 $scope.view.type = $scope.type || 'string';
 
                 $scope.view.exprError = '';
+                $scope.view.tooltipMsg = $scope.tooltipMsg || '';
 
                 /**
                  * Determine if model is object with defined transformation or literal
@@ -164,7 +166,9 @@ angular.module('registryApp.common')
             }],
             link: function(scope, element) {
                 var el = angular.element(element);
-                el.find('input').focus();
+                // TODO: Check out this, bootstrap tooltip messing with $digest and breaking if you manual trigger
+                // focus or anything
+//                el.find('input').focus();
 
                 function runHandler(event) {
 
@@ -179,6 +183,7 @@ angular.module('registryApp.common')
                 if (!_.isUndefined(scope.handleItemBlur) && scope.view.mode === 'literal') {
 //                    el.find('input').on('blur keypress', runHandler);
 
+                    // TODO: See why this needs to trigger?
                     runHandler({type: 'init'});
 
                     scope.$on('$destroy', function() {

@@ -25,8 +25,13 @@
             </div>
 
             <div class="col-md-3">
-              <div class="form-group mg-top-20">
-                  <label><input type="checkbox" ng-model="view.property.separate" ng-disabled="view.disabled"/>Separate prefix and value on command line</label>
+              <div class="form-group">
+                  <label class="control-label">
+                      Separate prefix with
+                  </label>
+
+                  <separator type="list" model="view.property.inputBinding.separate" is-disabled="view.disabled"></separator>
+
               </div>
             </div>
 
