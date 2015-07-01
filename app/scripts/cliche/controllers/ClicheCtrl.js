@@ -110,7 +110,13 @@ angular.module('registryApp.cliche')
                     }
 
                     Cliche.setTool(tool);
-                    Cliche.setJob($scope.view.revision.job ? JSON.parse($scope.view.revision.job) : null);
+                    var job = $scope.view.revision.job ? JSON.parse($scope.view.revision.job) : null;
+
+                    if (!job && typeof tool['sbg:job'] === 'object') {
+                        job = tool['sbg:job'];
+                    }
+
+                    Cliche.setJob(job);
                 }
 
                 $scope.view.user = result[1].user;
@@ -655,6 +661,9 @@ angular.module('registryApp.cliche')
             $scope.view.loading = true;
 
             var tool = Cliche.getTool();
+            var job = Cliche.getJob();
+
+            tool['sbg:job'] = job;
 
             App.update(tool, $scope.view.type)
                 .then(function(result) {
