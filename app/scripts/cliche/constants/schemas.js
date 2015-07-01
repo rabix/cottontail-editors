@@ -42,6 +42,8 @@ angular.module('registryApp.cliche')
         baseCommand: [''],
         stdin: '',
         stdout: '',
+        successCodes: [],
+        temporaryFailCodes: [],
         arguments: []
     })
     .constant('rawTransform', {

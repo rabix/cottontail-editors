@@ -291,6 +291,9 @@ var Schema = {
         stdOut: {
             type: ['string', 'object']
         },
+        successCodes: {
+            type: 'array'
+        },
         arguments: {
             type: 'array',
             items: {

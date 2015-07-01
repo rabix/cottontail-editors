@@ -289,6 +289,9 @@ var Schema = {
         engine: {
             type: 'string'
         },
+        successCodes: {
+            type: 'array'
+        },
         script: {
             type: 'string'
         }

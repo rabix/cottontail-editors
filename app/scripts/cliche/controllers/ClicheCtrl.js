@@ -123,6 +123,7 @@ angular.module('registryApp.cliche')
 
                 setUpCliche();
                 prepareRequirements();
+                prepareStatusCodes();
                 setUpCategories();
 
                 $scope.toggleConsole();
@@ -222,6 +223,16 @@ angular.module('registryApp.cliche')
             $scope.view.reqCpuRequirement = _.find($scope.view.tool.requirements, {'class': 'CPURequirement'});
             $scope.view.reqMemRequirement = _.find($scope.view.tool.requirements, {'class': 'MemRequirement'});
 
+        };
+        
+        var prepareStatusCodes = function () {
+            if (typeof $scope.view.tool.successCodes === 'undefined') {
+                $scope.view.tool.successCodes = [];
+            }
+
+            if (typeof $scope.view.tool.temporaryFailCodes === 'undefined') {
+                $scope.view.tool.temporaryFailCodes = [];
+            }
         };
 
         /**
@@ -566,6 +577,29 @@ angular.module('registryApp.cliche')
             $scope.view.tool.baseCommand.push('');
 
         };
+        
+        $scope.addStatusCode = function (codeType) {
+
+            if ( _.isArray($scope.view.tool[codeType]) ) {
+                $scope.view.tool[codeType].push(0);
+            } else {
+                console.error('Invalid status code key passed');
+            }
+
+        };
+
+        /**
+         * Remove item from the successCodes
+         *
+         * @param {integer} index
+         * @returns {boolean}
+         */
+        $scope.removeSuccessCode = function (index) {
+
+            if ($scope.view.tool.successCodes.length === 1) { return false; }
+
+            $scope.view.tool.successCodes.splice(index, 1);
+        };
 
         /**
          * Remove item from the baseCommand
@@ -740,6 +774,7 @@ angular.module('registryApp.cliche')
             Cliche.setTool($scope.view.tool);
             setUpCliche();
             prepareRequirements();
+            prepareStatusCodes();
             setUpCategories();
             Cliche.generateCommand()
                 .then(outputCommand, outputError);

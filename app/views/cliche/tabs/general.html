@@ -82,6 +82,62 @@
                     </div>
                 </div>
                 <!-- # StdIn and StdOut-->
+
+                <div class="row-margin">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Success Codes</label>
+
+                            <div class="enum-list-wrap">
+
+                                    <a tooltip="{{ ::help.cliche.general.successCodes }}" href ng-click="addStatusCode('successCodes')" class="btn btn-default add-enum-item"><i class="fa fa-plus"></i></a>
+                                    <div class="enum-list-container">
+                                        <ul class="enum-list" ng-class="{wide: view.tool.successCodes.length === 1}">
+                                            <li ng-repeat="successCode in view.tool.successCodes track by $index">
+                                                <div class="enum-field form-group form-group-file ">
+                                                    <div class="input-group status-codes">
+                                                        <input class="form-control" type="number" ng-model="view.tool.successCodes[$index]" />
+                                                    </div>
+                                                </div>
+                                                <a href ng-hide="view.tool.successCodes.length === 1" class="fa fa-remove remove-btn" ng-click="removeSuccessCode($index)"></a>
+                                            </li>
+                                        </ul>
+
+                                        <p class="alert alert-info" ng-if="view.tool.successCodes | isEmpty">Click the plus button to add</p>
+
+                                    </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Temporary Fail Codes</label>
+
+                            <div class="enum-list-wrap">
+
+                                <a tooltip="{{ ::help.cliche.general.temporaryFailCodes }}" href ng-click="addStatusCode('temporaryFailCodes')" class="btn btn-default add-enum-item"><i class="fa fa-plus"></i></a>
+                                <div class="enum-list-container">
+                                    <ul class="enum-list" ng-class="{wide: view.tool.successCodes.length === 1}">
+                                        <li ng-repeat="temporaryFailCode in view.tool.temporaryFailCodes track by $index">
+                                            <div class="enum-field form-group form-group-file">
+                                                <div class="input-group status-codes">
+                                                    <input type="number" ng-model="view.tool.temporaryFailCodes[$index]" />
+                                                </div>
+                                            </div>
+                                            <a href ng-hide="view.tool.temporaryFailCodes.length === 1" class="fa fa-remove remove-btn" ng-click="removeSuccessCode($index)"></a>
+                                        </li>
+                                    </ul>
+
+                                    <p class="alert alert-info" ng-if="view.tool.temporaryFailCodes | isEmpty">Click the plus button to add</p>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
 
             <div class="section">
