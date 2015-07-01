@@ -12,7 +12,8 @@ angular.module('registryApp.cliche')
         var key = options.key || 'name';
         var idObj = {n: '', o: ''};
         var cacheAdapter = {
-            'sbg:cmdInclude': 'true'
+            'sbg:cmdInclude': 'true',
+            separate: true
         };
 
         $scope.view = {};
