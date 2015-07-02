@@ -584,6 +584,7 @@ angular.module('registryApp.cliche')
                 $scope.view.tool[codeType].push(0);
             } else {
                 console.error('Invalid status code key passed');
+                return false;
             }
 
         };
@@ -591,14 +592,20 @@ angular.module('registryApp.cliche')
         /**
          * Remove item from the successCodes
          *
+         * @param {string} type
          * @param {integer} index
          * @returns {boolean}
          */
-        $scope.removeSuccessCode = function (index) {
+        $scope.removeStatusCode = function (type,  index) {
 
-            if ($scope.view.tool.successCodes.length === 1) { return false; }
+            if ( !_.isArray($scope.view.tool[type]) ) {
+                console.error('Invalid status code key passed');
+                return false;
+            }
 
-            $scope.view.tool.successCodes.splice(index, 1);
+            if ($scope.view.tool[type].length === 1) { return false; }
+
+            $scope.view.tool[type].splice(index, 1);
         };
 
         /**

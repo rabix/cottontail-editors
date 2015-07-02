@@ -99,11 +99,11 @@
                                                         <input class="form-control" type="number" ng-model="view.tool.successCodes[$index]" />
                                                     </div>
                                                 </div>
-                                                <a href ng-hide="view.tool.successCodes.length === 1" class="fa fa-remove remove-btn" ng-click="removeSuccessCode($index)"></a>
+                                                <a href ng-hide="view.tool.successCodes.length === 1" class="fa fa-remove remove-btn" ng-click="removeStatusCode('successCodes', $index)"></a>
                                             </li>
                                         </ul>
 
-                                        <p class="alert alert-info" ng-if="view.tool.successCodes | isEmpty">Click the plus button to add</p>
+                                        <p class="alert alert-info" ng-if="view.tool.successCodes | isEmpty">Click the plus button to add codes</p>
 
                                     </div>
 
@@ -122,14 +122,14 @@
                                         <li ng-repeat="temporaryFailCode in view.tool.temporaryFailCodes track by $index">
                                             <div class="enum-field form-group form-group-file">
                                                 <div class="input-group status-codes">
-                                                    <input type="number" ng-model="view.tool.temporaryFailCodes[$index]" />
+                                                    <input class="form-control" type="number" ng-model="view.tool.temporaryFailCodes[$index]" />
                                                 </div>
                                             </div>
-                                            <a href ng-hide="view.tool.temporaryFailCodes.length === 1" class="fa fa-remove remove-btn" ng-click="removeSuccessCode($index)"></a>
+                                            <a href ng-hide="view.tool.temporaryFailCodes.length === 1" class="fa fa-remove remove-btn" ng-click="removeStatusCode('temporaryFailCodes', $index)"></a>
                                         </li>
                                     </ul>
 
-                                    <p class="alert alert-info" ng-if="view.tool.temporaryFailCodes | isEmpty">Click the plus button to add</p>
+                                    <p class="alert alert-info" ng-if="view.tool.temporaryFailCodes | isEmpty">Click the plus button to add codes</p>
 
                                 </div>
 
