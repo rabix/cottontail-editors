@@ -18,7 +18,7 @@
                 <div class="form-group" ng-class="{'has-error': (view.form.name.$invalid && view.form.$dirty)}">
                     <label class="control-label" for="name">{{ view.key === 'id' ? 'ID' : 'Name' }}</label>
                     <input type="text" class="form-control" id="name" name="name" ng-model="view.name" is-valid-name required>
-                    <span class="help-block">Allowed characters are alphanumerics, _, and -</span>
+                    <span class="help-block">Allowed characters are alphanumerics and _</span>
                 </div>
             </div>
             <!-- END Name -->
@@ -84,8 +84,7 @@
 
         <legend class="legend-small">
             <label class="checkbox inline">
-                <input type="checkbox" ng-model="view.adapter" ng-change="toggleAdapter()"> Adapter
-                <small>(include in command line)</small>
+                <input type="checkbox" ng-model="view.adapter" ng-change="toggleAdapter()"> Include in command line
             </label>
         </legend>
 
@@ -137,7 +136,7 @@
 
         </div>
 
-        <p ng-if="!view.property.inputBinding" class="alert alert-info">Adapter is not active and input won't be displayed in the console</p>
+        <p ng-if="!view.property.inputBinding" class="alert alert-info">This input will not be automatically included in the generated command line.</p>
 
         <div class="form-group main-actions">
             <a href class="btn btn-warning" ng-click="cancel()">Cancel</a>

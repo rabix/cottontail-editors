@@ -27,7 +27,9 @@ angular.module('registryApp.common').constant('HelpMessages', {
             addInput: 'Add new input port.'
 		},
 		outputs: {
-			properties: ''
+			properties: '',
+            metadata: '',
+            secondaryFiles: ''
 		},
 		metadata: {
 			metadata: ''
