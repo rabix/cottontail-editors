@@ -603,8 +603,6 @@ angular.module('registryApp.cliche')
                 return false;
             }
 
-            if ($scope.view.tool[type].length === 1) { return false; }
-
             $scope.view.tool[type].splice(index, 1);
         };
 

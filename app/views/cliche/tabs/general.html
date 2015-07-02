@@ -99,7 +99,7 @@
                                                         <input class="form-control" type="number" ng-model="view.tool.successCodes[$index]" />
                                                     </div>
                                                 </div>
-                                                <a href ng-hide="view.tool.successCodes.length === 1" class="fa fa-remove remove-btn" ng-click="removeStatusCode('successCodes', $index)"></a>
+                                                <a href class="fa fa-remove remove-btn" ng-click="removeStatusCode('successCodes', $index)"></a>
                                             </li>
                                         </ul>
 
@@ -125,7 +125,7 @@
                                                     <input class="form-control" type="number" ng-model="view.tool.temporaryFailCodes[$index]" />
                                                 </div>
                                             </div>
-                                            <a href ng-hide="view.tool.temporaryFailCodes.length === 1" class="fa fa-remove remove-btn" ng-click="removeStatusCode('temporaryFailCodes', $index)"></a>
+                                            <a href class="fa fa-remove remove-btn" ng-click="removeStatusCode('temporaryFailCodes', $index)"></a>
                                         </li>
                                     </ul>
 
