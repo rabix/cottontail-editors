@@ -92,7 +92,7 @@
 
                                     <a tooltip="{{ ::help.cliche.general.successCodes }}" href ng-click="addStatusCode('successCodes')" class="btn btn-default add-enum-item"><i class="fa fa-plus"></i></a>
                                     <div class="enum-list-container">
-                                        <ul class="enum-list" ng-class="{wide: view.tool.successCodes.length === 1}">
+                                        <ul class="enum-list">
                                             <li ng-repeat="successCode in view.tool.successCodes track by $index">
                                                 <div class="enum-field form-group form-group-file ">
                                                     <div class="input-group status-codes">
@@ -118,7 +118,7 @@
 
                                 <a tooltip="{{ ::help.cliche.general.temporaryFailCodes }}" href ng-click="addStatusCode('temporaryFailCodes')" class="btn btn-default add-enum-item"><i class="fa fa-plus"></i></a>
                                 <div class="enum-list-container">
-                                    <ul class="enum-list" ng-class="{wide: view.tool.successCodes.length === 1}">
+                                    <ul class="enum-list" >
                                         <li ng-repeat="temporaryFailCode in view.tool.temporaryFailCodes track by $index">
                                             <div class="enum-field form-group form-group-file">
                                                 <div class="input-group status-codes">
