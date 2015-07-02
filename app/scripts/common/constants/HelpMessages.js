@@ -16,7 +16,8 @@ angular.module('registryApp.common').constant('HelpMessages', {
             memory: 'Amount of RAM (in MB) required by the tool.',
             baseCMD: 'Enter name of the executable and (optionally) sub-command and fixed arguments (e.g. “bamtools sort -bS”).',
             addBaseCMD: 'Add base command.',
-            successCodes: 'Add success code',
+            successCodes: 'Array of success exit status codes',
+            tempFailCodes: 'Array of temporary fail exit status codes',
             stdin: 'If a tool can only take input on stdin, set an expression (</>) here to reference the input file (e.g. $job.inputs.reads.path).',
             stdout: 'Enter file name to redirect standard output into. To construct a name based on inputs, use an expression (</>).',
             addArgument: 'Describe a command line argument that doesn’t map directly to any of the tool’s inputs (e.g. —num-threads should have the “value” field set to $job.allocatedResources.cpu expression).'

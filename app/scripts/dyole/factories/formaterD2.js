@@ -478,7 +478,11 @@ angular.module('registryApp.dyole')
                     _.forEach(step.inputs, function (input) {
                         if (input.default) {
                             var input_id = '#' + input['id'].split(Const.generalSeparator)[1],
-                                obj = values[stepId] = {};
+                                obj;
+
+                            values[stepId] = values[stepId] || {};
+
+                            obj =  values[stepId];
 
                             obj[input_id] = input.default;
                         }

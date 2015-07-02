@@ -265,7 +265,7 @@ angular.module('registryApp.dyole')
 
                 });
 
-                return inputs.length === 0 ? this.model.inputs : inputs;
+                return inputs;
             },
 
             _initTerminals: function () {
