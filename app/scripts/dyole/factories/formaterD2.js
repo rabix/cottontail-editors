@@ -536,7 +536,8 @@ angular.module('registryApp.dyole')
                         'repo_owner': 'rabix',
                         'repo_name': 'system',
                         'type': type,
-                        'name': schema.label
+                        'name': schema.label,
+                        'label': schema.label
                     },
                     'inputs': [],
                     'outputs': []
