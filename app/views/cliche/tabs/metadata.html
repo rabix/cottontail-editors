@@ -9,33 +9,33 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="label" class="control-label">Label</label>
-                    <input class="form-control" ng-model="view.tool.label" id="label" name="label" type="text"/>
+                    <input tooltip="{{ ::help.cliche.metadata.label }}" tooltip-trigger="focus" class="form-control" ng-model="view.tool.label" id="label" name="label" type="text"/>
                 </div>
 
                 <div class="form-group" ng-show="view.type !== 'script'">
                     <label for="toolkit" class="control-label">Toolkit</label>
-                    <input class="form-control" ng-model="view.tool['sbg:toolkit']" id="toolkit" type="text"/>
+                    <input tooltip="{{ ::help.cliche.metadata.toolkit }}" tooltip-trigger="focus" class="form-control" ng-model="view.tool['sbg:toolkit']" id="toolkit" type="text"/>
                 </div>
 
                 <div class="form-group" ng-show="view.type !== 'script'">
                     <label class="control-label" for="toolkit-version">Toolkit Version</label>
-                    <input class="form-control" ng-model="view.tool['sbg:toolkitVersion']" id="toolkit-version" type="text"/>
+                    <input tooltip="{{ ::help.cliche.metadata.toolkitVersion }}" tooltip-trigger="focus" class="form-control" ng-model="view.tool['sbg:toolkitVersion']" id="toolkit-version" type="text"/>
                 </div>
 
                 <div class="form-group" ng-show="view.type !== 'script'">
                     <label for="homepage" class="control-label">Homepage</label>
                     <!-- TODO: Add validation for url -->
-                    <input class="form-control" ng-model="view.tool['sbg:homepage']"  id="homepage" type="text"/>
+                    <input tooltip="{{ ::help.cliche.metadata.homepage }}" tooltip-trigger="focus" class="form-control" ng-model="view.tool['sbg:homepage']"  id="homepage" type="text"/>
                 </div>
 
                 <div class="form-group">
-                    <label for="category" class="third-class">Categories</label>
+                    <label for="category" class="third-class">Categories <help-message message="help.cliche.metadata.categories"></help-message></label>
                     <tags-input id="category" class="category-tags" ng-model="view.categories" placeholder="Add a category" on-tag-added="updateCategories($tag)" on-tag-removed="updateCategories($tag)"></tags-input>
                 </div>
             </div>
 
             <div class="col-md-6">
-                <label for="description" class="control-label">Description</label>
+                <label class="control-label">Description <help-message message="help.cliche.metadata.description"></help-message></label>
                 <div ng-hide="view.preview" class="form-group">
                     <textarea id="description" class="form-control" ng-model="view.tool.description"  cols="30" rows="15"></textarea>
                 </div>

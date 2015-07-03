@@ -17,7 +17,7 @@
             <div class="col-md-4">
                 <div class="form-group" ng-class="{'has-error': (view.form.name.$invalid && view.form.$dirty)}">
                     <label class="control-label" for="name">{{ view.key === 'id' ? 'ID' : 'Name' }}</label>
-                    <input type="text" class="form-control" id="name" name="name" ng-model="view.name" is-valid-name required>
+                    <input tooltip="{{ ::help.cliche.outputs.outputId }}" tooltip-trigger="focus" type="text" class="form-control" id="name" name="name" ng-model="view.name" is-valid-name required>
                     <span class="help-block">Allowed characters are alphanumerics and _</span>
                 </div>
             </div>
@@ -25,7 +25,7 @@
 
             <div class="col-md-4">
                 <div class="form-group" ng-class="{'has-error': (view.form.type.$invalid && view.form.$dirty)}">
-                    <label class="control-label" for="type">Type</label>
+                    <label class="control-label" >Type <help-message message="help.cliche.outputs.type"></help-message></label>
                     <select class="form-control" id="type" name="type" ng-model="view.type" ng-options="option for option in view.types" required></select>
                 </div>
             </div>
@@ -33,7 +33,7 @@
 
             <div class="col-md-4" ng-if="view.type === 'array'">
                 <div class="form-group">
-                    <label class="control-label" for="item-type" class="control-label">Item Type</label>
+                    <label class="control-label" class="control-label">Item Type <help-message message="help.cliche.outputs.type"></help-message></label>
                     <select class="form-control" id="item-type" name="itemType" ng-model="view.items.type" ng-options="option for option in view.itemTypes"></select>
                 </div>
             </div>
@@ -42,7 +42,7 @@
 
             <div class="meta-list clearfix">
                 <div class="col-md-12">
-                    <label class="control-label">Metadata</label>
+                    <label class="control-label">Metadata <help-message message="help.cliche.outputs.metadata"></help-message></label>
 
                     <div class="form-group meta-group" ng-class="{'has-error': view.newMeta.error}">
                         <div class="input-group">
@@ -75,7 +75,7 @@
             </div>
 
             <div class="col-md-12">
-                <label class="control-label">Secondary Files <small>(enter expression for secondary files or click + to enumerate them)</small></label>
+                <label class="control-label">Secondary Files <small>({{ ::help.cliche.outputs.secondaryFiles}})</small></label>
                 <enum ng-if="!view.isSecondaryFilesExpr" ng-model="view.property.adapter.secondaryFiles" type="'string'"></enum>
             </div>
             <!-- END meta data-->

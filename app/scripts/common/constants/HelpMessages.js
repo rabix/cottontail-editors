@@ -35,9 +35,13 @@ angular.module('registryApp.common').constant('HelpMessages', {
 		},
 		outputs: {
 			properties: 'Define tool output ports.',
+            outputId: 'Unique input id ( required property ).',
             addOutput: 'Add new output port.',
-            metadata: '',
-            secondaryFiles: ''
+            type: 'Represents output type.',
+            itemType: 'Represents array item type.',
+            glob: 'Add glob to find files relative to the output directory.',
+            metadata: 'Add metadata to output.',
+            secondaryFiles: 'click + to add secondary files and set expression or enumerate them'
 		},
         // inputBindings and outputBindings
         bindings: {
@@ -48,7 +52,13 @@ angular.module('registryApp.common').constant('HelpMessages', {
             value: 'Set input value or define expression.'
         },
 		metadata: {
-			metadata: ''
+			metadata: 'Fill additional information about app.',
+            label: 'Set app label',
+            description: 'Set app description using markdown.',
+            toolkit: 'Set app toolkit.',
+            toolkitVersion: 'Set app toolkit version.',
+            homepage: 'App homepage url.',
+            categories: 'Add app relevant it fits in categories by entering name and pressing enter.'
 		},
 		test: {
 			allocatedResources: '',
