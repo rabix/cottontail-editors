@@ -75,7 +75,7 @@
             </div>
 
             <div class="col-md-12">
-                <label class="control-label">Secondary Files <small>({{ ::help.cliche.outputs.secondaryFiles}})</small></label>
+                <label class="control-label">Secondary Files <help-message message="help.cliche.outputs.secondaryFilesInfo"></help-message></label>
                 <enum ng-if="!view.isSecondaryFilesExpr" ng-model="view.property.adapter.secondaryFiles" type="'string'"></enum>
             </div>
             <!-- END meta data-->
