@@ -47,7 +47,7 @@ angular.module('registryApp.common').constant('HelpMessages', {
         // inputBindings and outputBindings
         bindings: {
             position: 'An integer priority of the input on the command line (lower comes first).',
-            prefix: '\n\nPrefix for named arguments (e.g. —input-file or -i). If value is not supplied or false, the prefix will not be added. \n\n If value is True, only prefix will be added.',
+            prefix: 'Prefix for named arguments (e.g. —input-file or -i). If value is not supplied or false, the prefix will not be added. \n\n If value is True, only prefix will be added.',
             separatePrefix: 'Character to use as separator between prefix and value. \n\n “Space” means pass as separate arguments.',
             itemSeparator: 'Separate items in command line.',
             value: 'Enter an expression (</>) to transform the input value before passing it to the command line. \n\n Original value is available as $self variable.'
