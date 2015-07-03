@@ -17,7 +17,7 @@
             <div class="col-md-4">
                 <div class="form-group" ng-class="{'has-error': (view.form.name.$invalid && view.form.$dirty)}">
                     <label class="control-label" for="name">{{ view.key === 'id' ? 'ID' : 'Name' }}</label>
-                    <input type="text" class="form-control" id="name" name="name" ng-model="view.name" is-valid-name required>
+                    <input tooltip="{{ ::help.cliche.inputs.inputId }}" tooltip-trigger="focus" type="text" class="form-control" id="name" name="name" ng-model="view.name" is-valid-name required>
                     <span class="help-block">Allowed characters are alphanumerics and _</span>
                 </div>
             </div>
@@ -25,7 +25,7 @@
 
             <div class="col-md-4">
                 <div class="form-group" ng-class="{'has-error': (view.form.type.$invalid && view.form.$dirty)}">
-                    <label class="control-label" for="type">Type</label>
+                    <label class="control-label" >Type <help-message message="help.cliche.inputs.type"></help-message></label>
                     <select class="form-control" id="type" name="type" ng-model="view.type" ng-options="option for option in view.types" required></select>
                 </div>
             </div>
@@ -33,7 +33,7 @@
 
             <div class="col-md-4" ng-if="view.type === 'array'">
                 <div class="form-group">
-                    <label class="control-label" for="item-type" class="control-label">Item Type</label>
+                    <label class="control-label"  class="control-label">Item Type <help-message message="help.cliche.inputs.type"></help-message></label>
                     <select class="form-control" id="item-type" name="itemType" ng-model="view.items.type" ng-options="option for option in view.itemTypes"></select>
                 </div>
             </div>
@@ -50,7 +50,7 @@
 
         <legend class="legend-small">
             <label>
-                Metadata
+                Additional information
             </label>
         </legend>
 
@@ -58,7 +58,7 @@
             <div class="col-md-4">
                 <div class="form-group" ng-class="{'has-error': (view.form.label.$invalid && view.form.$dirty)}">
                     <label class="control-label" for="label">Label</label>
-                    <input type="text" class="form-control" id="label" name="label" ng-model="view.label">
+                    <input tooltip="{{ ::help.cliche.inputs.label }}" tooltip-trigger="focus" type="text" class="form-control" id="label" name="label" ng-model="view.label">
                 </div>
             </div>
             <!-- END Label -->
@@ -67,7 +67,7 @@
             <div class="col-md-4">
                 <div class="form-group" ng-class="{'has-error': (view.form.description.$invalid && view.form.$dirty)}">
                     <label class="control-label" for="description">Description</label>
-                    <input type="text" class="form-control" id="description" name="description" ng-model="view.description">
+                    <input tooltip="{{ ::help.cliche.inputs.description }}" tooltip-trigger="focus" type="text" class="form-control" id="description" name="description" ng-model="view.description">
                 </div>
             </div>
             <!-- END Description -->
@@ -76,7 +76,7 @@
             <div class="col-md-4">
                 <div class="form-group" ng-class="{'has-error': (view.form.category.$invalid && view.form.$dirty)}">
                     <label class="control-label" for="category">Category</label>
-                    <input type="text" class="form-control" id="category" name="category" ng-model="view.category">
+                    <input tooltip="{{ ::help.cliche.inputs.category }}" tooltip-trigger="focus" type="text" class="form-control" id="category" name="category" ng-model="view.category">
                 </div>
             </div>
             <!-- END Category -->
@@ -93,7 +93,7 @@
             <div class="col-md-2">
                 <div class="form-group" ng-class="{'has-error': (view.form.position.$invalid && view.form.$dirty)}">
                     <label class="control-label" for="position">Position</label>
-                    <input type="number" class="form-control" id="position" name="position" ng-model="view.property.inputBinding.position">
+                    <input tooltip="{{ ::help.cliche.bindings.position }}" tooltip-trigger="focus" type="number" class="form-control" id="position" name="position" ng-model="view.property.inputBinding.position">
                 </div>
             </div>
             <!-- END Position -->
@@ -101,7 +101,7 @@
             <div class="col-md-2">
                 <div class="form-group">
                     <label class="control-label" for="prefix">Prefix</label>
-                    <input type="text" class="form-control" id="prefix" name="prefix" ng-model="view.property.inputBinding.prefix" ng-disabled="view.disabled">
+                    <input tooltip="{{ ::help.cliche.bindings.prefix }}" tooltip-trigger="focus" type="text" class="form-control" id="prefix" name="prefix" ng-model="view.property.inputBinding.prefix" ng-disabled="view.disabled">
                 </div>
             </div>
             <!-- END Prefix -->
@@ -110,7 +110,7 @@
                 <div class="form-group">
 
                     <label class="control-label">
-                        Separate prefix with
+                        Separate prefix with <help-message message="help.cliche.bindings.separatePrefix"></help-message>
                     </label>
 
                     <separator type="list" model="view.property.inputBinding.separate" is-disabled="view.disabled"></separator>
@@ -120,7 +120,7 @@
 
             <div ng-if="view.type === 'array'" class="col-md-2">
                 <div class="form-group">
-                    <label class="control-label">Item Separator</label>
+                    <label class="control-label">Item Separator <help-message message="help.cliche.bindings.itemSeparator"></help-message></label>
                     <separator type="item" model="view.property.inputBinding.itemSeparator" is-disabled="view.disabled"></separator>
                 </div>
             </div>
@@ -128,7 +128,7 @@
 
             <div class="col-md-2" ng-if="!view.disabled && view.items.type !== 'record'">
                 <div class="form-group">
-                    <label class="control-label">Value</label>
+                    <label class="control-label">Value <help-message message="help.cliche.bindings.value"></help-message></label>
                     <expr ng-model="view.property.inputBinding.valueFrom" handle-item-update="updateTransform(value)" only-expr="true" self="true" self-type="view.type" self-item-type="view.items.type" placeholder="value"></expr>
                 </div>
             </div>

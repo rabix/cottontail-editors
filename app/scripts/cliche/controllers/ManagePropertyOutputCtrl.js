@@ -7,10 +7,12 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('ManagePropertyOutputCtrl', ['$scope', '$modalInstance', 'Cliche', 'options', 'lodash', function ($scope, $modalInstance, Cliche, options, _) {
+    .controller('ManagePropertyOutputCtrl', ['$scope', '$modalInstance', 'Cliche', 'options', 'lodash', 'HelpMessages', function ($scope, $modalInstance, Cliche, options, _, HelpMessages) {
 
         var key = options.key || 'name';
         var idObj = {n: '', o: ''};
+
+        $scope.help = HelpMessages;
 
         $scope.view = {};
         $scope.view.key = key;

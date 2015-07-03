@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('ManagePropertyInputCtrl', ['$scope', '$modalInstance', 'Cliche', 'options', 'lodash', function ($scope, $modalInstance, Cliche, options, _) {
+    .controller('ManagePropertyInputCtrl', ['$scope', '$modalInstance', 'Cliche', 'options', 'lodash', 'HelpMessages',  function ($scope, $modalInstance, Cliche, options, _, HelpMessages) {
 
         var key = options.key || 'name';
         var idObj = {n: '', o: ''};
@@ -15,6 +15,8 @@ angular.module('registryApp.cliche')
             'sbg:cmdInclude': 'true',
             separate: true
         };
+
+        $scope.help = HelpMessages;
 
         $scope.view = {};
         $scope.view.key = key;

@@ -20,17 +20,33 @@ angular.module('registryApp.common').constant('HelpMessages', {
             tempFailCodes: 'Array of temporary fail exit status codes',
             stdin: 'If a tool can only take input on stdin, set an expression (</>) here to reference the input file (e.g. $job.inputs.reads.path).',
             stdout: 'Enter file name to redirect standard output into. To construct a name based on inputs, use an expression (</>).',
-            addArgument: 'Describe a command line argument that doesn’t map directly to any of the tool’s inputs (e.g. —num-threads should have the “value” field set to $job.allocatedResources.cpu expression).'
+            addArgument: 'Describe a command line argument that doesn\'t map directly to any of the tool’s inputs (e.g. —num-threads should have the “value” field set to $job.allocatedResources.cpu expression).'
 		},
 		inputs: {
 			properties: 'Define tool input ports.',
-            addInput: 'Add new input port.'
+            addInput: 'Add new input port.',
+            inputId: 'Unique input id ( required property ).',
+            type: 'Represents input type.',
+            itemType: 'Represents array item type.',
+            label: 'Input label',
+            description: 'Input description',
+            category: 'Input category',
+            inputBinding: 'Include this input into command line, and it will show in command line preview bellow.'
 		},
 		outputs: {
-			properties: '',
+			properties: 'Define tool output ports.',
+            addOutput: 'Add new output port.',
             metadata: '',
             secondaryFiles: ''
 		},
+        // inputBindings and outputBindings
+        bindings: {
+            position: 'Position in command line.',
+            prefix: 'Command line prefix.',
+            separatePrefix: 'Separate prefix in command line.',
+            itemSeparator: 'Separate items in command line.',
+            value: 'Set input value or define expression.'
+        },
 		metadata: {
 			metadata: ''
 		},
