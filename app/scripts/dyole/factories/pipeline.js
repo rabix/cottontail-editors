@@ -542,7 +542,7 @@ angular.module('registryApp.dyole')
                     model.softwareDescription.label = terId;
                     model.softwareDescription.type = type;
                     model[internalType].push({
-                        'label': terId,
+                        'label': terId.slice(1),
                         'id': terId,
 						'type': terminal.model.type
                     });
