@@ -42,7 +42,7 @@ angular.module('registryApp.common').constant('HelpMessages', {
             glob: 'File(s) matching this glob expression will be reported as output(s) on this port.',
             metadata: 'File metadata is a map of string->string. If value depends on tool inputs, use an expression (</>) \n\n like $job.inputs.reads.meta.sample. more info (link to advanced features -> metadata)',
             secondaryFiles: 'click + to enumerate index files that should accompany this output.',
-            secondaryFilesInfo: 'If a tool creates index files, list them here using file naming rules: ".ext" means that ".ext" is appended to original file name; "^.ext" means ".ext" is appended to file base name (after original extension is removed).'
+            secondaryFilesInfo: 'If a tool creates index files, list them here using file naming rules: ".ext" means that ".ext" is appended \n\n to original file name; "^.ext" means ".ext" is appended to file base name (after original extension is removed).'
 		},
         // inputBindings and outputBindings
         bindings: {
