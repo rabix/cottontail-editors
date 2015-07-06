@@ -42,9 +42,9 @@ angular.module('registryApp.cliche')
          */
         var checkExpression = function () {
 
-            if ($scope.view.property.outputBinding && $scope.view.property.outputBinding.glob && $scope.view.property.outputBinding.glob.value) {
+            if ($scope.view.property.outputBinding && $scope.view.property.outputBinding.glob && $scope.view.property.outputBinding.glob.script) {
 
-                SandBox.evaluate($scope.view.property.outputBinding.glob.value, {})
+                SandBox.evaluate($scope.view.property.outputBinding.glob.script, {})
                     .then(function () {
                         $scope.view.exprError = '';
                     }, function (error) {

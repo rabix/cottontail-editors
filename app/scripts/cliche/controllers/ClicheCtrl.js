@@ -246,7 +246,7 @@ angular.module('registryApp.cliche')
             _.each(reqMap, function (key, reqName) {
                 req = $scope.view['req' + reqName];
                 if (req && req.value && _.isObject(req.value) && _.contains(req.value.value, '$job')) {
-                    SandBox.evaluate(req.value.value, {})
+                    SandBox.evaluate(req.value.script, {})
                         .then(function (result) {
                             $scope.view.job.allocatedResources[key] = result;
                         });
