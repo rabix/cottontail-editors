@@ -20,7 +20,7 @@ angular.module('registryApp.common').constant('HelpMessages', {
             tempFailCodes: 'Array of retriable exit codes.',
             stdin: 'If a tool can only take input on stdin, set an expression (</>) here to reference the input file (e.g. $job.inputs.reads.path).',
             stdout: 'Enter file name to redirect standard output into. To construct a name based on inputs, use an expression (</>).',
-            addArgument: 'Describe a command line argument that doesn\'t map directly to any of the tool's inputs (e.g. —num-threads should have the "value" field set to "$job.allocatedResources.cpu" expression).'
+            addArgument: 'Describe a command line argument that doesn\'t map directly to any of the tool inputs (e.g. —num-threads should have the "value" field set to "$job.allocatedResources.cpu" expression).'
 		},
 		inputs: {
 			properties: 'Define tool input ports.',
