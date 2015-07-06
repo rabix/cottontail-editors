@@ -255,16 +255,10 @@ angular.module('registryApp.dyole')
                 var inputs = [],
                     filter = ['File', 'file', 'directory'];
 
-                function checkType(schema, type) {
-
-                    return filter.indexOf(type) !== -1 || (type === 'array' && filter.indexOf(schema.items.type) !== -1);
-
-                }
-
                 _.each(this.inputRefs, function (input) {
 					
 					if (Common.checkTypeFile(input.type[1] || input.type[0])) {
-						input.required = input.type.length === 1;
+						input.required = typeof input.type === 'string' ? true : input.type.length === 1;
 						inputs.push(input);	
 					}
 

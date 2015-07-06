@@ -418,7 +418,7 @@ angular.module('registryApp.dyole')
                         relations.push(relation);
 
                     } else {
-                        if (src.length === 1) {
+//                        if (src.length === 1) {
                             src = src[0];
 
                             var ex = _.find(workflow.inputs, function (i) {
@@ -439,9 +439,9 @@ angular.module('registryApp.dyole')
                                 console.error('Param exposed but not set in workflow inputs');
                             }
 
-                        } else {
-                            console.error('Param must be exposed as workflow input');
-                        }
+//                        } else {
+//                            console.error('Param must be exposed as workflow input');
+//                        }
                     }
 
 

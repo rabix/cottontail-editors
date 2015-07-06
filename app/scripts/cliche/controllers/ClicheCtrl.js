@@ -590,7 +590,7 @@ angular.module('registryApp.cliche')
         };
 
         /**
-         * Remove item from the successCodes
+         * Remove item from the status codes
          *
          * @param {string} type
          * @param {integer} index
