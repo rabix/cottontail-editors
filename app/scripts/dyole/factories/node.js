@@ -820,6 +820,7 @@ angular.module('registryApp.dyole')
 
                     }
 
+                    this.id = name;
                     this.model.id = name;
                     this.model.softwareDescription.name = name;
 
