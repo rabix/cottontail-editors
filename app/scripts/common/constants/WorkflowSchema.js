@@ -80,6 +80,9 @@ var Schema = {
                         },
                         {
                             $ref: '#/definitions/recordDef'
+                        },
+                        {
+                            $ref: '#/definitions/stringTypeDef'
                         }
                     ]
                 }
@@ -248,7 +251,10 @@ var Schema = {
                     name: {
                         type: 'string'
                     },
-                    adapter: {
+                    label: {
+                        type: 'string'
+                    },
+                    inputBinding: {
                         $ref: '#/definitions/adapterDef'
                     }
                 },

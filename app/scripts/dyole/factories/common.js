@@ -15,7 +15,13 @@ angular.module('registryApp.dyole')
 
                 var filter = this.fileFilter;
 
-                return filter.indexOf(type) !== -1 || (type === 'array' && filter.indexOf(schema.items.type) !== -1);
+                if (type === 'array') {
+                    return typeof schema.items === 'string' ?
+                        filter.indexOf(schema.items) !== -1 :
+                        filter.indexOf(schema.items.type) !== -1;
+                }
+
+                return filter.indexOf(type) !== -1;
             },
 
             checkTypeFile: function (schema, type) {
@@ -90,6 +96,22 @@ angular.module('registryApp.dyole')
                 }
 
                 return _id;
+            },
+
+            parseType: function (type) {
+                var t;
+
+                if (type === 'string') {
+                    return type;
+                }
+
+                if (_.isArray(type)){
+                    return type[1] || type[0]
+                }
+
+                if (typeof type === 'object') {
+                    return type.type;
+                }
             }
 
         };

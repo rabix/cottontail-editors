@@ -10,29 +10,47 @@
     <div class="col">
         <div class="heading no-padding">
             <ul class="nav nav-tabs nav-tabs-steps nav-borders">
-                <li ng-class="{active: view.tab === 'info'}"><a href ng-click="switchTab('info')">Info</a></li>
+                <!--<li ng-class="{active: view.tab === 'info'}"><a href ng-click="switchTab('info')">Info</a></li>-->
                 <li ng-class="{active: view.tab === 'schema'}"><a href ng-click="switchTab('schema')">Schema</a></li>
                 <!--<li ng-class="{active: view.tab === 'tags'}"><a href ng-click="switchTab('tags')">Tags</a></li>-->
             </ul>
         </div>
 
         <div class="tabs right flex-one modal-tabs" ng-switch="view.tab">
-            <div class="tab" ng-switch-when="info">
-                <p>
-                    <strong>Author:</strong>
-                    <span> {{ ::data['sbg:createdBy'] }} </span>
-                </p>
-                <p>
-                    <strong>Description{{ ::data.description.length ? '' : ':'}}</strong>
-                    <div class="form-group" ng-class="{ 'format': data.description.length}">
-                        <div class="markdown-body" markdown="data.description"></div>
-                    </div>
-                </p>
-            </div>
+            <!--<div class="tab" ng-switch-when="info">-->
+                <!--<p>-->
+                    <!--<strong>Author:</strong>-->
+                    <!--<span> {{ ::data['sbg:createdBy'] }} </span>-->
+                <!--</p>-->
+                <!--<p>-->
+                    <!--<strong>Description{{ ::data.description.length ? '' : ':'}}</strong>-->
+                    <!--<div class="form-group" ng-class="{ 'format': data.description.length}">-->
+                        <!--<div class="markdown-body" markdown="data.description"></div>-->
+                    <!--</div>-->
+                <!--</p>-->
+            <!--</div>-->
 
             <div ng-switch-when="schema">
+
+                <div class="row change-schema">
+                    <div class="col-md-6 input-group">
+
+                        <label >Change Schema:</label>
+
+                        <select class="form-control"
+                                ng-model="view.type"
+                                ng-options=" value.value as value.name for value in view.schemaTypes">
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 input-group">
+                        <label for="isRequired">Required:</label>
+                        <input name="isRequired" type="checkbox" ng-model="view.required"/>
+                    </div>
+
+                </div>
                 <div class="json-pretty-scroll json-trace">
-                    <pre pretty-json="::schema"></pre>
+                    <pre pretty-json="schema"></pre>
                 </div>
             </div>
         </div>
