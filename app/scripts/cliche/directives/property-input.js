@@ -30,6 +30,7 @@ angular.module('registryApp.cliche')
             $scope.view.required = Cliche.isRequired($scope.view.schema);
             $scope.view.type = Cliche.parseType($scope.view.schema);
             $scope.view.items = Cliche.getItemsRef($scope.view.type, $scope.view.schema);
+            $scope.view.itemsType = Cliche.getItemsType($scope.view.items);
             $scope.view.adapter = Cliche.getAdapter($scope.prop, 'input');
 
             enumObj = Cliche.parseEnum($scope.view.schema);
@@ -45,7 +46,7 @@ angular.module('registryApp.cliche')
         /* init parse structure */
         parseStructure();
 
-        if ($scope.view.items && $scope.view.items.type === 'record' && _.isUndefined($scope.view.items.fields)) {
+        if ($scope.view.itemsType === 'record' && _.isUndefined($scope.view.items.fields)) {
             $scope.view.items.fields = [];
         }
 
@@ -56,7 +57,7 @@ angular.module('registryApp.cliche')
 
             if ($scope.view.property.inputBinding && $scope.view.property.inputBinding.valueFrom && $scope.view.property.inputBinding.valueFrom.value) {
 
-                var itemType = ($scope.view.items && $scope.view.items.type) ? $scope.view.items.type : null;
+                var itemType = Cliche.getItemsType($scope.view.items);
                 var self = {$self: Helper.getTestData($scope.view.type, itemType)};
 
                 SandBox.evaluate($scope.view.property.inputBinding.valueFrom.script, self)

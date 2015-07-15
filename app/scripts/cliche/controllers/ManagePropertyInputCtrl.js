@@ -33,6 +33,7 @@ angular.module('registryApp.cliche')
         $scope.view.required = Cliche.isRequired($scope.view.property.schema);
         $scope.view.type = Cliche.parseType($scope.view.property.schema);
         $scope.view.items = Cliche.getItemsRef($scope.view.type, $scope.view.property.schema);
+        $scope.view.itemsType = Cliche.getItemsType($scope.view.items);
 
         $scope.view.types = Cliche.getTypes('input');
         $scope.view.itemTypes = Cliche.getTypes('inputItem');
@@ -106,8 +107,8 @@ angular.module('registryApp.cliche')
         $scope.$watch('view.type', function(n, o) {
             if (n !== o) {
                 if (n === 'array') {
-                    if (!$scope.view.items) { $scope.view.items = {}; }
-                    $scope.view.items.type = 'string';
+                    $scope.view.itemsType = 'string';
+                    $scope.view.items = $scope.view.itemsType;
                 } else {
                     delete $scope.view.items;
                 }
@@ -115,13 +116,16 @@ angular.module('registryApp.cliche')
         });
 
         /* watch for the items type change in order to adjust the property structure */
-        $scope.$watch('view.items.type', function(n, o) {
+        $scope.$watch('view.itemsType', function(n, o) {
             if (n !== o) {
                 if (n === 'record') {
+                    // if itemsType is a record, create object
+                    // items: { type: 'record', fields: []}
                     $scope.view.disabled = true;
+                    $scope.view.items = {};
 
                     if (_.isUndefined($scope.view.items.fields)) {
-
+                        $scope.view.items.type = 'record';
                         $scope.view.items.fields = [];
 
                         if ($scope.view.adapter) {
@@ -132,10 +136,11 @@ angular.module('registryApp.cliche')
                         }
                     }
                 } else {
+                    // if itemType is not a record, make items string
+                    // items: 'string' || 'boolean' || etc.
+
                     $scope.view.disabled = false;
-                    if (!_.isUndefined($scope.view.items)) {
-                        delete $scope.view.items.fields;
-                    }
+                    $scope.view.items = $scope.view.itemsType;
                 }
             }
         });

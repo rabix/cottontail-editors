@@ -50,10 +50,12 @@ angular.module('registryApp.cliche')
          */
         var getTypes = function(type) {
 
+            // temporarily removing inputItem and input 'record', because it isn't supported.
+            // frontend supports inputItem: 'record'
             var map = {
                 input: ['File', 'string', 'enum', 'int', 'float', 'boolean', 'array'],
                 output: ['File', 'array'],
-                inputItem: ['string', 'int', 'float', 'File', 'record'],
+                inputItem: ['string', 'int', 'float', 'File'],
                 outputItem: ['File']
             };
 
@@ -933,9 +935,10 @@ angular.module('registryApp.cliche')
                     items: inner.items
                 };
 
-                stripParams(tmp, type.items.type);
+                stripParams(tmp, getItemsType(type.items));
 
-            /* if any level and enum */
+
+                /* if any level and enum */
             } else if (inner.type === 'enum') {
 
                 type = {
@@ -1059,6 +1062,22 @@ angular.module('registryApp.cliche')
         };
 
         /**
+         * Returns items type from items property.
+         *
+         * @param items
+         * @returns {string} type
+         */
+        var getItemsType = function(items) {
+            if (items) {
+                if (typeof items === 'string') {
+                    return items;
+                } else if (typeof items === 'object' && items.type) {
+                    return items.type;
+                }
+            }
+        };
+
+        /**
          * Get property schema depending on the level
          *
          * @param {object} type - input or output
@@ -1121,6 +1140,7 @@ angular.module('registryApp.cliche')
             copyPropertyParams: copyPropertyParams,
             getTplType: getTplType,
             getItemsRef: getItemsRef,
+            getItemsType: getItemsType,
             getTypes: getTypes,
             getSchema: getSchema,
             getAdapter: getAdapter,
