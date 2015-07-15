@@ -158,9 +158,13 @@ angular.module('registryApp.app')
             $scope.view.workflow = result[2].message;
 
             if ($scope.view.workflow['sbg:validationErrors'] && $scope.view.workflow['sbg:validationErrors'].length > 0) {
-                _.forEach($scope.view.workflow['sbg:validationErrors'], function(err) {
-                    Notification.error('[Workflow Error] ' + err);
-                });
+                var rev = parseInt($scope.view.workflow['sbg:revision']);
+                if (rev > 0 && $scope.view.workflow.steps.length !== 0) {
+                    _.forEach($scope.view.workflow['sbg:validationErrors'], function(err) {
+                        Notification.error('[Workflow Error] ' + err);
+                    });
+                }
+
             }
 
             $scope.view.loading = false;
