@@ -1130,6 +1130,26 @@ angular.module('registryApp.dyole')
                 },
 
                 /**
+                 * Update workflow metadata
+                 *
+                 * @param metadata
+                 */
+                updateMetadata: function (metadata) {
+
+                    var _mergeSBGProps = function (json, model) {
+                        _.forEach(json, function (val, key) {
+                            if (key.indexOf('sbg') !== -1 || key === 'description' || key === 'label') {
+                                model[key] = val;
+                            }
+                        });
+
+                        return model;
+                    };
+
+                    return _mergeSBGProps(metadata, this.model);
+                },
+
+                /**
                  * Get pipeline model
                  *
                  * @returns {*}

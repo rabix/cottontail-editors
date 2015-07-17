@@ -193,6 +193,12 @@ angular.module('registryApp.dyole')
             }
         };
 
+        var updateMetadata = function (metadata) {
+            if (Pipeline) {
+                Pipeline.updateMetadata(metadata);
+            }
+        };
+
         /**
          * Track pipeline change
          */
@@ -367,9 +373,11 @@ angular.module('registryApp.dyole')
                 getUrl: getUrl,
                 fork: fork,
                 format: format,
+                getJSON: format,
                 validate: validate,
                 adjustSize: adjustSize,
-                getEventObj: getEventObj
+                getEventObj: getEventObj,
+                updateMetadata: updateMetadata
             };
 
             PipelineService.setInstance($scope.controllerId, methods);

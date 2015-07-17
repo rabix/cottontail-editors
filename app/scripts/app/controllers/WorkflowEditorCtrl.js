@@ -433,17 +433,19 @@ angular.module('registryApp.app')
 
         $scope.editMetadata = function () {
 
+            var json = PipelineInstance.getJSON();
+
             var modalInstance = $modal.open({
                 template: $templateCache.get('views/dyole/edit-metadata.html'),
                 controller: 'DyoleEditMetadataCtrl',
                 windowClass: 'modal-markdown',
                 size: 'lg',
                 backdrop: 'static',
-                resolve: {data: function () {return {tool: $scope.view.workflow};}}
+                resolve: {data: function () {return {tool: json};}}
             });
 
             modalInstance.result.then(function(result) {
-                $scope.view.workflow = result;
+                PipelineInstance.updateMetadata(result);
             });
 
         };
