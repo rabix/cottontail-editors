@@ -790,7 +790,7 @@ angular.module('registryApp.dyole')
                 model = _mergeSBGProps(json, model);
                 model['id'] = json['id'] || model['id'];
                 model.label = json.label || model.label;
-                model.description = json.description || model.description;
+                model.description = json.description || '';
 
                 return model;
             },
