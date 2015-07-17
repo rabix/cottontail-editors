@@ -65,8 +65,23 @@ angular.module('registryApp.dyole')
              * @private
              */
             generateNodeId: function (model, used) {
-                var _id, check = true, name = (model.softwareDescription && model.softwareDescription.label) ? model.softwareDescription.label : model.label || model.name,
+                var _id, check = true,
+                    name = (model.softwareDescription && model.softwareDescription.label) ? model.softwareDescription.label : model.label || model.name,
                     n = 0;
+
+                // remove # to start striping and creating unique id
+                if (name.charAt(0) === '#') {
+                    name = name.slice(1);
+                }
+
+                var _fixName = function (n) {
+
+                    var regex = /[^A-Za-z0-9]/g;
+
+                    return n.replace(regex, '_');
+                };
+
+                name = _fixName(name);
 
                 used = used || {};
 

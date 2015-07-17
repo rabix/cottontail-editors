@@ -788,9 +788,9 @@ angular.module('registryApp.dyole')
                 _formatter.createWorkflowInOut(model, json.schemas, json.relations);
 
                 model = _mergeSBGProps(json, model);
-                model['id'] = model['id'] || json['id'];
-                model.label = model.label || json.label;
-                model.description = model.description || json.description;
+                model['id'] = json['id'] || model['id'];
+                model.label = json.label || model.label;
+                model.description = json.description || model.description;
 
                 return model;
             },
