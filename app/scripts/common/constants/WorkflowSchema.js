@@ -255,7 +255,15 @@ var Schema = {
                         type: 'string'
                     },
                     inputBinding: {
-                        $ref: '#/definitions/adapterDef'
+                        oneOf: [
+                            {
+                                $ref: '#/definitions/adapterDef'
+                            },
+                            {
+                                // TODO: Temp hack, remove when you figure out why sometimes inputBinding when its not present is undefiend
+                                type: ['undefined', 'null']
+                            }
+                        ]
                     }
                 },
                 required: ['type', 'id']
