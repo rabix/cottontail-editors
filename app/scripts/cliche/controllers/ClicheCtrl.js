@@ -179,8 +179,7 @@ angular.module('registryApp.cliche')
             if (Globals.appType === 'tool') {
 
                 $scope.view.generatingCommand = true;
-                Cliche.generateCommand()
-                    .then(outputCommand, outputError);
+                debouncedGenerateCommand();
 
                 var watch = [
                     'view.tool.baseCommand',
@@ -192,8 +191,7 @@ angular.module('registryApp.cliche')
                     var watcher = $scope.$watch(arg, function(n, o) {
                         if (n !== o) {
                             $scope.view.generatingCommand = true;
-                            Cliche.generateCommand()
-                                .then(outputCommand, outputError);
+                            debouncedGenerateCommand();
                         }
                     }, true);
                     cliAdapterWatchers.push(watcher);
@@ -266,8 +264,7 @@ angular.module('registryApp.cliche')
 
                 if ($scope.view.isConsoleVisible) {
                     $scope.view.generatingCommand = true;
-                    Cliche.generateCommand()
-                        .then(outputCommand, outputError);
+                    debouncedGenerateCommand();
                 }
 
                 jobWatcher = $scope.$watch('view.job.inputs', function(n, o) {
@@ -275,8 +272,7 @@ angular.module('registryApp.cliche')
                         checkRequirements();
                         if ($scope.view.isConsoleVisible) {
                             $scope.view.generatingCommand = true;
-                            Cliche.generateCommand()
-                                .then(outputCommand, outputError);
+                            debouncedGenerateCommand();
                         }
                     }
                 }, true);
@@ -521,8 +517,11 @@ angular.module('registryApp.cliche')
          * Initiate command generating
          */
         $scope.generateCommand = function() {
-            Cliche.generateCommand();
+            Cliche.generateCommand()
+            .then(outputCommand, outputError);
         };
+
+        var debouncedGenerateCommand = _.debounce($scope.generateCommand, 200);
 
         /**
          * Update tool resources and apply transformation on allocated resources if needed
@@ -781,8 +780,7 @@ angular.module('registryApp.cliche')
             prepareRequirements();
             prepareStatusCodes();
             setUpCategories();
-            Cliche.generateCommand()
-                .then(outputCommand, outputError);
+            debouncedGenerateCommand();
         }
 
         /**
