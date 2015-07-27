@@ -527,14 +527,17 @@ angular.module('registryApp.dyole')
                     var model = angular.copy(systemNodeModel),
                         terminalId, terId,
                         internalType = isInput ? 'outputs' : 'inputs',
-                        type = terminal.model.id.slice(1);
+                        type = isInput ? 'input' : 'output';
+
+
+                    var newId = terminal.model.id.slice(1);
 
                     var descriptions = {
                         input: '###*Input*' + '\n' + 'Downloads input files to local cluster for further processing.',
                         output: '###*Output*' + '\n' + 'Uploads resulting files from processing cluster to user storage.'
                     };
 
-                    terId  = Common.generateNodeId({label: type}, this.nodes);
+                    terId  = Common.generateNodeId({label: newId}, this.nodes);
 
                     model.label = terId;
                     model.description = descriptions[type];
