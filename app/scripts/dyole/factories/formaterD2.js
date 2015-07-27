@@ -124,13 +124,14 @@ angular.module('registryApp.dyole')
                     delete model.name;
                 }
 
-                var n = 1;
+                var n = 0;
 
                 while(!flag) {
 
                     if (!_self._checkIdUniqe(model.id, workflow.inputs) && !_self._checkIdUniqe(model.id, workflow.outputs)) {
                         flag = true;
                     } else {
+                        n++;
                         model.id = id + '_' + n;
                     }
 
