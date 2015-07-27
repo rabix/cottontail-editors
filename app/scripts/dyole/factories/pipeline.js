@@ -527,7 +527,7 @@ angular.module('registryApp.dyole')
                     var model = angular.copy(systemNodeModel),
                         terminalId, terId,
                         internalType = isInput ? 'outputs' : 'inputs',
-                        type = isInput ? 'input' : 'output';
+                        type = terminal.model.id.slice(1);
 
                     var descriptions = {
                         input: '###*Input*' + '\n' + 'Downloads input files to local cluster for further processing.',
