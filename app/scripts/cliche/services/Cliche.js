@@ -100,7 +100,7 @@ angular.module('registryApp.cliche')
                     transformed.baseCommand = angular.copy(rawTool.baseCommand);
                     transformed.stdin = angular.copy(rawTool.stdin);
                     transformed.stdout = angular.copy(rawTool.stdout);
-                    transformed.arguments = angular.copy(rawTool.arguments);
+                    transformed.arguments = angular.copy(rawTool['arguments']);
                 }
                 if (angular.isUndefined(transformed.requirements)) {
                     transformed.requirements = angular.copy(rawTool.requirements);
@@ -764,7 +764,7 @@ angular.module('registryApp.cliche')
 
                         var deferred = $q.defer(),
                             prefix = arg.prefix || '',
-                            prop = _.merge({key: 'arg' + key, position: arg.position, prefix: prefix, val: ''}, arg);
+                            prop = _.merge({key: 'arg' + key, position: arg.position || 0, prefix: prefix, val: ''}, arg);
 
                         applyTransform(arg.valueFrom, arg.valueFrom)
                             .then(function (result) {
