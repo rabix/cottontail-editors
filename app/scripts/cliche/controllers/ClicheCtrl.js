@@ -127,9 +127,6 @@ angular.module('registryApp.cliche')
                 setUpCategories();
 
                 $scope.toggleConsole();
-                
-                console.log('reqCpuRequirement',$scope.view.reqCpuRequirement);
-
             });
 
         /**
@@ -392,7 +389,7 @@ angular.module('registryApp.cliche')
                 template: $templateCache.get('views/partials/confirm-delete.html'),
                 resolve: { data: function () {
                     return {
-                        message: 'Start with clean template?'
+                        message: 'Start over with a clean template?'
                     }; }}
             });
 
