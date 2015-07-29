@@ -126,7 +126,9 @@
                                         <ul class="apps-inner-list">
                                             <!--<li ng-if="apps.length !== 0"><span class="label label-info section-name">Apps</span></li>-->
 
-                                            <li ng-repeat="app in filteredApps = (apps | filter:view.searchTerm)">
+                                            <li ng-repeat="app in filteredApps = (apps | filter:view.searchTerm)"
+                                                <!-- For disabling recursiv workflows -->
+                                                ng-if="(view.workflow['sbg:projectSlug'] + '/' + view.workflow['sbg:name']) !== (app.project + '/' + app.app_name)">
 
                                                 <a href drag="app">
                                                     <i class="fa"><img ng-src="{{ view.globals.base }}img/rabix/{{ ::app.type }}-hex.png" alt=""/></i>
