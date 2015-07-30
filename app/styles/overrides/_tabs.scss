@@ -62,6 +62,14 @@
   &.nav-tabs-steps {
     li {
       width: 15%;
+      height: 29px;
+
+      a {
+        height: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
     }
   }
 

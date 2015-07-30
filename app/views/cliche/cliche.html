@@ -6,14 +6,14 @@
 
         <div class="heading sub-heading">
             <ul class="nav nav-tabs nav-tabs-steps regular">
-                <li ng-show="view.type === 'tool'" ng-class="{active: view.tab === 'general'}"><a href ng-click="switchTab('general')">General</a></li>
-                <li ng-class="{active: view.tab === 'script'}" ng-show="view.type === 'script'"><a href ng-click="switchTab('script')">Script</a></li>
-                <li ng-class="{active: view.tab === 'inputs'}"><a href ng-click="switchTab('inputs')">Inputs</a></li>
-                <li ng-class="{active: view.tab === 'outputs'}"><a href ng-click="switchTab('outputs')">Outputs</a></li>
-                <li ng-class="{active: view.tab === 'metadata'}"><a href ng-click="switchTab('metadata')">Additional Information</a></li>
-                <li ng-show="view.type === 'tool'" ng-class="{active: view.tab === 'test'}"><a href ng-click="switchTab('test')">Test</a></li>
+                <li ng-show="view.type === 'tool'" ng-class="{active: view.tab === 'general'}"><a href ng-click="switchTab('general')" title="General">General</a></li>
+                <li ng-class="{active: view.tab === 'script'}" ng-show="view.type === 'script'"><a href ng-click="switchTab('script')" title="Script">Script</a></li>
+                <li ng-class="{active: view.tab === 'inputs'}"><a href ng-click="switchTab('inputs')" title="Inputs">Inputs</a></li>
+                <li ng-class="{active: view.tab === 'outputs'}"><a href ng-click="switchTab('outputs')" title="Outputs">Outputs</a></li>
+                <li ng-class="{active: view.tab === 'metadata'}"><a href ng-click="switchTab('metadata')" title="Additional Information">Additional Information</a></li>
+                <li ng-show="view.type === 'tool'" ng-class="{active: view.tab === 'test'}"><a href ng-click="switchTab('test')" title="Test">Test</a></li>
             </ul>
-            <a href class="btn btn-flush btn-flush-cliche" title="Start with clean template" ng-click="flush()"><i class="fa fa-trash"></i></a>
+            <a href class="btn btn-flush btn-flush-cliche" title="Start over with a clean template" ng-click="flush()"><i class="fa fa-trash"></i></a>
         </div>
         <!-- # .heading -->
 

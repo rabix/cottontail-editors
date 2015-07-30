@@ -127,9 +127,6 @@ angular.module('registryApp.cliche')
                 setUpCategories();
 
                 $scope.toggleConsole();
-                
-                console.log('reqCpuRequirement',$scope.view.reqCpuRequirement);
-
             });
 
         /**
@@ -388,10 +385,11 @@ angular.module('registryApp.cliche')
 
             var modalInstance = $modal.open({
                 controller: 'ModalCtrl',
+                size: 'sm',
                 template: $templateCache.get('views/partials/confirm-delete.html'),
                 resolve: { data: function () {
                     return {
-                        message: 'Are you sure you want to delete this ' + $scope.view.type + '?'
+                        message: 'Start over with a clean template?'
                     }; }}
             });
 
