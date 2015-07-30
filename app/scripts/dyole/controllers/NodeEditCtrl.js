@@ -1,14 +1,16 @@
 'use strict';
 
 angular.module('registryApp.dyole')
-    .controller('NodeEditCtrl', ['$scope', '$modalInstance', 'data', function ($scope, $modalInstance, data) {
+    .controller('NodeEditCtrl', ['$scope', '$modalInstance', 'data', '$timeout', function ($scope, $modalInstance, data, $timeout) {
 
         $scope.data = data;
         $scope.view = {
             error: null,
             name: data.name
         };
-
+        $timeout(function() {
+            angular.element('.node-label-edit').trigger('focus');
+        },1);
         $scope.ok = function () {
             var test = data.onEdit($scope.name);
 
