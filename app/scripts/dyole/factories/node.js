@@ -39,16 +39,24 @@ angular.module('registryApp.dyole')
             this.inputRefs = this.model.inputs;
 
             this.inputRefs.sort(function (a, b) {
-                if (a['id'] < b['id']) { return 1; }
-                if (b['id'] < a['id']) { return -1; }
+                if (a['id'] < b['id']) {
+                    return 1;
+                }
+                if (b['id'] < a['id']) {
+                    return -1;
+                }
                 return 0;
             });
 
             this.outputRefs = this.model.outputs;
 
             this.outputRefs.sort(function (a, b) {
-                if (a['id'] < b['id']) { return 1; }
-                if (b['id'] < a['id']) { return -1; }
+                if (a['id'] < b['id']) {
+                    return 1;
+                }
+                if (b['id'] < a['id']) {
+                    return -1;
+                }
                 return 0;
             });
 
@@ -171,9 +179,9 @@ angular.module('registryApp.dyole')
                 borders = canvas.group();
                 borders.push(outerBorder).push(innerBorder);
 
-                var name = model.label ? model.label : model.name || model['id'];
+                var name = model.label ? model.label : model['id'];
 
-                if ( model.softwareDescription && model.softwareDescription.label ) {
+                if (model.softwareDescription && model.softwareDescription.label) {
                     name = model.softwareDescription.label.charAt(0) === '#' ? model.softwareDescription.label.slice(1) : model.softwareDescription.name;
                 }
 
@@ -189,7 +197,7 @@ angular.module('registryApp.dyole')
                     top: 0
                 };
 
-                switch(model['class']) {
+                switch (model['class']) {
                     case 'Workflow':
                         imgUrl = this.icons.workflow;
                         break;
@@ -218,8 +226,8 @@ angular.module('registryApp.dyole')
                 img = new Image();
                 img.src = imgUrl;
 
-                $(img).load( function () {
-                    icon = canvas.image(imgUrl, - img.width/2 + modification.left, - img.height/2 + modification.top, img.width , img.height);
+                $(img).load(function () {
+                    icon = canvas.image(imgUrl, -img.width / 2 + modification.left, -img.height / 2 + modification.top, img.width, img.height);
                     borders.push(icon);
 
                     self._attachEvents();
@@ -256,11 +264,11 @@ angular.module('registryApp.dyole')
                     filter = ['File', 'file', 'directory'];
 
                 _.each(this.inputRefs, function (input) {
-					
-					if (Common.checkTypeFile(input.type[1] || input.type[0])) {
-						input.required = typeof input.type === 'string' ? true : input.type.length === 1;
-						inputs.push(input);	
-					}
+
+                    if (Common.checkTypeFile(input.type[1] || input.type[0])) {
+                        input.required = typeof input.type === 'string' ? true : input.type.length === 1;
+                        inputs.push(input);
+                    }
 
                 });
 
@@ -478,13 +486,11 @@ angular.module('registryApp.dyole')
 
                 borders.drag(this.onMove, this.onMoveStart, this.onMoveEnd,
                     this, this, this);
-                
+
                 this.label.dblclick(function (e) {
                     e.preventDefault();
 
-                    if (this.model.softwareDescription && this.model.softwareDescription.repo_name === 'system' && this.Pipeline.editMode) {
-                        this._initNameChanging();
-                    }
+                    this._initNameChanging();
 
                 }, this);
 
@@ -646,30 +652,28 @@ angular.module('registryApp.dyole')
                     });
 
 
-                    if (this.model.softwareDescription && this.model.softwareDescription.repo_name === 'system') {
+                    bbox = this.label.getBBox();
+                    this.editLabelButton = this.canvas.button({
+                        fill: this.buttons.rename.fill,
+                        x: bbox.x + bbox.width + 20,
+                        y: bbox.y + 8,
+                        radius: 10,
+                        border: this.buttons.border,
+                        image: {
+                            url: Globals.base + 'img/rabix/' + this.buttons.rename.image.name,
+                            width: 13,
+                            height: 13
+                        },
 
-                        bbox = this.label.getBBox();
-                        this.editLabelButton = this.canvas.button({
-                            fill: this.buttons.rename.fill,
-                            x: bbox.x + bbox.width + 20,
-                            y: bbox.y + 8,
-                            radius: 10,
-                            border: this.buttons.border,
-                            image: {
-                                url: Globals.base + 'img/rabix/' + this.buttons.rename.image.name,
-                                width: 13,
-                                height: 13
-                            },
+                        borderFill: 'transparent',
+                        borderStroke: 'transparent'
+                    }, {
+                        onClick: this._initNameChanging,
+                        scope: this
+                    });
 
-                            borderFill: 'transparent',
-                            borderStroke: 'transparent'
-                        }, {
-                            onClick: this._initNameChanging,
-                            scope: this
-                        });
+                    this.el.push(this.editLabelButton.getEl());
 
-                        this.el.push(this.editLabelButton.getEl());
-                    }
 
                     _self.el.push(_self.infoButton.getEl())
                         .push(_self.removeNodeButton.getEl());
@@ -724,12 +728,12 @@ angular.module('registryApp.dyole')
              */
             _initNameChanging: function () {
                 var _self = this;
-                var nodeName = this.model.id;
+                var nodeName = !Common.checkSystem(this.model) ? this.model.label : this.model.id;
 
                 $rootScope.$broadcast('node:label:edit', nodeName, function check(name) {
 
                     var test = _.filter(_self.Pipeline.nodes, function (n) {
-                        return n.model.softwareDescription && n.model.softwareDescription.repo_name === 'system' && n.model.id === name;
+                        return n.model.id === name;
                     });
 
                     return test.length === 0;
@@ -741,13 +745,12 @@ angular.module('registryApp.dyole')
                 var ter, old, oldId,
                     isInput = this.inputs.length === 0;
 
+                this.model.label = name;
+
                 if (this.model.softwareDescription && this.model.softwareDescription.repo_name === 'system') {
 
                     // Genereta id first(Check for id conflict)
                     name = Common.generateNodeId({name: name}, this.Pipeline.nodes);
-
-
-                    this.model.label = name;
                     this.Pipeline.model.schemas[this.model.id].name = name;
 
                     //TODO: Refactor this to use one function
@@ -760,7 +763,7 @@ angular.module('registryApp.dyole')
 
                         oldId = ter.model.id;
 
-                        old.label = old.name  = name;
+                        old.label = old.name = name;
                         old.id = name;
 
                         this.model.outputs.push(old);
@@ -861,14 +864,16 @@ angular.module('registryApp.dyole')
                         name = name.slice(1);
                     }
 
-                    this.label.attr('text', name);
-                    this._destroyButtons();
-
-                    if (this.selected) {
-                        this._showButtons();
-                    }
-
                 }
+
+                this.label.attr('text', name);
+                this._destroyButtons();
+
+                if (this.selected) {
+                    this._showButtons();
+                }
+
+
             },
 
             _select: function () {
@@ -932,14 +937,14 @@ angular.module('registryApp.dyole')
                     this.destroyed = true;
                 }
 
-				this._destroyButtons();
+                this._destroyButtons();
 
-				_.each(this.connections, function (connection) {
-					if (connection) {
-						connection.destroyConnection(_self.id);
-					}
-				});
-				
+                _.each(this.connections, function (connection) {
+                    if (connection) {
+                        connection.destroyConnection(_self.id);
+                    }
+                });
+
                 _.each(this.inputs, function (t) {
                     t.destroy();
                 });
@@ -948,7 +953,7 @@ angular.module('registryApp.dyole')
                     t.destroy();
                 });
 
-				this.connections = {};
+                this.connections = {};
 
                 if (typeof this.glow !== 'undefined') {
                     this.glow.remove();
@@ -960,10 +965,10 @@ angular.module('registryApp.dyole')
 
                 this.Pipeline.nodes[this.model.id] = null;
                 this.Pipeline.model.schemas[this.model.id] = null;
-				
+
                 delete this.Pipeline.model.schemas[this.model.id];
                 delete this.Pipeline.nodes[this.model.id];
-				
+
                 _.remove(this.Pipeline.nodes, function (n) {
                     return n.id === _self.model.id;
                 });
