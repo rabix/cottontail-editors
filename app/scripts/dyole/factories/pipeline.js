@@ -1186,6 +1186,8 @@ angular.module('registryApp.dyole')
                             json.schemas[nodeId].suggestedValue = node.suggestedValue;
                         }
 
+                        json.schemas[nodeId].label = node.label;
+
                         delete node.x;
                         delete node.y;
                     });

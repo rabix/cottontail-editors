@@ -5,6 +5,7 @@
 
 angular.module('registryApp.app')
     .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$modal', '$templateCache', 'Loading', 'App', 'User', 'Repo', 'Const', 'BeforeRedirect', 'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload', 'Api', 'HotkeyRegistry', 'Chronicle', 'Notification', function ($scope, $rootScope, $q, $modal, $templateCache, Loading, App, User, Repo, Const, BeforeRedirect, Helper, PipelineService, _, Globals, BeforeUnload, Api, HotkeyRegistry, Chronicle, Notification) {
+
         var PipelineInstance = null,
             prompt = false,
             onBeforeUnloadOff = BeforeUnload.register(function() { return 'Please save your changes before leaving.'; }, function() {return prompt});
@@ -283,8 +284,6 @@ angular.module('registryApp.app')
             }
 
             console.log($scope.view.suggestedValues);
-            console.log($scope.view.exposed);
-            console.log($scope.view.values);
 
             $scope.onWorkflowChange({value: true, isDisplay: false});
 
@@ -477,6 +476,7 @@ angular.module('registryApp.app')
                 if (json) {
                     json = JSON.parse(json);
                     $scope.view.workflow = json;
+                    $scope.view.isChanged = true;
                 }
             });
 
