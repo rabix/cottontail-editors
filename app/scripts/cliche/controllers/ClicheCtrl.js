@@ -219,7 +219,7 @@ angular.module('registryApp.cliche')
             $scope.view.reqMemRequirement = _.find($scope.view.tool.requirements, {'class': 'MemRequirement'});
 
         };
-        
+
         var prepareStatusCodes = function () {
             if (typeof $scope.view.tool.successCodes === 'undefined') {
                 $scope.view.tool.successCodes = [];
@@ -483,15 +483,33 @@ angular.module('registryApp.cliche')
          * Run app
          */
         $scope.runApp = function () {
-            //todo: run app
-            // create task and redirect to task page for that task
-            App.createAppTask().then(function (task) {
-                BeforeRedirect.setReload(true);
-                $scope.view.saving = true;
-                $scope.view.loading = true;
 
-                App.redirectToTaskPage(task);
+            var modalInstance = $modal.open({
+                controller: 'ModalCtrl',
+                template: $templateCache.get('views/partials/confirm-delete.html'),
+                resolve: { data: function () {
+                    return {
+                        message: 'Run will discard unsaved changes, are you sure you want to perform this action?'
+                    }; }
+                }
             });
+
+            modalInstance.result.then(function () {
+                createTask();
+            }, function () {
+                return false;
+            });
+
+            function createTask() {
+                // create task and redirect to task page for that task
+                App.createAppTask().then(function (task) {
+                    BeforeRedirect.setReload(true);
+                    $scope.view.saving = true;
+                    $scope.view.loading = true;
+
+                    App.redirectToTaskPage(task);
+                });
+            }
 
         };
 
@@ -574,7 +592,7 @@ angular.module('registryApp.cliche')
             $scope.view.tool.baseCommand.push('');
 
         };
-        
+
         $scope.addStatusCode = function (codeType) {
 
             if ( _.isArray($scope.view.tool[codeType]) ) {
