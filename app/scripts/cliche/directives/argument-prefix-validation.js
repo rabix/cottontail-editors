@@ -2,7 +2,7 @@
  * Created by branko7171 on 29.7.15..
  */
 angular.module('registryApp.cliche')
-    .directive('checkArgumentPrefix', function ($timeout) {
+    .directive('checkArgumentPrefix', [ '$timeout', function ($timeout) {
         return {
             scope : {
                 other: '=',
@@ -43,4 +43,4 @@ angular.module('registryApp.cliche')
 
             }
         };
-    });
+    }]);
