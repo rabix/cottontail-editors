@@ -9,6 +9,14 @@
 angular.module('registryApp.cliche')
     .controller('InputFieldCtrl', ['$scope', '$modal', '$templateCache', 'Cliche', 'Const', 'lodash', function ($scope, $modal, $templateCache, Cliche, Const, _) {
 
+		var suggested = $scope.suggestedValues[$scope.appName + Const.exposedSeparator + $scope.prop.id];
+
+		if (!$scope.values) {
+			if (suggested) {
+				$scope.model = $scope.values = suggested;
+			}
+		}
+
         $scope.view = {};
 
         $scope.key = $scope.key || 'name';
@@ -192,6 +200,9 @@ angular.module('registryApp.cliche')
 
                 if (typeof $scope.onUnExpose === 'function') {
                     $scope.onUnExpose({appName: $scope.appName, key: $scope.view.name, value: $scope.view.model});
+	                if ($scope.suggestedValues[$scope.appName + Const.exposedSeparator + $scope.prop.id]) {
+		                $scope.values =  $scope.suggestedValues[$scope.appName + Const.exposedSeparator + $scope.prop.id];
+	                }
                 }
 
                 $scope.isDisabled = false;
@@ -222,7 +233,9 @@ angular.module('registryApp.cliche')
                 exposed: '=?',
                 isDisabled: '=?',
                 handleExpose: '&',
-                onUnExpose: '&'
+                onUnExpose: '&',
+	            suggestedValues: '=',
+	            values: '='
             },
             controller: 'InputFieldCtrl',
             compile: function(element) {
