@@ -288,8 +288,6 @@ angular.module('registryApp.app')
             }
 
             console.log($scope.view.suggestedValues);
-            console.log($scope.view.exposed);
-            console.log($scope.view.values);
 
             $scope.onWorkflowChange({value: true, isDisplay: false});
 
