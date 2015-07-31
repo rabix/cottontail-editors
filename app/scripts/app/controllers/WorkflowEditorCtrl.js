@@ -8,9 +8,13 @@ angular.module('registryApp.app')
 
         var PipelineInstance = null,
             prompt = false,
-            onBeforeUnloadOff = BeforeUnload.register(function() { return 'Please save your changes before leaving.'; }, function() {return prompt});
+            onBeforeUnloadOff = BeforeUnload.register(function () {
+                return 'Please save your changes before leaving.';
+            }, function () {
+                return prompt
+            });
 
-        $scope.$on('pipeline:change', function() {
+        $scope.$on('pipeline:change', function () {
             prompt = true;
         });
 
@@ -52,7 +56,7 @@ angular.module('registryApp.app')
         $scope.view.PublicApps = {};
 
         /* list of user repos*/
-        $scope.view.userRepos= [];
+        $scope.view.userRepos = [];
 
         /* flag if something is changed: params or workflow */
         $scope.view.isChanged = false;
@@ -98,12 +102,12 @@ angular.module('registryApp.app')
 
 
         $q.all([
-                User.getUser()
+            User.getUser()
 //                Repo.getRepos(0, '', true)
-            ]).then(function(result) {
-                $scope.view.user = result[0].user;
+        ]).then(function (result) {
+            $scope.view.user = result[0].user;
 //                $scope.view.userRepos = result[1].list;
-            });
+        });
 
         var toggleState = true;
 
@@ -130,7 +134,7 @@ angular.module('registryApp.app')
             toggleAll();
         };
 
-        $scope.$watch('view.searchTerm', function (newVal,oldVal) {
+        $scope.$watch('view.searchTerm', function (newVal, oldVal) {
 
             if (oldVal !== newVal) {
 
@@ -161,7 +165,7 @@ angular.module('registryApp.app')
             if ($scope.view.workflow['sbg:validationErrors'] && $scope.view.workflow['sbg:validationErrors'].length > 0) {
                 var rev = parseInt($scope.view.workflow['sbg:revision']);
                 if (rev > 0 && $scope.view.workflow.steps.length !== 0) {
-                    _.forEach($scope.view.workflow['sbg:validationErrors'], function(err) {
+                    _.forEach($scope.view.workflow['sbg:validationErrors'], function (err) {
                         Notification.error('[Workflow Error] ' + err);
                     });
                 }
@@ -247,7 +251,7 @@ angular.module('registryApp.app')
 
             var workflow = PipelineInstance.format();
             App.update(workflow, 'workflow')
-                .then(function(data) {
+                .then(function (data) {
                     var rev = data.message['sbg:revision'];
                     Notification.primary('Workflow successfully updated.');
                     redirectTo(rev);
@@ -257,7 +261,7 @@ angular.module('registryApp.app')
                 });
         };
 
-        $scope.toggleSidebar = function() {
+        $scope.toggleSidebar = function () {
 
             $scope.view.showSidebar = !$scope.view.showSidebar;
 //            $rootScope.$broadcast('sidebar:toggle', $scope.view.showSidebar);
@@ -290,7 +294,7 @@ angular.module('registryApp.app')
             $scope.onWorkflowChange({value: true, isDisplay: false});
 
         };
-        
+
         $scope.onUnExpose = function (appName, key, value) {
             var keyName = appName + Const.exposedSeparator + key.slice(1);
 
@@ -322,7 +326,7 @@ angular.module('registryApp.app')
             $scope.view.exposed = exposed;
             $scope.view.suggestedValues = suggestedValues;
 
-            _.forEach($scope.view.suggestedValues, function(sugValue, keyName) {
+            _.forEach($scope.view.suggestedValues, function (sugValue, keyName) {
                 var appId = keyName.split(Const.exposedSeparator)[0];
                 var inputId = '#' + keyName.split(Const.exposedSeparator)[1];
 
@@ -339,7 +343,7 @@ angular.module('registryApp.app')
                 if (n !== o) {
                     $scope.onWorkflowChange({value: true, isDisplay: false});
                 }
-            } , true);
+            }, true);
 
             $scope.switchTab('params');
             $scope.$digest();
@@ -350,7 +354,7 @@ angular.module('registryApp.app')
          */
         var onNodeDeselect = function () {
 
-            _.forEach($scope.view.suggestedValues, function(sugValue, keyName) {
+            _.forEach($scope.view.suggestedValues, function (sugValue, keyName) {
                 var appId = keyName.split(Const.exposedSeparator)[0];
                 var inputId = '#' + keyName.split(Const.exposedSeparator)[1];
 
@@ -378,7 +382,7 @@ angular.module('registryApp.app')
          * redirects to a specific revision
          * @param revisionId
          */
-        var redirectTo = function(revisionId) {
+        var redirectTo = function (revisionId) {
             prompt = false;
             window.location = '/u/' + Globals.projectOwner + '/' + Globals.projectSlug + '/apps/' + Globals.appName + '/edit?type=' + Globals.appType + '&rev=' + revisionId;
         };
@@ -403,7 +407,7 @@ angular.module('registryApp.app')
         /**
          * Toggle dropdown menu
          */
-        $scope.toggleMenu = function() {
+        $scope.toggleMenu = function () {
 
             $scope.view.isMenuOpen = !$scope.view.isMenuOpen;
 
@@ -416,7 +420,7 @@ angular.module('registryApp.app')
         /**
          * Load markdown modal for description edit
          */
-        $scope.loadMarkdown = function() {
+        $scope.loadMarkdown = function () {
 
             var modalInstance = $modal.open({
                 template: $templateCache.get('views/partials/markdown.html'),
@@ -424,10 +428,12 @@ angular.module('registryApp.app')
                 windowClass: 'modal-markdown',
                 size: 'lg',
                 backdrop: 'static',
-                resolve: {data: function () {return {markdown: $scope.view.workflow.description};}}
+                resolve: {data: function () {
+                    return {markdown: $scope.view.workflow.description};
+                }}
             });
 
-            modalInstance.result.then(function(result) {
+            modalInstance.result.then(function (result) {
                 $scope.view.workflow.description = result;
             });
         };
@@ -442,35 +448,67 @@ angular.module('registryApp.app')
                 windowClass: 'modal-markdown',
                 size: 'lg',
                 backdrop: 'static',
-                resolve: {data: function () {return {tool: json};}}
+                resolve: {data: function () {
+                    return {tool: json};
+                }}
             });
 
-            modalInstance.result.then(function(result) {
+            modalInstance.result.then(function (result) {
                 PipelineInstance.updateMetadata(result);
             });
 
         };
 
         $scope.runWorkflow = function () {
-            // create task and redirect to task page for that task
-            App.createAppTask().then(function (task) {
-                BeforeRedirect.setReload(true);
-                $scope.view.saving = true;
-                $scope.view.loading = true;
 
-                App.redirectToTaskPage(task);
-            });
+            if ($scope.view.isChanged) {
+
+                var modalInstance = $modal.open({
+                    controller: 'ModalCtrl',
+                    template: $templateCache.get('views/partials/confirm-delete.html'),
+                    resolve: { data: function () {
+                        return {
+                            message: 'Run will discard unsaved changes, are you sure you want to perform this action?'
+                        }; }
+                    }
+                });
+
+                modalInstance.result.then(function () {
+                    createTask();
+                }, function () {
+                    return false;
+                });
+
+
+            } else {
+                createTask();
+            }
+
+            function createTask() {
+                // create task and redirect to task page for that task
+                App.createAppTask().then(function (task) {
+                    BeforeRedirect.setReload(true);
+                    $scope.view.saving = true;
+                    $scope.view.loading = true;
+
+                    App.redirectToTaskPage(task);
+                });
+
+            }
+
         };
 
         /**
          * Load json importer
          */
-        $scope.loadJsonImport = function() {
+        $scope.loadJsonImport = function () {
 
             var modalInstance = $modal.open({
                 template: $templateCache.get('views/cliche/partials/json-editor.html'),
                 controller: 'JsonEditorCtrl',
-                resolve: { options: function () { return {user: $scope.view.user, type: 'workflow'}; }}
+                resolve: { options: function () {
+                    return {user: $scope.view.user, type: 'workflow'};
+                }}
             });
 
             modalInstance.result.then(function (json) {
@@ -487,11 +525,11 @@ angular.module('registryApp.app')
         /**
          * Switch to another revision of the app
          */
-        $scope.changeRevision = function() {
+        $scope.changeRevision = function () {
 
             var deferred = $q.defer();
 
-            Api.getLatest.get().$promise.then(function(result) {
+            Api.getLatest.get().$promise.then(function (result) {
                 var latestRevision = result.message['sbg:revision'];
                 var revisionsList = _.range(latestRevision + 1);
 
@@ -505,14 +543,16 @@ angular.module('registryApp.app')
                             $modalInstance.dismiss('cancel');
                         };
 
-                        $scope.choose = function(id) {
+                        $scope.choose = function (id) {
                             $modalInstance.close(id);
                         };
 
                     }],
                     size: 'sm',
                     windowClass: 'modal-revisions',
-                    resolve: {data: function () {return {revisions: revisionsList, workflow: $scope.view.workflow, current: $scope.view.workflow['sbg:revision']};}}
+                    resolve: {data: function () {
+                        return {revisions: revisionsList, workflow: $scope.view.workflow, current: $scope.view.workflow['sbg:revision']};
+                    }}
                 });
 
                 modalInstance.result.then(function (revisionId) {
