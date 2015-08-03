@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.common')
-    .directive('expr', ['$templateCache', 'lodash', function ($templateCache, _) {
+    .directive('expr', ['$templateCache', 'lodash', '$rootScope', 'ClicheEvents', function ($templateCache, _, $rootScope, ClicheEvents) {
 
         return {
             restrict: 'E',
@@ -101,6 +101,7 @@ angular.module('registryApp.common')
 
                         if (!_.isUndefined($scope.handleItemUpdate)) {
                             $scope.handleItemUpdate({index: $scope.index, value: $scope.view[mode]});
+                            $rootScope.$broadcast(ClicheEvents.EXPRESSION.CHANGED);
                         }
                     }
 
