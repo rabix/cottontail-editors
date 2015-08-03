@@ -82,13 +82,39 @@
             <!-- END Category -->
         </div>
 
+        <div ng-if="view.type === 'File'">
+        <!--<div>-->
+            <legend class="legend-small">
+                Secondary Files
+            </legend>
+
+            <div class="enum-list-wrap">
+
+                <a href ng-click="addSecondaryFile()" class="btn btn-default add-enum-item"><i class="fa fa-plus"></i></a>
+
+                <div class="enum-list-container">
+                    <ul class="enum-list">
+                        <li ng-repeat="file in view.property.inputBinding.secondaryFiles track by $index">
+                            <div class="enum-field form-group form-group-file">
+                                <expr ng-model="file" index="{{ $index }}" handle-item-update="updateSecondaryFile(value, index)"></expr>
+                            </div>
+                            <a href class="fa fa-remove remove-btn" ng-click="removeSecondaryFile($index)"></a>
+                        </li>
+                    </ul>
+
+                    <p class="alert alert-info" ng-if="view.property.inputBinding.secondaryFiles | isEmpty">Click the plus button to add a file</p>
+                </div>
+            </div>
+        </div>
+
+
         <legend class="legend-small">
             <label class="checkbox inline">
                 <input type="checkbox" ng-model="view.adapter" ng-change="toggleAdapter()"> Include in command line
             </label>
         </legend>
 
-        <div ng-if="view.property.inputBinding" class="row">
+        <div ng-if="!!(view.property.inputBinding['sbg:cmdInclude'])" class="row">
 
             <div class="col-md-2">
                 <div class="form-group" ng-class="{'has-error': (view.form.position.$invalid && view.form.$dirty)}">
@@ -136,7 +162,7 @@
 
         </div>
 
-        <p ng-if="!view.property.inputBinding" class="alert alert-info">This input will not be automatically included in the generated command line.</p>
+        <p ng-if="!(!!view.property.inputBinding['sbg:cmdInclude'])" class="alert alert-info">This input will not be automatically included in the generated command line.</p>
 
         <div class="form-group main-actions">
             <a href class="btn btn-warning" ng-click="cancel()">Cancel</a>
