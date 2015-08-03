@@ -94,7 +94,7 @@
 
                 <div class="enum-list-container">
                     <ul class="enum-list">
-                        <li ng-repeat="file in view.secondaryFiles track by $index">
+                        <li ng-repeat="file in view.property.inputBinding.secondaryFiles track by $index">
                             <div class="enum-field form-group form-group-file">
                                 <expr ng-model="file" index="{{ $index }}" handle-item-update="updateSecondaryFile(value, index)"></expr>
                             </div>
@@ -102,7 +102,7 @@
                         </li>
                     </ul>
 
-                    <p class="alert alert-info" ng-if="view.secondaryFiles | isEmpty">Click the plus button to add a file</p>
+                    <p class="alert alert-info" ng-if="view.property.inputBinding.secondaryFiles | isEmpty">Click the plus button to add a file</p>
                 </div>
             </div>
         </div>
@@ -114,7 +114,7 @@
             </label>
         </legend>
 
-        <div ng-if="view.property.inputBinding" class="row">
+        <div ng-if="!!(view.property.inputBinding['sbg:cmdInclude'])" class="row">
 
             <div class="col-md-2">
                 <div class="form-group" ng-class="{'has-error': (view.form.position.$invalid && view.form.$dirty)}">
@@ -162,7 +162,7 @@
 
         </div>
 
-        <p ng-if="!view.property.inputBinding" class="alert alert-info">This input will not be automatically included in the generated command line.</p>
+        <p ng-if="!(!!view.property.inputBinding['sbg:cmdInclude'])" class="alert alert-info">This input will not be automatically included in the generated command line.</p>
 
         <div class="form-group main-actions">
             <a href class="btn btn-warning" ng-click="cancel()">Cancel</a>

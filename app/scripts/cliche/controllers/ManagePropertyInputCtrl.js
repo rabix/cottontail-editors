@@ -27,13 +27,6 @@ angular.module('registryApp.cliche')
         // only add adapter if one has been defined
         if (options.property && options.property.inputBinding) {
             $scope.view.property.inputBinding = Cliche.getAdapter(options.property, false, 'input');
-
-            // temporarily remove secondary files from inputBinding, for command line check,
-            // return them later during save
-            $scope.view.secondaryFiles = $scope.view.property.inputBinding.secondaryFiles;
-
-            //delete $scope.view.property.inputBinding.secondaryFiles;
-            //if (_.isEmpty($scope.view.property.inputBinding)) {delete $scope.view.property.inputBinding}
         }
 
         $scope.view.name = Cliche.parseName(options.property);
@@ -50,7 +43,7 @@ angular.module('registryApp.cliche')
         $scope.view.symbols = enumObj.symbols;
 
         $scope.view.disabled = ($scope.view.items && $scope.view.items.type) === 'record';
-        $scope.view.adapter = !_.isUndefined($scope.view.property.inputBinding);
+        $scope.view.adapter = !!(!_.isUndefined($scope.view.property.inputBinding) && $scope.view.property.inputBinding['sbg:cmdInclude']);
 
         $scope.view.description = $scope.view.property.description || '';
         $scope.view.label = $scope.view.property.label || '';
@@ -77,16 +70,6 @@ angular.module('registryApp.cliche')
                 if (Cliche.checkIfEnumNameExists(options.mode, enumObj)) {
                     $scope.view.error = 'Choose another enum name, "' + $scope.view.name + '" already exists';
                     return false;
-                }
-            }
-
-            if (!_.isEmpty($scope.view.secondaryFiles) && $scope.view.type === 'File') {
-                if ($scope.view.property.inputBinding) {
-                    $scope.view.property.inputBinding.secondaryFiles = _.compact($scope.view.secondaryFiles);
-                } else {
-                    $scope.view.property.inputBinding = {
-                        secondaryFiles: _.compact($scope.view.secondaryFiles)
-                    }
                 }
             }
 
@@ -180,32 +163,37 @@ angular.module('registryApp.cliche')
         $scope.toggleAdapter = function () {
 
             if ($scope.view.adapter) {
-                $scope.view.property.inputBinding = cacheAdapter;
+                $scope.view.property.inputBinding = _.extend($scope.view.property.inputBinding, cacheAdapter) || cacheAdapter;
             } else {
                 cacheAdapter = angular.copy($scope.view.property.inputBinding);
                 delete $scope.view.property.inputBinding;
-            }
 
+                if (cacheAdapter.secondaryFiles) {
+                    $scope.view.property.inputBinding = {
+                        secondaryFiles: cacheAdapter.secondaryFiles
+                    }
+                }
+            }
         };
 
         $scope.addSecondaryFile = function () {
-            if (_.isUndefined($scope.view.secondaryFiles)) {
-	            $scope.view.secondaryFiles = []
+            if (_.isUndefined($scope.view.property.inputBinding)) {
+                $scope.view.property.inputBinding = {
+                    secondaryFiles: []
+                };
+            } else if (_.isUndefined($scope.view.property.inputBinding.secondaryFiles)) {
+                $scope.view.property.inputBinding.secondaryFiles = [];
             }
-	        //temporary check, might remove later
-	        if (_.isUndefined($scope.view.property.inputBinding)) {
-		        $scope.view.property.inputBinding = {};
-		        $scope.toggleAdapter();
-	        }
-	        $scope.view.secondaryFiles.push('');
+
+            $scope.view.property.inputBinding.secondaryFiles.push('');
         };
 
         $scope.updateSecondaryFile = function (value, index) {
-            $scope.view.secondaryFiles[index] = value;
+            $scope.view.property.inputBinding.secondaryFiles[index] = value;
         };
 
         $scope.removeSecondaryFile = function(index) {
-            $scope.view.secondaryFiles.splice(index, 1);
+            $scope.view.property.inputBinding.secondaryFiles.splice(index, 1);
         };
 
         /**

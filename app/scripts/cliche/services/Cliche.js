@@ -641,7 +641,7 @@ angular.module('registryApp.cliche')
 
                     var key = parseName(property);
 
-                    return _.contains(keys, key) && property.inputBinding;
+                    return _.contains(keys, key) && property.inputBinding && property.inputBinding['sbg:cmdInclude'];
                 });
 
             /* go through properties */
