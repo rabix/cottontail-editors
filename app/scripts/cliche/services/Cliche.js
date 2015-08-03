@@ -84,8 +84,8 @@ angular.module('registryApp.cliche')
                 delete transformed.stdout;
                 delete transformed.arguments;
                 // requirements
-                delete transformed.requirements;
-
+	            // scripts by default should only have the ExpressionEngineRequirement
+	            transformed.requirements = _.filter(transformed.requirements, {class: 'ExpressionEngineRequirement'});
             } else {
 
                 transformed['class'] = 'CommandLineTool';
@@ -374,6 +374,9 @@ angular.module('registryApp.cliche')
 
         };
 
+		var getExpressionRequirement = function() {
+			return _.find(rawTool.requirements, {'class': 'ExpressionEngineRequirement'});
+		};
 
         /**
          * Delete property (input or output) from the object
@@ -641,7 +644,7 @@ angular.module('registryApp.cliche')
 
                     var key = parseName(property);
 
-                    return _.contains(keys, key) && property.inputBinding;
+                    return _.contains(keys, key) && property.inputBinding && property.inputBinding['sbg:cmdInclude'];
                 });
 
             /* go through properties */
@@ -1146,6 +1149,7 @@ angular.module('registryApp.cliche')
             getSchema: getSchema,
             getAdapter: getAdapter,
             checkIfEnumNameExists: checkIfEnumNameExists,
+	        getExpressionRequirement: getExpressionRequirement,
             manageProperty: manageProperty,
             deleteProperty: deleteProperty,
             manageArg: manageArg,
