@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('ClicheCtrl', ['$scope', '$q', '$modal', '$templateCache', '$rootScope', 'App', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload', 'BeforeRedirect', 'Api', 'User', 'lodash', 'HelpMessages', 'Globals', 'HotkeyRegistry', 'Chronicle', 'Notification', 'rawTool', function($scope, $q, $modal, $templateCache, $rootScope, App, Cliche, Loading, SandBox, BeforeUnload, BeforeRedirect, Api, User, _, HelpMessages, Globals, HotkeyRegistry, Chronicle, Notification, rawTool) {
+    .controller('ClicheCtrl', ['$scope', '$q', '$modal', '$templateCache', '$rootScope', 'App', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload', 'BeforeRedirect', 'Api', 'User', 'lodash', 'HelpMessages', 'Globals', 'HotkeyRegistry', 'Chronicle', 'Notification', 'rawTool', 'Helper', 'ClicheEvents', function($scope, $q, $modal, $templateCache, $rootScope, App, Cliche, Loading, SandBox, BeforeUnload, BeforeRedirect, Api, User, _, HelpMessages, Globals, HotkeyRegistry, Chronicle, Notification, rawTool, Helper, ClicheEvents) {
         $scope.Loading = Loading;
 
         var cliAdapterWatchers = [],
@@ -84,6 +84,13 @@ angular.module('registryApp.cliche')
         Cliche.subscribe(function(cmd) {
             $scope.view.command = cmd;
         });
+
+		/**
+		 * Cliche events that can be broadcast by various components
+		 */
+		$scope.$on(ClicheEvents.EXPRESSION.CHANGED, function() {
+			checkExpressionRequirement();
+		});
 
         $scope.$watch('Loading.classes', function(n, o) {
             if (n !== o) { $scope.view.classes = n; }
@@ -316,8 +323,13 @@ angular.module('registryApp.cliche')
                 delete json.stdin;
                 delete json.stdout;
                 delete json.arguments;
-                delete json.requirements;
                 delete json.transform;
+
+                json.requirements.forEach(function(req, index) {
+                    if (req.class !== 'ExpressionEngineRequirement') {
+                        json.requirements.splice(index, 1);
+                    }
+                });
 
             } else {
                 if (angular.isDefined(json.transform)) { delete json.transform; }
@@ -357,6 +369,24 @@ angular.module('registryApp.cliche')
                 return {text: cat};
             });
         };
+
+		/**
+		 * Checks if the app has any expressions.
+		 *
+		 * Apps with expressions require an expression engine. It adds an expression engine
+		 * requirement to apps with any expressions.
+		 */
+		var checkExpressionRequirement = function () {
+			if (Helper.deepPropertyExists($scope.view.tool, 'script')) {
+				$scope.view.expReq = true;
+				if (!_.find($scope.view.tool.requirements, {'class': 'ExpressionEngineRequirement'})) {
+					$scope.view.tool.requirements.push(Cliche.getExpressionRequirement());
+				}
+			} else {
+				$scope.view.expReq = false;
+				_.remove($scope.view.tool.requirements, {'class': 'ExpressionEngineRequirement'});
+			}
+		};
 
         /**
          * Switch the tab
