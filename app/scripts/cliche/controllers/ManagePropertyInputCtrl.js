@@ -22,23 +22,30 @@ angular.module('registryApp.cliche')
         $scope.view.key = key;
         $scope.view.mode = options.mode;
         $scope.view.property = options.property || {};
-        $scope.view.property.schema =  Cliche.getSchema('input', options.property, options.toolType, false);
+        $scope.view.property.type =  Cliche.getSchema('input', options.property, options.toolType, false);
 
         // only add adapter if one has been defined
         if (options.property && options.property.inputBinding) {
             $scope.view.property.inputBinding = Cliche.getAdapter(options.property, false, 'input');
+
+            // temporarily remove secondary files from inputBinding, for command line check,
+            // return them later during save
+            $scope.view.secondaryFiles = $scope.view.property.inputBinding.secondaryFiles;
+
+            //delete $scope.view.property.inputBinding.secondaryFiles;
+            //if (_.isEmpty($scope.view.property.inputBinding)) {delete $scope.view.property.inputBinding}
         }
 
         $scope.view.name = Cliche.parseName(options.property);
-        $scope.view.required = Cliche.isRequired($scope.view.property.schema);
-        $scope.view.type = Cliche.parseType($scope.view.property.schema);
-        $scope.view.items = Cliche.getItemsRef($scope.view.type, $scope.view.property.schema);
+        $scope.view.required = Cliche.isRequired($scope.view.property.type);
+        $scope.view.type = Cliche.parseType($scope.view.property.type);
+        $scope.view.items = Cliche.getItemsRef($scope.view.type, $scope.view.property.type);
         $scope.view.itemsType = Cliche.getItemsType($scope.view.items);
 
         $scope.view.types = Cliche.getTypes('input');
         $scope.view.itemTypes = Cliche.getTypes('inputItem');
 
-        var enumObj = Cliche.parseEnum($scope.view.property.schema);
+        var enumObj = Cliche.parseEnum($scope.view.property.type);
 
         $scope.view.symbols = enumObj.symbols;
 
@@ -73,6 +80,16 @@ angular.module('registryApp.cliche')
                 }
             }
 
+            if (!_.isEmpty($scope.view.secondaryFiles) && $scope.view.type === 'File') {
+                if ($scope.view.property.inputBinding) {
+                    $scope.view.property.inputBinding.secondaryFiles = _.compact($scope.view.secondaryFiles);
+                } else {
+                    $scope.view.property.inputBinding = {
+                        secondaryFiles: _.compact($scope.view.secondaryFiles)
+                    }
+                }
+            }
+
             var inner = {
                 key: key,
                 name: $scope.view.name,
@@ -85,9 +102,6 @@ angular.module('registryApp.cliche')
                 description: $scope.view.description,
                 category: $scope.view.category
             };
-
-            $scope.view.property.type = $scope.view.property.schema;
-            delete $scope.view.property.schema;
 
             var formatted = Cliche.formatProperty(inner, $scope.view.property, 'input');
 
@@ -172,6 +186,26 @@ angular.module('registryApp.cliche')
                 delete $scope.view.property.inputBinding;
             }
 
+        };
+
+        $scope.addSecondaryFile = function () {
+            if (_.isUndefined($scope.view.secondaryFiles)) {
+	            $scope.view.secondaryFiles = []
+            }
+	        //temporary check, might remove later
+	        if (_.isUndefined($scope.view.property.inputBinding)) {
+		        $scope.view.property.inputBinding = {};
+		        $scope.toggleAdapter();
+	        }
+	        $scope.view.secondaryFiles.push('');
+        };
+
+        $scope.updateSecondaryFile = function (value, index) {
+            $scope.view.secondaryFiles[index] = value;
+        };
+
+        $scope.removeSecondaryFile = function(index) {
+            $scope.view.secondaryFiles.splice(index, 1);
         };
 
         /**

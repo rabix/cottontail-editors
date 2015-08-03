@@ -9,13 +9,12 @@
 angular.module('registryApp.cliche')
     .controller('InputFieldCtrl', ['$scope', '$modal', '$templateCache', 'Cliche', 'Const', 'lodash', function ($scope, $modal, $templateCache, Cliche, Const, _) {
 
-		var suggested = $scope.suggestedValues[$scope.appName + Const.exposedSeparator + $scope.prop.id];
-
-		if (!$scope.values) {
-			if (suggested) {
-				$scope.model = $scope.values = suggested;
-			}
-		}
+        if ($scope.suggestedValues && !$scope.values) {
+            var suggested = $scope.suggestedValues[$scope.appName + Const.exposedSeparator + $scope.prop.id];
+            if (suggested) {
+                $scope.model = $scope.values = suggested;
+            }
+        }
 
         $scope.view = {};
 
