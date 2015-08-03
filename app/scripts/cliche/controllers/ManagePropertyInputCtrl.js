@@ -16,6 +16,8 @@ angular.module('registryApp.cliche')
             separate: true
         };
 
+        var cachedInputBinding;
+
         $scope.help = HelpMessages;
 
         $scope.view = {};
@@ -27,6 +29,7 @@ angular.module('registryApp.cliche')
         // only add adapter if one has been defined
         if (options.property && options.property.inputBinding) {
             $scope.view.property.inputBinding = Cliche.getAdapter(options.property, false, 'input');
+            cachedInputBinding = _.cloneDeep($scope.view.property.inputBinding);
         }
 
         $scope.view.name = Cliche.parseName(options.property);
@@ -194,12 +197,18 @@ angular.module('registryApp.cliche')
 
         $scope.removeSecondaryFile = function(index) {
             $scope.view.property.inputBinding.secondaryFiles.splice(index, 1);
+            if ($scope.view.property.inputBinding.secondaryFiles.length === 0) {
+                delete $scope.view.property.inputBinding.secondaryFiles;
+            }
         };
 
         /**
          * Dismiss modal
          */
         $scope.cancel = function () {
+            if (cachedInputBinding) {
+                $scope.view.property.inputBinding = cachedInputBinding;
+            }
             $modalInstance.dismiss('cancel');
         };
 
