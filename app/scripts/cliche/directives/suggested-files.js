@@ -12,7 +12,7 @@ angular.module('registryApp.cliche')
         $scope.view.required = Cliche.isRequired($scope.model);
         $scope.view.model = $scope.model.suggestedValue || [];
 
-        var schema = $scope.model.outputs[0].schema;
+        var schema = $scope.model.outputs[0].type;
         var type = Cliche.parseType(schema);
         var isArray = type === 'array';
 
