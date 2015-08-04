@@ -106,7 +106,7 @@ angular.module('registryApp.cliche')
 
                 if (result[0].message) {
 
-                    var tool = _.assign(rawTool, result[0].message);
+                    var tool = _.assign(_.cloneDeep(rawTool), result[0].message);
 
                     $scope.view.app = tool;
                     $scope.view.tool = tool;
