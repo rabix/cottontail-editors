@@ -12,7 +12,7 @@
         <div class="codemirror-editor"></div>
     </div>
 
-    <div ng-if="view.urlImport" class="form-group">
+    <div ng-show="view.urlImport" class="form-group">
         <form name="urlImport" ng-class="{ 'has-error' : urlImport.url.$invalid}">
             <label for="url">Enter url:</label>
             <input id="url" name="url" placeholder="http://www.example.com/tool.json" class="form-control" type="url" ng-model="view.url" required>
