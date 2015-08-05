@@ -63,7 +63,13 @@ angular.module('registryApp.cliche')
                     $scope.view.error = '';
 
                     $http.post(Globals.apiUrls.brood + 'import', {url: $scope.view.url}).then(function (response) {
-                        var data = response.message;
+
+                        if (!response.data) {
+                            $rootScope.$broadcast('httpError', {message: 'Something has gone wrong, summon the avengers.'});
+                            return false;
+                        }
+
+                        var data = response.data.message;
                         $scope.view.validating = false;
 
                         if (typeof data === 'object') {
@@ -73,7 +79,7 @@ angular.module('registryApp.cliche')
                                 var test = JSON.parse(data);
                                 validateJson(data);
                             } catch (e) {
-                                $rootScope.$broadcast('httpError', {message: 'Error while parsinf json response'});
+                                $rootScope.$broadcast('httpError', {message: 'Error while parsing json response'});
                             }
                         }
 
