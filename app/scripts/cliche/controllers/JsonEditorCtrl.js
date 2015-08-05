@@ -7,10 +7,12 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('JsonEditorCtrl', ['$scope', '$rootScope', '$modalInstance', '$timeout', '$document', 'options', 'SchemaValidator', function($scope, $rootScope, $modalInstance, $timeout, $document, options, SchemaValidator) {
+    .controller('JsonEditorCtrl', ['$scope', '$rootScope', '$modalInstance', '$timeout', '$document', 'options', 'SchemaValidator', '$http', function($scope, $rootScope, $modalInstance, $timeout, $document, options, SchemaValidator, $http) {
 
         $scope.view = {};
         $scope.view.user = options.user;
+
+        $scope.view.urlImport = false;
 
         //$scope.mirror = null;
 
@@ -50,10 +52,40 @@ angular.module('registryApp.cliche')
         $scope.import = function() {
 
             var json = $scope.mirror.getValue();
+
+            if ($scope.view.urlImport && $scope.view.url) {
+                $http.get($scope.view.url).then(function (response) {
+
+                    $scope.view.validating = false;
+
+                    if (typeof response.data === 'object'){
+                        validateJson(response.data);
+                    } else {
+                        try {
+                            var data = JSON.parse(response.data);
+                            validateJson(data);
+                        } catch(e) {
+                            $rootScope.$broadcast('httpError', {message: e});
+                        }
+                    }
+
+                }, function (trace) {
+                    $scope.view.validating = false;
+                    $rootScope.$broadcast('httpError', {message: 'Response error: ' + trace.message});
+                });
+
+            } else {
+                validateJson(json);
+            }
+
+        };
+
+        function validateJson(data) {
+            var json  = $scope.view.urlImport ? JSON.stringify(data): data;
+
             $scope.view.error = '';
 
-
-            if (!isJsonString(json)) {
+            if (!$scope.view.urlImport && !isJsonString(json)) {
                 $scope.view.error = 'You must provide valid json format';
                 return false;
             }
@@ -72,7 +104,7 @@ angular.module('registryApp.cliche')
                     $rootScope.$broadcast('httpError', {message: trace});
                 });
 
-        };
+        }
 
         /**
          * Close the modal window
