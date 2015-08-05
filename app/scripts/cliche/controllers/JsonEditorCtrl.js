@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('JsonEditorCtrl', ['$scope', '$rootScope', '$modalInstance', '$timeout', '$document', 'options', 'SchemaValidator', '$http', function($scope, $rootScope, $modalInstance, $timeout, $document, options, SchemaValidator, $http) {
+    .controller('JsonEditorCtrl', ['$scope', '$rootScope', '$modalInstance', '$timeout', '$document', 'options', 'SchemaValidator', '$http', 'Globals', function($scope, $rootScope, $modalInstance, $timeout, $document, options, SchemaValidator, $http, Globals) {
 
         $scope.view = {};
         $scope.view.user = options.user;
@@ -51,37 +51,33 @@ angular.module('registryApp.cliche')
          */
         $scope.import = function() {
 
-            var json = $scope.mirror.getValue();
-
-            if ($scope.view.urlImport && $scope.view.url) {
-                $http.get($scope.view.url).then(function (response) {
+            if ($scope.view.urlImport) {
+                $http.post(Globals.apiUrls.brood + 'import', { url: $scope.view.url }).then(function (response) {
 
                     $scope.view.validating = false;
 
                     if (typeof response.data === 'object'){
-                        validateJson(response.data);
+                        validateJson(JSON.stringify(response.data));
                     } else {
                         try {
-                            var data = JSON.parse(response.data);
-                            validateJson(data);
+                            var test = JSON.parse(response.data);
+                            validateJson(response.data);
                         } catch(e) {
-                            $rootScope.$broadcast('httpError', {message: e});
+                            $rootScope.$broadcast('httpError', {message: 'Error while parsinf json response'});
                         }
                     }
 
                 }, function (trace) {
                     $scope.view.validating = false;
-                    $rootScope.$broadcast('httpError', {message: 'Response error: ' + trace.message});
                 });
 
             } else {
-                validateJson(json);
+                validateJson($scope.mirror.getValue());
             }
 
         };
 
-        function validateJson(data) {
-            var json  = $scope.view.urlImport ? JSON.stringify(data): data;
+        function validateJson(json) {
 
             $scope.view.error = '';
 
