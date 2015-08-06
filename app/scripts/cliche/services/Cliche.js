@@ -916,8 +916,6 @@ angular.module('registryApp.cliche')
              * @param {string} itemType
              */
             var stripParams = function(prop, itemType) {
-                console.trace();
-
                 var toStrip = ['prefix', 'separator', 'itemSeparator', 'valueFrom'];
 
                 if (itemType === 'record' && prop.inputBinding) {
@@ -966,7 +964,8 @@ angular.module('registryApp.cliche')
 
                     // _.isEmpty returns true for number values, which we don't want
                     // if there is a number value, then the prop is not empty
-                    if (_.isEmpty(tmp[adapter][key]) && !_.isNumber(tmp[adapter][key]) && !_.isBoolean(tmp[adapter][key])) {
+                    if (_.isEmpty(tmp[adapter][key]) && !_.isNumber(tmp[adapter][key]) && !_.isBoolean(tmp[adapter][key]) && !_.isNull(tmp[adapter][key])) {
+
                         delete tmp[adapter][key];
                     }
                 });
