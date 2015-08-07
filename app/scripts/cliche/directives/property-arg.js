@@ -55,7 +55,7 @@ angular.module('registryApp.cliche')
             });
 
             modalInstance.result.then(function () {
-                Cliche.deleteArg($scope.index);
+                Cliche.deleteArg($scope.prop);
                 Cliche.generateCommand();
             });
         };

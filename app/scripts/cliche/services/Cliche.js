@@ -398,12 +398,10 @@ angular.module('registryApp.cliche')
         /**
          * Delete argument property from cliAdapter
          *
-         * @param {integer} index
+         * @param {object} argument
          */
-        var deleteArg = function(index) {
-
-            toolJSON.arguments.splice(index, 1);
-
+        var deleteArg = function(argument) {
+            _.remove(toolJSON['arguments'], argument);
         };
 
         /**
