@@ -23,7 +23,8 @@ angular.module('registryApp.common')
                 onlyExpr: '@',
                 tooltipMsg: '@',
                 handleItemUpdate: '&',
-                handleItemBlur: '&'
+                handleItemBlur: '&',
+                min: '@'
             },
             controller: ['$scope', '$modal', 'SandBox', 'Helper', 'rawTransform', function ($scope, $modal, SandBox, Helper, rawTransform) {
 
@@ -32,6 +33,7 @@ angular.module('registryApp.common')
                 $scope.view.placeholder = $scope.placeholder || 'Enter value';
                 $scope.view.type = $scope.type || 'string';
 
+                $scope.view.min = $scope.min || '';
                 $scope.view.exprError = '';
                 $scope.view.tooltipMsg = $scope.tooltipMsg || '';
 
