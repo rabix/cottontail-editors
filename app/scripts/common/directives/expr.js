@@ -24,6 +24,7 @@ angular.module('registryApp.common')
                 tooltipMsg: '@',
                 handleItemUpdate: '&',
                 handleItemBlur: '&',
+	            longLiteral: '@',
                 min: '@'
             },
             controller: ['$scope', '$modal', 'SandBox', 'Helper', 'rawTransform', function ($scope, $modal, SandBox, Helper, rawTransform) {
@@ -36,6 +37,8 @@ angular.module('registryApp.common')
                 $scope.view.min = $scope.min || '';
                 $scope.view.exprError = '';
                 $scope.view.tooltipMsg = $scope.tooltipMsg || '';
+
+	            $scope.view.longLiteral = $scope.longLiteral === 'true';
 
                 /**
                  * Determine if model is object with defined transformation or literal
@@ -165,6 +168,47 @@ angular.module('registryApp.common')
 
 
                 };
+
+	            /**
+	             * Edit long literals
+	             */
+	            $scope.editLiteral = function() {
+					var expr = $scope.view.mode === 'transform' ? $scope.view.transform.script : '';
+
+		            var modalInstance = $modal.open({
+			            template: $templateCache.get('views/partials/edit-literal.html'),
+			            controller: 'LiteralCtrl',
+			            windowClass: 'modal-expression',
+			            backdrop: 'static',
+			            size: 'lg',
+			            resolve: {
+				            options: function () {
+					            return {
+						            literal: $scope.view.literal
+					            }
+				            }
+			            }
+		            });
+
+		            modalInstance.result.then(function (lit) {
+			            $scope.view.mode = 'literal';
+
+			            if (_.isEmpty(lit) && expr) {
+				            $scope.view.transform = angular.copy(rawTransform);
+				            $scope.view.transform.script = expr;
+				            $scope.view.literal = '';
+
+			            } else if (_.isEmpty(lit)) {
+				            $scope.view.transform = null;
+				            $scope.view.literal = '';
+
+			            } else {
+				            $scope.view.literal = lit;
+			            }
+
+		            });
+
+	            }
 
             }],
             link: function(scope, element) {
