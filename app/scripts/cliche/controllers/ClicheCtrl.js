@@ -678,6 +678,8 @@ angular.module('registryApp.cliche')
 			if (_.isEmpty($scope.view.reqCreateFileRequirement.fileDef)) {
 				_.remove($scope.view.tool.requirements, {'class': 'CreateFileRequirement'});
 				delete $scope.view.reqCreateFileRequirement;
+
+				checkExpressionRequirement();
 			}
 		};
 
