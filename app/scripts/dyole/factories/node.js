@@ -729,8 +729,12 @@ angular.module('registryApp.dyole')
             _initNameChanging: function () {
                 var _self = this;
                 var nodeName = !Common.checkSystem(this.model) ? this.model.label : this.model.id;
+                var opts = {
+                    name: nodeName,
+                    isSystem: Common.checkSystem(this.model)
+                };
 
-                $rootScope.$broadcast('node:label:edit', nodeName, function check(name) {
+                $rootScope.$broadcast('node:label:edit', opts, function check(name) {
 
                     var test = _.filter(_self.Pipeline.nodes, function (n) {
                         return n.model.id === name;

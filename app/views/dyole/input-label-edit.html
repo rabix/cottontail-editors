@@ -7,9 +7,9 @@
     <form ng-submit="ok()" name="form" class="form">
         <div class="form-group" ng-class="{'has-error': form.name.$invalid}">
             <label class="control-label">Name</label>
-            <input name="name"class="form-control node-label-edit" type="text" ng-model="view.name"/>
+            <input name="name" is-valid-name="true" class="form-control node-label-edit" type="text" ng-model="view.name"/>
+            <span class="help-block">Allowed characters are alphanumerics, _, and -</span>
         </div>
-        <br>
         <div class="form-group">
             <button class="btn btn-primary" type="submit">Save</button>
             <a href class="btn btn-default" ng-click="cancel()">Cancel</a>
