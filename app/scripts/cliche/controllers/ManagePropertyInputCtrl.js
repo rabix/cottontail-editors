@@ -109,6 +109,10 @@ angular.module('registryApp.cliche')
                 if (n === 'array') {
                     $scope.view.itemsType = 'string';
                     $scope.view.items = $scope.view.itemsType;
+
+	                if ($scope.view.property.inputBinding) {
+		                $scope.view.property.inputBinding.itemSeparator = null;
+	                }
                 } else {
                     delete $scope.view.items;
                 }
@@ -167,6 +171,9 @@ angular.module('registryApp.cliche')
 
             if ($scope.view.adapter) {
                 $scope.view.property.inputBinding = _.extend($scope.view.property.inputBinding, cacheAdapter) || cacheAdapter;
+	            if ($scope.view.type === 'array') {
+		            $scope.view.property.inputBinding.itemSeparator = null;
+	            }
             } else {
                 cacheAdapter = angular.copy($scope.view.property.inputBinding);
                 delete $scope.view.property.inputBinding;

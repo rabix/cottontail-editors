@@ -44,7 +44,11 @@ angular.module('registryApp.cliche')
                         dockerPull: 'rabix/js-engine'
                     }
                 ]
-            }
+            },
+	        {
+		        'class': 'CreateFileRequirement',
+		        fileDef: []
+	        }
         ],
         inputs: [],
         outputs: [],

@@ -224,8 +224,22 @@ angular.module('registryApp.cliche')
             $scope.view.reqDockerRequirement = _.find($scope.view.tool.requirements, {'class': 'DockerRequirement'});
             $scope.view.reqCPURequirement = _.find($scope.view.tool.requirements, {'class': 'CPURequirement'});
             $scope.view.reqMemRequirement = _.find($scope.view.tool.requirements, {'class': 'MemRequirement'});
-
         };
+
+		/**
+		 * Creates an object on the view for CreateFileRequirement.
+		 * If that requirement does not exist in the tool, will create it
+		 * and link the view object to it.
+		 */
+		var connectCreateFile = function () {
+			var createFileReq = _.find($scope.view.tool.requirements, {'class': 'CreateFileRequirement'});
+			if (!createFileReq) {
+				$scope.view.tool.requirements.push(_.clone(_.find(rawTool.requirements, {'class': 'CreateFileRequirement'})));
+				$scope.view.reqCreateFileRequirement = _.find($scope.view.tool.requirements, {'class': 'CreateFileRequirement'});
+			} else {
+				$scope.view.reqCreateFileRequirement = createFileReq;
+			}
+		};
 
         var prepareStatusCodes = function () {
             if (typeof $scope.view.tool.successCodes === 'undefined') {
@@ -622,6 +636,52 @@ angular.module('registryApp.cliche')
             $scope.view.tool.baseCommand.push('');
 
         };
+
+
+		/**
+		 * Add fileDef object to CreateFileRequirement.
+		 *
+		 * creates requirement if it fileDef was empty.
+		 */
+		$scope.addFileDef = function () {
+			if (!$scope.view.reqCreateFileRequirement) {
+				connectCreateFile();
+			}
+
+			$scope.view.reqCreateFileRequirement.fileDef.push({
+				filename: '',
+				fileContent: ''
+			})
+		};
+
+		/**
+		 * update fileDef in CreateFileRequirement by index.
+		 * @param {string | expression} transform
+		 * @param {number} index
+		 * @param {string} key
+		 */
+		$scope.updateFileDef = function (transform, index, key) {
+			$scope.view.reqCreateFileRequirement.fileDef[index][key] = transform;
+		};
+
+		/**
+		 * Removes fileDef object from CreateFileRequirement by index.
+		 *
+		 * if fileDef is empty, then it will remove the whole CreateFileRequirement
+		 * requirement form the tool.
+		 *
+		 * @param index
+		 */
+		$scope.removeFileDef = function(index) {
+			$scope.view.reqCreateFileRequirement.fileDef.splice(index, 1);
+
+			if (_.isEmpty($scope.view.reqCreateFileRequirement.fileDef)) {
+				_.remove($scope.view.tool.requirements, {'class': 'CreateFileRequirement'});
+				delete $scope.view.reqCreateFileRequirement;
+
+				checkExpressionRequirement();
+			}
+		};
 
         $scope.addStatusCode = function (codeType) {
 

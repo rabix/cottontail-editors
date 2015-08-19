@@ -297,13 +297,16 @@ angular.module('registryApp.dyole')
 
         };
 
-        var onNodeLabelEdit = function(e, name, onEdit, onSave, scope) {
+        var onNodeLabelEdit = function(e, opts, onEdit, onSave, scope) {
 
             var $modal = $injector.get('$modal');
             var $templateCache = $injector.get('$templateCache');
+            var name = opts.name;
+            var isSystem = opts.isSystem;
 
+            var template = isSystem ? 'views/dyole/input-label-edit.html' : 'views/dyole/node-label-edit.html';
             $modal.open({
-                template: $templateCache.get('views/dyole/node-label-edit.html'),
+                template: $templateCache.get(template),
                 controller: 'NodeEditCtrl',
                 windowClass: 'modal-node',
                 resolve: {data: function () { return {

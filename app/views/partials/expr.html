@@ -10,6 +10,16 @@
 
         <span class="input-group-btn">
             <a href
+               ng-if="view.longLiteral"
+               class="btn btn-expression"
+               tooltip="{{ !view.transform.script && view.transform ? view.transform : 'Click to add a literal'}}"
+               tooltip-placement="top"
+               tooltip-append-to-body="true"
+               ng-click="editLiteral()"
+               ng-class="{'btn-warning': (view.mode === 'literal' && view.literal), 'btn-default': (view.mode === 'transform' || !view.literal)}">
+                <i class="fa fa-font"></i>
+            </a>
+            <a href
                class="btn btn-expression"
                tooltip="{{ view.transform.script || 'There is no expression defined. Click to add it' }}"
                tooltip-placement="top"
