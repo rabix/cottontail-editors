@@ -580,7 +580,7 @@ angular.module('registryApp.cliche')
                 schema = getSchema('input', property, 'tool', false),
                 type = parseType(schema),
                 items = getItemsRef(type, schema),
-                separator = parseSeparation(property.separate);
+                separator = parseSeparation(property.inputBinding.separate);
 
             if (items && items.type !== 'record') {
                 joiner = _.isNull(itemSeparator) ? (' ' + prefix + separator) : itemSeparator;
