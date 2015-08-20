@@ -24,7 +24,8 @@ angular.module('registryApp.common')
                 tooltipMsg: '@',
                 handleItemUpdate: '&',
                 handleItemBlur: '&',
-	            longLiteral: '@',
+                handleNull: '&',
+                longLiteral: '@',
                 min: '@'
             },
             controller: ['$scope', '$modal', 'SandBox', 'Helper', 'rawTransform', function ($scope, $modal, SandBox, Helper, rawTransform) {
@@ -48,11 +49,11 @@ angular.module('registryApp.common')
                     if ($scope.ngModel && $scope.ngModel.script) {
                         $scope.view.mode = 'transform';
                         $scope.view.transform = $scope.ngModel;
-                        $scope.view.literal = null;
+                        $scope.view.literal = undefined;
                     } else {
                         $scope.view.mode = 'literal';
                         $scope.view.literal = $scope.ngModel;
-                        $scope.view.transform = null;
+                        $scope.view.transform = undefined;
                     }
 
                 };
@@ -91,6 +92,8 @@ angular.module('registryApp.common')
                     }
                 });
 
+
+
                 /**
                  * Trigger the update on the outside
                  *
@@ -99,8 +102,11 @@ angular.module('registryApp.common')
                  * @param {String} mode - 'literal' | 'transform'
                  */
                 var triggerUpdate = function(n, o, mode) {
+                    if (_.isNull(n) || n === '') {
+                        $scope.handleNull({index: $scope.index, value: $scope.view[mode]});
 
-                    if (n !== o && !_.isNull(n) && !_.isUndefined(n)) {
+                    }
+                    if (n !== o && !_.isNull(n) && !_.isUndefined(n) && n !== '') {
 
                         checkExpression();
 
@@ -152,7 +158,7 @@ angular.module('registryApp.common')
                         if (_.isEmpty(expr)) {
 
                             $scope.view.mode = 'literal';
-                            $scope.view.transform = null;
+                            $scope.view.transform = undefined;
                             $scope.view.literal = '';
 
                         } else {
@@ -161,7 +167,7 @@ angular.module('registryApp.common')
 
                             if (!_.isObject($scope.view.transform)) { $scope.view.transform = angular.copy(rawTransform); }
                             $scope.view.transform.script = expr;
-                            $scope.view.literal = null;
+                            $scope.view.literal = undefined;
                         }
 
                     });
