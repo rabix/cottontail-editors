@@ -74,7 +74,7 @@ angular.module('registryApp.common')
 	                        .then(function (result) {
 		                        // check if typeof result is the same as $scope.type (parses number strings, etc.)
 		                        if (!checkFormat(result)) {
-			                        $scope.view.exprError = 'Format is invalid, expected type ' + $scope.type;
+			                        $scope.view.exprError = 'Format is invalid, expected type ' + $scope.view.type;
 		                        } else {
 			                        $scope.view.exprError = '';
 		                        }
@@ -99,7 +99,7 @@ angular.module('registryApp.common')
 	            function checkFormat (expr) {
 		            switch ($scope.view.type) {
 			            case 'string':
-				            return _.isString(expr);
+				            return _.isString(expr) || _.isNumber(expr);
 			            case 'number':
 				            return _.isNumber(expr);
 			            default:

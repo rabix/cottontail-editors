@@ -188,7 +188,9 @@ angular.module('registryApp.cliche')
                 var watch = [
                     'view.tool.baseCommand',
                     'view.tool.stdout',
-                    'view.tool.stdin'
+                    'view.tool.stdin',
+	                'view.reqMemRequirement.value',
+	                'view.reqCPURequirement.value'
                 ];
 
                 _.each(watch, function(arg) {
@@ -616,9 +618,7 @@ angular.module('registryApp.cliche')
                     });
 
             } else {
-                if ($scope.view.job.allocatedResources[reqMap[key]] < transform) {
-                    $scope.view.job.allocatedResources[reqMap[key]] = transform;
-                }
+                $scope.view.job.allocatedResources[reqMap[key]] = transform;
             }
 
         };
