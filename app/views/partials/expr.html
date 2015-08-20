@@ -2,7 +2,7 @@
 
     <div class="input-group" ng-class="{error: view.exprError}">
 
-        <!--<i class="fa fa-warning error" ng-if="view.exprError" title="{{ view.exprError }}"></i>-->
+        <i class="fa fa-warning error" ng-if="view.exprError" title="{{ view.exprError }}"></i>
 
         <input tooltip="{{ view.tooltipMsg }}" tooltip-trigger="focus"  ng-blur="runHandler($event)" ng-keypress="runHandler($event)" ng-show="view.mode === 'transform'" type="text" class="form-control" ng-model="view.transform.script" readonly>
 

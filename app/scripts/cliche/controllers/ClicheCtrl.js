@@ -227,11 +227,14 @@ angular.module('registryApp.cliche')
         };
 
 		/**
-		 * Creates an object on the view for CreateFileRequirement.
-		 * If that requirement does not exist in the tool, will create it
-		 * and link the view object to it.
+		 * Connects requirement object on $scope.view to object
+		 * in $scope.view.tool.requirements array.
+		 *
+		 * If such a requirement does not exist, will copy req from
+		 * rawTool and make view object a reference to object in array.
+		 *
+		 * @param {string} key
 		 */
-
         var connectRequirement = function(key){
             var tempRequirement = _.find($scope.view.tool.requirements, {'class': key});
             if (!tempRequirement) {
@@ -240,7 +243,7 @@ angular.module('registryApp.cliche')
             } else {
                 $scope.view['req'+key] = tempRequirement;
             }
-        }
+        };
 
         var prepareStatusCodes = function () {
             if (typeof $scope.view.tool.successCodes === 'undefined') {
@@ -792,10 +795,15 @@ angular.module('registryApp.cliche')
 
         };
 
+		/**
+		 * Removes the memory requirement when value is set to null or is an empty string
+		 */
         $scope.removeMemRequirement = function() {
-                _.remove($scope.view.tool.requirements, {'class': 'MemRequirement'});
-                delete $scope.view.reqMemRequirement;
+            _.remove($scope.view.tool.requirements, {'class': 'MemRequirement'});
+            delete $scope.view.reqMemRequirement;
 
+	        $scope.updateResource(1024, reqMap.MemRequirement);
+			checkExpressionRequirement();
         };
 
 

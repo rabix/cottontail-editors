@@ -71,16 +71,41 @@ angular.module('registryApp.common')
                         var self = $scope.self ? {$self: Helper.getTestData($scope.selfType, $scope.selfItemType)} : {};
 
                         SandBox.evaluate($scope.view.transform.script, self)
-                            .then(function () {
-                                $scope.view.exprError = '';
-                            }, function (error) {
-                                $scope.view.exprError = error.name + ':' + error.message;
-                            });
+	                        .then(function (result) {
+		                        // check if typeof result is the same as $scope.type (parses number strings, etc.)
+		                        if (!checkFormat(result)) {
+			                        $scope.view.exprError = 'Format is invalid, expected type ' + $scope.type;
+		                        } else {
+			                        $scope.view.exprError = '';
+		                        }
+	                        }, function (error) {
+		                        $scope.view.exprError = error.name + ':' + error.message;
+	                        });
                     } else {
                         $scope.view.exprError = '';
                     }
 
                 };
+
+	            /**
+	             * Checks if the result format conforms to the input format type.
+	             *
+	             * Defaults to true, because if no $scope.type is provided, type defaults to
+	             * string, and all expressions are inherently strings.
+	             *
+	             * @param {string} expr expression result
+	             * @returns {boolean}
+	             */
+	            function checkFormat (expr) {
+		            switch ($scope.view.type) {
+			            case 'string':
+				            return _.isString(expr);
+			            case 'number':
+				            return _.isNumber(expr);
+			            default:
+				            return true;
+		            }
+	            }
 
                 /* init check of the expression if defined */
                 checkExpression();
