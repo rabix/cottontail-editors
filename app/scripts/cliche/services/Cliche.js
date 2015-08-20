@@ -671,8 +671,6 @@ angular.module('registryApp.cliche')
                 switch (type) {
                 case 'array':
                     /* if input is ARRAY */
-	                debugger;
-
                     parseArrayInput(property, inputs[key], prefix, itemSeparator)
                         .then(function (result) {
                             prop.val = result;
