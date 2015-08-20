@@ -33,7 +33,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label">Memory (MB)</label>
-                            <expr tooltip-msg="{{ ::help.cliche.general.memory }}" ng-model="view.reqMemRequirement.value" type="number" handle-item-update="updateResource(value, 'MemRequirement')"></expr>
+                            <expr tooltip-msg="{{ ::help.cliche.general.memory }}" ng-model="view.reqMemRequirement.value" type="number" handle-null="removeMemRequirement()" handle-item-update="updateResource(value, 'MemRequirement')"></expr>
                         </div>
                     </div>
 

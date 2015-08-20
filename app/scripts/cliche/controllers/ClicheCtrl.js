@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('ClicheCtrl', ['$scope', '$q', '$modal', '$templateCache', '$rootScope', 'App', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload', 'BeforeRedirect', 'Api', 'User', 'lodash', 'HelpMessages', 'Globals', 'HotkeyRegistry', 'Chronicle', 'Notification', 'rawTool', 'Helper', 'ClicheEvents', function($scope, $q, $modal, $templateCache, $rootScope, App, Cliche, Loading, SandBox, BeforeUnload, BeforeRedirect, Api, User, _, HelpMessages, Globals, HotkeyRegistry, Chronicle, Notification, rawTool, Helper, ClicheEvents) {
+    .controller('ClicheCtrl', ['$scope', '$q', '$modal', '$templateCache', '$rootScope', 'App', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload', 'BeforeRedirect', 'Api', 'User', 'lodash', 'HelpMessages', 'Globals', 'HotkeyRegistry', 'Chronicle', 'Notification', 'rawTool', 'Helper', 'ClicheEvents','$timeout', function($scope, $q, $modal, $templateCache, $rootScope, App, Cliche, Loading, SandBox, BeforeUnload, BeforeRedirect, Api, User, _, HelpMessages, Globals, HotkeyRegistry, Chronicle, Notification, rawTool, Helper, ClicheEvents, $timeout) {
         $scope.Loading = Loading;
 
         var cliAdapterWatchers = [],
@@ -224,22 +224,33 @@ angular.module('registryApp.cliche')
             $scope.view.reqDockerRequirement = _.find($scope.view.tool.requirements, {'class': 'DockerRequirement'});
             $scope.view.reqCPURequirement = _.find($scope.view.tool.requirements, {'class': 'CPURequirement'});
             $scope.view.reqMemRequirement = _.find($scope.view.tool.requirements, {'class': 'MemRequirement'});
+	        $scope.view.createFileRequirement = _.find($scope.view.tool.requirements, {'class': 'CreateFileRequirement'});
+
+
+	        if ($scope.view.createFileRequirement && $scope.view.createFileRequirement.fileDef.length === 0) {
+		        _.remove($scope.view.tool.requirements, {'class': 'CreateFileRequirement'});
+		        delete $scope.view.createFileRequirement;
+	        }
         };
 
 		/**
-		 * Creates an object on the view for CreateFileRequirement.
-		 * If that requirement does not exist in the tool, will create it
-		 * and link the view object to it.
+		 * Connects requirement object on $scope.view to object
+		 * in $scope.view.tool.requirements array.
+		 *
+		 * If such a requirement does not exist, will copy req from
+		 * rawTool and make view object a reference to object in array.
+		 *
+		 * @param {string} key
 		 */
-		var connectCreateFile = function () {
-			var createFileReq = _.find($scope.view.tool.requirements, {'class': 'CreateFileRequirement'});
-			if (!createFileReq) {
-				$scope.view.tool.requirements.push(_.clone(_.find(rawTool.requirements, {'class': 'CreateFileRequirement'})));
-				$scope.view.reqCreateFileRequirement = _.find($scope.view.tool.requirements, {'class': 'CreateFileRequirement'});
-			} else {
-				$scope.view.reqCreateFileRequirement = createFileReq;
-			}
-		};
+        var connectRequirement = function(key){
+            var tempRequirement = _.find($scope.view.tool.requirements, {'class': key});
+            if (!tempRequirement) {
+                $scope.view.tool.requirements.push(_.clone(_.find(rawTool.requirements, {'class': key})));
+                $scope.view['req'+key] = _.find($scope.view.tool.requirements, {'class': key});
+            } else {
+                $scope.view['req'+key] = tempRequirement;
+            }
+        };
 
         var prepareStatusCodes = function () {
             if (typeof $scope.view.tool.successCodes === 'undefined') {
@@ -591,8 +602,9 @@ angular.module('registryApp.cliche')
          */
         $scope.updateResource = function (transform, key) {
 
+            connectRequirement(key);
             //in case field has not yet been defined
-            var req = $scope.view['req' + key] || { class: key };
+            var req = $scope.view['req' + key];
 
             req.value = transform;
 
@@ -645,7 +657,7 @@ angular.module('registryApp.cliche')
 		 */
 		$scope.addFileDef = function () {
 			if (!$scope.view.reqCreateFileRequirement) {
-				connectCreateFile();
+				connectRequirement('CreateFileRequirement');
 			}
 
 			$scope.view.reqCreateFileRequirement.fileDef.push({
@@ -790,6 +802,18 @@ angular.module('registryApp.cliche')
 
         };
 
+		/**
+		 * Removes the memory requirement when value is set to null or is an empty string
+		 */
+        $scope.removeMemRequirement = function() {
+            _.remove($scope.view.tool.requirements, {'class': 'MemRequirement'});
+            delete $scope.view.reqMemRequirement;
+
+	        $scope.view.job.allocatedResources[reqMap['MemRequirement']] = 1024; // set default value
+			checkExpressionRequirement();
+        };
+
+
         /**
          * Update current tool
          *
@@ -806,6 +830,7 @@ angular.module('registryApp.cliche')
 
             var tool = Cliche.getTool();
             var job = Cliche.getJob();
+
 
             tool['sbg:job'] = job;
 
