@@ -15,6 +15,7 @@ angular.module('registryApp.cliche')
         $scope.help = HelpMessages;
 
         $scope.view = {};
+		$scope.view.uniqueId = _.uniqueId();
         $scope.view.key = key;
         $scope.view.mode = options.mode;
         $scope.view.property = options.property || {};
@@ -37,15 +38,31 @@ angular.module('registryApp.cliche')
         idObj.o = $scope.view.name;
 
         // shows expression style input rather than regular input
-        // for secondary files (not currently using)
+        // for secondary files
         $scope.view.isSecondaryFilesExpr = false;
 
-        // create list of input ids to inherit metadata from (not currently using)
-        //$scope.view.inputs = _.pluck(_.filter(Cliche.getTool().inputs, function(prop) {
-        //    var type = Cliche.parseType(prop.schema),
-        //        typeObj = Cliche.parseTypeObj(prop.schema);
-        //    return type === 'file' || (typeObj.items && typeObj.items.type === 'file');
-        //}), '@id');
+        // create list of input ids to inherit metadata from
+        $scope.view.inputs = _.pluck(_.filter(Cliche.getTool().inputs, function(input) {
+            var type = Cliche.parseType(input.type),
+                typeObj = Cliche.parseTypeObj(input.type);
+            return type === 'File' || (typeObj.items && typeObj.items === 'File');
+        }), 'id');
+
+		var cachedMetadata = [];
+		if (!_.isEmpty($scope.view.inputs)) {
+			$scope.$watch('view.property.outputBinding["sbg:inheritMetadataFrom"]', function (n, o) {
+				if (n !== o) {
+					if (!_.isNull(n)) {
+						cachedMetadata = $scope.view.property.outputBinding.metadata;
+						delete $scope.view.property.outputBinding.metadata;
+						$scope.view.usingInherit = true;
+					} else {
+						$scope.view.property.outputBinding.metadata = cachedMetadata;
+						$scope.view.usingInherit = false;
+					}
+				}
+			})
+		}
 
         /**
          * Toggle secondary files into array (not currently using)
