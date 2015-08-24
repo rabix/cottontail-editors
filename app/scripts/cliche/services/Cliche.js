@@ -787,6 +787,10 @@ angular.module('registryApp.cliche')
                 /* generate command from arguments and inputs and apply transforms on baseCmd */
                 .then(function (joined) {
 
+		            function isBlank(val) {
+			            return val === '' || _.isNull(val);
+		            }
+
                     var command = [],
                         baseCmdPromises = [];
 
@@ -794,10 +798,17 @@ angular.module('registryApp.cliche')
 
                         var separate = parseSeparation(arg.separate),
                             value = _.isUndefined(arg.val) ? '' : arg.val,
-                            cmd;
+                            cmd = '';
 
-                        if (!(arg.type && arg.type !== 'boolean' && (arg.val === '' || _.isNull(arg.val) || _.isUndefined(arg.val)))) {
-                            cmd = arg.prefix + separate + value;
+                        if (!arg.type || arg.type === 'boolean' || !isBlank(value)) {
+	                        if (_.isArray(value)) {
+		                        _.forEach(value, function(val, index) {
+			                        var space = index === 0 ? '' : ' '
+			                        cmd += space + arg.prefix + separate + val;
+		                        })
+	                        } else {
+                                cmd = arg.prefix + separate + value;
+	                        }
 
                             if (!_.isEmpty(cmd)) {
                                 command.push(cmd);
