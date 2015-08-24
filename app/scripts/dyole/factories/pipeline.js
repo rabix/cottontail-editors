@@ -178,11 +178,11 @@ angular.module('registryApp.dyole')
                         var endNode = _self.nodes[model.end_node],
                             startNode = _self.nodes[model.start_node];
 
-                        if (startNode && Common.checkSystem(startNode.model)) {
+                        if (startNode && Common.checkSystem(startNode.model) && Object.keys(startNode.connections).length === 0) {
                             startNode.removeNode();
                         }
 
-                        if (endNode && Common.checkSystem(endNode.model)) {
+                        if (endNode && Common.checkSystem(endNode.model) && Object.keys(endNode.connections).length === 0) {
                             endNode.removeNode();
                         }
                     });
