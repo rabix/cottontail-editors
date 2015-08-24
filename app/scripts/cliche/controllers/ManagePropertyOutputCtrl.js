@@ -48,21 +48,6 @@ angular.module('registryApp.cliche')
             return type === 'File' || (typeObj.items && typeObj.items === 'File');
         }), 'id');
 
-		var cachedMetadata = [];
-		if (!_.isEmpty($scope.view.inputs)) {
-			$scope.$watch('view.property.outputBinding["sbg:inheritMetadataFrom"]', function (n, o) {
-				if (n !== o) {
-					if (!_.isNull(n)) {
-						cachedMetadata = $scope.view.property.outputBinding.metadata;
-						delete $scope.view.property.outputBinding.metadata;
-						$scope.view.usingInherit = true;
-					} else {
-						$scope.view.property.outputBinding.metadata = cachedMetadata;
-						$scope.view.usingInherit = false;
-					}
-				}
-			})
-		}
 
         /**
          * Toggle secondary files into array (not currently using)

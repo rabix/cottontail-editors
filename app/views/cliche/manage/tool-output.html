@@ -48,7 +48,7 @@
             <!-- END Glob -->
         </div>
 
-        <div class="row">
+        <div class="row" ng-if="view.type === 'File'">
             <div class="col-md-5">
                 <label for="property-meta-inherit-{{ view.uniqueId }}" class="control-label">Inherit Metadata From Input</label>
                 <div class="form-group">
@@ -58,7 +58,8 @@
                 </div>
             </div>
         </div>
-        <div class="meta-list" ng-if="!view.usingInherit">
+
+        <div class="meta-list">
             <div class="row">
                 <div class="col-md-12">
                     <label class="control-label">Metadata <help-message message="help.cliche.outputs.metadata"></help-message></label>
