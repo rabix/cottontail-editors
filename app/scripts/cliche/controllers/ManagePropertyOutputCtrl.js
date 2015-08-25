@@ -48,6 +48,17 @@ angular.module('registryApp.cliche')
             return type === 'File' || (typeObj.items && typeObj.items === 'File');
         }), 'id');
 
+		if (!_.isEmpty($scope.view.inputs)) {
+			$scope.$watch('view.property.outputBinding["sbg:inheritMetadataFrom"]', function(n) {
+				if (_.isNull(n)) {
+					delete  $scope.view.property.outputBinding['sbg:inheritMetadataFrom'];
+					if (_.isEmpty($scope.view.property.outputBinding)) {
+						delete $scope.view.property.outputBinding;
+					}
+				}
+			})
+		}
+
 
         /**
          * Toggle secondary files into array (not currently using)
