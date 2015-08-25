@@ -97,11 +97,12 @@ angular.module('registryApp.common')
 	             * @returns {boolean}
 	             */
 	            function checkFormat (expr) {
-		            switch ($scope.view.type) {
+		            switch ($scope.type) {
 			            case 'string':
 				            return _.isString(expr) || _.isNumber(expr);
 			            case 'number':
 				            return _.isNumber(expr);
+			            case undefined:
 			            default:
 				            return true;
 		            }

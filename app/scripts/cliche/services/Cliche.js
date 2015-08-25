@@ -802,10 +802,13 @@ angular.module('registryApp.cliche')
 
                         if (!arg.type || arg.type === 'boolean' || !isBlank(value)) {
 	                        if (_.isArray(value)) {
-		                        _.forEach(value, function(val, index) {
-			                        var space = index === 0 ? '' : ' '
-			                        cmd += space + arg.prefix + separate + val;
-		                        })
+		                        // set default value for itemSeparator for arguments that haven't been saved with new interface
+		                        arg.itemSeparator = _.isUndefined(arg.itemSeparator) ? null : arg.itemSeparator;
+
+		                        var itemSeparator = parseItemSeparator(arg.itemSeparator),
+		                            joiner = _.isNull(itemSeparator) ? (' ' + arg.prefix + separate) : itemSeparator;
+
+		                        cmd = arg.prefix + separate + value.join(joiner);
 	                        } else {
                                 cmd = arg.prefix + separate + value;
 	                        }
@@ -814,7 +817,6 @@ angular.module('registryApp.cliche')
                                 command.push(cmd);
                             }
                         }
-
                     });
 
                     _.each(toolJSON.baseCommand, function (baseCmd) {

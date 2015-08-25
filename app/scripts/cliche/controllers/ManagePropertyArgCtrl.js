@@ -7,11 +7,16 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('ManagePropertyArgCtrl', ['$scope', '$modalInstance', 'Cliche', 'options', 'lodash', function ($scope, $modalInstance, Cliche, options, _) {
+    .controller('ManagePropertyArgCtrl', ['$scope', '$modalInstance', 'Cliche', 'options', 'lodash', 'SandBox', '$timeout', function ($scope, $modalInstance, Cliche, options, _, SandBox, $timeout) {
 
         $scope.view = {};
         $scope.view.property = angular.copy(options.property);
         $scope.view.mode = options.mode;
+
+		if (options.property && options.property.valueFrom && options.property.valueFrom.script) {
+			checkIsArray(options.property.valueFrom.script);
+		}
+
 
         if (_.isUndefined($scope.view.property)) {
             $scope.view.property = {separate: true};
@@ -45,7 +50,26 @@ angular.module('registryApp.cliche')
          */
         $scope.updateArgument = function (value) {
             $scope.view.property.valueFrom = value;
+
+	        if (!!value.script) {
+				checkIsArray(value.script);
+	        }
         };
+
+		function checkIsArray(value) {
+			$timeout(function() {
+				SandBox.evaluate(value)
+					.then(function (result) {
+						if (_.isArray(result)) {
+							$scope.view.showItemSeparator = true;
+							$scope.view.property.itemSeparator = null;
+						} else {
+							$scope.view.showItemSeparator = false;
+							delete $scope.view.property.itemSeparator;
+						}
+					});
+			});
+		}
 
         /**
          * Dismiss modal

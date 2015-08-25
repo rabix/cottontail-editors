@@ -18,7 +18,7 @@
                 </div>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <div class="form-group">
                     <label class="control-label" for="prefix">Prefix</label>
                     <input type="text" class="form-control" id="prefix" name="prefix" ng-model="view.property.prefix">
@@ -36,7 +36,15 @@
               </div>
             </div>
 
-            <div class="col-md-3">
+            <div ng-if="view.showItemSeparator" class="col-md-2">
+                <div class="form-group">
+                    <label class="control-label">Item Separator</label>
+                    <separator type="item" model="view.property.itemSeparator" is-disabled="view.disabled"></separator>
+                </div>
+            </div>
+            <!-- END Item Separator -->
+
+            <div class="col-md-2">
                 <div class="form-group" ng-class="{'has-error': (view.form.position.$invalid && view.form.$dirty)}">
                     <label for="position" class="control-label">Position</label>
                     <input type="number" class="form-control" id="position" name="position" ng-model="view.property.position">
