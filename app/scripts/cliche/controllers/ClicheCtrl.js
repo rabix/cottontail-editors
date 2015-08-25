@@ -226,12 +226,12 @@ angular.module('registryApp.cliche')
             $scope.view.reqDockerRequirement = _.find($scope.view.tool.requirements, {'class': 'DockerRequirement'});
             $scope.view.reqCPURequirement = _.find($scope.view.tool.requirements, {'class': 'CPURequirement'});
             $scope.view.reqMemRequirement = _.find($scope.view.tool.requirements, {'class': 'MemRequirement'});
-	        $scope.view.createFileRequirement = _.find($scope.view.tool.requirements, {'class': 'CreateFileRequirement'});
+	        $scope.view.reqCreateFileRequirement = _.find($scope.view.tool.requirements, {'class': 'CreateFileRequirement'});
 
+	        if ($scope.view.reqCreateFileRequirement && $scope.view.reqCreateFileRequirement.fileDef.length === 0) {
 
-	        if ($scope.view.createFileRequirement && $scope.view.createFileRequirement.fileDef.length === 0) {
 		        _.remove($scope.view.tool.requirements, {'class': 'CreateFileRequirement'});
-		        delete $scope.view.createFileRequirement;
+		        delete $scope.view.reqCreateFileRequirement;
 	        }
         };
 
