@@ -130,9 +130,9 @@ angular.module('registryApp.common')
                 var triggerUpdate = function(n, o, mode) {
                     if (_.isNull(n) || n === '') {
                         $scope.handleNull({index: $scope.index, value: $scope.view[mode]});
-
                     }
-                    if (n !== o && !_.isNull(n) && !_.isUndefined(n) && n !== '') {
+
+                    if (n !== o && !_.isNull(n) && !_.isUndefined(n)) {
 
                         checkExpression();
 
