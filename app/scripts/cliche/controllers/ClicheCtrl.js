@@ -12,6 +12,7 @@ angular.module('registryApp.cliche')
         var cliAdapterWatchers = [],
             jobWatcher,
             reqMap = {CPURequirement: 'cpu', MemRequirement: 'mem'},
+	        reqDefaults = {CPURequirement: 1, MemRequirement: 1024},
             onBeforeUnloadOff = BeforeUnload.register(
                 function() {
                     return 'Please save your changes before leaving.';
@@ -803,13 +804,15 @@ angular.module('registryApp.cliche')
         };
 
 		/**
-		 * Removes the memory requirement when value is set to null or is an empty string
+		 * Removes the memory or cpu requirement when value is set to null or is an empty string
+		 *
+		 * Sets default values in jobJson
 		 */
-        $scope.removeMemRequirement = function() {
-            _.remove($scope.view.tool.requirements, {'class': 'MemRequirement'});
-            delete $scope.view.reqMemRequirement;
+        $scope.removeResourceRequirement = function(key) {
+            _.remove($scope.view.tool.requirements, {'class': key});
+            delete $scope.view['req' + key];
 
-	        $scope.view.job.allocatedResources[reqMap['MemRequirement']] = 1024; // set default value
+	        $scope.view.job.allocatedResources[reqMap[key]] = reqDefaults[key]; // set default value
 			checkExpressionRequirement();
         };
 
