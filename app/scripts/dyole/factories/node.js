@@ -134,6 +134,17 @@ angular.module('registryApp.dyole')
 
                 },
 
+                update: {
+                    fill: '#ffffff',
+
+                    image: {
+                        name: 'icon-update.png',
+                        width: 10,
+                        height: 10
+                    }
+
+                },
+
                 rename: {
                     fill: 'transparent',
 
@@ -596,6 +607,11 @@ angular.module('registryApp.dyole')
                 //                this._recalculateFileTypes();
                 //            }
             },
+            
+            _updateNode: function () {
+                // call update from Pipeline Instance
+                this.Pipeline.updateNodeSchema(this.model.id, this.model.x, this.model.y);
+            },
 
             deselectAvailableTerminals: function () {
 
@@ -615,13 +631,13 @@ angular.module('registryApp.dyole')
                     nodeRadius = this.constraints.radius,
                     buttonDistance = typeof this.buttons.distance !== 'undefined' ? -this.buttons.distance - nodeRadius - this.buttons.radius : -nodeRadius * 1.5;
 
-                if (!this.infoButton && !this.removeNodeButton) {
+                if (!this.infoButton && !this.removeNodeButton && !this.updateNodeButton) {
 
                     this.buttons.rename.image.url = 'images/' + this.buttons.rename.image.name;
 
                     this.infoButton = this.canvas.button({
                         fill: this.buttons.info.fill,
-                        x: +16,
+                        x: +32,
                         y: buttonDistance,
                         radius: this.buttons.radius,
                         border: this.buttons.border,
@@ -637,7 +653,7 @@ angular.module('registryApp.dyole')
 
                     this.removeNodeButton = this.canvas.button({
                         fill: this.buttons.delete.fill,
-                        x: -16,
+                        x: -32,
                         y: buttonDistance,
                         radius: this.buttons.radius,
                         border: this.buttons.border,
@@ -648,6 +664,22 @@ angular.module('registryApp.dyole')
                         }
                     }, {
                         onClick: this._removeNodeButtonClick,
+                        scope: this
+                    });
+
+                    this.updateNodeButton = this.canvas.button({
+                        fill: this.buttons.update.fill,
+                        x: 0,
+                        y: buttonDistance,
+                        radius: this.buttons.radius,
+                        border: this.buttons.border,
+                        image: {
+                            url: Globals.base + 'img/rabix/' + this.buttons.update.image.name,
+                            width: 14,
+                            height: 14
+                        }
+                    }, {
+                        onClick: this._updateNode,
                         scope: this
                     });
 
@@ -675,8 +707,10 @@ angular.module('registryApp.dyole')
                     this.el.push(this.editLabelButton.getEl());
 
 
-                    _self.el.push(_self.infoButton.getEl())
-                        .push(_self.removeNodeButton.getEl());
+                    _self.el
+                        .push(_self.infoButton.getEl())
+                        .push(_self.removeNodeButton.getEl())
+                        .push(_self.updateNodeButton.getEl());
 
                 }
 
@@ -692,6 +726,11 @@ angular.module('registryApp.dyole')
                 if (this.removeNodeButton) {
                     this.removeNodeButton.remove();
                     this.removeNodeButton = null;
+                }
+
+                if (this.updateNodeButton) {
+                    this.updateNodeButton.remove();
+                    this.updateNodeButton = null;
                 }
 
                 if (this.editLabelButton) {
@@ -986,6 +1025,9 @@ angular.module('registryApp.dyole')
                 this.circle.remove();
 
                 this.el.remove();
+
+                this.Pipeline.Event.trigger('node:destroy', this.id);
+
             }
         };
 

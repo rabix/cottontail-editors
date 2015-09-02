@@ -5,7 +5,7 @@
 'use strict';
 
 angular.module('registryApp.dyole')
-    .factory('pipeline', ['event', 'node', 'connection', '$rootScope', 'systemNodeModel', 'FormaterD2', 'Const', 'common', 'lodash', 'SchemaValidator', 'Notification', function (Event, Node, Connection, $rootScope, systemNodeModel, Formater, Const, Common, _, Validator, Notification) {
+    .factory('pipeline', ['event', 'node', 'connection', '$rootScope', 'systemNodeModel', 'FormaterD2', 'Const', 'common', 'lodash', 'SchemaValidator', 'Notification',  'App',function (Event, Node, Connection, $rootScope, systemNodeModel, Formater, Const, Common, _, Validator, Notification, App) {
             /** Temporary hack!! **/
             var initWidth;
 
@@ -138,6 +138,10 @@ angular.module('registryApp.dyole')
 //                        $rootScope.$broadcast('node:deselect');
                         _self.Event.trigger('controller:node:deselect');
 
+                    });
+
+                    this.Event.subscribe('node:destroy', function () {
+                        _self.Event.trigger('controller:node:destroy');
                     });
 
                     this.Event.subscribe('node:select', function (model) {
@@ -817,6 +821,16 @@ angular.module('registryApp.dyole')
                 },
 
                 /**
+                 * Get node instance by id
+                 *
+                 * @param nodeId
+                 * @returns {*}
+                 */
+                getNodeById: function (nodeId) {
+                    return this.nodes[nodeId]
+                },
+
+                /**
                  * Connect input/output thats created with start node
                  *
                  * @param terminal
@@ -826,7 +840,7 @@ angular.module('registryApp.dyole')
                  * @private
                  */
                 _connectSystemNode: function (terminal, nodeId, isInput, terminalId) {
-                    var node = this.nodes[nodeId],
+                    var node = this.getNodeById(nodeId),
                         type = !isInput ? 'input' : 'output',
                         nodeTer = node.getTerminalById(terminalId, type);
 
@@ -968,6 +982,104 @@ angular.module('registryApp.dyole')
                     $('body').off('mouseup');
                 },
 
+                updateNodeSchema: function (nodeId, x, y) {
+                    var _self = this;
+
+                    if (typeof nodeId === 'undefined') {
+                        console.error('Node id must be specified to update its schema');
+                        return false;
+                    }
+
+                    var node = this.getNodeById(nodeId),
+                        nodeModel = node.model;
+
+                    var project = nodeModel['sbg:projectSlug'].split('/'),
+                        projectOwner = project[0],
+                        projectSlug = project[1];
+
+                    Notification.primary('Updating node schema...');
+
+                    App.getApp(projectOwner, projectSlug, nodeModel['sbg:name']).then(function(result) {
+
+                        if (typeof result.message === 'object' && !_.isEmpty(result.message)) {
+
+                            var newNode = result.message;
+
+                            if (nodeModel['sbg:revision'] === newNode['sbg:revision']) {
+                                Notification.primary('Node is already up to date.');
+                                return false;
+                            }
+
+                            var connections = _.map(node.connections, function (connection, id) {
+                                return connection.model;
+                            });
+
+                            node.removeNode();
+
+
+                            // we need to do little hacking up since addNode excepts coordinates of a drop
+                            var translation = _self.getEl().getTranslation();
+                            var canvas = _self._getOffset(_self.$parent[0]);
+                            var scale = _self.getEl().getScale().x;
+
+                            x = x * scale;
+                            y = y * scale;
+
+                            x = (x + translation.x) + canvas.left;
+                            y = (y + translation.y) + canvas.top;
+
+                            _self.addNode(newNode, x, y , false, function (newId) {
+
+                                var n = _self.getNodeById(newId);
+
+                                _.forEach(connections, function (c) {
+                                    var startTerminal, endTerminal,
+                                        flag = false;
+
+                                    // swap with new id so connections can try to recreate
+                                    if (c.start_node === nodeId) {
+                                        c.start_node = newId;
+                                    }
+
+                                    if (c.end_node === nodeId) {
+                                        c.end_node = newId;
+                                    }
+
+                                    // try to validate inputs and create connection
+                                    if (c.end_node === newId) {
+                                        startTerminal = _self.getNodeById(c.start_node).getTerminalById(c.output_name, 'output');
+                                        endTerminal = n.getTerminalById(c.input_name, 'input');
+
+                                        flag = startTerminal && endTerminal;
+                                    }
+
+                                    if (c.start_node === newId) {
+                                        endTerminal = _self.getNodeById(c.end_node).getTerminalById(c.input_name, 'input');
+                                        startTerminal = n.getTerminalById(c.output_name, 'output');
+
+                                        flag = startTerminal && endTerminal;
+                                    }
+
+                                    if (flag) {
+                                        _self.Event.trigger('connection:create', endTerminal, startTerminal);
+                                    } else {
+                                        Notification.warning('Terminal mismatch, Some connections cannot be recreated after update.');
+                                    }
+                                });
+
+                                Notification.primary('Successfully updated node schema.');
+                            });
+
+
+                        } else {
+                            console.error('Failed to udpate node schema: Message: %s, Status: %s', result.message, result.status);
+                            Notification.error('Failed to udpate node schema: Message: '+ result.message +', Status: ' + result.status);
+                        }
+
+                    });
+
+                },
+
                 /**
                  * Add node to the canvas
                  *
@@ -975,8 +1087,9 @@ angular.module('registryApp.dyole')
                  * @param clientX
                  * @param clientY
                  * @param rawCoords
+                 * @param callback
                  */
-                addNode: function (nodeModel, clientX, clientY, rawCoords) {
+                addNode: function (nodeModel, clientX, clientY, rawCoords, callback) {
 
                     var _self = this,
                         rawModel = angular.copy(nodeModel.json || nodeModel),
@@ -1022,7 +1135,6 @@ angular.module('registryApp.dyole')
                             y = clientY - _self.pipelineWrap.getTranslation().y;
                         }
 
-
                         model.x = x / zoom;
                         model.y = y / zoom;
 
@@ -1039,22 +1151,25 @@ angular.module('registryApp.dyole')
                         _self.model.schemas[model.id] = rawModel;
 
                         _self.Event.trigger('node:add', model);
+
+                        if (typeof callback === 'function') {
+                            callback(_id);
+                        }
                     };
 
                     if (Common.checkSystem) {
                         _createNode();
+                    } else {
+                        Validator.validate(type, rawModel)
+                            .then(function () {
 
-                        return;
+                                _createNode();
+
+                            }, function (trace) {
+                                Notification.error('App not valid:' + trace);
+                            });
                     }
 
-                    Validator.validate(type, rawModel)
-                        .then(function () {
-
-                            _createNode();
-
-                        }, function (trace) {
-                            Notification.error('App not valid:' + trace);
-                        });
                 },
 
                 deleteSelected: function () {

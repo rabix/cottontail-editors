@@ -128,8 +128,9 @@ angular.module('registryApp.dyole')
             $scope.view.loading = true;
             $scope.view.explanation = false;
 
-            var projectOwner = app.project.split('/')[0],
-                projectSlug = app.project.split('/')[1];
+            var project = app.project.split('/'),
+                projectOwner = project[0],
+                projectSlug = project[1];
 
             App.getApp(projectOwner, projectSlug, app.app_name).then(function(result) {
 
@@ -353,14 +354,12 @@ angular.module('registryApp.dyole')
         $scope.pipelineActions = {
             //TODO: Add disabling buttons logic
             zoomIn: function () {
-                var zoom;
 
                 if (Pipeline) {
                     Pipeline.zoomIn();
                 }
             },
             zoomOut: function () {
-                var zoom;
 
                 if (Pipeline) {
                     Pipeline.zoomOut();

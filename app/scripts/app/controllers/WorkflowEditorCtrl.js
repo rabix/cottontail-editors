@@ -94,6 +94,7 @@ angular.module('registryApp.app')
 
             PipelineInstance.getEventObj().subscribe('controller:node:select', onNodeSelect);
             PipelineInstance.getEventObj().subscribe('controller:node:deselect', onNodeDeselect);
+            PipelineInstance.getEventObj().subscribe('controller:node:destroy', onNodeDestroy);
 
             console.log('Pipeline Instance cached', PipelineInstance);
         };
@@ -374,6 +375,14 @@ angular.module('registryApp.app')
 
             $scope.switchTab('apps');
             $scope.$digest();
+        };
+
+        var onNodeDestroy = function () {
+            $scope.switchTab('apps');
+
+            if (!$scope.$$phase) {
+                $scope.$digest();
+            }
         };
 
         /**
