@@ -114,19 +114,33 @@ angular.module('registryApp.dyole')
             },
 
             parseType: function (type) {
-                var t;
-
                 if (type === 'string') {
                     return type;
                 }
 
                 if (_.isArray(type)){
-                    return type[1] || type[0]
+                    return type[1] || type[0];
                 }
 
                 if (typeof type === 'object') {
                     return type.type;
                 }
+            },
+
+            fullParseType: function (type) {
+
+                if (typeof type === 'string') {
+                    return type;
+                }
+
+                if (_.isArray(type)){
+                    return this.fullParseType(type[1] || type[0]);
+                }
+
+                if (typeof type === 'object') {
+                    return this.fullParseType(type.type);
+                }
+
             }
 
         };
