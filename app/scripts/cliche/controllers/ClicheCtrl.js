@@ -692,8 +692,8 @@ angular.module('registryApp.cliche')
 				_.remove($scope.view.tool.requirements, {'class': 'CreateFileRequirement'});
 				delete $scope.view.reqCreateFileRequirement;
 
-				checkExpressionRequirement();
 			}
+            checkExpressionRequirement();
 		};
 
         $scope.addStatusCode = function (codeType) {
