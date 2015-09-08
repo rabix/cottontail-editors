@@ -36,7 +36,7 @@ angular.module('registryApp.common').constant('HelpMessages', {
 		},
 		outputs: {
 			properties: 'Define tool output ports.',
-            outputId: 'Unique input id ( required property ).',
+            outputId: 'Unique output id (required property).',
             addOutput: 'Add new output port.',
             type: 'Represents output type.',
             itemType: 'Represents array item type. Allowed characters are alphanum and _.',
