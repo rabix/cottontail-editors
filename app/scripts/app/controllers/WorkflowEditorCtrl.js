@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('registryApp.app')
-    .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$modal', '$templateCache', 'Loading', 'App', 'User', 'Repo', 'Const', 'BeforeRedirect', 'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload', 'Api', 'HotkeyRegistry', 'Chronicle', 'Notification', function ($scope, $rootScope, $q, $modal, $templateCache, Loading, App, User, Repo, Const, BeforeRedirect, Helper, PipelineService, _, Globals, BeforeUnload, Api, HotkeyRegistry, Chronicle, Notification) {
+    .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$modal', '$templateCache', 'Loading', 'App', 'User', 'Repo', 'Const', 'BeforeRedirect', 'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload', 'Api', 'HotkeyRegistry', 'Notification', function ($scope, $rootScope, $q, $modal, $templateCache, Loading, App, User, Repo, Const, BeforeRedirect, Helper, PipelineService, _, Globals, BeforeUnload, Api, HotkeyRegistry, Notification) {
 
         var PipelineInstance = null,
             prompt = false,
@@ -607,28 +607,9 @@ angular.module('registryApp.app')
             });
         };
 
-        //$scope.chron = Chronicle.record('view.workflow', $scope, true);
-
-        $scope.undoAction = function () {
-            // undo action
-        };
-
-        $scope.redoAction = function () {
-            // redo action;
-        };
-
-        $scope.view.canUndo = function () {
-            return $scope.chron ? $scope.chron.currArchivePos > 1 : false;
-        };
-        $scope.view.canRedo = function () {
-            return $scope.chron ? $scope.chron.currArchivePos !== $scope.chron.archive.length - 1 : false;
-        };
-
         var unloadHotkeys = HotkeyRegistry.loadHotkeys([
             {name: 'save', callback: $scope.save, preventDefault: true},
-            {name: 'run', callback: $scope.runWorkflow, preventDefault: true},
-            {name: 'undo', callback: $scope.undoAction, preventDefault: true},
-            {name: 'redo', callback: $scope.redoAction, preventDefault: true}
+            {name: 'run', callback: $scope.runWorkflow, preventDefault: true}
         ]);
 
         $scope.$on('$destroy', function () {

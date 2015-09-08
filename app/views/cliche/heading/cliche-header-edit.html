@@ -19,14 +19,6 @@
         </div>
         <div class="actions pull-right">
 
-            <button class="btn btn-default" tooltip="Undo action" title="Undo" ng-click="undoAction()" ng-disabled="!view.canUndo()">
-                <i class="fa fa-undo"></i>
-            </button>
-
-            <button class="btn btn-default redo-btn" tooltip="Redo action" title="Redo" ng-click="redoAction()" ng-disabled="!view.canRedo()">
-                <i class="fa fa-undo fa-flip-horizontal"></i>
-            </button>
-
             <button type="submit"
                     ng-click="updateTool()"
                     ng-if="view.user && view.user.id === view.app.user._id"
