@@ -12,7 +12,7 @@ angular.module('registryApp.common').constant('HelpMessages', {
 			arguments: 'Additional command line arguments, if not bound to any input (e.g. dynamic number of threads).',
             dockerPull: 'Enter image repository and (optionally) tag. For example, "images.sbgenomics.com/jsmith/mytool:latest" or "ubuntu". We suggest using the SevenBridges image registry (images.sbgenomics.com) to speed up transfer of image data to compute nodes.',
             imageId: 'Optionally set to ID of the image to make sure same image is used every time.',
-            cpu: 'Leave at 0 for multi-threaded tools or set 1 for single threaded tools.',
+            cpu: 'Leave at 1 for multi-threaded tools or set 0 for single threaded tools.',
             memory: 'Amount of RAM (in MB) required by the tool.',
             baseCMD: 'Enter name of the executable and (optionally) sub-command and fixed arguments (e.g. “bamtools sort -bS”).',
             addBaseCMD: 'Add base command.',
