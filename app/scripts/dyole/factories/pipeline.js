@@ -1146,9 +1146,11 @@ angular.module('registryApp.dyole')
                             valueType = 'int';
                             break;
                         case 'object':
+
                             if (_.isArray(value)) {
                                 valueType = 'array';
                             }
+
                             break;
                         default:
                             valueType = 'null';
@@ -1157,6 +1159,10 @@ angular.module('registryApp.dyole')
 
                     if (type === 'enum') {
                         return valueType === 'string';
+                    }
+
+                    if (type === 'float') {
+                        return valueType === 'int' || valueType === 'float';
                     }
 
                     return valueType.toLowerCase() === type.toLowerCase();

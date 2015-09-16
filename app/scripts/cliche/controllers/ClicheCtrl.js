@@ -368,7 +368,12 @@ angular.module('registryApp.cliche')
 
             if ($scope.view.mode === 'edit') { $scope.view.tool.label = cachedName; }
 
-            Cliche.setJob(null, preserve);
+	        if (!_.isUndefined(json['sbg:job'])) {
+		        Cliche.setJob(json['sbg:job'], preserve);
+	        } else {
+		        Cliche.setJob(null, preserve);
+	        }
+
             $scope.view.job = Cliche.getJob();
 
             prepareRequirements();
