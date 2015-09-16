@@ -48,6 +48,41 @@
             <!-- END Glob -->
         </div>
 
+
+        <legend class="legend-small">
+            <label>
+                Additional information
+            </label>
+        </legend>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group" ng-class="{'has-error': (view.form.label.$invalid && view.form.$dirty)}">
+                    <label class="control-label" for="label">Label</label>
+                    <input tooltip="{{ ::help.cliche.inputs.label }}" tooltip-trigger="focus" type="text" class="form-control" id="label" name="label" ng-model="view.label">
+                </div>
+            </div>
+            <!-- END Label -->
+
+
+            <div class="col-md-4">
+                <div class="form-group" ng-class="{'has-error': (view.form.description.$invalid && view.form.$dirty)}">
+                    <label class="control-label" for="description">Description</label>
+                    <input tooltip="{{ ::help.cliche.inputs.description }}" tooltip-trigger="focus" type="text" class="form-control" id="description" name="description" ng-model="view.description">
+                </div>
+            </div>
+            <!-- END Description -->
+
+            <div class="col-md-4" ng-show="">
+                <div class="form-group" ng-class="{'has-error': (view.form.fileTypes.$invalid && view.form.$dirty)}">
+                    <label class="control-label" for="file_types">File Types</label>
+                    <input tooltip="{{ ::help.cliche.inputs.fileTypes }}" tooltip-trigger="focus" type="text" class="form-control" id="file_types" name="fileTypes" ng-model="view.fileTypes">
+                </div>
+            </div>
+            <!-- END File Types -->
+
+        </div>
+
         <div class="row" ng-if="view.type === 'File'">
             <div class="col-md-5">
                 <label for="property-meta-inherit-{{ view.uniqueId }}" class="control-label">Inherit Metadata From Input</label>

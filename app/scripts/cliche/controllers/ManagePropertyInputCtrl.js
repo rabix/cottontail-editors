@@ -97,6 +97,7 @@ angular.module('registryApp.cliche')
 		};
 		$scope.view.moreText = extraInfoText.more;
 		$scope.view.showMore = false;
+		$scope.showFileTypes = $scope.view.type === 'File' || $scope.view.itemsType === 'File';
 
         idObj.o = $scope.view.name;
 
@@ -147,6 +148,10 @@ angular.module('registryApp.cliche')
 		        }
 	        });
 
+	        if ($scope.view.type !== 'File' && $scope.view.itemType !== 'File') {
+		        delete formatted['sbg:fileTypes'];
+	        }
+
             idObj.n = $scope.view.name;
 
             Cliche.manageProperty(options.mode, formatted, options.properties, idObj)
@@ -170,6 +175,8 @@ angular.module('registryApp.cliche')
 		                $scope.view.property.inputBinding.itemSeparator = null;
 	                }
                 } else {
+	                $scope.showFileTypes = n === 'File';
+
                     delete $scope.view.items;
                 }
             }
@@ -201,6 +208,8 @@ angular.module('registryApp.cliche')
 
                     $scope.view.disabled = false;
                     $scope.view.items = $scope.view.itemsType;
+
+                    $scope.showFileTypes = n === 'File';
                 }
             }
         });
