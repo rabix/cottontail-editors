@@ -50,7 +50,53 @@ angular.module('registryApp.cliche')
 
         $scope.view.description = $scope.view.property.description || '';
         $scope.view.label = $scope.view.property.label || '';
-        $scope.view.category = $scope.view.property['sbg:category'] || '';
+
+		/**
+		 * Array of additional information fields
+		 * @type {*[]}
+		 */
+		var additionalInformation = [
+			{
+				name: 'description',
+				custom: false
+			},
+			{
+				name: 'label',
+				custom: false
+			},
+			{
+				name: 'category',
+				custom: true
+			},
+			{
+				name: 'altPrefix',
+				custom: true
+			},
+			{
+				name: 'toolDefaultValue',
+				custom: true
+			},
+			{
+				name: 'fileTypes',
+				custom: true
+			}
+		];
+
+		_.forEach(additionalInformation, function (field) {
+			var prefix = field.custom ? 'sbg:' : '';
+			$scope.view[field.name] = $scope.view.property[prefix + field.name] || '';
+		});
+
+		/**
+		 * Text for button which shows above populated extra fields
+		 * @type {{more: string, less: string}}
+		 */
+		var extraInfoText = {
+			more: 'Show More...',
+			less: 'Show Less...'
+		};
+		$scope.view.moreText = extraInfoText.more;
+		$scope.view.showMore = false;
 
         idObj.o = $scope.view.name;
 
@@ -85,11 +131,21 @@ angular.module('registryApp.cliche')
                 symbols: $scope.view.symbols,
                 items: $scope.view.items,
                 label: $scope.view.label,
-                description: $scope.view.description,
-                category: $scope.view.category
+                description: $scope.view.description
             };
 
             var formatted = Cliche.formatProperty(inner, $scope.view.property, 'input');
+
+	        /**
+	         * Save extra fields only if they are populated
+	         */
+	        _.forEach(additionalInformation, function(field) {
+		        var prefix = field.custom ? 'sbg:' : '';
+
+		        if ($scope.view[field.name] !== '') {
+			        formatted[prefix + field.name] = $scope.view[field.name];
+		        }
+	        });
 
             idObj.n = $scope.view.name;
 
@@ -208,6 +264,11 @@ angular.module('registryApp.cliche')
                 delete $scope.view.property.inputBinding.secondaryFiles;
             }
         };
+
+		$scope.toggleMoreInfo = function () {
+			$scope.view.showMore = !$scope.view.showMore;
+			$scope.view.moreText = $scope.view.showMore ? extraInfoText.more : extraInfoText.less;
+		};
 
         /**
          * Dismiss modal

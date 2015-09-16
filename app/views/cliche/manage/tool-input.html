@@ -72,18 +72,52 @@
             </div>
             <!-- END Description -->
 
+            <div class="col-md-4">
+                <button class="btn-link mg-top-25" type="button" ng-click="toggleMoreInfo()" tooltip="Show more Additional information fields">
+                    {{ view.moreText }}
+                </button>
+            </div>
 
-            <!--<div class="col-md-4">-->
-                <!--<div class="form-group" ng-class="{'has-error': (view.form.category.$invalid && view.form.$dirty)}">-->
-                    <!--<label class="control-label" for="category">Category</label>-->
-                    <!--<input tooltip="{{ ::help.cliche.inputs.category }}" tooltip-trigger="focus" type="text" class="form-control" id="category" name="category" ng-model="view.category">-->
-                <!--</div>-->
-            <!--</div>-->
+        </div>
+
+        <div class="row" ng-show="view.showMore">
+
+            <div class="col-md-3">
+                <div class="form-group" ng-class="{'has-error': (view.form.altPrefix.$invalid && view.form.$dirty)}">
+                    <label class="control-label" for="alt_prefix">Alternative Prefix</label>
+                    <input tooltip="{{ ::help.cliche.inputs.altPrefix }}" tooltip-trigger="focus" type="text" class="form-control" id="alt_prefix" name="altPrefix" ng-model="view.altPrefix">
+                </div>
+            </div>
+            <!-- END Alt Prefix -->
+
+            <div class="col-md-3">
+                <div class="form-group" ng-class="{'has-error': (view.form.toolDefaultValue.$invalid && view.form.$dirty)}">
+                    <label class="control-label" for="tool_default_value">Tool Default</label>
+                    <input tooltip="{{ ::help.cliche.inputs.toolDefaultValue }}" tooltip-trigger="focus" type="text" class="form-control" id="tool_default_value" name="toolDefaultValue" ng-model="view.toolDefaultValue">
+                </div>
+            </div>
             <!-- END Category -->
+
+
+            <div class="col-md-3">
+                <div class="form-group" ng-class="{'has-error': (view.form.category.$invalid && view.form.$dirty)}">
+                    <label class="control-label" for="category">Category</label>
+                    <input tooltip="{{ ::help.cliche.inputs.category }}" tooltip-trigger="focus" type="text" class="form-control" id="category" name="category" ng-model="view.category">
+                </div>
+            </div>
+            <!-- END Category -->
+
+            <div class="col-md-3">
+                <div class="form-group" ng-class="{'has-error': (view.form.fileTypes.$invalid && view.form.$dirty)}">
+                    <label class="control-label" for="file_types">File Types</label>
+                    <input tooltip="{{ ::help.cliche.inputs.fileTypes }}" tooltip-trigger="focus" type="text" class="form-control" id="file_types" name="fileTypes" ng-model="view.fileTypes">
+                </div>
+            </div>
+            <!-- END File Types -->
+
         </div>
 
         <div ng-if="view.type === 'File'">
-        <!--<div>-->
             <legend class="legend-small">
                 Secondary Files
             </legend>
