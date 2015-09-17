@@ -49,11 +49,9 @@
         </div>
 
 
-        <legend class="legend-small">
-            <label>
-                Additional information
-            </label>
-        </legend>
+        <h3 class="legend-small">
+            Additional information
+        </h3>
 
         <div class="row">
             <div class="col-md-4">
@@ -83,6 +81,10 @@
 
         </div>
 
+        <h3 class="legend-small">
+            Metadata <help-message message="help.cliche.outputs.metadata"></help-message>
+        </h3>
+
         <div class="row" ng-if="view.type === 'File'">
             <div class="col-md-5">
                 <label for="property-meta-inherit-{{ view.uniqueId }}" class="control-label">Inherit Metadata From Input</label>
@@ -97,8 +99,6 @@
         <div class="meta-list">
             <div class="row">
                 <div class="col-md-12">
-                    <label class="control-label">Metadata <help-message message="help.cliche.outputs.metadata"></help-message></label>
-
                     <div class="form-group meta-group" ng-class="{'has-error': view.newMeta.error}">
                         <div class="input-group">
                             <div class="col-xs-6 no-padding">
@@ -130,10 +130,12 @@
             </div>
         </div>
 
+        <h3 class="legend-small">
+            Secondary Files <help-message message="help.cliche.outputs.secondaryFilesInfo"></help-message>
+        </h3>
 
         <div class="row">
             <div class="col-md-12">
-                <label class="control-label">Secondary Files <help-message message="help.cliche.outputs.secondaryFilesInfo"></help-message></label>
                 <!--<div ng-if="view.isSecondaryFilesExpr" class="enum-list-wrap">-->
                     <!--<a href ng-click="toggleToList()" class="btn btn-default add-enum-item"><i class="fa fa-plus"></i></a>-->
                     <!--<div class="enum-list-container">-->

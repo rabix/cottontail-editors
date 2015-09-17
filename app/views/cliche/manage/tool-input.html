@@ -48,11 +48,9 @@
         </div>
 
 
-        <legend class="legend-small">
-            <label>
-                Additional information
-            </label>
-        </legend>
+        <h3 class="legend-small">
+            Additional information
+        </h3>
 
         <div class="row">
             <div class="col-md-4">
@@ -118,9 +116,9 @@
         </div>
 
         <div ng-if="view.type === 'File'">
-            <legend class="legend-small">
+            <h3 class="legend-small">
                 Secondary Files
-            </legend>
+            </h3>
 
             <div class="enum-list-wrap">
 
@@ -142,11 +140,11 @@
         </div>
 
 
-        <legend class="legend-small">
+        <h3 class="legend-small">
             <label class="checkbox inline">
                 <input type="checkbox" ng-model="view.adapter" ng-change="toggleAdapter()"> Include in command line
             </label>
-        </legend>
+        </h3>
 
         <div ng-if="!!(view.property.inputBinding['sbg:cmdInclude'])" class="row">
 

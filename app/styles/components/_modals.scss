@@ -38,9 +38,12 @@
     .modal-dialog {
       .main-actions {
         text-align: right;
-        margin: 10px -15px -15px;
-        border-top: 1px solid #ddd;
-        padding: 10px;
+        margin-top: $modal-inner-padding;
+        margin-bottom: (-$modal-inner-padding);
+        margin-right:  (-$modal-inner-padding);
+        margin-left:  (-$modal-inner-padding);
+        border-top: 1px solid $modal-header-border-color;
+        padding: $modal-inner-padding;
       }
     }
   }

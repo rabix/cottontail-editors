@@ -145,26 +145,6 @@ label {
 
 /* Legend extension */
 legend {
-  &.legend-small {
-    font-size: 16px;
-    //    margin-bottom: 5px;
-    font-weight: normal;
-
-    &.nb {
-      border-bottom: none;
-    }
-
-    .btn {
-      padding: 1px 7px;
-      line-height: 20px;
-      margin: 3px;
-      font-size: 12px;
-    }
-
-    label {
-      font-weight: normal;
-    }
-  }
   &.legend-r {
     text-align: right;
   }
@@ -175,5 +155,31 @@ legend {
     margin: 0 0 5px 0;
     background-color: #eee;
     padding: 2px 5px;
+  }
+}
+
+.legend-small {
+  font-size: 16px;
+  color: #333;
+  line-height: inherit;
+  margin-bottom: 20px;
+  margin-top: 5px;
+  border-bottom: 1px solid #e5e5e5;
+  font-weight: normal;
+
+  &.nb {
+    border-bottom: none;
+  }
+
+  .btn {
+    padding: 1px 7px;
+    line-height: 20px;
+    margin: 3px;
+    font-size: 12px;
+  }
+
+  label {
+    font-weight: normal;
+    margin-bottom: 0;
   }
 }
