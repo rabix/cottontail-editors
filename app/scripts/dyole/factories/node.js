@@ -35,6 +35,11 @@ angular.module('registryApp.dyole')
             this.destroyed = false;
 
             this.selected = false;
+            this.isOutdated = true;
+
+            if (Common.checkSystem(this.model)) {
+                this.isOutdated = false;
+            }
 
             this.inputRefs = this.model.inputs;
 
@@ -631,13 +636,19 @@ angular.module('registryApp.dyole')
                     nodeRadius = this.constraints.radius,
                     buttonDistance = typeof this.buttons.distance !== 'undefined' ? -this.buttons.distance - nodeRadius - this.buttons.radius : -nodeRadius * 1.5;
 
+                var buttonCoords = [+32, -32, 0];
+
+                if (!this.isOutdated) {
+                    buttonCoords = [+16, -16, 0];
+                }
+
                 if (!this.infoButton && !this.removeNodeButton && !this.updateNodeButton) {
 
                     this.buttons.rename.image.url = 'images/' + this.buttons.rename.image.name;
 
                     this.infoButton = this.canvas.button({
                         fill: this.buttons.info.fill,
-                        x: +32,
+                        x: buttonCoords[0],
                         y: buttonDistance,
                         radius: this.buttons.radius,
                         border: this.buttons.border,
@@ -653,7 +664,7 @@ angular.module('registryApp.dyole')
 
                     this.removeNodeButton = this.canvas.button({
                         fill: this.buttons.delete.fill,
-                        x: -32,
+                        x: buttonCoords[1],
                         y: buttonDistance,
                         radius: this.buttons.radius,
                         border: this.buttons.border,
@@ -667,21 +678,26 @@ angular.module('registryApp.dyole')
                         scope: this
                     });
 
-                    this.updateNodeButton = this.canvas.button({
-                        fill: this.buttons.update.fill,
-                        x: 0,
-                        y: buttonDistance,
-                        radius: this.buttons.radius,
-                        border: this.buttons.border,
-                        image: {
-                            url: Globals.base + 'img/rabix/' + this.buttons.update.image.name,
-                            width: 14,
-                            height: 14
-                        }
-                    }, {
-                        onClick: this._updateNode,
-                        scope: this
-                    });
+                    if (this.isOutdated) {
+
+                        this.updateNodeButton = this.canvas.button({
+                            fill: this.buttons.update.fill,
+                            x: buttonCoords[2],
+                            y: buttonDistance,
+                            radius: this.buttons.radius,
+                            border: this.buttons.border,
+                            image: {
+                                url: Globals.base + 'img/rabix/' + this.buttons.update.image.name,
+                                width: 14,
+                                height: 14
+                            }
+                        }, {
+                            onClick: this._updateNode,
+                            scope: this
+                        });
+
+                    }
+
 
 
                     bbox = this.label.getBBox();
@@ -709,8 +725,11 @@ angular.module('registryApp.dyole')
 
                     _self.el
                         .push(_self.infoButton.getEl())
-                        .push(_self.removeNodeButton.getEl())
-                        .push(_self.updateNodeButton.getEl());
+                        .push(_self.removeNodeButton.getEl());
+
+                    if (this.isOutdated) {
+                        _self.el.push(_self.updateNodeButton.getEl())
+                    }
 
                 }
 
