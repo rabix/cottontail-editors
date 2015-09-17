@@ -25,7 +25,27 @@
 
                 <div class="form-group">
                     <label>Links</label>
-                    <!--TODO: create link enumeration-->
+                    <div class="enum-list-wrap">
+                        <a href ng-click="addLink()" class="btn btn-default add-enum-item"><i class="fa fa-plus"></i></a>
+
+                        <div class="enum-list-container">
+                            <ul class="enum-list">
+                                <li ng-repeat="link in view.tool['sbg:links']">
+                                    <div class="enum-field form-group form-group-file">
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control" placeholder="Link label" ng-model="link.label"/>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control" placeholder="Link URL" ng-model="link.id"/>
+                                        </div>
+                                    </div>
+                                    <a href class="fa fa-remove remove-btn" ng-class="{'labeled': $index === 0}" ng-click="removeLink($index)"></a>
+                                </li>
+                            </ul>
+
+                            <p class="alert alert-info" ng-if="view.tool['sbg:links'] | isEmpty">Click the plus button to add a link</p>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="form-group">

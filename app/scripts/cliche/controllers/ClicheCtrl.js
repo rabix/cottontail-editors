@@ -767,6 +767,35 @@ angular.module('registryApp.cliche')
             }
         };
 
+		/**
+		 * Adds a new link field under 'sbg:links'
+		 */
+		$scope.addLink = function () {
+			if (_.isUndefined($scope.view.tool['sbg:links'])) {
+				$scope.view.tool['sbg:links'] = [];
+			}
+
+			$scope.view.tool['sbg:links'].push({
+				label: '',
+				id: ''
+			});
+		};
+
+		/**
+		 * Removes link by index from 'sbg:links'.
+		 *
+		 * if 'sbg:links' is empty, then it will remove the whole field from the tool
+		 *
+		 * @param index
+		 */
+		$scope.removeLink = function (index) {
+			$scope.view.tool['sbg:links'].splice(index, 1);
+
+			if (_.isEmpty($scope.view.tool['sbg:links'])) {
+				delete $scope.view.tool['sbg:links'];
+			}
+		};
+
         /**
          * Create new tool and default revision
          *
@@ -913,20 +942,10 @@ angular.module('registryApp.cliche')
 
         };
 
-        function reInitCliche() {
-            Cliche.setTool($scope.view.tool);
-            setUpCliche();
-            prepareRequirements();
-            prepareStatusCodes();
-            setUpCategories();
-            debouncedGenerateCommand();
-        }
-
         var unloadHotkeys = HotkeyRegistry.loadHotkeys([
             {name: 'save', callback: $scope.updateTool, preventDefault: true},
             {name: 'run', callback: $scope.runApp, preventDefault: true}
         ]);
-
 
         $scope.$on('$destroy', function() {
             onBeforeUnloadOff();

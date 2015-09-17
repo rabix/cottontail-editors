@@ -17,7 +17,7 @@ angular.module('registryApp.common')
 		}
 
 		function filterFunction (list, input) {
-			var regex = new RegExp(input.split('').join('.*'));
+			var regex = new RegExp(input.toLowerCase().split('').join('.*'));
 
 			return _(list).filter(function (license) {
 				var nameScore = license.name.toLowerCase().search(regex);
@@ -27,7 +27,7 @@ angular.module('registryApp.common')
 					license.score = nameScore !== -1 ? nameScore : idScore;
 					return license;
 				}
-			}).sortBy('score').value();
+			}).sortBy('score').value().slice(0, 6);
 		}
 
 		$scope.filterResults = function(input) {
