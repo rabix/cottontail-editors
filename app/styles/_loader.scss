@@ -3,6 +3,7 @@
 .loading {
   &:after {
     content: '';
+    z-index: 3;
     display: block;
     background: url('../images/loader.gif') no-repeat center;
     width: 100%;
@@ -16,7 +17,7 @@
     top: 0;
     left: 0;
     height: 100%;
-    z-index: 2;
+    z-index: 3;
     background-color: rgba(255, 255, 255, 0.7);
   }
 }

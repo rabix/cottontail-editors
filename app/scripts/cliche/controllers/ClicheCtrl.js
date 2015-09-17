@@ -850,6 +850,27 @@ angular.module('registryApp.cliche')
 			checkExpressionRequirement();
         };
 
+		/**
+		 * Removes empty link and fileDef objects
+		 * @param tool
+		 */
+		function removeEmptyFields(tool) {
+			debugger;
+
+			var createFileReq = _.find(tool.requirements, {'class': 'CreateFileRequirement'});
+			if (!_.isUndefined(createFileReq)) {
+				_.remove(createFileReq.fileDef, function(fileDef) {
+					return fileDef.filename === '' && fileDef.fileContent === '';
+				});
+			}
+
+			var links = tool['sbg:links'];
+			if (!_.isUndefined(links)) {
+				_.remove(links, function(link) {
+					return link.id === '' && link.label === '';
+				});
+			}
+		}
 
         /**
          * Update current tool
@@ -866,10 +887,9 @@ angular.module('registryApp.cliche')
             $scope.view.loading = true;
 
             var tool = Cliche.getTool();
-            var job = Cliche.getJob();
 
-
-            tool['sbg:job'] = job;
+	        removeEmptyFields(tool);
+            tool['sbg:job'] = Cliche.getJob();
 
             App.update(tool, $scope.view.type)
                 .then(function(result) {
