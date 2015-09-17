@@ -12,20 +12,30 @@
                     <input tooltip="{{ ::help.cliche.metadata.label }}" tooltip-trigger="focus" class="form-control" ng-model="view.tool.label" id="label" name="label" type="text"/>
                 </div>
 
-                <div class="form-group" ng-show="view.type !== 'script'">
+                <div class="form-group">
                     <label for="toolkit" class="control-label">Toolkit</label>
                     <input tooltip="{{ ::help.cliche.metadata.toolkit }}" tooltip-trigger="focus" class="form-control" ng-model="view.tool['sbg:toolkit']" id="toolkit" type="text"/>
                 </div>
 
-                <div class="form-group" ng-show="view.type !== 'script'">
+                <div class="form-group">
                     <label class="control-label" for="toolkit-version">Toolkit Version</label>
                     <input tooltip="{{ ::help.cliche.metadata.toolkitVersion }}" tooltip-trigger="focus" class="form-control" ng-model="view.tool['sbg:toolkitVersion']" id="toolkit-version" type="text"/>
                 </div>
 
-                <div class="form-group" ng-show="view.type !== 'script'">
-                    <label for="homepage" class="control-label">Homepage</label>
-                    <!-- TODO: Add validation for url -->
-                    <input tooltip="{{ ::help.cliche.metadata.homepage }}" tooltip-trigger="focus" class="form-control" ng-model="view.tool['sbg:homepage']"  id="homepage" type="text"/>
+
+                <div class="form-group">
+                    <label>Links</label>
+                    <!--TODO: create link enumeration-->
+                </div>
+
+                <div class="form-group">
+                    <label for="author">Tool Author/Organization</label>
+                    <input tooltip="{{ ::help.cliche.metadata.author }}" tooltip-trigger="focus" type="text" id="author" class="form-control" ng-model="view.tool['sbg:toolAuthor']"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="license">Tool License</label>
+                    <license-picker id="license" ng-model="view.tool['sbg:license']"></license-picker>
                 </div>
 
                 <div class="form-group">
