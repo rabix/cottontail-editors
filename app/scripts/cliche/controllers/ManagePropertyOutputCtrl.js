@@ -35,6 +35,12 @@ angular.module('registryApp.cliche')
         $scope.view.types = Cliche.getTypes('output');
         $scope.view.itemTypes = Cliche.getTypes('outputItem');
 
+		$scope.view.label = $scope.view.property.label;
+		$scope.view.description = $scope.view.property.description;
+		$scope.view.fileTypes = $scope.view.property['sbg:fileTypes'];
+
+		$scope.view.showFileTypes = $scope.view.type === 'File' || $scope.view.itemsType === 'File';
+
         idObj.o = $scope.view.name;
 
         // shows expression style input rather than regular input
@@ -148,7 +154,11 @@ angular.module('registryApp.cliche')
 
             var formatted = Cliche.formatProperty(inner, $scope.view.property, 'output');
 
-            idObj.n = $scope.view.name;
+	        if ($scope.view.label !== '') { formatted.label = $scope.view.label; }
+	        if ($scope.view.description !== '') { formatted.description = $scope.view.description; }
+	        if ($scope.view.fileTypes !== '') { formatted['sbg:fileTypes'] = $scope.view.fileTypes; }
+
+	        idObj.n = $scope.view.name;
 
             Cliche.manageProperty(options.mode, formatted, options.properties, idObj)
                 .then(function() {
@@ -165,8 +175,10 @@ angular.module('registryApp.cliche')
                 if (n === 'array') {
                     $scope.view.itemsType = 'File';
                     $scope.view.items = $scope.view.itemsType;
+	                $scope.view.showFileTypes = true;
                 } else {
                     delete $scope.view.items;
+	                $scope.view.showFileTypes = n === 'File';
                 }
             }
         });

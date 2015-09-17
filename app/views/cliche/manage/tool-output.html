@@ -71,7 +71,7 @@
             </div>
             <!-- END Description -->
 
-            <div class="col-md-4" ng-show="">
+            <div class="col-md-4" ng-show="view.showFileTypes">
                 <div class="form-group" ng-class="{'has-error': (view.form.fileTypes.$invalid && view.form.$dirty)}">
                     <label class="control-label" for="file_types">File Types</label>
                     <input tooltip="{{ ::help.cliche.inputs.fileTypes }}" tooltip-trigger="focus" type="text" class="form-control" id="file_types" name="fileTypes" ng-model="view.fileTypes">
