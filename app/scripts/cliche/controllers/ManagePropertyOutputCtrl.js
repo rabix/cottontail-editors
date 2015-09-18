@@ -40,7 +40,7 @@ angular.module('registryApp.cliche')
 		$scope.view.fileTypes = $scope.view.property['sbg:fileTypes'];
 
 		$scope.view.metadata = [];
-		if ($scope.view.property.outputBinding.metadata) {
+		if ($scope.view.property.outputBinding && $scope.view.property.outputBinding.metadata) {
 			_.forOwn($scope.view.property.outputBinding.metadata, function (value, key) {
 				$scope.view.metadata.push({value: value, key: key});
 			});
