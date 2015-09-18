@@ -37,10 +37,28 @@
 
 /* forms */
 
-select, textarea, input[type="text"], input[type="password"], input[type="number"], input[type="date"], input[type="email"], input[type="url"], input[type="tel"], input[type="search"] {
+select,
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="email"],
+input[type="url"],
+input[type="tel"],
+input[type="search"] {
   width: 100%;
+  border-radius: 0;
   border: 1px solid #ccc;
   margin: 0;
+
+  &:hover {
+    border-color: #bbb;
+
+    &:focus {
+      border-color: darken(#66afe9, 20);
+    }
+  }
 }
 
 input[type="checkbox"], input[type="radio"] {

@@ -855,8 +855,6 @@ angular.module('registryApp.cliche')
 		 * @param tool
 		 */
 		function removeEmptyFields(tool) {
-			debugger;
-
 			var createFileReq = _.find(tool.requirements, {'class': 'CreateFileRequirement'});
 			if (!_.isUndefined(createFileReq)) {
 				_.remove(createFileReq.fileDef, function(fileDef) {

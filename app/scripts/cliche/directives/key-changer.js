@@ -7,78 +7,28 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .directive('keyChanger', ['$templateCache', 'lodash', function ($templateCache, _) {
+    .directive('keyChanger', ['lodash', function (_) {
 
         return {
-            restrict: 'E',
-            template: $templateCache.get('views/cliche/partials/key-changer.html'),
+            restrict: 'A',
             scope: {
                 key: '=',
-                items: '='
+                items: '=',
+	            hasError: '='
             },
-            controller: ['$scope', '$element', '$timeout', function ($scope, $element, $timeout) {
+            link: function(scope, element) {
+	            function checkKey() {
+		            scope.hasError = _.where(scope.items, {key: scope.key}).length > 1;
+		            if (!scope.$$phase) {
+			            scope.$apply();
+		            }
+	            }
 
-                var timeoutId;
-                $scope.view = {};
+	            angular.element(element).on('keypress keyup keydown blur change', _.debounce(checkKey, 100));
 
-                /**
-                 * Init key edit and focus the input for key editing
-                 */
-                $scope.initUpdateMetaKey = function () {
-
-                    $scope.view.metaKey = $scope.key;
-                    $scope.view.oldKey = angular.copy($scope.key);
-
-                    $scope.cancelTimeout();
-
-                    timeoutId = $timeout(function () {
-                        var input = $element[0].querySelector('.meta-key-value');
-                        input.focus();
-                    }, 100);
-
-                };
-
-                /**
-                 * Update meta key
-                 *
-                 * @returns {boolean}
-                 */
-                $scope.updateMetaKey = function () {
-
-
-                    $scope.view.error = false;
-
-                    if ($scope.view.metaKey === $scope.view.oldKey) {
-                        $scope.view.metaKey = '';
-                        return false;
-                    }
-
-                    if (!_.isUndefined($scope.items[$scope.view.metaKey]) || $scope.view.metaKey === '') {
-                        $scope.view.error = true;
-                        return false;
-                    }
-
-                    $scope.items[$scope.view.metaKey] = $scope.items[$scope.view.oldKey];
-                    delete $scope.items[$scope.view.oldKey];
-                    $scope.view.metaKey = '';
-
-                };
-
-                /**
-                 * Cancel timeout used for input focus
-                 */
-                $scope.cancelTimeout = function () {
-                    if (angular.isDefined(timeoutId)) {
-                        $timeout.cancel(timeoutId);
-                        timeoutId = undefined;
-                    }
-                };
-
-                $scope.$on('$destroy', function () {
-                    $scope.cancelTimeout();
-                });
-
-            }],
-            link: function() {}
+	            scope.$on('$destroy', function() {
+		            angular.element(element).off('keypress keyup keydown blur change');
+	            });
+            }
         };
     }]);

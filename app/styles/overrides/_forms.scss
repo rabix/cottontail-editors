@@ -29,11 +29,7 @@
 /* Form override */
 form,
 .form {
-  .form-control {
-    color: #555;
-    height: 33px;
-    @include border-radius(0);
-  }
+
   input {
     &.form-control {
       &:read-only {
@@ -101,6 +97,7 @@ form,
 /* Form control override */
 .form-control {
   color: #555;
+  height: 33px;
   @include border-radius(0);
 
   &.script-area {
@@ -118,6 +115,29 @@ form,
 .help-block {
   margin: 0;
   font-size: 12px;
+}
+
+/* Has Error extension */
+.has-error {
+  .fa-warning {
+    color: $brand-danger;
+  }
+
+  select,
+  textarea,
+  input[type="text"],
+  input[type="password"],
+  input[type="number"],
+  input[type="date"],
+  input[type="email"],
+  input[type="url"],
+  input[type="tel"],
+  input[type="search"],
+  .form-control {
+    &:hover, &:focus, &:hover:focus {
+      border-color: darken(#D91E18, 10);
+    }
+  }
 }
 
 /* Input group override */

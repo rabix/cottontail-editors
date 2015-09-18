@@ -300,7 +300,18 @@
       .enum-field.form-group {
         border: none;
         margin: 0 25px 0 0;
-        overflow: auto;
+        @include clearfix();
+
+        // hack for when list items are divided into columns
+        > div {
+          position: relative;
+          overflow-x: visible;
+        }
+        .fa-warning {
+          position: absolute;
+          left: -6px;
+          top: 9px;
+        }
 
         &.form-group-object {
           border-bottom: 1px solid #ddd;

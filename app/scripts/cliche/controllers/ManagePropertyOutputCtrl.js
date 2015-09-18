@@ -39,6 +39,12 @@ angular.module('registryApp.cliche')
 		$scope.view.description = $scope.view.property.description;
 		$scope.view.fileTypes = $scope.view.property['sbg:fileTypes'];
 
+		$scope.view.metadata = [];
+		if ($scope.view.property.outputBinding.metadata) {
+			_.forOwn($scope.view.property.outputBinding.metadata, function (value, key) {
+				$scope.view.metadata.push({value: value, key: key});
+			});
+		}
 		$scope.view.showFileTypes = $scope.view.type === 'File' || $scope.view.itemsType === 'File';
 
         idObj.o = $scope.view.name;
@@ -77,46 +83,20 @@ angular.module('registryApp.cliche')
 
         $scope.view.newMeta = {key: '', value: ''};
 
-        /**
-         * Add meta data to the output
-         */
-        $scope.addMeta = function () {
-
-            $scope.view.newMeta.error = false;
-            $scope.view.property.outputBinding = $scope.view.property.outputBinding || {};
-
-            if (!$scope.view.property.outputBinding.metadata) {
-                $scope.view.property.outputBinding.metadata = {};
-            }
-
-            if (!_.isUndefined($scope.view.property.outputBinding.metadata[$scope.view.newMeta.key]) || $scope.view.newMeta.key === '') {
-                $scope.view.newMeta.error = true;
-                return false;
-            }
-
-            $scope.view.property.outputBinding.metadata[$scope.view.newMeta.key] = $scope.view.newMeta.value;
-            $scope.view.newMeta = {key: '', value: ''};
-
-        };
+		$scope.addMetadata = function () {
+			$scope.view.metadata.push({
+				key: '',
+				value: ''
+			});
+		};
 
         /**
          * Remove meta data from the output
          *
          * @param {integer} index
-         * @returns {boolean}
          */
-        $scope.removeMeta = function (index) {
-            delete $scope.view.property.outputBinding.metadata[index];
-        };
-
-        /**
-         * Update new meta value with expression or literal
-         *
-         * @param value
-         */
-
-        $scope.updateNewMeta = function (value) {
-            $scope.view.newMeta.value = value;
+        $scope.removeMetadata = function (index) {
+            $scope.view.metadata.splice(index, 1);
         };
 
         /**
@@ -126,7 +106,7 @@ angular.module('registryApp.cliche')
          * @param value
          */
         $scope.updateMetaValue = function (index, value) {
-            $scope.view.property.outputBinding.metadata[index] = value;
+            $scope.view.metadata[index].value = value;
         };
 
         /**
@@ -140,6 +120,14 @@ angular.module('registryApp.cliche')
             $scope.view.form.$setDirty();
 
             if ($scope.view.form.$invalid) { return false; }
+
+	        if (!_.isEmpty($scope.view.metadata)) {
+		        _.forEach($scope.view.metadata, function(meta) {
+			        if (!meta.error) {
+			            $scope.view.property.outputBinding.metadata[meta.key] = meta.value;
+			        }
+		        });
+	        }
 
             var inner = {
                 key: key,
