@@ -284,7 +284,7 @@ angular.module('registryApp.dyole')
                     var schema = model.inputs[0] || model.outputs[0];
                     schema.type = data.schema.type;
 
-                    Pipeline.updateIOSchema(model.id, schema.type);
+                    Pipeline.updateIOSchema(model.id, schema.type, data.schema.description);
 
                 }
 

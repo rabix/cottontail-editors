@@ -989,6 +989,25 @@ angular.module('registryApp.dyole')
                 });
             },
 
+            /**
+             * Set outdated state
+             *
+             * @param isOutdated
+             */
+            setOutdated: function (isOutdated) {
+
+                if (typeof isOutdated !== 'boolean') {
+                    console.error('Wrong parametar passed, expexted boolean, got: ', typeof isOutdated);
+                    return false;
+                }
+
+                this.isOutdated = isOutdated;
+
+                this._innerBorder.attr({
+                    fill: this.isOutdated ? this.constraints.outdated.fill : this.constraints.fill
+                });
+            },
+
             removeNode: function () {
 
                 var _self = this;
