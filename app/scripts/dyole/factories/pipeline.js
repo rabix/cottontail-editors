@@ -1333,16 +1333,23 @@ angular.module('registryApp.dyole')
              *
              * @param id
              * @param type
+             * @param description
              */
             updateIOSchema: function (id, type, description) {
+                var n = this.getNodeById(id).model;
+                var nSchema = n.inputs[0] || n.outputs[0];
+
                 var node = this.model.schemas[id];
                 var schema = node.inputs[0] || node.outputs[0];
 
                 schema.type = type;
+                nSchema.type = type;
 
                 if (description) {
                     node.description = description;
                     schema.description = description;
+                    n.description = description;
+                    nSchema.description = description;
                 }
             },
 
