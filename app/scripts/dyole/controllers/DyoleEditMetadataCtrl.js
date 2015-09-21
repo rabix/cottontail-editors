@@ -36,10 +36,50 @@ angular.module('registryApp.dyole')
         };
 
 
-        /**
+		/**
+		 * Adds a new link field under 'sbg:links'
+		 */
+		$scope.addLink = function () {
+			if (_.isUndefined($scope.view.tool['sbg:links'])) {
+				$scope.view.tool['sbg:links'] = [];
+			}
+
+			$scope.view.tool['sbg:links'].push({
+				label: '',
+				id: ''
+			});
+		};
+
+		/**
+		 * Removes link by index from 'sbg:links'.
+		 *
+		 * if 'sbg:links' is empty, then it will remove the whole field from the tool
+		 *
+		 * @param index
+		 */
+		$scope.removeLink = function (index) {
+			$scope.view.tool['sbg:links'].splice(index, 1);
+
+			if (_.isEmpty($scope.view.tool['sbg:links'])) {
+				delete $scope.view.tool['sbg:links'];
+			}
+		};
+
+
+		/**
          * Close the modal window
+		 *
+		 * also removes empty link fields.
          */
-        $scope.edit = function ($event) {
+        $scope.edit = function () {
+
+	        var links = $scope.view.tool['sbg:links'];
+	        if (!_.isUndefined(links)) {
+		        _.remove(links, function(link) {
+			        return link.id === '' && link.label === '';
+		        });
+	        }
+
             $modalInstance.close($scope.view.tool);
         };
 

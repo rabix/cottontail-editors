@@ -462,6 +462,7 @@ angular.module('registryApp.app')
 
             modalInstance.result.then(function (result) {
                 PipelineInstance.updateMetadata(result);
+	            $scope.view.isChanged = !_.isEqual(result, json) || $scope.view.isChanged;
             });
 
         };
