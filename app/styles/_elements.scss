@@ -549,7 +549,7 @@ legend {
   max-width: 60%;
 
   %ellipsis {
-    max-width: 70%;
+    max-width: 100%;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -572,7 +572,7 @@ legend {
 
   .error {
     @extend %ellipsis;
-    color: #ff0000;
+    color: $brand-danger;
   }
 }
 
