@@ -123,6 +123,10 @@ angular.module('registryApp.app')
 
             window.location = url;
         };
+        
+        self.checkOutdatedInWf = function (list) {
+            return Api.checkOutdatedInWf.post({}, list).$promise;
+        };
 
         return self;
 
