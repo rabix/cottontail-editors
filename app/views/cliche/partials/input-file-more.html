@@ -27,32 +27,26 @@
                 <div class="col-md-12">
 
                     <label class="control-label">Metadata</label>
+                    <div class="enum-list-wrap">
+                        <a href ng-click="addMetadata()" class="btn btn-default add-enum-item"><i class="fa fa-plus"></i></a>
 
-                    <div class="form-group meta-group" ng-class="{'has-error': view.newMeta.error}">
-                        <div class="input-group">
-                            <div class="col-md-6 no-padding">
-                                <input type="text" class="form-control" ng-model="view.newMeta.key" placeholder="key" />
-                            </div>
-                            <div class="col-md-6 no-padding">
-                                <input type="text" class="form-control" ng-model="view.newMeta.value" placeholder="value" />
-                            </div>
-                            <span class="input-group-btn">
-                                <a href ng-click="addMeta()" class="btn btn-primary btn-expression"><i class="fa fa-plus"></i></a>
-                            </span>
-                        </div>
-                    </div>
+                        <div class="enum-list-container">
+                            <ul class="enum-list">
+                                <li ng-repeat="meta in view.metadata" ng-if="meta.key !== '__inherit__'" ng-class="{'has-error': meta.error}">
+                                    <div class="enum-field form-group form-group-file">
+                                        <div class="col-md-6">
+                                            <i class="fa fa-warning error" ng-if="meta.error" title="Duplicate metadata key. This key value pair will not be saved."></i>
+                                            <input key-changer key="meta.key" items="view.metadata" has-error="meta.error" type="text" class="form-control" placeholder="Metadata Key" ng-model="meta.key"/>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <expr ng-model="meta.value" index="{{ $index }}" type="string"  handle-item-update="updateMetaValue(index, value)" placeholder="Metadata Value"></expr>
+                                        </div>
+                                    </div>
+                                    <a href class="fa fa-remove remove-btn" ng-click="removeMetadata($index)"></a>
+                                </li>
+                            </ul>
 
-                    <div ng-repeat="(metaKey, metaValue) in view.schema.metadata" class="form-group meta-group">
-                        <div ng-if="metaKey !== '__inherit__'" class="input-group">
-                            <div class="col-md-6 no-padding">
-                                <key-changer key="metaKey" items="view.schema.metadata"></key-changer>
-                            </div>
-                            <div class="col-md-6 no-padding">
-                                <input type="text" class="form-control" ng-model="metaValue" placeholder="key" />
-                            </div>
-                            <span class="input-group-btn">
-                                <a href ng-click="removeMeta(metaKey)" class="btn btn-default btn-expression"><i class="fa fa-remove"></i></a>
-                            </span>
+                            <p class="alert alert-info" ng-if="view.metadata | isEmpty">Click the plus button to add a metadata key-value pair.</p>
                         </div>
                     </div>
 
