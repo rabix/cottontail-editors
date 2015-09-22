@@ -102,14 +102,14 @@
                                             <input key-changer key="meta.key" items="view.metadata" has-error="meta.error" type="text" class="form-control" placeholder="Metadata Key" ng-model="meta.key"/>
                                         </div>
                                         <div class="col-md-6">
-                                            <expr ng-model="meta.value" index="{{ $index }}" type="string"  handle-item-update="updateMetaValue(index, value)"></expr>
+                                            <expr ng-model="meta.value" index="{{ $index }}" type="string"  handle-item-update="updateMetaValue(index, value)" placeholder="Metadata Value"></expr>
                                         </div>
                                     </div>
                                     <a href class="fa fa-remove remove-btn" ng-click="removeMetadata($index)"></a>
                                 </li>
                             </ul>
 
-                            <p class="alert alert-info" ng-if="view.metadata | isEmpty">Click the plus button to add a link</p>
+                            <p class="alert alert-info" ng-if="view.metadata | isEmpty">Click the plus button to add a metadata key-value pair.</p>
                         </div>
                     </div>
                 </div>

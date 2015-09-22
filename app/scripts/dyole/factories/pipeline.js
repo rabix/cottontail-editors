@@ -995,7 +995,8 @@ angular.module('registryApp.dyole')
                 }
 
                 var node = this.getNodeById(nodeId),
-                    nodeModel = node.model;
+                    nodeModel = node.model,
+                    oldLabel = nodeModel.label;
 
                 var project = nodeModel['sbg:projectSlug'].split('/'),
                     projectOwner = project[0],
@@ -1036,6 +1037,7 @@ angular.module('registryApp.dyole')
                         x = (x + translation.x) + canvas.left;
                         y = (y + translation.y) + canvas.top;
 
+                        newNode.label = oldLabel;
                         _self.addNode(newNode, x, y, false, function (newId) {
 
                             var n = _self.getNodeById(newId);

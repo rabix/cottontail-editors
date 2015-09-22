@@ -13,7 +13,12 @@ angular.module('registryApp.cliche')
         $scope.view.schema = angular.copy(data.schema);
         $scope.view.key = data.key;
 
-        $scope.view.newMeta = {key: '', value: ''};
+		$scope.view.metadata = [];
+		if ($scope.view.schema && $scope.view.schema.metadata) {
+			_.forOwn($scope.view.schema.metadata, function (value, key) {
+				$scope.view.metadata.push({value: value, key: key});
+			});
+		}
 
         if (_.isUndefined($scope.view.schema.secondaryFiles)) {
             $scope.view.schema.secondaryFiles = [];
@@ -34,47 +39,46 @@ angular.module('registryApp.cliche')
                 return false;
             }
 
+	        if (!_.isEmpty($scope.view.metadata)) {
+		        if (_.isUndefined($scope.view.schema.metadata)) {
+			        $scope.view.schema.metadata = {};
+		        }
+		        _.forEach($scope.view.metadata, function(meta) {
+			        if (!meta.error && meta.key !== '') {
+				        $scope.view.schema.metadata[meta.key] = meta.value;
+			        }
+		        });
+	        }
+
             $modalInstance.close($scope.view.schema);
 
         };
 
-        /**
-         * Add meta data to the input
-         */
-        $scope.addMeta = function () {
+		$scope.addMetadata = function () {
+			$scope.view.metadata.push({
+				key: '',
+				value: ''
+			});
+		};
 
-            $scope.view.newMeta.error = false;
+		/**
+		 * Remove meta data from the output
+		 *
+		 * @param {integer} index
+		 */
+		$scope.removeMetadata = function (index) {
+			$scope.view.metadata.splice(index, 1);
+		};
 
-            if (!$scope.view.schema.metadata) {
-                $scope.view.schema.metadata = {};
-            }
-
-            if (!_.isUndefined($scope.view.schema.metadata[$scope.view.newMeta.key]) || $scope.view.newMeta.key === '') {
-                $scope.view.newMeta.error = true;
-                return false;
-            }
-
-            $scope.view.schema.metadata[$scope.view.newMeta.key] = $scope.view.newMeta.value;
-            $scope.view.newMeta = {key: '', value: ''};
-
-        };
-
-        /**
-         * Remove meta data from the input
-         *
-         * @param {integer} index
-         * @returns {boolean}
-         */
-        $scope.removeMeta = function (index) {
-            delete $scope.view.schema.metadata[index];
-        };
-
-        /**
-         * Close the modal
-         */
-        $scope.ok = function () {
-            $modalInstance.close();
-        };
+		/**
+		 * Update existing meta value with expression or literal
+		 *
+		 * @param index
+		 * @param value
+		 */
+		$scope.updateMetaValue = function (index, value) {
+			$scope.view.metadata[index].value = value;
+		};
 
         /**
          * Dismiss the modal

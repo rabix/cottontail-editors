@@ -81,8 +81,6 @@ angular.module('registryApp.cliche')
         //    $scope.view.isSecondaryFilesExpr = false;
         //};
 
-        $scope.view.newMeta = {key: '', value: ''};
-
 		$scope.addMetadata = function () {
 			$scope.view.metadata.push({
 				key: '',
@@ -123,7 +121,7 @@ angular.module('registryApp.cliche')
 
 	        if (!_.isEmpty($scope.view.metadata)) {
 		        _.forEach($scope.view.metadata, function(meta) {
-			        if (!meta.error) {
+			        if (!meta.error && meta.key !== '') {
 			            $scope.view.property.outputBinding.metadata[meta.key] = meta.value;
 			        }
 		        });
