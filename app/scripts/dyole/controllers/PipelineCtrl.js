@@ -320,6 +320,9 @@ angular.module('registryApp.dyole')
 
         };
 
+        var onIncludeInPorts = function (nodeId, inputId, value) {
+            Pipeline.updateNodePorts(nodeId, inputId, value);
+        };
 
         var onNodeInfoOff = $rootScope.$on('node:info', onNodeInfo);
         var onNodeLabelEditOff = $rootScope.$on('node:label:edit', onNodeLabelEdit);
@@ -383,7 +386,8 @@ angular.module('registryApp.dyole')
                 validate: validate,
                 adjustSize: adjustSize,
                 getEventObj: getEventObj,
-                updateMetadata: updateMetadata
+                updateMetadata: updateMetadata,
+                onIncludeInPorts: onIncludeInPorts
             };
 
             PipelineService.setInstance($scope.controllerId, methods);

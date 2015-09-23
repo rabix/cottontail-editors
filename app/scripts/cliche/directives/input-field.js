@@ -31,6 +31,8 @@ angular.module('registryApp.cliche')
 
         $scope.view.tpl = 'views/cliche/inputs/input-' + $scope.view.type.toLowerCase()  + '.html';
 
+        $scope.view.includeInPorts = $scope.view.property['sbg:includeInPorts'] || false;
+
         var keyName = $scope.appName + Const.exposedSeparator + $scope.view.name;
 
         var enumObj = Cliche.parseEnum($scope.view.property.type);
@@ -209,6 +211,11 @@ angular.module('registryApp.cliche')
 
 
         };
+        
+        $scope.includeInPorts = function () {
+            console.log(arguments);
+            $scope.handleIncludeInPorts({appName: $scope.appName, key: $scope.view.name, value: $scope.view.includeInPorts});
+        };
 
         $scope.$on('$destroy', function () {
             if (_.isFunction(deepWatcher)) {
@@ -233,6 +240,7 @@ angular.module('registryApp.cliche')
                 isDisabled: '=?',
                 handleExpose: '&',
                 onUnExpose: '&',
+                handleIncludeInPorts: '&',
 	            suggestedValues: '=',
 	            values: '='
             },

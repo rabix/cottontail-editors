@@ -311,6 +311,9 @@ angular.module('registryApp.app')
 
             }
         };
+        $scope.onIncludeInPorts = function (appName, key, value) {
+            PipelineInstance.onIncludeInPorts(appName, key, value)
+        };
 
         // think about this when implementing multi select of nodes
         var deepNodeWatch;

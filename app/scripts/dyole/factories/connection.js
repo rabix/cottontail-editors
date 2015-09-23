@@ -206,8 +206,8 @@ angular.module('registryApp.dyole')
             destroyConnection: function (pipelineDestroy) {
 
 				var inputCheck, outputCheck;
-				var startNode = this.Pipeline.nodes[this.model.start_node],
-					endNode = this.Pipeline.nodes[this.model.end_node];
+				var startNode = this.Pipeline.getNodeById(this.model.start_node),
+					endNode = this.Pipeline.getNodeById(this.model.end_node);
 
                 this.connection.remove();
 
@@ -240,10 +240,12 @@ angular.module('registryApp.dyole')
                 }
             },
 
-            destroy: function () {
+            destroy: function (pipelineDestroy) {
                 var _self = this;
 
-                this.destroyConnection(true);
+                pipelineDestroy = pipelineDestroy || true;
+
+                this.destroyConnection(pipelineDestroy);
 
                 _.each(this.events, function (ev) {
                     _self.Pipeline.Event.unsubscribe(ev.event, ev.handler);

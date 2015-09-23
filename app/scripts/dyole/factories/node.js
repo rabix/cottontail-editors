@@ -254,12 +254,12 @@ angular.module('registryApp.dyole')
                 node.push(borders).push(label);
 
                 // render input terminals
-                _.each(inputs, function (terminal) {
+                _.forEach(inputs, function (terminal) {
                     node.push(terminal.render().el);
                 });
 
                 // render output terminals
-                _.each(outputs, function (terminal) {
+                _.forEach(outputs, function (terminal) {
                     node.push(terminal.render().el);
                 });
 
@@ -275,13 +275,55 @@ angular.module('registryApp.dyole')
                 return this;
             },
 
+            reRenderTerminals: function () {
+
+                var node = this.el,
+                    connections = [];
+
+                _.forEach(this.connections, function (c) {
+                    connections.push(c.model);
+                    c.destroy(false);
+                });
+
+                _.forEach(this.inputs, function (input) {
+                    input.destroy();
+                });
+
+                _.forEach(this.outputs, function (output) {
+                    output.destroy();
+                });
+
+                this.inputs = [];
+                this.outputs = [];
+
+                this._initTerminals();
+
+                // render input terminals
+                _.forEach(this.inputs, function (terminal) {
+                    node.push(terminal.render().el);
+                });
+
+                // render output terminals
+                _.forEach(this.outputs, function (terminal) {
+                    node.push(terminal.render().el);
+                });
+
+                this._restoreConnections(connections);
+            },
+
+            _restoreConnections: function (connections) {
+                var _self = this;
+                _.forEach(connections, function (cModel) {
+                    _self.Pipeline.createConnectionFromModel(cModel);
+                });
+            },
+
             _filterInputs: function () {
-                var inputs = [],
-                    filter = ['File', 'file', 'directory'];
+                var inputs = [];
 
                 _.each(this.inputRefs, function (input) {
 
-                    if (Common.checkTypeFile(input.type[1] || input.type[0])) {
+                    if (Common.checkTypeFile(input.type[1] || input.type[0]) || input['sbg:includeInPorts']) {
                         input.required = typeof input.type === 'string' ? true : input.type.length === 1;
                         inputs.push(input);
                     }
@@ -404,43 +446,6 @@ angular.module('registryApp.dyole')
                     outerBorder = this._outerBorder,
                     inputs = this.inputs,
                     outputs = this.outputs;
-                //
-                //            this.listenTo(model, 'change:selected', function (model, value) {
-                //
-                //                if (!value) {
-                //                    this._deselect();
-                //                }
-                //
-                //            });
-                //
-                //            this.listenTo(model, 'change:paramValues', function () {
-                //                globals.vents.trigger('pipeline:change', 'revision');
-                //            });
-                //
-                //            this.listenTo(globals.vents, 'key:arrow', function (e) {
-                //
-                //                if (!this.selected) {
-                //                    return;
-                //                }
-                //
-                //                var keycode = e.keyCode ? e.keyCode : e.which,
-                //                    arrowCodes = [37,38,39,40], inputFocus;
-                //
-                //                inputFocus = $('input,textarea').is(':focus');
-                //                if ( (keycode === 46 || keycode === 8)) {
-                //
-                //                    if (!inputFocus) {
-                //                        self.removeNodeButtonClick();
-                //                        e.preventDefault();
-                //                    }
-                //
-                //                }
-                //
-                //                if (_.contains(arrowCodes, keycode) && !inputFocus) {
-                //                    self.moveNode(keycode);
-                //                }
-                //
-                //            });
 
                 borders.mouseover(function () {
 
@@ -454,13 +459,7 @@ angular.module('registryApp.dyole')
                         stroke: '#9b9b9b'
                     });
 
-                    // show input and output terminals' labels
-                    _.each(inputs, function (input) {
-                        input.showTerminalName();
-                    });
-                    _.each(outputs, function (output) {
-                        output.showTerminalName();
-                    });
+                    _self.showTerminalNames();
 
                 });
 
@@ -469,15 +468,9 @@ angular.module('registryApp.dyole')
                     if (typeof _self.glow !== 'undefined') {
                         _self.glow.remove();
                     }
-                    // hide input and output terminals' labels
-                    _.each(inputs, function (input) {
-                        input.hideTerminalName();
-                    });
-                    _.each(outputs, function (output) {
-                        output.hideTerminalName();
-                    });
 
-                    //                _self.hideTooltip();
+                    _self.hideTerminalNames();
+
                 });
 
                 borders.click(function () {
@@ -494,7 +487,6 @@ angular.module('registryApp.dyole')
                             this._showInfo();
                         }
 
-                        //                    }
                     }
 
                     this.dragged = false;
@@ -577,6 +569,33 @@ angular.module('registryApp.dyole')
                 });
 
                 return terminal;
+            },
+
+            showTerminalNames: function () {
+                var inputs = this.inputs,
+                    outputs = this.outputs;
+
+                // show input and output terminals' labels
+                _.forEach(inputs, function (input) {
+                    input.showTerminalName();
+                });
+                _.forEach(outputs, function (output) {
+                    output.showTerminalName();
+                });
+            },
+
+            hideTerminalNames: function () {
+                var inputs = this.inputs,
+                    outputs = this.outputs;
+
+                // hide input and output terminals' labels
+                _.forEach(inputs, function (input) {
+                    input.hideTerminalName();
+                });
+                _.forEach(outputs, function (output) {
+                    output.hideTerminalName();
+                });
+
             },
 
             redrawConnections: function () {
