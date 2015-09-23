@@ -288,8 +288,6 @@ angular.module('registryApp.app')
                 delete $scope.view.values[appName];
             }
 
-            console.log($scope.view.suggestedValues);
-
             $scope.onWorkflowChange({value: true, isDisplay: false});
 
         };
@@ -312,6 +310,9 @@ angular.module('registryApp.app')
             }
         };
         $scope.onIncludeInPorts = function (appName, key, value) {
+
+            // call onExpose to remove values from values object
+            $scope.onExpose(appName, key);
             PipelineInstance.onIncludeInPorts(appName, key, value)
         };
 

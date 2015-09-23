@@ -3,7 +3,7 @@
     <div ng-if="exposed" class="control-label">
 
         <div class="checkbox">
-            <label><input type="checkbox" ng-model="view.expose" ng-change="exposeParams()"> expose</label>
+            <label><input ng-disabled="view.includeInPorts" type="checkbox" ng-model="view.expose" ng-change="exposeParams()"> expose</label>
         </div>
 
         <div class="checkbox">

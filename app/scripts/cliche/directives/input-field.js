@@ -40,11 +40,9 @@ angular.module('registryApp.cliche')
         $scope.view.symbols = enumObj.symbols;
 
         $scope.view.expose = $scope.exposed ? !_.isUndefined($scope.exposed[keyName]) : false;
-        if ($scope.view.expose) { $scope.isDisabled = true; }
+        if ($scope.view.expose || $scope.view.includeInPorts) { $scope.isDisabled = true; }
 
         $scope.view.exposible = !_.isUndefined($scope.exposed);
-
-
 
         $scope.view.ignore = $scope.ignoreFiles === 'true' && ($scope.view.type === 'File' || ($scope.view.items === 'File'));
 
@@ -100,55 +98,59 @@ angular.module('registryApp.cliche')
 
         };
 
+
         //var inputScheme = $scope.model;
         var inputScheme;
 
-        /* type FILE */
-        if ($scope.view.type === 'File') {
+        var setModelDefaultValue = function () {
 
-            inputScheme = getFileScheme($scope.model);
+            /* type FILE */
+            if ($scope.view.type === 'File') {
 
-        /* type RECORD */
-        } else if($scope.view.type === 'record') {
+                inputScheme = getFileScheme($scope.model);
 
-            inputScheme = getObjectScheme($scope.model);
+                /* type RECORD */
+            } else if($scope.view.type === 'record') {
 
-        /* type ARRAY */
-        } else if($scope.view.type === 'array') {
-            inputScheme = [];
+                inputScheme = getObjectScheme($scope.model);
 
-            $scope.view.items = $scope.view.items || 'string';
+                /* type ARRAY */
+            } else if($scope.view.type === 'array') {
+                inputScheme = [];
 
-            switch($scope.view.itemsType) {
-            case 'record':
-                _.each($scope.model, function(value) {
-                    var innerScheme = getObjectScheme(value);
-                    delete innerScheme.path;
-                    inputScheme.push(innerScheme);
-                });
-                break;
-            case 'File' || 'file':
-                _.each($scope.model, function(value) {
-                    inputScheme.push(getFileScheme(value));
-                });
-                break;
-            default:
-                //Type checking to avoid an array of characters
-                if (_.isArray($scope.model)) {
-                    _.each($scope.model, function(value) {
-                        inputScheme.push(getDefaultScheme(value));
-                    });
-                } else if (_.isString($scope.model)) {
-                    inputScheme.push(getDefaultScheme($scope.model));
+                $scope.view.items = $scope.view.items || 'string';
+
+                switch($scope.view.itemsType) {
+                    case 'record':
+                        _.each($scope.model, function(value) {
+                            var innerScheme = getObjectScheme(value);
+                            delete innerScheme.path;
+                            inputScheme.push(innerScheme);
+                        });
+                        break;
+                    case 'File' || 'file':
+                        _.each($scope.model, function(value) {
+                            inputScheme.push(getFileScheme(value));
+                        });
+                        break;
+                    default:
+                        //Type checking to avoid an array of characters
+                        if (_.isArray($scope.model)) {
+                            _.each($scope.model, function(value) {
+                                inputScheme.push(getDefaultScheme(value));
+                            });
+                        } else if (_.isString($scope.model)) {
+                            inputScheme.push(getDefaultScheme($scope.model));
+                        }
+                        break;
                 }
-                break;
+                /* type STRING, NUMBER, INTEGER, BOOLEAN */
+            } else {
+                inputScheme = getDefaultScheme($scope.model);
             }
-            /* type STRING, NUMBER, INTEGER, BOOLEAN */
-        } else {
-            inputScheme = getDefaultScheme($scope.model);
-        }
 
-        $scope.view.model = inputScheme;
+            $scope.view.model = inputScheme;
+        };
 
         // TODO: Figure this out for complex props, try to avoid this deep watch
         var deepWatcher = $scope.$watch('view.model', function(n, o) {
@@ -209,11 +211,16 @@ angular.module('registryApp.cliche')
                 $scope.isDisabled = false;
             }
 
-
         };
         
         $scope.includeInPorts = function () {
-            console.log(arguments);
+            if ($scope.view.includeInPorts) {
+                $scope.view.expose = false;
+                $scope.exposeParams();
+                setModelDefaultValue();
+            }
+
+            $scope.isDisabled = $scope.view.includeInPorts;
             $scope.handleIncludeInPorts({appName: $scope.appName, key: $scope.view.name, value: $scope.view.includeInPorts});
         };
 
@@ -222,7 +229,9 @@ angular.module('registryApp.cliche')
                 deepWatcher.call();
                 deepWatcher = null;
             }
-        })
+        });
+
+        setModelDefaultValue();
 
     }])
     .directive('inputField', ['RecursionHelper', function (RecursionHelper) {
