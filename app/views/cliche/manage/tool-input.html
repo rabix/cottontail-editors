@@ -25,7 +25,7 @@
 
             <div class="col-md-4">
                 <div class="form-group" ng-class="{'has-error': (view.form.type.$invalid && view.form.$dirty)}">
-                    <label class="control-label" >Type <help-message message="help.cliche.inputs.type"></help-message></label>
+                    <label class="control-label" for="type" >Type <help-message message="help.cliche.inputs.type"></help-message></label>
                     <select class="form-control" id="type" name="type" ng-model="view.type" ng-options="option for option in view.types" required></select>
                 </div>
             </div>
@@ -33,7 +33,7 @@
 
             <div class="col-md-4" ng-if="view.type === 'array'">
                 <div class="form-group">
-                    <label class="control-label"  class="control-label">Item Type <help-message message="help.cliche.inputs.type"></help-message></label>
+                    <label class="control-label">Item Type <help-message message="help.cliche.inputs.type"></help-message></label>
                     <select class="form-control" id="item-type" name="itemType" ng-model="view.itemsType" ng-options="option for option in view.itemTypes"></select>
                 </div>
             </div>

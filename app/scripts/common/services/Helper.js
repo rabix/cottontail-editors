@@ -133,6 +133,7 @@ angular.module('registryApp.common')
                 int: 0,
                 float: 0,
                 boolean: true,
+	            record: [],
                 array: {
                     file: [{path: name + '.ext', 'class': 'File', size: 0, secondaryFiles: []}],
                     File: [{path: name + '.ext', 'class': 'File', size: 0, secondaryFiles: []}],

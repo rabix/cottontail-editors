@@ -44,8 +44,9 @@ angular.module('registryApp.cliche')
         var enumObj = Cliche.parseEnum($scope.view.property.type);
 
         $scope.view.symbols = enumObj.symbols;
+		$scope.view.fields = Cliche.getFieldsRef($scope.view.property.type);
 
-        $scope.view.disabled = ($scope.view.items && $scope.view.items.type) === 'record';
+        $scope.view.disabled = $scope.view.itemsType === 'record' || $scope.view.type === 'record';
         $scope.view.adapter = !!(!_.isUndefined($scope.view.property.inputBinding) && $scope.view.property.inputBinding['sbg:cmdInclude']);
 
         $scope.view.description = $scope.view.property.description || '';
@@ -128,9 +129,11 @@ angular.module('registryApp.cliche')
                 name: $scope.view.name,
                 required: $scope.view.required,
                 type: $scope.view.type,
-                enumName: $scope.view.name,
+	            recordName: $scope.view.name, // using the same name for input id and recordName
+                enumName: $scope.view.name, // and for enumName
                 symbols: $scope.view.symbols,
                 items: $scope.view.items,
+	            fields: $scope.view.fields,
                 label: $scope.view.label,
                 description: $scope.view.description
             };
@@ -167,18 +170,29 @@ angular.module('registryApp.cliche')
         /* watch for the type change in order to adjust the property structure */
         $scope.$watch('view.type', function(n, o) {
             if (n !== o) {
-                if (n === 'array') {
-                    $scope.view.itemsType = 'string';
-                    $scope.view.items = $scope.view.itemsType;
 
-	                if ($scope.view.property.inputBinding) {
-		                $scope.view.property.inputBinding.itemSeparator = null;
-	                }
-                } else {
-	                $scope.showFileTypes = n === 'File';
+	            switch(n) {
+		            case 'array':
+			            $scope.view.itemsType = 'string';
+			            $scope.view.items = $scope.view.itemsType;
 
-                    delete $scope.view.items;
-                }
+			            if ($scope.view.property.inputBinding) {
+				            $scope.view.property.inputBinding.itemSeparator = null;
+			            }
+		                break;
+		            case 'record':
+			            $scope.showFileTypes = false;
+			            $scope.view.disabled = true;
+
+			            $scope.view.fields = [];
+
+			            break;
+		            default:
+			            $scope.showFileTypes = n === 'File';
+
+			            delete $scope.view.items;
+			            break;
+	            }
             }
         });
 
@@ -194,6 +208,7 @@ angular.module('registryApp.cliche')
                     if (_.isUndefined($scope.view.items.fields)) {
                         $scope.view.items.type = 'record';
                         $scope.view.items.fields = [];
+	                    $scope.view.items.name = $scope.view.name;
 
                         if ($scope.view.adapter) {
                             $scope.view.property.inputBinding.prefix = '';
