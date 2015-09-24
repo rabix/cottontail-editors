@@ -995,6 +995,7 @@ angular.module('registryApp.dyole')
             },
 
             _deselect: function () {
+                var nodeId = this.id;
                 this._destroyButtons();
 
                 // Show default state
@@ -1003,6 +1004,11 @@ angular.module('registryApp.dyole')
                 });
 
                 this.selected = false;
+
+                _.remove(this.Pipeline.selectedNodes, function (n) {
+                   return n.id === nodeId;
+                });
+
             },
 
             _removeValues: function () {
