@@ -627,6 +627,10 @@ angular.module('registryApp.dyole')
             addConnection: function (connection) {
                 this.connections[connection.id] = connection;
 
+                if (this.selected) {
+                    connection.getEl().glow();
+                }
+
                 // recalculate file types only for regular input node
                 //            if (this.model.type.indexOf('input/') !== -1) {
                 //                this._recalculateFileTypes();
@@ -971,7 +975,6 @@ angular.module('registryApp.dyole')
                     this._showButtons();
                 }
 
-
             },
 
             _select: function () {
@@ -992,6 +995,10 @@ angular.module('registryApp.dyole')
                 this.selected = true;
 
                 this.Pipeline.Event.trigger('node:select', this.model);
+
+                _.forEach(this.connections, function (connection) {
+                    connection.getEl().glow();
+                });
             },
 
             _deselect: function () {
@@ -1007,6 +1014,10 @@ angular.module('registryApp.dyole')
 
                 _.remove(this.Pipeline.selectedNodes, function (n) {
                    return n.id === nodeId;
+                });
+
+                _.forEach(this.connections, function (connection) {
+                    connection.connection.unGlow();
                 });
 
             },

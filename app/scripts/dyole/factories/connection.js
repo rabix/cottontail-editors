@@ -32,6 +32,10 @@ angular.module('registryApp.dyole')
 //            strokeColor: '#dddddd',
             strokeColor: '#FBFCFC',
 
+            getEl: function () {
+                return this.connection;
+            },
+
             _attachEvents: function () {
 
                 var _self = this,
