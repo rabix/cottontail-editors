@@ -214,6 +214,7 @@ angular.module('registryApp.cliche')
         };
         
         $scope.includeInPorts = function () {
+
             if ($scope.view.includeInPorts) {
                 $scope.view.expose = false;
                 $scope.exposeParams();

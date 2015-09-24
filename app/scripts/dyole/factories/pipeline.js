@@ -1380,8 +1380,6 @@ angular.module('registryApp.dyole')
             },
 
             updateNodePorts: function (nodeId, inputId, value) {
-                console.log(arguments);
-
                 var node = this.getNodeById(nodeId);
                 var terminal = _.find(node.model.inputs, function (input) {
                     return input.id === inputId;
@@ -1390,6 +1388,13 @@ angular.module('registryApp.dyole')
                 if (terminal) {
                     terminal['sbg:includeInPorts'] = value;
                     node.reRenderTerminals();
+
+                    if (!value) {
+                        if (node.model.scatter === inputId) {
+                            node.model.scatter = false;
+                            delete node.model.scatter;
+                        }
+                    }
                 }
             },
 

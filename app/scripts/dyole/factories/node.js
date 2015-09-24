@@ -277,7 +277,8 @@ angular.module('registryApp.dyole')
 
             reRenderTerminals: function () {
 
-                var node = this.el,
+                var _self = this,
+                    node = this.el,
                     connections = [];
 
                 _.forEach(this.connections, function (c) {
@@ -306,6 +307,22 @@ angular.module('registryApp.dyole')
                 // render output terminals
                 _.forEach(this.outputs, function (terminal) {
                     node.push(terminal.render().el);
+                });
+
+                var toRemove = [];
+                _.forEach(connections, function (connection) {
+
+                    var inp = _.find(_self.inputs, function (input) {
+                        return input.model.id === connection.input_name;
+                    });
+
+                    if (!inp && connection.end_node === _self.model.id) {
+                        toRemove.push(connection.id);
+                    }
+                });
+
+                _.remove(connections, function (connection) {
+                    return toRemove.indexOf(connection.id) !== -1;
                 });
 
                 this._restoreConnections(connections);
@@ -1070,7 +1087,7 @@ angular.module('registryApp.dyole')
                 delete this.Pipeline.nodes[this.model.id];
 
                 _.remove(this.Pipeline.nodes, function (n) {
-                    return n.id === _self.model.id;
+                    return n.model.id === _self.model.id;
                 });
 
             },

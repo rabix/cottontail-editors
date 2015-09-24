@@ -139,7 +139,7 @@ angular.module('registryApp.common')
 
             _.each(inputRefs, function (input) {
 
-                if (Common.checkTypeFile(input.type[1] || input.type[0])) {
+                if (Common.checkTypeFile(input.type[1] || input.type[0]) || input['sbg:includeInPorts']) {
                     input.required = input.type.length === 1;
                     inputs.push(input);
                 }
@@ -153,7 +153,7 @@ angular.module('registryApp.common')
         // placeholder for input values
         $scope.inputValues = {};
 
-        if (typeof $scope.data.scatter !== 'undefiend' && typeof $scope.data.scatter === 'string') {
+        if (typeof $scope.data.scatter !== 'undefined' && typeof $scope.data.scatter === 'string') {
             $scope.inputValues[$scope.data.scatter] = true;
         }
 
