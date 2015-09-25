@@ -99,7 +99,52 @@ angular.module('registryApp.cliche')
 
         };
 
-        //var inputScheme = $scope.model;
+		/**
+		 * Creates a list of objects with values for inputs type record
+		 * @param {Array} fields
+		 * @returns {Array}
+		 */
+		function createList (fields) {
+			var list = [];
+			_.forEach(fields, (function(field) {
+				console.log(field);
+				var item = {};
+				item.name = Cliche.parseName(field);
+				item.prop = field;
+
+				if (Cliche.parseType(Cliche.getSchema('input', field, 'tool', false)) === 'File') {
+					item.value =  {path: ''};
+					list.push(item);
+				} else {
+					item.value = '';
+					list.push(item);
+				}
+			}));
+
+			return list;
+		}
+
+		/**
+		 * Populates above generated list for records with values from the model
+		 * @param model
+		 * @param list
+		 */
+		function populateValues(model, list) {
+			if (_.isArray(model)) {
+				_.forEach(model, function(item) {
+					var key = _.keys(item)[0],
+					    value = {},
+						listItem = _.find(list, {'name': key});
+
+					if (listItem) {
+						value[key] = item[key];
+						listItem.value = value;
+					}
+				})
+			}
+		}
+
+		//var inputScheme = $scope.model;
         var inputScheme;
 
         /* type FILE */
@@ -110,9 +155,24 @@ angular.module('registryApp.cliche')
         /* type RECORD */
         } else if($scope.view.type === 'record') {
 
-            inputScheme = getObjectScheme($scope.model);
+	        $scope.view.list = createList($scope.view.fields);
+	        populateValues($scope.model, $scope.view.list);
 
-        /* type ARRAY */
+	        $scope.$watch('view.list', function(n, o) {
+				if (n !== o) {
+					$scope.model = _.pluck(n, 'value');
+				}
+	        }, true);
+
+	        $scope.$watch('model', function(n, o) {
+		        if (n !== o) {
+			        populateValues(n, $scope.view.list);
+		        }
+	        });
+
+	        inputScheme = getObjectScheme($scope.model);
+
+	        /* type ARRAY */
         } else if($scope.view.type === 'array') {
             inputScheme = [];
 

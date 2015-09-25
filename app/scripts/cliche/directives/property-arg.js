@@ -75,7 +75,7 @@ angular.module('registryApp.cliche')
                         return {
                             type: 'arg',
                             mode: 'edit',
-                            property: $scope.prop
+                            property: angular.copy($scope.prop)
                         };
                     }
                 }

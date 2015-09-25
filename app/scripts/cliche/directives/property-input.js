@@ -112,8 +112,6 @@ angular.module('registryApp.cliche')
 			var type = Cliche.parseType(schema);
 
 			if (oldType !== type) {
-
-				console.log(type);
 				
 				var name = Cliche.parseName(result.prop);
 				var enumObj = Cliche.parseEnum(schema);
@@ -146,7 +144,7 @@ angular.module('registryApp.cliche')
                             mode: 'edit',
                             key: $scope.key,
                             toolType: $scope.type,
-                            property: $scope.prop,
+                            property: angular.copy($scope.prop),
                             properties: $scope.properties
                         };
                     }

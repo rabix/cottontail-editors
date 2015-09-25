@@ -11,15 +11,19 @@
     </div>
 
     <div class="input-property-body">
-        <enum
-                ng-model="view.model"
-                type="view.type"
-                properties="view.fields"
-                is-required="view.required"
-                exposible="{{ view.exposible }}"
+        <div class="alert alert-info" ng-if="view.fields | isEmpty">
+            No fields defined.
+        </div>
+
+        <input-field
+                ng-repeat="item in view.list track by item.name"
+                ng-model="item.value[item.name]"
+                class="input-field"
+                prop="item.prop"
                 form="form"
-                is-disabled="isDisabled">
-        </enum>
+                is-disabled="isDisabled"
+                ignore-files="{{ exposible }}">
+        </input-field>
     </div>
 
 </div>
