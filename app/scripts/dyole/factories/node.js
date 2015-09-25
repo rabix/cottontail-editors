@@ -490,13 +490,15 @@ angular.module('registryApp.dyole')
 
                 });
 
-                borders.click(function () {
+                borders.click(function (e) {
 
                     var dragged = this.dragged;
 
                     if (typeof dragged !== 'undefined' && !dragged) {
 
-                        this.Pipeline.Event.trigger('node:deselect');
+                        if (!e.ctrlKey && !e.metaKey) {
+                            this.Pipeline.Event.trigger('node:deselect');
+                        }
 
                         if (this.Pipeline.editMode) {
                             this._select();
@@ -540,7 +542,8 @@ angular.module('registryApp.dyole')
 
                 var parent = this.parent,
                     node = this.el,
-                    scale = parent.getScale();
+                    scale = parent.getScale(),
+                    old = node.getTranslation();
 
                 // divide movement proportionally
                 // so you get equal movement in zoom state
@@ -554,8 +557,9 @@ angular.module('registryApp.dyole')
 
                 this.dragged = true;
 
-
-                //            this.parentView.moveSelectedNodes((start.x + dx) - old.x, ( start.y + dy) - old.y , this.model.get('id'));
+                if (this.selected) {
+                    this.Pipeline.moveSelectedNodes((start.x + dx) - old.x, ( start.y + dy) - old.y , this.model.id);
+                }
 
                 this.Pipeline.Event.trigger('scrollbars:draw');
                 this.Pipeline.Event.trigger('pipeline:change');
@@ -574,6 +578,23 @@ angular.module('registryApp.dyole')
                         this.Pipeline.Event.trigger('pipeline:change', 'display');
                     }
                 }
+            },
+
+            addTranslation: function (dx, dy) {
+                var translate = this.el.getTranslation();
+                //var parent = this.parent,
+                //    parentCoords = parent.node.getCTM(),
+                //    scale = parent.getScale();
+
+                var x = translate.x + dx,
+                    y = translate.y + dy;
+
+                this.el.setTranslation(x, y);
+
+                this.redrawConnections();
+
+                this.Pipeline.Event.trigger('scrollbars:draw');
+
             },
 
             getTerminalById: function (id, type) {
@@ -983,8 +1004,6 @@ angular.module('registryApp.dyole')
                     return;
                 }
 
-                this.Pipeline.selectedNodes.push(this);
-
                 this._showButtons();
 
                 // Show selected state
@@ -994,7 +1013,7 @@ angular.module('registryApp.dyole')
 
                 this.selected = true;
 
-                this.Pipeline.Event.trigger('node:select', this.model);
+                this.Pipeline.Event.trigger('node:select', this);
 
                 _.forEach(this.connections, function (connection) {
                     connection.getEl().glow();
@@ -1011,10 +1030,6 @@ angular.module('registryApp.dyole')
                 });
 
                 this.selected = false;
-
-                _.remove(this.Pipeline.selectedNodes, function (n) {
-                   return n.id === nodeId;
-                });
 
                 _.forEach(this.connections, function (connection) {
                     connection.connection.unGlow();

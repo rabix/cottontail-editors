@@ -129,13 +129,15 @@ angular.module('registryApp.dyole')
                 });
 
                 this.Event.subscribe('node:deselect', function () {
-                    _.each(_self.selectedNodes, function (node) {
+
+                    _.forEach(_self.selectedNodes, function (node) {
                         if (node.selected) {
                             node._deselect();
                         }
                     });
 
-//                        $rootScope.$broadcast('node:deselect');
+                    _self.selectedNodes.splice(0, _self.selectedNodes.length);
+
                     _self.Event.trigger('controller:node:deselect');
 
                 });
@@ -144,13 +146,15 @@ angular.module('registryApp.dyole')
                     _self.Event.trigger('controller:node:destroy');
                 });
 
-                this.Event.subscribe('node:select', function (model) {
+                this.Event.subscribe('node:select', function (node) {
+                    var model = node.model;
 
                     if (!model.softwareDescription || model.softwareDescription.type !== 'output') {
 //                            $rootScope.$broadcast('node:select', model, _self.exposed, _self.values, _self.suggestedValues);
                         _self.Event.trigger('controller:node:select', {}, model, _self.exposed, _self.values, _self.suggestedValues);
                     }
 
+                    _self.selectedNodes.push(node);
 
                 });
 
@@ -517,6 +521,16 @@ angular.module('registryApp.dyole')
                     connection.id]);
                 _self.nodes[connection.end_node].addConnection(_self.connections[
                     connection.id]);
+            },
+
+            moveSelectedNodes: function (dx, dy, except) {
+
+                _.each(this.selectedNodes, function (node) {
+                    if (node.model.id !== except) {
+                        node.addTranslation(dx, dy);
+                    }
+                });
+
             },
 
             /**
