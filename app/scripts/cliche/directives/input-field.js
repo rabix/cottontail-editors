@@ -218,7 +218,6 @@ angular.module('registryApp.cliche')
             if ($scope.view.includeInPorts) {
                 $scope.view.expose = false;
                 $scope.exposeParams();
-                setModelDefaultValue();
             }
 
             $scope.isDisabled = $scope.view.includeInPorts;

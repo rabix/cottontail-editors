@@ -1013,6 +1013,10 @@ angular.module('registryApp.dyole')
                 var node = this.getNodeById(nodeId),
                     nodeModel = node.model,
                     oldLabel = nodeModel.label;
+                
+                var portIncludedInputs = _.filter(node.model.inputs, function (inp) {
+                    return inp['sbg:includeInPorts'];
+                });
 
                 var project = nodeModel['sbg:projectSlug'].split('/'),
                     projectOwner = project[0],
@@ -1054,6 +1058,19 @@ angular.module('registryApp.dyole')
                         y = (y + translation.y) + canvas.top;
 
                         newNode.label = oldLabel;
+
+                        _.forEach(portIncludedInputs, function (inp) {
+
+                            var input = _.find(newNode.inputs, function (i) {
+                                return i.id === inp.id;
+                            });
+
+                            if (input) {
+                                input['sbg:includeInPorts'] = inp['sbg:includeInPorts'];
+                            }
+
+                        });
+
                         _self.addNode(newNode, x, y, false, function (newId) {
 
                             var n = _self.getNodeById(newId);

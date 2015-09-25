@@ -35,11 +35,9 @@ angular.module('registryApp.dyole')
             this.destroyed = false;
 
             this.selected = false;
-            this.isOutdated = true;
 
-            if (Common.checkSystem(this.model)) {
-                this.isOutdated = false;
-            }
+
+            this.isOutdated = !Common.checkSystem(this.model);
 
             this.inputRefs = this.model.inputs;
 
