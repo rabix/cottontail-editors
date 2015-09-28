@@ -121,6 +121,11 @@ angular.module('registryApp.cliche')
 
 	        if (!_.isEmpty($scope.view.metadata)) {
 		        _.forEach($scope.view.metadata, function(meta) {
+
+			        if (!$scope.view.property.outputBinding.metadata) {
+				        $scope.view.property.outputBinding.metadata = [];
+			        }
+
 			        if (!meta.error && meta.key !== '') {
 			            $scope.view.property.outputBinding.metadata[meta.key] = meta.value;
 			        }
