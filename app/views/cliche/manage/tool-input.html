@@ -142,7 +142,7 @@
 
         <h3 class="legend-small">
             <label class="checkbox inline">
-                <input type="checkbox" ng-model="view.adapter" ng-change="toggleAdapter()"> Include in command line
+                <input type="checkbox" ng-model="view.adapter" ng-change="toggleAdapter()" ng-disabled="view.disabledAll"> Include in command line
             </label>
         </h3>
 

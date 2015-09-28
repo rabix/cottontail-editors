@@ -131,9 +131,11 @@ angular.module('registryApp.cliche')
                 type: $scope.view.type,
 	            recordName: $scope.view.name, // using the same name for input id and recordName
                 enumName: $scope.view.name, // and for enumName
+	            mapName: $scope.view.name, // and for mapName
                 symbols: $scope.view.symbols,
                 items: $scope.view.items,
 	            fields: $scope.view.fields,
+	            values: $scope.view.values,
                 label: $scope.view.label,
                 description: $scope.view.description
             };
@@ -187,7 +189,21 @@ angular.module('registryApp.cliche')
 			            $scope.view.fields = [];
 
 			            break;
+
+		            case 'map':
+			            $scope.showFileTypes = false;
+
+			            $scope.view.disabledAll = true;
+			            $scope.view.adapter = false;
+			            if ($scope.view.property.inputBinding) {
+				            $scope.toggleAdapter();
+			            }
+
+			            $scope.view.values = 'string';
+			            break;
+
 		            default:
+			            $scope.view.disabledAll = $scope.view.disabled = false;
 			            $scope.showFileTypes = n === 'File';
 
 			            delete $scope.view.items;
@@ -217,11 +233,18 @@ angular.module('registryApp.cliche')
                             delete $scope.view.property.inputBinding.valueFrom;
                         }
                     }
+                } else if (n === 'map') {
+	                $scope.view.disabledAll = true;
+	                $scope.view.adapter = false;
+	                if ($scope.view.property.inputBinding) {
+		                $scope.toggleAdapter();
+	                }
+
                 } else {
                     // if itemType is not a record, make items string
                     // items: 'string' || 'boolean' || etc.
 
-                    $scope.view.disabled = false;
+                    $scope.view.disabled = $scope.view.disabledAll = false;
                     $scope.view.items = $scope.view.itemsType;
 
                     $scope.showFileTypes = n === 'File';

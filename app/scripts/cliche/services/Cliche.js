@@ -53,9 +53,9 @@ angular.module('registryApp.cliche')
             // temporarily removing inputItem and input 'record', because it isn't supported.
             // frontend supports inputItem: 'record'
             var map = {
-                input: ['File', 'string', 'enum', 'int', 'float', 'boolean', 'array', 'record'],
+                input: ['File', 'string', 'enum', 'int', 'float', 'boolean', 'array', 'record', 'map'],
                 output: ['File', 'array'],
-                inputItem: ['string', 'int', 'float', 'File', 'record'],
+                inputItem: ['string', 'int', 'float', 'File', 'record', 'map'],
                 outputItem: ['File']
             };
 
@@ -956,11 +956,19 @@ angular.module('registryApp.cliche')
                 /* if any level and enum */
             } else if (inner.type === 'enum') {
 
-                type = {
-                    type: 'enum',
-                    name: inner.enumName,
-                    symbols: inner.symbols
-                };
+	            type = {
+		            type: 'enum',
+		            name: inner.enumName,
+		            symbols: inner.symbols
+	            };
+
+            } else if (inner.type === 'map') {
+
+	            type = {
+		            type: 'map',
+		            name: inner.mapName,
+		            values: inner.values
+	            };
 
             /* every other case */
             } else if (inner.type === 'record') {
@@ -1047,7 +1055,7 @@ angular.module('registryApp.cliche')
          */
         var getTplType = function(type) {
             type = type.toLowerCase();
-            var general = ['file', 'string', 'int', 'float', 'boolean'];
+            var general = ['file', 'string', 'int', 'float', 'boolean', 'map'];
 
             if (_.contains(general, type)) {
                 return 'general';

@@ -129,18 +129,14 @@ angular.module('registryApp.cliche')
 		 * @param list
 		 */
 		function populateValues(model, list) {
-			if (_.isArray(model)) {
-				_.forEach(model, function(item) {
-					var key = _.keys(item)[0],
-					    value = {},
-						listItem = _.find(list, {'name': key});
+			_.forEach(model, function(value, key) {
+				var listItem = _.find(list, {'name': key});
 
-					if (listItem) {
-						value[key] = item[key];
-						listItem.value = value;
-					}
-				})
-			}
+				if (listItem) {
+					listItem.value = {};
+					listItem.value[key] = value;
+				}
+			});
 		}
 
 		//var inputScheme = $scope.model;
@@ -172,44 +168,48 @@ angular.module('registryApp.cliche')
 				}
 	        }, true);
 
-	        $scope.$watch('model', function(n, o) {
-		        if (n !== o) {
-			        populateValues(n, $scope.view.list);
-		        }
-	        });
-
 	        inputScheme = getObjectScheme($scope.model);
 
 	        /* type ARRAY */
-        } else if($scope.view.type === 'array') {
-            inputScheme = [];
+        } else if ($scope.view.type === 'array') {
+	        inputScheme = [];
 
-            $scope.view.items = $scope.view.items || 'string';
+	        $scope.view.items = $scope.view.items || 'string';
 
-            switch($scope.view.itemsType) {
-            case 'record':
-                _.each($scope.model, function(value) {
-                    var innerScheme = getObjectScheme(value);
-                    delete innerScheme.path;
-                    inputScheme.push(innerScheme);
-                });
-                break;
-            case 'File' || 'file':
-                _.each($scope.model, function(value) {
-                    inputScheme.push(getFileScheme(value));
-                });
-                break;
-            default:
-                //Type checking to avoid an array of characters
-                if (_.isArray($scope.model)) {
-                    _.each($scope.model, function(value) {
-                        inputScheme.push(getDefaultScheme(value));
-                    });
-                } else if (_.isString($scope.model)) {
-                    inputScheme.push(getDefaultScheme($scope.model));
-                }
-                break;
-            }
+	        switch ($scope.view.itemsType) {
+		        case 'record':
+			        _.each($scope.model, function (value) {
+				        var innerScheme = getObjectScheme(value);
+				        delete innerScheme.path;
+				        inputScheme.push(innerScheme);
+			        });
+			        break;
+		        case 'File' || 'file':
+			        _.each($scope.model, function (value) {
+				        inputScheme.push(getFileScheme(value));
+			        });
+			        break;
+		        case 'map':
+			        _.each($scope.model, function (value) {
+				        inputScheme.push(getObjectScheme(value));
+			        });
+			        break;
+		        default:
+			        //Type checking to avoid an array of characters
+			        if (_.isArray($scope.model)) {
+				        _.each($scope.model, function (value) {
+					        inputScheme.push(getDefaultScheme(value));
+				        });
+			        } else if (_.isString($scope.model)) {
+				        inputScheme.push(getDefaultScheme($scope.model));
+			        }
+			        break;
+	        }
+
+	        /* type MAP */
+        } else if ($scope.view.type === 'map') {
+	        inputScheme = getObjectScheme($scope.model);
+
             /* type STRING, NUMBER, INTEGER, BOOLEAN */
         } else {
             inputScheme = getDefaultScheme($scope.model);
