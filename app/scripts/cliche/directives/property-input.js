@@ -207,8 +207,22 @@ angular.module('registryApp.cliche')
             if (typeof $scope[action] === 'function') { $scope[action](); }
         };
 
+		/**
+		 * Sorts inputs/args by position
+		 * @param item
+		 * @returns {*}
+		 */
+		$scope.sortByPosition = function(item) {
 
-    }])
+			var position = item.inputBinding && item.inputBinding.position ? item.inputBinding.position : 0; //input
+			position = item.position ? item.position : position; //args
+
+			return position;
+		};
+
+
+
+	}])
     .directive('propertyInput', ['$templateCache', 'RecursionHelper', function ($templateCache, RecursionHelper) {
 
         return {
