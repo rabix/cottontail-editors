@@ -47,6 +47,7 @@ angular.module('registryApp.cliche')
 		$scope.view.fields = Cliche.getFieldsRef($scope.view.property.type);
 
         $scope.view.disabled = $scope.view.itemsType === 'record' || $scope.view.type === 'record';
+		$scope.view.disabledAll = $scope.view.itemsType === 'map' || $scope.view.type === 'map';
         $scope.view.adapter = !!(!_.isUndefined($scope.view.property.inputBinding) && $scope.view.property.inputBinding['sbg:cmdInclude']);
 
         $scope.view.description = $scope.view.property.description || '';
@@ -235,6 +236,12 @@ angular.module('registryApp.cliche')
                     }
                 } else if (n === 'map') {
 	                $scope.view.disabledAll = true;
+	                $scope.view.items = {};
+
+	                $scope.view.items.type = 'map';
+	                $scope.view.items.values = 'string';
+	                $scope.view.items.name = $scope.view.name;
+
 	                $scope.view.adapter = false;
 	                if ($scope.view.property.inputBinding) {
 		                $scope.toggleAdapter();

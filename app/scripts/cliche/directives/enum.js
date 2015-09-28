@@ -24,7 +24,7 @@ angular.module('registryApp.cliche')
                 itemScheme = {path: $scope.path};
             } else if ($scope.type === 'File') {
                 itemScheme = {path: ''};
-            } else if ($scope.type === 'object') {
+            } else if ($scope.type === 'object' || $scope.type === 'map') {
                 itemScheme = {};
             } else {
                 itemScheme = '';
