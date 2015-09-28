@@ -866,8 +866,9 @@ angular.module('registryApp.cliche')
                         consoleCMDCallback(consoleCMD);
                     }
 
-                    return consoleCMD;
+		            consoleCMD = consoleCMD.trim();
 
+                    return consoleCMD;
                 })
                 .catch(function (error) { return $q.reject(error); });
 

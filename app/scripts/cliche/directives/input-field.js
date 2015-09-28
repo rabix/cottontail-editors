@@ -107,7 +107,6 @@ angular.module('registryApp.cliche')
 		function createList (fields) {
 			var list = [];
 			_.forEach(fields, (function(field) {
-				console.log(field);
 				var item = {};
 				item.name = Cliche.parseName(field);
 				item.prop = field;
@@ -160,7 +159,16 @@ angular.module('registryApp.cliche')
 
 	        $scope.$watch('view.list', function(n, o) {
 				if (n !== o) {
-					$scope.model = _.pluck(n, 'value');
+
+					var inputObj = {};
+					_.forEach(_.pluck(n, 'value'), function(val) {
+						var keys = _.keys(val);
+						_.forEach(keys, function(inputKey) {
+							inputObj[inputKey] = val[inputKey];
+						})
+					});
+
+					$scope.model = inputObj;
 				}
 	        }, true);
 
