@@ -76,7 +76,9 @@ angular.module('registryApp.dyole')
                 labelOffset: 15,
 
                 outdated: {
-                    fill: '#F5AB35',
+                    //fill: '#F5AB35',
+                    //fill: '#86b0d4',
+                    fill: '#2b7450',
                     gradient: ''
                 },
 
@@ -1024,7 +1026,7 @@ angular.module('registryApp.dyole')
 
                 // Show default state
                 this._innerBorder.attr({
-                    fill: this.constraints.fill
+                    fill: this.isOutdated ? this.constraints.outdated.fill : this.constraints.fill
                 });
 
                 this.selected = false;

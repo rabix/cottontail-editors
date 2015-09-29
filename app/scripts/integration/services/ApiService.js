@@ -22,6 +22,7 @@ angular.module('integration')
         var appName = Globals.appName;
         var revision = parseInt(Globals.revision, 10);
         var getAppsUrl = Globals.get_apps_url;
+        var checkOutdatedUrl = 'updates';
         var getMineAppsByProject = 'aggregate?group_by=project&func=array&visibility=mine';
         var getPublicAppsByProject = 'aggregate?group_by=project&func=array&visibility=public';
         var validateAppUrl =  brood + 'validate/app';
@@ -53,6 +54,10 @@ angular.module('integration')
 
         self.getMineAppsByProject = $resource(brood + getMineAppsByProject, {}, {
             'get': {method: 'GET', headers: headers}
+        });
+
+        self.checkOutdatedInWf = $resource(brood + checkOutdatedUrl, {}, {
+            'post': {method: 'POST', headers: headers}
         });
 
         self.validateApp = $resource(validateAppUrl, {}, {

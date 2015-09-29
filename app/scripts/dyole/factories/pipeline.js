@@ -77,6 +77,8 @@ angular.module('registryApp.dyole')
             this._generateConnections();
 
             this._drawScrollbars();
+
+            this._checkOutdated();
         };
 
         Pipeline.prototype = {
@@ -1304,6 +1306,57 @@ angular.module('registryApp.dyole')
                 _.forEach(this.selectedNodes, function (node) {
                     node.removeNode();
                 });
+            },
+
+            _checkOutdated: function () {
+                var _self = this,
+                    list = [];
+
+                _.forEach(this.model.nodes, function (node) {
+                    if (!Common.checkSystem(node)) {
+                        list.push(node.appId);
+                    }
+                });
+
+                App.checkOutdatedInWf(list).then(function (response) {
+                    var map = response.message;
+
+                    _.forEach(map, function (isOutdated, nodeId) {
+
+                        if (isOutdated) {
+
+                            _.forEach(_self.nodes, function (node) {
+
+                                if (!Common.checkSystem(node.model)) {
+                                    var n1 = _self._fixTrailingSlash(node.model.appId),
+                                        n2 = _self._fixTrailingSlash(nodeId);
+
+                                    if ( n1 === n2 ) {
+                                        node.setOutdated(true);
+                                    }
+
+                                }
+
+                            });
+                            
+                        }
+
+                    });
+
+
+                }, function (err) {
+                    console.error(err);
+                });
+                  
+            },
+
+            _fixTrailingSlash: function (url) {
+
+                if (url.charAt(url.length-1) === '/') {
+                    url = url.slice(0, -1);
+                }
+
+                return url;
             },
 
             /**
