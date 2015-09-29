@@ -150,8 +150,9 @@ angular.module('registryApp.dyole')
                     var model = node.model;
 
                     if (!model.softwareDescription || model.softwareDescription.type !== 'output') {
-//                            $rootScope.$broadcast('node:select', model, _self.exposed, _self.values, _self.suggestedValues);
-                        _self.Event.trigger('controller:node:select', {}, model, _self.exposed, _self.values, _self.suggestedValues);
+                        if (_self.selectedNodes.length === 0) {
+                            _self.Event.trigger('controller:node:select', {}, model, _self.exposed, _self.values, _self.suggestedValues);
+                        }
                     }
 
                     _self.selectedNodes.push(node);
@@ -1388,6 +1389,11 @@ angular.module('registryApp.dyole')
                     n.description = description;
                     nSchema.description = description;
                 }
+
+                schema['sbg:includeInPorts'] = true;
+                nSchema['sbg:includeInPorts'] = true;
+
+                this.Event.trigger('pipeline:change', true);
             },
 
             /**
@@ -1406,6 +1412,8 @@ angular.module('registryApp.dyole')
 
                     return model;
                 };
+
+                this.Event.trigger('pipeline:change', true);
 
                 return _mergeSBGProps(metadata, this.model);
             },
