@@ -36,8 +36,7 @@ angular.module('registryApp.dyole')
 
             this.selected = false;
 
-
-            this.isOutdated = !Common.checkSystem(this.model);
+            this.isOutdated = this._checkNodeOutdated();
 
             this.inputRefs = this.model.inputs;
 
@@ -326,6 +325,15 @@ angular.module('registryApp.dyole')
                 });
 
                 this._restoreConnections(connections);
+            },
+            
+            _checkNodeOutdated: function () {
+
+                if (Common.checkSystem(this.model)) {
+                    return false;
+                }
+
+                return this.model['sbg:revision'] !== this.model['sbg:latestRevision'];
             },
 
             _restoreConnections: function (connections) {
