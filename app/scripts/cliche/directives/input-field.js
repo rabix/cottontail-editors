@@ -194,6 +194,11 @@ angular.module('registryApp.cliche')
 				        inputScheme.push(getObjectScheme(value));
 			        });
 			        break;
+		        case 'enum':
+			        _.each($scope.model, function (value) {
+				        inputScheme.push(getDefaultScheme(value));
+			        });
+			        break;
 		        default:
 			        //Type checking to avoid an array of characters
 			        if (_.isArray($scope.model)) {

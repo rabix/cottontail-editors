@@ -89,6 +89,9 @@ var Schema = {
                         },
 	                    {
 		                    $ref: '#/definitions/mapDef'
+	                    },
+	                    {
+		                    $ref: '#/definitions/enumDef'
 	                    }
                     ]
                 }

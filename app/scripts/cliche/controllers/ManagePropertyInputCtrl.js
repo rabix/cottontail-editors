@@ -42,6 +42,9 @@ angular.module('registryApp.cliche')
         $scope.view.itemTypes = Cliche.getTypes('inputItem');
 
         var enumObj = Cliche.parseEnum($scope.view.property.type);
+		if ($scope.view.items && $scope.view.itemsType === 'enum') {
+			enumObj = Cliche.parseEnum($scope.view.items);
+		}
 
         $scope.view.symbols = enumObj.symbols;
 		$scope.view.fields = Cliche.getFieldsRef($scope.view.property.type);
@@ -124,6 +127,10 @@ angular.module('registryApp.cliche')
                     return false;
                 }
             }
+
+	        if ($scope.view.type === 'array' && $scope.view.itemsType === 'enum') {
+		        $scope.view.items.symbols = $scope.view.symbols;
+	        }
 
             var inner = {
                 key: key,
@@ -216,46 +223,60 @@ angular.module('registryApp.cliche')
         /* watch for the items type change in order to adjust the property structure */
         $scope.$watch('view.itemsType', function(n, o) {
             if (n !== o) {
-                if (n === 'record') {
-                    // if itemsType is a record, create object
-                    // items: { type: 'record', fields: []}
-                    $scope.view.disabled = true;
-                    $scope.view.items = {};
+	            $scope.view.symbols = enumObj.symbols;
 
-                    if (_.isUndefined($scope.view.items.fields)) {
-                        $scope.view.items.type = 'record';
-                        $scope.view.items.fields = [];
-	                    $scope.view.items.name = $scope.view.name;
+	            switch (n) {
+		            case 'record':
+			            // if itemsType is a record, create object
+			            // items: { type: 'record', fields: []}
+			            $scope.view.disabled = true;
+			            $scope.view.items = {};
 
-                        if ($scope.view.adapter) {
-                            $scope.view.property.inputBinding.prefix = '';
-                            $scope.view.property.inputBinding.separate = true;
-                            delete $scope.view.property.inputBinding.itemSeparator;
-                            delete $scope.view.property.inputBinding.valueFrom;
-                        }
-                    }
-                } else if (n === 'map') {
-	                $scope.view.disabledAll = true;
-	                $scope.view.items = {};
+			            if (_.isUndefined($scope.view.items.fields)) {
+				            $scope.view.items.type = 'record';
+				            $scope.view.items.fields = [];
+				            $scope.view.items.name = $scope.view.name;
 
-	                $scope.view.items.type = 'map';
-	                $scope.view.items.values = 'string';
-	                $scope.view.items.name = $scope.view.name;
+				            if ($scope.view.adapter) {
+					            $scope.view.property.inputBinding.prefix = '';
+					            $scope.view.property.inputBinding.separate = true;
+					            delete $scope.view.property.inputBinding.itemSeparator;
+					            delete $scope.view.property.inputBinding.valueFrom;
+				            }
+			            }
+			            break;
 
-	                $scope.view.adapter = false;
-	                if ($scope.view.property.inputBinding) {
-		                $scope.toggleAdapter();
-	                }
+		            case 'map':
+			            $scope.view.disabledAll = true;
+			            $scope.view.items = {};
 
-                } else {
-                    // if itemType is not a record, make items string
-                    // items: 'string' || 'boolean' || etc.
+			            $scope.view.items.type = 'map';
+			            $scope.view.items.values = 'string';
+			            $scope.view.items.name = $scope.view.name;
 
-                    $scope.view.disabled = $scope.view.disabledAll = false;
-                    $scope.view.items = $scope.view.itemsType;
+			            $scope.view.adapter = false;
+			            if ($scope.view.property.inputBinding) {
+				            $scope.toggleAdapter();
+			            }
+			            break;
 
-                    $scope.showFileTypes = n === 'File';
-                }
+		            case 'enum':
+			            $scope.view.items = {};
+			            $scope.view.items.type = 'enum';
+			            $scope.view.items.name = $scope.view.name;
+
+			            break;
+
+		            default:
+			            // if itemType is not a record, make items string
+			            // items: 'string' || 'boolean' || etc.
+
+			            $scope.view.disabled = $scope.view.disabledAll = false;
+			            $scope.view.items = $scope.view.itemsType;
+
+			            $scope.showFileTypes = n === 'File';
+		                break;
+	            }
             }
         });
 

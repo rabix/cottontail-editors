@@ -11,6 +11,7 @@ angular.module('registryApp.cliche')
 
         $scope.view = {};
         $scope.view.tplPath = 'views/cliche/enum/enum-' + $scope.type.toLowerCase()  + '.html';
+		$scope.view.symbols = $scope.symbols;
 
         /**
          * Get schema for the appropriate enum type
@@ -144,7 +145,8 @@ angular.module('registryApp.cliche')
                 path: '=',
                 form: '=',
                 exposible: '@',
-                isDisabled: '=?'
+                isDisabled: '=?',
+	            symbols: '=?'
             },
             controller: 'EnumCtrl',
             link: function() {}

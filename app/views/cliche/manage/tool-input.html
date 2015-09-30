@@ -41,7 +41,7 @@
 
         </div>
 
-        <div class="row" ng-if="view.type === 'enum'">
+        <div class="row" ng-if="view.type === 'enum' || view.itemsType === 'enum'">
             <div class="col-md-12">
                 <enum ng-model="view.symbols" type="'string'" min="1" is-required="true"></enum>
             </div>

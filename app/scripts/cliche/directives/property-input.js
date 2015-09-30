@@ -110,14 +110,18 @@ angular.module('registryApp.cliche')
 		var updateDefaultValue = function (result, oldType) {
 			var schema = Cliche.getSchema('input', result.prop, 'tool', false);
 			var type = Cliche.parseType(schema);
+			var items = Cliche.getItemsRef(type, schema);
+			var itemsType = Cliche.getItemsType(items);
 
 			if (oldType !== type) {
 				
 				var name = Cliche.parseName(result.prop);
 				var enumObj = Cliche.parseEnum(schema);
-				var itemType = Cliche.getItemsType(Cliche.getItemsRef(type, schema));
+				if (items && itemsType === 'enum') {
+					enumObj = Cliche.parseEnum(items);
+				}
 
-				$scope.inputs[name] = Helper.getDefaultInputValue(name, enumObj.symbols, type, itemType);
+				$scope.inputs[name] = Helper.getDefaultInputValue(name, enumObj.symbols, type, itemsType);
 			}
 		};
 

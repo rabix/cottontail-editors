@@ -55,7 +55,7 @@ angular.module('registryApp.cliche')
             var map = {
                 input: ['File', 'string', 'enum', 'int', 'float', 'boolean', 'array', 'record', 'map'],
                 output: ['File', 'array'],
-                inputItem: ['string', 'int', 'float', 'File', 'record', 'map'],
+                inputItem: ['string', 'int', 'float', 'File', 'record', 'map', 'enum'],
                 outputItem: ['File']
             };
 

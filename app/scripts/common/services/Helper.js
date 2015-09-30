@@ -142,7 +142,8 @@ angular.module('registryApp.common')
                     int: [0],
                     float: [0],
                     record: [],
-	                map: [{}]
+	                map: [{}],
+	                'enum': [symbols ? symbols[0] : name]
                 }
             };
 
