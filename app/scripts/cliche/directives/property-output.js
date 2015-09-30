@@ -84,7 +84,7 @@ angular.module('registryApp.cliche')
                             mode: 'edit',
                             key: $scope.key,
                             toolType: $scope.type,
-                            property: $scope.prop,
+                            property: angular.copy($scope.prop),
                             properties: $scope.properties,
                             required: $scope.view.required
                         };

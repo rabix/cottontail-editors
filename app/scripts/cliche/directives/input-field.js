@@ -27,6 +27,7 @@ angular.module('registryApp.cliche')
         $scope.view.type = Cliche.parseType($scope.view.property.type);
         $scope.view.required = Cliche.isRequired($scope.view.property.type);
         $scope.view.items = Cliche.getItemsRef($scope.view.type, $scope.view.property.type);
+		$scope.view.fields = Cliche.getFieldsRef($scope.view.property.type);
         $scope.view.itemsType = Cliche.getItemsType($scope.view.items);
 
         $scope.view.tpl = 'views/cliche/inputs/input-' + $scope.view.type.toLowerCase()  + '.html';
@@ -98,7 +99,47 @@ angular.module('registryApp.cliche')
 
         };
 
-        //var inputScheme = $scope.model;
+		/**
+		 * Creates a list of objects with values for inputs type record
+		 * @param {Array} fields
+		 * @returns {Array}
+		 */
+		function createList (fields) {
+			var list = [];
+			_.forEach(fields, (function(field) {
+				var item = {};
+				item.name = Cliche.parseName(field);
+				item.prop = field;
+
+				if (Cliche.parseType(Cliche.getSchema('input', field, 'tool', false)) === 'File') {
+					item.value =  {path: ''};
+					list.push(item);
+				} else {
+					item.value = '';
+					list.push(item);
+				}
+			}));
+
+			return list;
+		}
+
+		/**
+		 * Populates above generated list for records with values from the model
+		 * @param model
+		 * @param list
+		 */
+		function populateValues(model, list) {
+			_.forEach(model, function(value, key) {
+				var listItem = _.find(list, {'name': key});
+
+				if (listItem) {
+					listItem.value = {};
+					listItem.value[key] = value;
+				}
+			});
+		}
+
+		//var inputScheme = $scope.model;
         var inputScheme;
 
         /* type FILE */
@@ -109,38 +150,71 @@ angular.module('registryApp.cliche')
         /* type RECORD */
         } else if($scope.view.type === 'record') {
 
-            inputScheme = getObjectScheme($scope.model);
+	        $scope.view.list = createList($scope.view.fields);
+	        populateValues($scope.model, $scope.view.list);
 
-        /* type ARRAY */
-        } else if($scope.view.type === 'array') {
-            inputScheme = [];
+	        $scope.$watch('view.list', function(n, o) {
+				if (n !== o) {
 
-            $scope.view.items = $scope.view.items || 'string';
+					var inputObj = {};
+					_.forEach(_.pluck(n, 'value'), function(val) {
+						var keys = _.keys(val);
+						_.forEach(keys, function(inputKey) {
+							inputObj[inputKey] = val[inputKey];
+						})
+					});
 
-            switch($scope.view.itemsType) {
-            case 'record':
-                _.each($scope.model, function(value) {
-                    var innerScheme = getObjectScheme(value);
-                    delete innerScheme.path;
-                    inputScheme.push(innerScheme);
-                });
-                break;
-            case 'File' || 'file':
-                _.each($scope.model, function(value) {
-                    inputScheme.push(getFileScheme(value));
-                });
-                break;
-            default:
-                //Type checking to avoid an array of characters
-                if (_.isArray($scope.model)) {
-                    _.each($scope.model, function(value) {
-                        inputScheme.push(getDefaultScheme(value));
-                    });
-                } else if (_.isString($scope.model)) {
-                    inputScheme.push(getDefaultScheme($scope.model));
-                }
-                break;
-            }
+					$scope.model = inputObj;
+				}
+	        }, true);
+
+	        inputScheme = getObjectScheme($scope.model);
+
+	        /* type ARRAY */
+        } else if ($scope.view.type === 'array') {
+	        inputScheme = [];
+
+	        $scope.view.items = $scope.view.items || 'string';
+
+	        switch ($scope.view.itemsType) {
+		        case 'record':
+			        _.each($scope.model, function (value) {
+				        var innerScheme = getObjectScheme(value);
+				        delete innerScheme.path;
+				        inputScheme.push(innerScheme);
+			        });
+			        break;
+		        case 'File' || 'file':
+			        _.each($scope.model, function (value) {
+				        inputScheme.push(getFileScheme(value));
+			        });
+			        break;
+		        case 'map':
+			        _.each($scope.model, function (value) {
+				        inputScheme.push(getObjectScheme(value));
+			        });
+			        break;
+		        case 'enum':
+			        _.each($scope.model, function (value) {
+				        inputScheme.push(getDefaultScheme(value));
+			        });
+			        break;
+		        default:
+			        //Type checking to avoid an array of characters
+			        if (_.isArray($scope.model)) {
+				        _.each($scope.model, function (value) {
+					        inputScheme.push(getDefaultScheme(value));
+				        });
+			        } else if (_.isString($scope.model)) {
+				        inputScheme.push(getDefaultScheme($scope.model));
+			        }
+			        break;
+	        }
+
+	        /* type MAP */
+        } else if ($scope.view.type === 'map') {
+	        inputScheme = getObjectScheme($scope.model);
+
             /* type STRING, NUMBER, INTEGER, BOOLEAN */
         } else {
             inputScheme = getDefaultScheme($scope.model);
