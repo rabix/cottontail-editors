@@ -352,7 +352,7 @@ angular.module('registryApp.dyole')
         ]);
 
         $scope.pipelineActions = {
-            //TODO: Add disabling buttons logic
+
             zoomIn: function () {
 
                 if (Pipeline) {
@@ -364,9 +364,14 @@ angular.module('registryApp.dyole')
                 if (Pipeline) {
                     Pipeline.zoomOut();
                 }
-
             }
         };
+
+        Pipeline.Event.subscribe('pipeline:zoom', function (zoomCaps) {
+            $scope.view.disableZoomIn = zoomCaps.zoomIn;
+            $scope.view.disableZoomOut = zoomCaps.zoomOut;
+            $scope.$apply();
+        });
 
         /**
          * If scope controller is set, expose pipeline methods to service
