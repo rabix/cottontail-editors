@@ -349,6 +349,17 @@
         }
       }
     }
+
+    .key-value-map {
+      border: 1px solid #ddd;
+      padding: 10px;
+
+      &:hover {
+        @include transition(border 0.3s ease);
+        border: 1px solid #bbb;
+        background-color: #efefef;
+      }
+    }
   }
 }
 
