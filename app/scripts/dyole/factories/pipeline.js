@@ -86,7 +86,9 @@ angular.module('registryApp.dyole')
             constraints: {
                 dropArea: {
                     width: 140
-                }
+                },
+                zoomOutCap: 0.6,
+                zoomInCap: 1.2
             },
 
             /**
@@ -1519,6 +1521,19 @@ angular.module('registryApp.dyole')
             },
 
             /**
+             * Calculate if zoom level is within the limits.
+             *
+             * @return {zoonIn: boolean, zoomOut: boolean} Value is true if the value is on or beyond the limit.
+             *
+             */
+            isZoomOutOfConstraint: function () {
+                return {
+                    zoomIn: this.currentScale >= this.constraints.zoomInCap,
+                    zoomOut: this.currentScale <= this.constraints.zoomOutCap
+                };
+            },
+
+            /**
              * Canvas zoom in
              * Returns current canvas scale
              *
@@ -1526,7 +1541,6 @@ angular.module('registryApp.dyole')
              */
             zoomIn: function () {
                 var canvas = this.getEl(),
-                    zoomLevel = canvas.getScale(),
                     canvasBox = canvas.node.getBBox(),
                     canvasTransform = canvas.node.getCTM(),
                     canvasRect = canvasBox,
@@ -1536,7 +1550,7 @@ angular.module('registryApp.dyole')
                 canvasBox.t = canvasBox.y + canvasTransform.f;
                 canvasBox.r = canvasBox.l + (canvasRect.width * canvasTransform.a);
 
-                if (zoomLevel.x < 1.2 && zoomLevel.y < 1.2) {
+                if (!this.isZoomOutOfConstraint().zoomIn) {
 
                     this.currentScale += scale;
 
@@ -1549,6 +1563,8 @@ angular.module('registryApp.dyole')
                     );
 
                     this._zoomingFinish();
+                    
+                    this.Event.trigger('pipeline:zoom', this.isZoomOutOfConstraint());
                 }
 
                 return this.currentScale;
@@ -1572,7 +1588,7 @@ angular.module('registryApp.dyole')
                 canvasBox.t = canvasBox.y + canvasTransform.f;
                 canvasBox.r = canvasBox.l + (canvasRect.width * canvasTransform.a);
 
-                if (zoomLevel.x > 0.6 && zoomLevel.y > 0.6) {
+                if (!this.isZoomOutOfConstraint().zoomOut) {
                     this.currentScale -= scale;
 
                     canvas.scaleAtPoint(
@@ -1584,6 +1600,8 @@ angular.module('registryApp.dyole')
                     );
 
                     this._zoomingFinish();
+
+                    this.Event.trigger('pipeline:zoom', this.isZoomOutOfConstraint());
                 }
 
                 return this.currentScale;
