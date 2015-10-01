@@ -88,7 +88,7 @@
             </div>
             <!-- END Alt Prefix -->
 
-            <div class="col-md-4" ng-show="!showFileTypes">
+            <div class="col-md-4" ng-show="!isFileType">
                 <div class="form-group" ng-class="{'has-error': (view.form.toolDefaultValue.$invalid && view.form.$dirty)}">
                     <label class="control-label" for="tool_default_value">Tool Default</label>
                     <input tooltip="{{ ::help.cliche.inputs.toolDefaultValue }}" tooltip-trigger="focus" type="text" class="form-control" id="tool_default_value" name="toolDefaultValue" ng-model="view.toolDefaultValue">
@@ -105,7 +105,7 @@
             </div>
             <!-- END Category -->
 
-            <div class="col-md-4" ng-show="showFileTypes">
+            <div class="col-md-4" ng-show="isFileType">
                 <div class="form-group" ng-class="{'has-error': (view.form.fileTypes.$invalid && view.form.$dirty)}">
                     <label class="control-label" for="file_types">File Types</label>
                     <input tooltip="{{ ::help.cliche.inputs.fileTypes }}" tooltip-trigger="focus" type="text" class="form-control" id="file_types" name="fileTypes" ng-model="view.fileTypes">

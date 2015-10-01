@@ -102,7 +102,7 @@ angular.module('registryApp.cliche')
 		};
 		$scope.view.moreText = extraInfoText.more;
 		$scope.view.showMore = false;
-		$scope.showFileTypes = $scope.view.type === 'File' || $scope.view.itemsType === 'File';
+		$scope.isFileType = $scope.view.type === 'File' || $scope.view.itemsType === 'File';
 
         idObj.o = $scope.view.name;
 
@@ -191,7 +191,7 @@ angular.module('registryApp.cliche')
 			            }
 		                break;
 		            case 'record':
-			            $scope.showFileTypes = false;
+			            $scope.isFileType = false;
 			            $scope.view.disabled = true;
 
 			            $scope.view.fields = [];
@@ -199,7 +199,7 @@ angular.module('registryApp.cliche')
 			            break;
 
 		            case 'map':
-			            $scope.showFileTypes = false;
+			            $scope.isFileType = false;
 
 			            $scope.view.disabledAll = true;
 			            $scope.view.adapter = false;
@@ -212,7 +212,7 @@ angular.module('registryApp.cliche')
 
 		            default:
 			            $scope.view.disabledAll = $scope.view.disabled = false;
-			            $scope.showFileTypes = n === 'File';
+			            $scope.isFileType = n === 'File';
 
 			            delete $scope.view.items;
 			            break;
@@ -274,7 +274,7 @@ angular.module('registryApp.cliche')
 			            $scope.view.disabled = $scope.view.disabledAll = false;
 			            $scope.view.items = $scope.view.itemsType;
 
-			            $scope.showFileTypes = n === 'File';
+			            $scope.isFileType = n === 'File';
 		                break;
 	            }
             }

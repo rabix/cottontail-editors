@@ -54,9 +54,9 @@ angular.module('registryApp.cliche')
             // frontend supports inputItem: 'record'
             var map = {
                 input: ['File', 'string', 'enum', 'int', 'float', 'boolean', 'array', 'record', 'map'],
-                output: ['File', 'array'],
+                output: ['File', 'string', 'enum', 'int', 'float', 'boolean', 'array', 'record', 'map'],
                 inputItem: ['string', 'int', 'float', 'File', 'record', 'map', 'enum'],
-                outputItem: ['File']
+                outputItem: ['string', 'int', 'float', 'File', 'record', 'map', 'enum']
             };
 
             return map[type] || [];
