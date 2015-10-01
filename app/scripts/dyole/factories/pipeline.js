@@ -1517,6 +1517,8 @@ angular.module('registryApp.dyole')
             initZoom: function () {
                 this._initZoomLevel(this.currentScale);
 
+                this.Event.trigger('pipeline:zoom', this.isZoomOutOfConstraint());
+
                 return this.currentScale;
             },
 
