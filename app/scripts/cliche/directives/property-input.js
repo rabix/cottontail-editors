@@ -31,6 +31,7 @@ angular.module('registryApp.cliche')
             $scope.view.type = Cliche.parseType($scope.view.schema);
             $scope.view.items = Cliche.getItemsRef($scope.view.type, $scope.view.schema);
             $scope.view.itemsType = Cliche.getItemsType($scope.view.items);
+	        $scope.view.fields = Cliche.getFieldsRef($scope.view.schema);
             $scope.view.adapter = Cliche.getAdapter($scope.prop, 'input');
 
             enumObj = Cliche.parseEnum($scope.view.schema);
@@ -106,6 +107,24 @@ angular.module('registryApp.cliche')
             }
         };
 
+		var updateDefaultValue = function (result, oldType) {
+			var schema = Cliche.getSchema('input', result.prop, 'tool', false);
+			var type = Cliche.parseType(schema);
+			var items = Cliche.getItemsRef(type, schema);
+			var itemsType = Cliche.getItemsType(items);
+
+			if (oldType !== type) {
+				
+				var name = Cliche.parseName(result.prop);
+				var enumObj = Cliche.parseEnum(schema);
+				if (items && itemsType === 'enum') {
+					enumObj = Cliche.parseEnum(items);
+				}
+
+				$scope.inputs[name] = Helper.getDefaultInputValue(name, enumObj.symbols, type, itemsType);
+			}
+		};
+
         /**
          * Toggle property box visibility
          */
@@ -129,7 +148,7 @@ angular.module('registryApp.cliche')
                             mode: 'edit',
                             key: $scope.key,
                             toolType: $scope.type,
-                            property: $scope.prop,
+                            property: angular.copy($scope.prop),
                             properties: $scope.properties
                         };
                     }
@@ -139,6 +158,7 @@ angular.module('registryApp.cliche')
             modalInstance.result.then(function(result) {
 
                 var oldName = $scope.view.name;
+	            var oldType = $scope.view.type;
 
                 Cliche.copyPropertyParams(result.prop, $scope.prop);
 
@@ -146,6 +166,7 @@ angular.module('registryApp.cliche')
                 checkExpression();
 
                 adjustInputs('change', oldName, $scope.view.name);
+                updateDefaultValue(result, oldType);
 
                 $scope.handler();
 
@@ -190,8 +211,22 @@ angular.module('registryApp.cliche')
             if (typeof $scope[action] === 'function') { $scope[action](); }
         };
 
+		/**
+		 * Sorts inputs/args by position
+		 * @param item
+		 * @returns {*}
+		 */
+		$scope.sortByPosition = function(item) {
 
-    }])
+			var position = item.inputBinding && item.inputBinding.position ? item.inputBinding.position : 0; //input
+			position = item.position ? item.position : position; //args
+
+			return position;
+		};
+
+
+
+	}])
     .directive('propertyInput', ['$templateCache', 'RecursionHelper', function ($templateCache, RecursionHelper) {
 
         return {
