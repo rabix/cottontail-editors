@@ -119,19 +119,21 @@ angular.module('registryApp.cliche')
 
             if ($scope.view.form.$invalid) { return false; }
 
-	        if ((!$scope.view.property.outputBinding || !$scope.view.property.outputBinding.metadata) && $scope.view.showFileTypes) {
-		        $scope.view.property.outputBinding = Cliche.getAdapter($scope.view.property, false, 'output') || {};
-		        $scope.view.property.outputBinding.metadata = {};
-	        }
+	        if ($scope.view.showFileTypes) {
+		        if (!$scope.view.property.outputBinding) {
+			        $scope.view.property.outputBinding = {};
+		        }
 
-	        if (!_.isEmpty($scope.view.metadata)) {
-		        _.forEach($scope.view.metadata, function(meta) {
-			        if (!meta.error && meta.key !== '') {
-			            $scope.view.property.outputBinding.metadata[meta.key] = meta.value;
-			        }
-		        });
-	        } else {
 		        $scope.view.property.outputBinding.metadata = {};
+
+
+		        if (!_.isEmpty($scope.view.metadata)) {
+			        _.forEach($scope.view.metadata, function(meta) {
+				        if (!meta.error && meta.key !== '') {
+					        $scope.view.property.outputBinding.metadata[meta.key] = meta.value;
+				        }
+			        });
+		        }
 	        }
 
             var inner = {
