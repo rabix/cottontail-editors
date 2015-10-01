@@ -87,15 +87,6 @@ angular.module('registryApp.cliche')
 			$scope.view[field.name] = $scope.view.property[prefix + field.name] || '';
 		});
 
-		/**
-		 * Text for button which shows above populated extra fields
-		 * @type {{more: string, less: string}}
-		 */
-		var extraInfoText = {
-			more: 'Show More...',
-			less: 'Show Less...'
-		};
-		$scope.view.moreText = extraInfoText.more;
 		$scope.view.showMore = false;
 		$scope.showFileTypes = $scope.view.type === 'File' || $scope.view.itemsType === 'File';
 
@@ -276,7 +267,6 @@ angular.module('registryApp.cliche')
 
 		$scope.toggleMoreInfo = function () {
 			$scope.view.showMore = !$scope.view.showMore;
-			$scope.view.moreText = $scope.view.showMore ? extraInfoText.more : extraInfoText.less;
 		};
 
         /**
