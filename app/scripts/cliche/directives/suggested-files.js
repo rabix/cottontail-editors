@@ -36,6 +36,9 @@ angular.module('registryApp.cliche')
             modalInstance.result.then(function (result) {
                 $scope.view.model = result;
                 console.log('*** Files Chosen: ', result);
+                if ($scope.onChange) {
+                    $scope.onChange();
+                }
             });
         };
         
@@ -57,7 +60,8 @@ angular.module('registryApp.cliche')
             restrict: 'E',
             template: $templateCache.get('views/cliche/partials/suggested-files.html'),
             scope: {
-                model: '=ngModel'
+                model: '=ngModel',
+                onChange: '&'
             },
             controller: 'SuggestedFilesCtrl',
             compile: function(element) {

@@ -269,6 +269,10 @@ angular.module('registryApp.app')
             PipelineInstance.adjustSize($scope.view.showSidebar);
 
         };
+        
+        $scope.onInputFileSet = function () {
+            $scope.onWorkflowChange({value: true, isDisplay: false});
+        };
 
         /**
          * Check if particular property is not exposed anymore and remove it from values schema list
