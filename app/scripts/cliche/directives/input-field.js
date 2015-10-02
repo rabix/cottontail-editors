@@ -46,6 +46,13 @@ angular.module('registryApp.cliche')
 
         $scope.view.ignore = $scope.ignoreFiles === 'true' && ($scope.view.type === 'File' || ($scope.view.items === 'File'));
 
+        // TODO: something is wrong when, cannot just change view.name have to implement other logic
+        //if ($scope.view.exposible) {
+        //    if ($scope.prop.label && $scope.prop.label !== '') {
+        //        $scope.view.name = $scope.prop.label;
+        //    }
+        //}
+
         /**
          * Get default input scheme
          *
