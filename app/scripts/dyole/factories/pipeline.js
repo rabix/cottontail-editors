@@ -151,7 +151,8 @@ angular.module('registryApp.dyole')
                 this.Event.subscribe('node:select', function (node) {
                     var model = node.model;
 
-                    if (!model.softwareDescription || model.softwareDescription.type !== 'output') {
+                    //if (!model.softwareDescription || model.softwareDescription.type !== 'output') {
+                    if (!model.softwareDescription) {
                         if (_self.selectedNodes.length === 0) {
                             _self.Event.trigger('controller:node:select', {}, model, _self.exposed, _self.values, _self.suggestedValues);
                         }
