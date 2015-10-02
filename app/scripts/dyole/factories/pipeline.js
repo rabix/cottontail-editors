@@ -1516,15 +1516,28 @@ angular.module('registryApp.dyole')
                         y: node.y
                     };
 
-                    if (typeof node.scatter !== 'undefiend') {
+                    if (typeof node.scatter !== 'undefined') {
                         json.schemas[nodeId].scatter = node.scatter;
                     }
 
-                    if (typeof node.suggestedValue !== 'undefiend') {
+                    if (typeof node.suggestedValue !== 'undefined') {
                         json.schemas[nodeId].suggestedValue = node.suggestedValue;
                     }
 
                     json.schemas[nodeId].label = node.label;
+
+                    _.forEach(node.inputs, function (input) {
+
+                        if (input['sbg:includeInPorts'] !== 'undefined') {
+
+                            var i = _.find(json.schemas[nodeId].inputs, function (inp) {
+                                return input.id === inp.id;
+                            });
+
+                            i['sbg:includeInPorts'] = input['sbg:includeInPorts'];
+
+                        }
+                    });
 
                     delete node.x;
                     delete node.y;
