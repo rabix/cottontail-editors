@@ -7,7 +7,9 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('InputFieldCtrl', ['$scope', '$modal', '$templateCache', 'Cliche', 'Const', 'lodash', function ($scope, $modal, $templateCache, Cliche, Const, _) {
+    .controller('InputFieldCtrl', ['$scope', '$modal', '$templateCache', 'Cliche', 'Const', 'lodash', 'ClicheEvents', '$rootScope', function ($scope, $modal, $templateCache, Cliche, Const, _, ClicheEvents, $rootScope) {
+
+        var watchers = [];
 
         if ($scope.suggestedValues && !$scope.values) {
             var suggested = $scope.suggestedValues[$scope.appName + Const.exposedSeparator + $scope.prop.id];
@@ -27,6 +29,7 @@ angular.module('registryApp.cliche')
         $scope.view.type = Cliche.parseType($scope.view.property.type);
         $scope.view.required = Cliche.isRequired($scope.view.property.type);
         $scope.view.items = Cliche.getItemsRef($scope.view.type, $scope.view.property.type);
+		$scope.view.fields = Cliche.getFieldsRef($scope.view.property.type);
         $scope.view.itemsType = Cliche.getItemsType($scope.view.items);
 
         $scope.view.tpl = 'views/cliche/inputs/input-' + $scope.view.type.toLowerCase()  + '.html';
@@ -105,8 +108,46 @@ angular.module('registryApp.cliche')
 
         };
 
+        /**
+         * Creates a list of objects with values for inputs type record
+         * @param {Array} fields
+         * @returns {Array}
+         */
+        function createList (fields) {
+            var list = [];
+            _.forEach(fields, (function(field) {
+                var item = {};
+                item.name = Cliche.parseName(field);
+                item.prop = field;
 
-        //var inputScheme = $scope.model;
+                if (Cliche.parseType(Cliche.getSchema('input', field, 'tool', false)) === 'File') {
+                    item.value =  {path: ''};
+                    list.push(item);
+                } else {
+                    item.value = '';
+                    list.push(item);
+                }
+            }));
+
+            return list;
+        }
+
+        /**
+         * Populates above generated list for records with values from the model
+         * @param model
+         * @param list
+         */
+        function populateValues(model, list) {
+            _.forEach(model, function(value, key) {
+                var listItem = _.find(list, {'name': key});
+
+                if (listItem) {
+                    listItem.value = {};
+                    listItem.value[key] = value;
+                }
+            });
+        }
+        
         var inputScheme;
 
         var setModelDefaultValue = function () {
@@ -119,31 +160,60 @@ angular.module('registryApp.cliche')
                 /* type RECORD */
             } else if($scope.view.type === 'record') {
 
+                $scope.view.list = createList($scope.view.fields);
+                populateValues($scope.model, $scope.view.list);
+
+                var watcher = $scope.$watch('view.list', function(n, o) {
+                    if (n !== o) {
+
+                        var inputObj = {};
+                        _.forEach(_.pluck(n, 'value'), function(val) {
+                            var keys = _.keys(val);
+                            _.forEach(keys, function(inputKey) {
+                                inputObj[inputKey] = val[inputKey];
+                            })
+                        });
+
+                        $scope.model = inputObj;
+                    }
+                }, true);
+
+                watchers.push(watcher);
                 inputScheme = getObjectScheme($scope.model);
 
                 /* type ARRAY */
-            } else if($scope.view.type === 'array') {
+            } else if ($scope.view.type === 'array') {
                 inputScheme = [];
 
                 $scope.view.items = $scope.view.items || 'string';
 
-                switch($scope.view.itemsType) {
+                switch ($scope.view.itemsType) {
                     case 'record':
-                        _.each($scope.model, function(value) {
+                        _.each($scope.model, function (value) {
                             var innerScheme = getObjectScheme(value);
                             delete innerScheme.path;
                             inputScheme.push(innerScheme);
                         });
                         break;
                     case 'File' || 'file':
-                        _.each($scope.model, function(value) {
+                        _.each($scope.model, function (value) {
                             inputScheme.push(getFileScheme(value));
+                        });
+                        break;
+                    case 'map':
+                        _.each($scope.model, function (value) {
+                            inputScheme.push(getObjectScheme(value));
+                        });
+                        break;
+                    case 'enum':
+                        _.each($scope.model, function (value) {
+                            inputScheme.push(getDefaultScheme(value));
                         });
                         break;
                     default:
                         //Type checking to avoid an array of characters
                         if (_.isArray($scope.model)) {
-                            _.each($scope.model, function(value) {
+                            _.each($scope.model, function (value) {
                                 inputScheme.push(getDefaultScheme(value));
                             });
                         } else if (_.isString($scope.model)) {
@@ -151,6 +221,11 @@ angular.module('registryApp.cliche')
                         }
                         break;
                 }
+
+                /* type MAP */
+            } else if ($scope.view.type === 'map') {
+                inputScheme = getObjectScheme($scope.model);
+
                 /* type STRING, NUMBER, INTEGER, BOOLEAN */
             } else {
                 inputScheme = getDefaultScheme($scope.model);
@@ -161,8 +236,12 @@ angular.module('registryApp.cliche')
 
         // TODO: Figure this out for complex props, try to avoid this deep watch
         var deepWatcher = $scope.$watch('view.model', function(n, o) {
-            if (n !== o) { $scope.model = n; }
+            if (n !== o) {
+                $scope.model = n;
+                $rootScope.$broadcast(ClicheEvents.JOB.CHANGED, {job: n});
+            }
         }, true);
+        watchers.push(deepWatcher);
 
 
 //        // TODO: Figure this out for complex props
@@ -232,10 +311,12 @@ angular.module('registryApp.cliche')
         };
 
         $scope.$on('$destroy', function () {
-            if (_.isFunction(deepWatcher)) {
-                deepWatcher.call();
-                deepWatcher = null;
-            }
+            _.forEach(watchers, function(watcher) {
+                if (_.isFunction(watcher)) {
+                    watcher.call();
+                    watcher = null;
+                }
+            })
         });
 
         setModelDefaultValue();

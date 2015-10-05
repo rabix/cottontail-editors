@@ -25,7 +25,7 @@
 
             <div class="col-md-4">
                 <div class="form-group" ng-class="{'has-error': (view.form.type.$invalid && view.form.$dirty)}">
-                    <label class="control-label" >Type <help-message message="help.cliche.inputs.type"></help-message></label>
+                    <label class="control-label" for="type" >Type <help-message message="help.cliche.inputs.type"></help-message></label>
                     <select class="form-control" id="type" name="type" ng-model="view.type" ng-options="option for option in view.types" required></select>
                 </div>
             </div>
@@ -33,7 +33,7 @@
 
             <div class="col-md-4" ng-if="view.type === 'array'">
                 <div class="form-group">
-                    <label class="control-label"  class="control-label">Item Type <help-message message="help.cliche.inputs.type"></help-message></label>
+                    <label class="control-label">Item Type <help-message message="help.cliche.inputs.type"></help-message></label>
                     <select class="form-control" id="item-type" name="itemType" ng-model="view.itemsType" ng-options="option for option in view.itemTypes"></select>
                 </div>
             </div>
@@ -41,7 +41,7 @@
 
         </div>
 
-        <div class="row" ng-if="view.type === 'enum'">
+        <div class="row" ng-if="view.type === 'enum' || view.itemsType === 'enum'">
             <div class="col-md-12">
                 <enum ng-model="view.symbols" type="'string'" min="1" is-required="true"></enum>
             </div>
@@ -88,7 +88,7 @@
             </div>
             <!-- END Alt Prefix -->
 
-            <div class="col-md-4" ng-show="!showFileTypes">
+            <div class="col-md-4" ng-show="!isFileType">
                 <div class="form-group" ng-class="{'has-error': (view.form.toolDefaultValue.$invalid && view.form.$dirty)}">
                     <label class="control-label" for="tool_default_value">Tool Default</label>
                     <input tooltip="{{ ::help.cliche.inputs.toolDefaultValue }}" tooltip-trigger="focus" type="text" class="form-control" id="tool_default_value" name="toolDefaultValue" ng-model="view.toolDefaultValue">
@@ -105,7 +105,7 @@
             </div>
             <!-- END Category -->
 
-            <div class="col-md-4" ng-show="showFileTypes">
+            <div class="col-md-4" ng-show="isFileType">
                 <div class="form-group" ng-class="{'has-error': (view.form.fileTypes.$invalid && view.form.$dirty)}">
                     <label class="control-label" for="file_types">File Types</label>
                     <input tooltip="{{ ::help.cliche.inputs.fileTypes }}" tooltip-trigger="focus" type="text" class="form-control" id="file_types" name="fileTypes" ng-model="view.fileTypes">
@@ -142,7 +142,7 @@
 
         <h3 class="legend-small">
             <label class="checkbox inline">
-                <input type="checkbox" ng-model="view.adapter" ng-change="toggleAdapter()"> Include in command line
+                <input type="checkbox" ng-model="view.adapter" ng-change="toggleAdapter()" ng-disabled="view.disabledAll"> Include in command line
             </label>
         </h3>
 

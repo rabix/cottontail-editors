@@ -13,7 +13,7 @@
 
     <div class="row">
 
-        <div class="col-md-12 box-col">
+        <div class="col-md-12 box-col" ng-if="view.type === 'File'">
             <strong class="key">Glob:</strong>
             <div class="value">
                 <i class="fa fa-warning error" ng-if="view.exprError" title="{{ view.exprError }}"></i>

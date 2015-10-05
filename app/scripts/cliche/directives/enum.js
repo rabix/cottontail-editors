@@ -11,6 +11,7 @@ angular.module('registryApp.cliche')
 
         $scope.view = {};
         $scope.view.tplPath = 'views/cliche/enum/enum-' + $scope.type.toLowerCase()  + '.html';
+		$scope.view.symbols = $scope.symbols;
 
         /**
          * Get schema for the appropriate enum type
@@ -24,7 +25,7 @@ angular.module('registryApp.cliche')
                 itemScheme = {path: $scope.path};
             } else if ($scope.type === 'File') {
                 itemScheme = {path: ''};
-            } else if ($scope.type === 'object') {
+            } else if ($scope.type === 'object' || $scope.type === 'map') {
                 itemScheme = {};
             } else {
                 itemScheme = '';
@@ -106,7 +107,6 @@ angular.module('registryApp.cliche')
 
         };
 
-        // TODO: try to use $watchCollection
         $scope.$watch('view.list', function(n, o) {
             if (n !== o) {
                 $scope.model = _.pluck(n, 'value');
@@ -144,7 +144,8 @@ angular.module('registryApp.cliche')
                 path: '=',
                 form: '=',
                 exposible: '@',
-                isDisabled: '=?'
+                isDisabled: '=?',
+	            symbols: '=?'
             },
             controller: 'EnumCtrl',
             link: function() {}

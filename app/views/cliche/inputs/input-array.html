@@ -12,8 +12,8 @@
             <label><input type="checkbox" ng-model="view.includeInPorts" ng-change="includeInPorts()"> Include in Ports</label>
         </div>
 
-        <span class="input-key" title="{{ view.name }}">
-            <span class="input-key-inner">{{ view.name }}</span>
+        <span class="input-key" title="{{ ::view.name }}">
+            <span class="input-key-inner">{{ ::view.name }}</span>
         </span>
 
     </div>
@@ -23,6 +23,7 @@
              ng-model="view.model"
              type="view.itemsType"
              properties="view.items.fields"
+             symbols="view.items.symbols"
              is-required="view.required"
              exposible="{{ view.exposible }}"
              form="form"
