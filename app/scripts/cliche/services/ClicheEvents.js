@@ -11,9 +11,12 @@ angular.module('registryApp.cliche')
 
 		return {
 			EXPRESSION: {
-				CHANGED: 'expression-changed',
-				NEW: 'expression-new',
-				DELETED: 'expression-deleted'
-			}
+				CHANGED: 'expression:changed',
+				NEW: 'expression:new',
+				DELETED: 'expression:deleted'
+			},
+            JOB: {
+                CHANGED: 'job:changed'
+            }
 		};
 	}]);

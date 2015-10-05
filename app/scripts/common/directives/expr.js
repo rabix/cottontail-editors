@@ -144,6 +144,8 @@ angular.module('registryApp.common')
 
                 };
 
+                $scope.$on(ClicheEvents.JOB.CHANGED, checkExpression);
+
                 $scope.$watch('view.transform.script', function (n, o) {
                     triggerUpdate(n, o, 'transform');
                 });
@@ -243,12 +245,7 @@ angular.module('registryApp.common')
 	            }
 
             }],
-            link: function(scope, element) {
-                var el = angular.element(element);
-                // TODO: Check out this, bootstrap tooltip messing with $digest and breaking if you manual trigger
-                // focus or anything
-//                el.find('input').focus();
-
+            link: function(scope) {
                 function runHandler(event) {
 
                     if (event.type === 'keypress' && event.which === 13 || event.type === 'blur' || event.type === 'init' /* for initial load */) {
@@ -260,14 +257,9 @@ angular.module('registryApp.common')
 
                 // only set up event handler if event can be handled
                 if (!_.isUndefined(scope.handleItemBlur) && scope.view.mode === 'literal') {
-//                    el.find('input').on('blur keypress', runHandler);
 
-                    // TODO: See why this needs to trigger?
+                    // to trigger event for splitting base command when the tool has loaded (import for example)
                     runHandler({type: 'init'});
-
-                    scope.$on('$destroy', function() {
-//                        el.off('blur keypress');
-                    });
                 }
             }
         };

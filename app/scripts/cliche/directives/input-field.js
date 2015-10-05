@@ -7,7 +7,9 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('InputFieldCtrl', ['$scope', '$modal', '$templateCache', 'Cliche', 'Const', 'lodash', function ($scope, $modal, $templateCache, Cliche, Const, _) {
+    .controller('InputFieldCtrl', ['$scope', '$modal', '$templateCache', 'Cliche', 'Const', 'lodash', 'ClicheEvents', '$rootScope', function ($scope, $modal, $templateCache, Cliche, Const, _, ClicheEvents, $rootScope) {
+
+        var watchers = [];
 
         if ($scope.suggestedValues && !$scope.values) {
             var suggested = $scope.suggestedValues[$scope.appName + Const.exposedSeparator + $scope.prop.id];
@@ -154,7 +156,7 @@ angular.module('registryApp.cliche')
                 $scope.view.list = createList($scope.view.fields);
                 populateValues($scope.model, $scope.view.list);
 
-                $scope.$watch('view.list', function(n, o) {
+                var watcher = $scope.$watch('view.list', function(n, o) {
                     if (n !== o) {
 
                         var inputObj = {};
@@ -169,6 +171,7 @@ angular.module('registryApp.cliche')
                     }
                 }, true);
 
+                watchers.push(watcher);
                 inputScheme = getObjectScheme($scope.model);
 
                 /* type ARRAY */
@@ -226,8 +229,12 @@ angular.module('registryApp.cliche')
 
         // TODO: Figure this out for complex props, try to avoid this deep watch
         var deepWatcher = $scope.$watch('view.model', function(n, o) {
-            if (n !== o) { $scope.model = n; }
+            if (n !== o) {
+                $scope.model = n;
+                $rootScope.$broadcast(ClicheEvents.JOB.CHANGED, {job: n});
+            }
         }, true);
+        watchers.push(deepWatcher);
 
 
 //        // TODO: Figure this out for complex props
@@ -297,10 +304,12 @@ angular.module('registryApp.cliche')
         };
 
         $scope.$on('$destroy', function () {
-            if (_.isFunction(deepWatcher)) {
-                deepWatcher.call();
-                deepWatcher = null;
-            }
+            _.forEach(watchers, function(watcher) {
+                if (_.isFunction(watcher)) {
+                    watcher.call();
+                    watcher = null;
+                }
+            })
         });
 
         setModelDefaultValue();
