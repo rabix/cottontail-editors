@@ -5,8 +5,8 @@
         <div ng-if="exposed" class="checkbox">
             <label><input type="checkbox" ng-model="view.expose" ng-change="exposeParams()"> expose</label>
         </div>
-        <span class="input-key" title="{{ view.name }}">
-            <span class="input-key-inner">{{ view.name }}</span>
+        <span class="input-key" title="{{ ::view.name }}">
+            <span class="input-key-inner">{{ ::view.name }}</span>
         </span>
     </div>
 
