@@ -133,8 +133,9 @@ form,
   input[type="url"],
   input[type="tel"],
   input[type="search"],
+  .tags,
   .form-control {
-    &:hover, &:focus, &:hover:focus {
+    &:hover, &:focus, &:hover:focus, &.focused {
       border-color: darken(#D91E18, 10);
     }
   }
