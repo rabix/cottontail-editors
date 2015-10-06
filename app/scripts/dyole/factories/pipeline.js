@@ -86,7 +86,9 @@ angular.module('registryApp.dyole')
             constraints: {
                 dropArea: {
                     width: 140
-                }
+                },
+                zoomOutCap: 0.6,
+                zoomInCap: 1.2
             },
 
             /**
@@ -196,6 +198,27 @@ angular.module('registryApp.dyole')
 
                     if (endNode && Common.checkSystem(endNode.model) && Object.keys(endNode.connections).length === 0) {
                         endNode.removeNode();
+                    }
+                });
+
+                /**
+                 * Attach listener for mouse scroll on canvas element.
+                 * Using mouse scroll + CTRL/CMD to zoom in/out.
+                 * wheel event is supported by all browsers
+                 */
+                $canvasArea[0].addEventListener('wheel', function (e) {
+
+                    if (e.ctrlKey) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        e.stopImmediatePropagation();
+
+                        if (e.deltaY > 0) {
+                            _self.zoomOut();
+                        }
+                        else if (e.deltaY < 0) {
+                            _self.zoomIn();
+                        }
                     }
                 });
 
@@ -1557,6 +1580,9 @@ angular.module('registryApp.dyole')
              */
             _zoomingFinish: function () {
                 this._drawScrollbars();
+
+                this.Event.trigger('pipeline:zoom', this.isZoomOutOfConstraint());
+
                 this.model.display.canvas.zoom = this.currentScale;
             },
 
@@ -1569,7 +1595,22 @@ angular.module('registryApp.dyole')
             initZoom: function () {
                 this._initZoomLevel(this.currentScale);
 
+                this.Event.trigger('pipeline:zoom', this.isZoomOutOfConstraint());
+
                 return this.currentScale;
+            },
+
+            /**
+             * Calculate if zoom level is within the limits.
+             *
+             * @return {zoonIn: boolean, zoomOut: boolean} Value is true if the value is on or beyond the limit.
+             *
+             */
+            isZoomOutOfConstraint: function () {
+                return {
+                    zoomIn: this.currentScale >= this.constraints.zoomInCap,
+                    zoomOut: this.currentScale <= this.constraints.zoomOutCap
+                };
             },
 
             /**
@@ -1580,7 +1621,6 @@ angular.module('registryApp.dyole')
              */
             zoomIn: function () {
                 var canvas = this.getEl(),
-                    zoomLevel = canvas.getScale(),
                     canvasBox = canvas.node.getBBox(),
                     canvasTransform = canvas.node.getCTM(),
                     canvasRect = canvasBox,
@@ -1590,7 +1630,7 @@ angular.module('registryApp.dyole')
                 canvasBox.t = canvasBox.y + canvasTransform.f;
                 canvasBox.r = canvasBox.l + (canvasRect.width * canvasTransform.a);
 
-                if (zoomLevel.x < 1.2 && zoomLevel.y < 1.2) {
+                if (!this.isZoomOutOfConstraint().zoomIn) {
 
                     this.currentScale += scale;
 
@@ -1616,7 +1656,6 @@ angular.module('registryApp.dyole')
              */
             zoomOut: function () {
                 var canvas = this.getEl(),
-                    zoomLevel = canvas.getScale(),
                     canvasBox = canvas.node.getBBox(),
                     canvasTransform = canvas.node.getCTM(),
                     canvasRect = canvasBox,
@@ -1626,7 +1665,7 @@ angular.module('registryApp.dyole')
                 canvasBox.t = canvasBox.y + canvasTransform.f;
                 canvasBox.r = canvasBox.l + (canvasRect.width * canvasTransform.a);
 
-                if (zoomLevel.x > 0.6 && zoomLevel.y > 0.6) {
+                if (!this.isZoomOutOfConstraint().zoomOut) {
                     this.currentScale -= scale;
 
                     canvas.scaleAtPoint(
