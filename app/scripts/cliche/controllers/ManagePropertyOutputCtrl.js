@@ -45,7 +45,7 @@ angular.module('registryApp.cliche')
 				$scope.view.metadata.push({value: value, key: key});
 			});
 		}
-		$scope.view.isFileType = $scope.view.type === 'File' || $scope.view.itemsType === 'File';
+		$scope.view.showFileTypes = $scope.view.type === 'File' || $scope.view.itemsType === 'File';
 
         idObj.o = $scope.view.name;
 
@@ -170,19 +170,14 @@ angular.module('registryApp.cliche')
                 if (n === 'array') {
                     $scope.view.itemsType = 'File';
                     $scope.view.items = $scope.view.itemsType;
-	                $scope.view.isFileType = true;
+	                $scope.view.showFileTypes = true;
                 } else {
                     delete $scope.view.items;
-	                $scope.view.isFileType = n === 'File';
+	                $scope.view.showFileTypes = n === 'File';
                 }
             }
         });
 
-		$scope.$watch('view.itemsType', function(n, o) {
-			if (n !== o) {
-				$scope.view.isFileType = n === 'File';
-			}
-		});
 
         /**
          * Update existing glob value with expression or literal

@@ -52,10 +52,6 @@ angular.module('registryApp.cliche')
                     var type = Cliche.parseType(typeObj);
                     var itemType = Cliche.getItemsType(typeObj.items);
 
-	                if (typeObj.items && itemType === 'enum') {
-		                enumObj = Cliche.parseEnum(typeObj.items);
-	                }
-
                     $scope.inputs[name] = Helper.getDefaultInputValue(name, enumObj.symbols, type, itemType);
                 }
 

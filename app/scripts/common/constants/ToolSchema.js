@@ -33,10 +33,7 @@ var Schema = {
                     },
                     {
                         $ref: '#/definitions/recordDef'
-                    },
-	                {
-		                $ref: '#/definitions/mapDef'
-	                }
+                    }
                 ]
             }
         },
@@ -86,13 +83,7 @@ var Schema = {
                         },
                         {
                             $ref: '#/definitions/recordDef'
-                        },
-	                    {
-		                    $ref: '#/definitions/mapDef'
-	                    },
-	                    {
-		                    $ref: '#/definitions/enumDef'
-	                    }
+                        }
                     ]
                 }
             },
@@ -111,20 +102,6 @@ var Schema = {
             },
             required: ['type', 'fields']
         },
-	    mapDef: {
-		    type: 'object',
-		    properties: {
-			    type: {
-				    type: 'string',
-				    enum: ['map']
-			    },
-			    values: {
-				    // currently only strings are supported as values type
-				    type: 'string',
-				    enum: ['string']
-			    }
-		    }
-	    },
         fieldsDef: {
             type: 'array',
             items: {

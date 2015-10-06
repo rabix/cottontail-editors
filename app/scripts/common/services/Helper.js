@@ -133,17 +133,13 @@ angular.module('registryApp.common')
                 int: 0,
                 float: 0,
                 boolean: true,
-	            record: {},
-	            map: {},
                 array: {
                     file: [{path: name + '.ext', 'class': 'File', size: 0, secondaryFiles: []}],
                     File: [{path: name + '.ext', 'class': 'File', size: 0, secondaryFiles: []}],
                     string: [name],
                     int: [0],
                     float: [0],
-                    record: [],
-	                map: [{}],
-	                'enum': [symbols ? symbols[0] : name]
+                    record: []
                 }
             };
 
