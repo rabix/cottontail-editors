@@ -642,6 +642,12 @@ angular.module('registryApp.cliche')
 
                     var key = parseName(property);
 
+                    // To normalize input bindings, because this property is not set during migrations
+                    // but it is necessary for Cliche
+                    if (property.inputBinding && !_.isEmpty(property.inputBinding)) {
+                        property.inputBinding['sbg:cmdInclude'] = true;
+                    }
+
                     return _.contains(keys, key) && property.inputBinding && property.inputBinding['sbg:cmdInclude'];
                 });
 
