@@ -29,7 +29,6 @@ angular.module('registryApp.cliche')
         $scope.view.type = Cliche.parseType($scope.view.property.type);
         $scope.view.required = Cliche.isRequired($scope.view.property.type);
         $scope.view.items = Cliche.getItemsRef($scope.view.type, $scope.view.property.type);
-		$scope.view.fields = Cliche.getFieldsRef($scope.view.property.type);
         $scope.view.itemsType = Cliche.getItemsType($scope.view.items);
 
         $scope.view.tpl = 'views/cliche/inputs/input-' + $scope.view.type.toLowerCase()  + '.html';
@@ -108,46 +107,7 @@ angular.module('registryApp.cliche')
 
         };
 
-        /**
-         * Creates a list of objects with values for inputs type record
-         * @param {Array} fields
-         * @returns {Array}
-         */
-        function createList (fields) {
-            var list = [];
-            _.forEach(fields, (function(field) {
-                var item = {};
-                item.name = Cliche.parseName(field);
-                item.prop = field;
-
-                if (Cliche.parseType(Cliche.getSchema('input', field, 'tool', false)) === 'File') {
-                    item.value =  {path: ''};
-                    list.push(item);
-                } else {
-                    item.value = '';
-                    list.push(item);
-                }
-            }));
-
-            return list;
-        }
-
-        /**
-         * Populates above generated list for records with values from the model
-         * @param model
-         * @param list
-         */
-        function populateValues(model, list) {
-            _.forEach(model, function(value, key) {
-                var listItem = _.find(list, {'name': key});
-
-                if (listItem) {
-                    listItem.value = {};
-                    listItem.value[key] = value;
-                }
-            });
-        }
-        
+        //var inputScheme = $scope.model;
         var inputScheme;
 
         var setModelDefaultValue = function () {
@@ -158,27 +118,8 @@ angular.module('registryApp.cliche')
                 inputScheme = getFileScheme($scope.model);
 
                 /* type RECORD */
-            } else if($scope.view.type === 'record') {
+            } else if ($scope.view.type === 'record') {
 
-                $scope.view.list = createList($scope.view.fields);
-                populateValues($scope.model, $scope.view.list);
-
-                var watcher = $scope.$watch('view.list', function(n, o) {
-                    if (n !== o) {
-
-                        var inputObj = {};
-                        _.forEach(_.pluck(n, 'value'), function(val) {
-                            var keys = _.keys(val);
-                            _.forEach(keys, function(inputKey) {
-                                inputObj[inputKey] = val[inputKey];
-                            })
-                        });
-
-                        $scope.model = inputObj;
-                    }
-                }, true);
-
-                watchers.push(watcher);
                 inputScheme = getObjectScheme($scope.model);
 
                 /* type ARRAY */
@@ -200,16 +141,6 @@ angular.module('registryApp.cliche')
                             inputScheme.push(getFileScheme(value));
                         });
                         break;
-                    case 'map':
-                        _.each($scope.model, function (value) {
-                            inputScheme.push(getObjectScheme(value));
-                        });
-                        break;
-                    case 'enum':
-                        _.each($scope.model, function (value) {
-                            inputScheme.push(getDefaultScheme(value));
-                        });
-                        break;
                     default:
                         //Type checking to avoid an array of characters
                         if (_.isArray($scope.model)) {
@@ -221,11 +152,6 @@ angular.module('registryApp.cliche')
                         }
                         break;
                 }
-
-                /* type MAP */
-            } else if ($scope.view.type === 'map') {
-                inputScheme = getObjectScheme($scope.model);
-
                 /* type STRING, NUMBER, INTEGER, BOOLEAN */
             } else {
                 inputScheme = getDefaultScheme($scope.model);
@@ -298,7 +224,7 @@ angular.module('registryApp.cliche')
             }
 
         };
-        
+
         $scope.includeInPorts = function () {
 
             if ($scope.view.includeInPorts) {

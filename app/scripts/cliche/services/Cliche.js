@@ -53,10 +53,10 @@ angular.module('registryApp.cliche')
             // temporarily removing inputItem and input 'record', because it isn't supported.
             // frontend supports inputItem: 'record'
             var map = {
-                input: ['File', 'string', 'enum', 'int', 'float', 'boolean', 'array', 'record', 'map'],
-                output: ['File', 'string', 'enum', 'int', 'float', 'boolean', 'array', 'record', 'map'],
-                inputItem: ['string', 'int', 'float', 'File', 'record', 'map', 'enum'],
-                outputItem: ['string', 'int', 'float', 'File', 'record', 'map', 'enum']
+                input: ['File', 'string', 'enum', 'int', 'float', 'boolean', 'array'],
+                output: ['File', 'array'],
+                inputItem: ['string', 'int', 'float', 'File'],
+                outputItem: ['File']
             };
 
             return map[type] || [];
@@ -279,8 +279,8 @@ angular.module('registryApp.cliche')
                             exists = true;
                             return false;
                         }
-                    } else if (type === 'array' && input.items && input.items.type === 'record' || type === 'record') {
-                        exists = checkInner(name, input.items.fields, false);
+                    } else if (type === 'array' && input.items && input.items.type === 'record') {
+                        exists = checkInner(name, input.items.fields);
                         if (exists) {
                             return false;
                         }
@@ -631,7 +631,7 @@ angular.module('registryApp.cliche')
         /**
          * Prepare properties for the command line generating
          *
-         * @param {Array} properties
+         * @param {object} properties
          * @param {object} inputs
          * @returns {Promise} props
          */
@@ -650,10 +650,9 @@ angular.module('registryApp.cliche')
 
                 var deferred = $q.defer(),
                     key = parseName(property),
-                    schema = getSchema('input', property, 'tool', false),
+                    schema = getSchema('input', property, 'tool'),
                     type = parseType(schema),
                     items = getItemsRef(type, schema),
-	                fields = getFieldsRef(schema),
                     prefix = property.inputBinding.prefix || '',
                     itemSeparator = parseItemSeparator(property.inputBinding.itemSeparator),
 
@@ -692,8 +691,8 @@ angular.module('registryApp.cliche')
                         });
                     break;
                 case 'record':
-                    /* if input is RECORD  */
-                    parseObjectInput(fields, inputs[key])
+                    /* if input is RECORD - not in use at this moment, because input type can not be record for now */
+                    parseObjectInput(items.fields, inputs[key])
                         .then(function (result) {
                             prop.val = result;
                             deferred.resolve(prop);
@@ -866,9 +865,8 @@ angular.module('registryApp.cliche')
                         consoleCMDCallback(consoleCMD);
                     }
 
-		            consoleCMD = consoleCMD.trim();
-
                     return consoleCMD;
+
                 })
                 .catch(function (error) { return $q.reject(error); });
 
@@ -956,28 +954,13 @@ angular.module('registryApp.cliche')
                 /* if any level and enum */
             } else if (inner.type === 'enum') {
 
-	            type = {
-		            type: 'enum',
-		            name: inner.enumName,
-		            symbols: inner.symbols
-	            };
-
-            } else if (inner.type === 'map') {
-
-	            type = {
-		            type: 'map',
-		            name: inner.mapName,
-		            values: inner.values
-	            };
+                type = {
+                    type: 'enum',
+                    name: inner.enumName,
+                    symbols: inner.symbols
+                };
 
             /* every other case */
-            } else if (inner.type === 'record') {
-	            type = {
-		            type: 'record',
-		            name: inner.recordName,
-		            fields: inner.fields
-	            }
-
             } else {
                 type = inner.type;
             }
@@ -1056,7 +1039,7 @@ angular.module('registryApp.cliche')
          */
         var getTplType = function(type) {
             type = type.toLowerCase();
-            var general = ['file', 'string', 'int', 'float', 'boolean', 'map'];
+            var general = ['file', 'string', 'int', 'float', 'boolean'];
 
             if (_.contains(general, type)) {
                 return 'general';
@@ -1099,15 +1082,6 @@ angular.module('registryApp.cliche')
                 }
             }
         };
-
-		/**
-		 * Returns array of fields for records
-		 *
-		 * @param {object} schema
-		 */
-		var getFieldsRef = function (schema) {
-			return schema[0] == 'null' ? schema[1].fields : schema[0].fields;
-		};
 
         /**
          * Get property schema depending on the level
@@ -1173,7 +1147,6 @@ angular.module('registryApp.cliche')
             getTplType: getTplType,
             getItemsRef: getItemsRef,
             getItemsType: getItemsType,
-	        getFieldsRef: getFieldsRef,
             getTypes: getTypes,
             getSchema: getSchema,
             getAdapter: getAdapter,
