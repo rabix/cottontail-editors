@@ -46,7 +46,8 @@ input[type="date"],
 input[type="email"],
 input[type="url"],
 input[type="tel"],
-input[type="search"] {
+input[type="search"],
+.tags {
   width: 100%;
   border-radius: 0;
   border: 1px solid #ccc;
@@ -55,9 +56,13 @@ input[type="search"] {
   &:hover {
     border-color: #bbb;
 
-    &:focus {
+    &:focus, &.focused {
       border-color: darken(#66afe9, 20);
     }
+  }
+
+  &:focus, &.focused {
+    border-color: #66afe9;
   }
 }
 
