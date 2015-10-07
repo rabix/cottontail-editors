@@ -660,6 +660,7 @@ angular.module('registryApp.cliche')
                     prop = _.extend({
                         key: key,
                         type: type,
+                        required: isRequired(property.type),
                         val: '',
                         position: property.inputBinding.position || 0,
                         prefix: prefix,
@@ -793,6 +794,7 @@ angular.module('registryApp.cliche')
 		            }
 
                     var command = [],
+                        requiredCommand = [],
                         baseCmdPromises = [];
 
                     _.each(joined, function(arg) {
@@ -816,6 +818,10 @@ angular.module('registryApp.cliche')
 
                             if (!_.isEmpty(cmd)) {
                                 command.push(cmd);
+
+                                if (arg.required) {
+                                    requiredCommand.push(cmd);
+                                }
                             }
                         }
                     });
@@ -836,7 +842,11 @@ angular.module('registryApp.cliche')
 
                     return $q.all(baseCmdPromises)
                         .then(function (cmds) {
-                            return {command: command, baseCommand: cmds.join(' ')};
+                            return {
+                                command: command,
+                                requiredCommand: requiredCommand,
+                                baseCommand: cmds.join(' ')
+                            };
                         }, function (error) { return $q.reject(error); });
 
                 })
@@ -845,21 +855,32 @@ angular.module('registryApp.cliche')
                     return $q.all([
                             applyTransform(toolJSON.stdin, toolJSON.stdin),
                             applyTransform(toolJSON.stdout, toolJSON.stdout)
-                        ]).then(function(result) {
-                            return {command: res.command, baseCommand: res.baseCommand, stdin: result[0], stdout: result[1]};
+                        ])
+                        .then(function(result) {
+                            return {
+                                command: res.command,
+                                requiredCommand: res.requiredCommand,
+                                baseCommand: res.baseCommand,
+                                stdin: result[0],
+                                stdout: result[1]
+                            };
                         }, function (error) { return $q.reject(error); });
                 })
                 /* generate final command */
                 .then(function (result) {
 
+                    var cmdPreview = result.baseCommand + ' ' + result.requiredCommand.join(' ' );
+
                     consoleCMD = result.baseCommand + ' ' + result.command.join(' ');
 
                     if (result.stdin) {
                         consoleCMD += ' < ' + result.stdin;
+                        cmdPreview += ' < ' + result.stdin;
                     }
 
                     if (result.stdout) {
                         consoleCMD += ' > ' + result.stdout;
+                        cmdPreview += ' > ' + result.stdout;
                     }
 
                     if (_.isFunction(consoleCMDCallback)) {
@@ -867,6 +888,8 @@ angular.module('registryApp.cliche')
                     }
 
 		            consoleCMD = consoleCMD.trim();
+
+                    toolJSON['sbg:cmdPreview'] = cmdPreview.trim();
 
                     return consoleCMD;
                 })
