@@ -338,6 +338,18 @@ angular.module('registryApp.dyole')
         var onIncludeInPorts = function (nodeId, inputId, value) {
             Pipeline.updateNodePorts(nodeId, inputId, value);
         };
+        
+        var getWorkflowHints = function () {
+            return Pipeline.getHints();
+        };
+
+        var getRequireSBGMetadata = function () {
+            return Pipeline.getRequireSBGMetadata();
+        };
+
+        var updateWorkflowSettings = function (instance, requireSBGMetadata) {
+            return Pipeline.updateWorkflowSettings(instance,requireSBGMetadata);
+        };
 
         var onNodeInfoOff = $rootScope.$on('node:info', onNodeInfo);
         var onNodeLabelEditOff = $rootScope.$on('node:label:edit', onNodeLabelEdit);
@@ -401,7 +413,10 @@ angular.module('registryApp.dyole')
                 adjustSize: adjustSize,
                 getEventObj: getEventObj,
                 updateMetadata: updateMetadata,
-                onIncludeInPorts: onIncludeInPorts
+                onIncludeInPorts: onIncludeInPorts,
+                getWorkflowHints: getWorkflowHints,
+                getRequireSBGMetadata: getRequireSBGMetadata,
+                updateWorkflowSettings: updateWorkflowSettings
             };
 
             PipelineService.setInstance($scope.controllerId, methods);
