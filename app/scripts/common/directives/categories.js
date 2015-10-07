@@ -36,13 +36,6 @@ angular.module('registryApp.common')
             return {text: cat};
         });
 
-        $scope.update = function() {
-            debugger;
-
-            $scope.onUpdate();
-
-        };
-
         $scope.loadCategories = function ($query) {
             var regex = new RegExp($query.toLowerCase().split('').join('.*'));
 
