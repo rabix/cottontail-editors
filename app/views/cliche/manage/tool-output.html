@@ -46,6 +46,10 @@
                 </div>
             </div>
             <!-- END Glob -->
+
+            <div class="col-md-12" ng-if="view.type === 'enum' || view.itemsType === 'enum'">
+                <enum ng-model="view.symbols" type="'string'" min="1" is-required="true"></enum>
+            </div>
         </div>
 
 
