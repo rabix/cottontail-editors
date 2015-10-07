@@ -269,6 +269,10 @@ angular.module('registryApp.app')
             PipelineInstance.adjustSize($scope.view.showSidebar);
 
         };
+        
+        $scope.onInputFileSet = function () {
+            $scope.onWorkflowChange({value: true, isDisplay: false});
+        };
 
         /**
          * Check if particular property is not exposed anymore and remove it from values schema list
@@ -287,8 +291,6 @@ angular.module('registryApp.app')
             if (!_.isUndefined($scope.view.values[appName]) && _.isEmpty($scope.view.values[appName])) {
                 delete $scope.view.values[appName];
             }
-
-            console.log($scope.view.suggestedValues);
 
             $scope.onWorkflowChange({value: true, isDisplay: false});
 
@@ -310,6 +312,12 @@ angular.module('registryApp.app')
                 $scope.view.values[appName][key] = value;
 
             }
+        };
+        $scope.onIncludeInPorts = function (appName, key, value) {
+
+            // call onExpose to remove values from values object
+            $scope.onExpose(appName, key);
+            PipelineInstance.onIncludeInPorts(appName, key, value)
         };
 
         // think about this when implementing multi select of nodes

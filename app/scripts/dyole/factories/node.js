@@ -35,11 +35,8 @@ angular.module('registryApp.dyole')
             this.destroyed = false;
 
             this.selected = false;
-            this.isOutdated = true;
 
-            if (Common.checkSystem(this.model)) {
-                this.isOutdated = false;
-            }
+            this.isOutdated = this._checkNodeOutdated();
 
             this.inputRefs = this.model.inputs;
 
@@ -256,12 +253,12 @@ angular.module('registryApp.dyole')
                 node.push(borders).push(label);
 
                 // render input terminals
-                _.each(inputs, function (terminal) {
+                _.forEach(inputs, function (terminal) {
                     node.push(terminal.render().el);
                 });
 
                 // render output terminals
-                _.each(outputs, function (terminal) {
+                _.forEach(outputs, function (terminal) {
                     node.push(terminal.render().el);
                 });
 
@@ -277,13 +274,81 @@ angular.module('registryApp.dyole')
                 return this;
             },
 
+            reRenderTerminals: function () {
+
+                var _self = this,
+                    node = this.el,
+                    connections = [];
+
+                _.forEach(this.connections, function (c) {
+                    connections.push(c.model);
+                    c.destroy(false);
+                });
+
+                _.forEach(this.inputs, function (input) {
+                    input.destroy();
+                });
+
+                _.forEach(this.outputs, function (output) {
+                    output.destroy();
+                });
+
+                this.inputs = [];
+                this.outputs = [];
+
+                this._initTerminals();
+
+                // render input terminals
+                _.forEach(this.inputs, function (terminal) {
+                    node.push(terminal.render().el);
+                });
+
+                // render output terminals
+                _.forEach(this.outputs, function (terminal) {
+                    node.push(terminal.render().el);
+                });
+
+                var toRemove = [];
+                _.forEach(connections, function (connection) {
+
+                    var inp = _.find(_self.inputs, function (input) {
+                        return input.model.id === connection.input_name;
+                    });
+
+                    if (!inp && connection.end_node === _self.model.id) {
+                        toRemove.push(connection.id);
+                    }
+                });
+
+                _.remove(connections, function (connection) {
+                    return toRemove.indexOf(connection.id) !== -1;
+                });
+
+                this._restoreConnections(connections);
+            },
+            
+            _checkNodeOutdated: function () {
+
+                if (Common.checkSystem(this.model)) {
+                    return false;
+                }
+
+                return this.model['sbg:revision'] !== this.model['sbg:latestRevision'];
+            },
+
+            _restoreConnections: function (connections) {
+                var _self = this;
+                _.forEach(connections, function (cModel) {
+                    _self.Pipeline.createConnectionFromModel(cModel);
+                });
+            },
+
             _filterInputs: function () {
-                var inputs = [],
-                    filter = ['File', 'file', 'directory'];
+                var inputs = [];
 
                 _.each(this.inputRefs, function (input) {
 
-                    if (Common.checkTypeFile(input.type[1] || input.type[0])) {
+                    if (Common.checkTypeFile(input.type[1] || input.type[0]) || input['sbg:includeInPorts']) {
                         input.required = typeof input.type === 'string' ? true : input.type.length === 1;
                         inputs.push(input);
                     }
@@ -406,43 +471,6 @@ angular.module('registryApp.dyole')
                     outerBorder = this._outerBorder,
                     inputs = this.inputs,
                     outputs = this.outputs;
-                //
-                //            this.listenTo(model, 'change:selected', function (model, value) {
-                //
-                //                if (!value) {
-                //                    this._deselect();
-                //                }
-                //
-                //            });
-                //
-                //            this.listenTo(model, 'change:paramValues', function () {
-                //                globals.vents.trigger('pipeline:change', 'revision');
-                //            });
-                //
-                //            this.listenTo(globals.vents, 'key:arrow', function (e) {
-                //
-                //                if (!this.selected) {
-                //                    return;
-                //                }
-                //
-                //                var keycode = e.keyCode ? e.keyCode : e.which,
-                //                    arrowCodes = [37,38,39,40], inputFocus;
-                //
-                //                inputFocus = $('input,textarea').is(':focus');
-                //                if ( (keycode === 46 || keycode === 8)) {
-                //
-                //                    if (!inputFocus) {
-                //                        self.removeNodeButtonClick();
-                //                        e.preventDefault();
-                //                    }
-                //
-                //                }
-                //
-                //                if (_.contains(arrowCodes, keycode) && !inputFocus) {
-                //                    self.moveNode(keycode);
-                //                }
-                //
-                //            });
 
                 borders.mouseover(function () {
 
@@ -456,13 +484,7 @@ angular.module('registryApp.dyole')
                         stroke: '#9b9b9b'
                     });
 
-                    // show input and output terminals' labels
-                    _.each(inputs, function (input) {
-                        input.showTerminalName();
-                    });
-                    _.each(outputs, function (output) {
-                        output.showTerminalName();
-                    });
+                    _self.showTerminalNames();
 
                 });
 
@@ -471,24 +493,20 @@ angular.module('registryApp.dyole')
                     if (typeof _self.glow !== 'undefined') {
                         _self.glow.remove();
                     }
-                    // hide input and output terminals' labels
-                    _.each(inputs, function (input) {
-                        input.hideTerminalName();
-                    });
-                    _.each(outputs, function (output) {
-                        output.hideTerminalName();
-                    });
 
-                    //                _self.hideTooltip();
+                    _self.hideTerminalNames();
+
                 });
 
-                borders.click(function () {
+                borders.click(function (e) {
 
                     var dragged = this.dragged;
 
                     if (typeof dragged !== 'undefined' && !dragged) {
 
-                        this.Pipeline.Event.trigger('node:deselect');
+                        if (!e.ctrlKey && !e.metaKey) {
+                            this.Pipeline.Event.trigger('node:deselect');
+                        }
 
                         if (this.Pipeline.editMode) {
                             this._select();
@@ -496,7 +514,6 @@ angular.module('registryApp.dyole')
                             this._showInfo();
                         }
 
-                        //                    }
                     }
 
                     this.dragged = false;
@@ -533,7 +550,8 @@ angular.module('registryApp.dyole')
 
                 var parent = this.parent,
                     node = this.el,
-                    scale = parent.getScale();
+                    scale = parent.getScale(),
+                    old = node.getTranslation();
 
                 // divide movement proportionally
                 // so you get equal movement in zoom state
@@ -547,8 +565,9 @@ angular.module('registryApp.dyole')
 
                 this.dragged = true;
 
-
-                //            this.parentView.moveSelectedNodes((start.x + dx) - old.x, ( start.y + dy) - old.y , this.model.get('id'));
+                if (this.selected) {
+                    this.Pipeline.moveSelectedNodes((start.x + dx) - old.x, ( start.y + dy) - old.y , this.model.id);
+                }
 
                 this.Pipeline.Event.trigger('scrollbars:draw');
                 this.Pipeline.Event.trigger('pipeline:change');
@@ -569,6 +588,23 @@ angular.module('registryApp.dyole')
                 }
             },
 
+            addTranslation: function (dx, dy) {
+                var translate = this.el.getTranslation();
+                //var parent = this.parent,
+                //    parentCoords = parent.node.getCTM(),
+                //    scale = parent.getScale();
+
+                var x = translate.x + dx,
+                    y = translate.y + dy;
+
+                this.el.setTranslation(x, y);
+
+                this.redrawConnections();
+
+                this.Pipeline.Event.trigger('scrollbars:draw');
+
+            },
+
             getTerminalById: function (id, type) {
 
                 var terminal;
@@ -579,6 +615,33 @@ angular.module('registryApp.dyole')
                 });
 
                 return terminal;
+            },
+
+            showTerminalNames: function () {
+                var inputs = this.inputs,
+                    outputs = this.outputs;
+
+                // show input and output terminals' labels
+                _.forEach(inputs, function (input) {
+                    input.showTerminalName();
+                });
+                _.forEach(outputs, function (output) {
+                    output.showTerminalName();
+                });
+            },
+
+            hideTerminalNames: function () {
+                var inputs = this.inputs,
+                    outputs = this.outputs;
+
+                // hide input and output terminals' labels
+                _.forEach(inputs, function (input) {
+                    input.hideTerminalName();
+                });
+                _.forEach(outputs, function (output) {
+                    output.hideTerminalName();
+                });
+
             },
 
             redrawConnections: function () {
@@ -592,6 +655,10 @@ angular.module('registryApp.dyole')
 
             addConnection: function (connection) {
                 this.connections[connection.id] = connection;
+
+                if (this.selected) {
+                    connection.getEl().glow();
+                }
 
                 // recalculate file types only for regular input node
                 //            if (this.model.type.indexOf('input/') !== -1) {
@@ -937,7 +1004,6 @@ angular.module('registryApp.dyole')
                     this._showButtons();
                 }
 
-
             },
 
             _select: function () {
@@ -945,8 +1011,6 @@ angular.module('registryApp.dyole')
                 if (!this.Pipeline.editMode) {
                     return;
                 }
-
-                this.Pipeline.selectedNodes.push(this);
 
                 this._showButtons();
 
@@ -957,10 +1021,15 @@ angular.module('registryApp.dyole')
 
                 this.selected = true;
 
-                this.Pipeline.Event.trigger('node:select', this.model);
+                this.Pipeline.Event.trigger('node:select', this);
+
+                _.forEach(this.connections, function (connection) {
+                    connection.getEl().glow();
+                });
             },
 
             _deselect: function () {
+                var nodeId = this.id;
                 this._destroyButtons();
 
                 // Show default state
@@ -969,6 +1038,11 @@ angular.module('registryApp.dyole')
                 });
 
                 this.selected = false;
+
+                _.forEach(this.connections, function (connection) {
+                    connection.connection.unGlow();
+                });
+
             },
 
             _removeValues: function () {
@@ -1053,7 +1127,7 @@ angular.module('registryApp.dyole')
                 delete this.Pipeline.nodes[this.model.id];
 
                 _.remove(this.Pipeline.nodes, function (n) {
-                    return n.id === _self.model.id;
+                    return n.model.id === _self.model.id;
                 });
 
             },

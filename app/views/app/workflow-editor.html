@@ -163,13 +163,16 @@
                                     exposed="view.exposed"
                                     ignore-files="true"
                                     handle-expose="onExpose(appName, property['id'])"
+                                    handle-include-in-ports="onIncludeInPorts(appName, property['id'], value)"
                                     on-un-expose="onUnExpose(appName, property['id'], value)">
                             </input-field>
 
                             <!-- For input suggested files -->
                             <suggested-files
                                     ng-if="view.json.softwareDescription"
-                                    ng-model="view.json" >
+                                    ng-model="view.json"
+                                    on-change="onInputFileSet()"
+                            >
                             </suggested-files>
 
                             <p class="alert alert-info" ng-if="view.json.inputs.length === 0 && !view.json.softwareDescription">There are no params that can be set or exposed.</p>

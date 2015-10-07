@@ -54,9 +54,9 @@ angular.module('registryApp.cliche')
             // frontend supports inputItem: 'record'
             var map = {
                 input: ['File', 'string', 'enum', 'int', 'float', 'boolean', 'array', 'record', 'map'],
-                output: ['File', 'array'],
+                output: ['File', 'string', 'enum', 'int', 'float', 'boolean', 'array', 'record', 'map'],
                 inputItem: ['string', 'int', 'float', 'File', 'record', 'map', 'enum'],
-                outputItem: ['File']
+                outputItem: ['string', 'int', 'float', 'File', 'record', 'map', 'enum']
             };
 
             return map[type] || [];
@@ -993,8 +993,9 @@ angular.module('registryApp.cliche')
                     // _.isEmpty returns true for number values, which we don't want
                     // if there is a number value, then the prop is not empty
                     if (_.isEmpty(tmp[adapter][key]) && !_.isNumber(tmp[adapter][key]) && !_.isBoolean(tmp[adapter][key]) && !_.isNull(tmp[adapter][key])) {
-
-                        delete tmp[adapter][key];
+	                    if (key !== 'metadata') {
+	                        delete tmp[adapter][key];
+	                    }
                     }
                 });
 

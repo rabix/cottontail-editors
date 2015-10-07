@@ -33,17 +33,37 @@
             <div ng-switch-when="schema">
 
                 <div class="row change-schema">
-                    <div class="col-md-6 input-group">
+                    <div class="col-md-12 no-padding">
 
-                        <label >Change Schema:</label>
+                        <div class="col-md-12">
+                            <label>Change Schema:</label>
+                        </div>
 
-                        <select class="form-control"
-                                ng-model="view.type"
-                                ng-options=" value.value as value.name for value in view.schemaTypes">
-                        </select>
+                        <div class="col-md-6">
+                            <select class="form-control"
+                                    ng-model="view.type"
+                                    ng-options=" value.value as value.name for value in view.schemaTypes">
+                            </select>
+                        </div>
+
+                        <div class="col-md-6" ng-if="view.type === 'array'">
+                            <select class="form-control"
+                                    ng-model="view.itemType"
+                                    ng-options=" value.value as value.name for value in view.itemTypes">
+                            </select>
+                        </div>
+
+                        <div class="col-md-12 required-checkbox" ng-if="view.type === 'enum'">
+                            <label>Enum Name: </label>
+                            <input class="form-control" type="text" ng-model="view.enumName" required >
+                        </div>
+
+                        <div class="col-md-12 required-checkbox" ng-if="view.type === 'enum'">
+                            <enum ng-model="view.enumSymbols" type="'string'" min="1" is-required="true"></enum>
+                        </div>
                     </div>
 
-                    <div class="col-md-6 input-group">
+                    <div class="col-md-6 required-checkbox">
                         <label for="isRequired">Required:</label>
                         <input name="isRequired" type="checkbox" ng-model="view.required"/>
                     </div>

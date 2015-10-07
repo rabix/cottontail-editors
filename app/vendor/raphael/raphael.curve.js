@@ -36,7 +36,7 @@ Raphael.fn.curve = function (config, attributes) {
     function Curve(conf, attr) {
 
         var pub, path = r.group(),
-            pathInner, pathOutter;
+            pathInner, pathOutter, glow;
 
 
         function initialize(conf) {
@@ -141,18 +141,41 @@ Raphael.fn.curve = function (config, attributes) {
 
                 endCoords.x2 = coords.x2;
                 endCoords.y2 = coords.y2;
+
+                if (glow) {
+                    this.unGlow();
+                    this.glow();
+                }
                 
                 return this;
             },
 
-            glow: function (attr) {
-                path.glow(attr);
+            glow: function () {
+                var attr = {
+                    opacity: 0.3
+                };
+
+                if (!glow) {
+                    glow = pathOutter.glow(attr);
+                }
 
                 return this;
+            },
+            
+            unGlow: function () {
+                if (glow) {
+                    glow.remove();
+                    glow = null;
+                }
             },
 
             remove: function () {
                 if (pathInner && pathOutter) {
+
+                    if (glow) {
+                        this.unGlow();
+                    }
+
                     pathInner.remove();
                     pathOutter.remove();
                     path.remove();

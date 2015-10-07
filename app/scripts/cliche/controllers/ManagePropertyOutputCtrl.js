@@ -45,7 +45,7 @@ angular.module('registryApp.cliche')
 				$scope.view.metadata.push({value: value, key: key});
 			});
 		}
-		$scope.view.showFileTypes = $scope.view.type === 'File' || $scope.view.itemsType === 'File';
+		$scope.view.isFileType = $scope.view.type === 'File' || $scope.view.itemsType === 'File';
 
         idObj.o = $scope.view.name;
 
@@ -119,12 +119,21 @@ angular.module('registryApp.cliche')
 
             if ($scope.view.form.$invalid) { return false; }
 
-	        if (!_.isEmpty($scope.view.metadata)) {
-		        _.forEach($scope.view.metadata, function(meta) {
-			        if (!meta.error && meta.key !== '') {
-			            $scope.view.property.outputBinding.metadata[meta.key] = meta.value;
-			        }
-		        });
+	        if ($scope.view.showFileTypes) {
+		        if (!$scope.view.property.outputBinding) {
+			        $scope.view.property.outputBinding = {};
+		        }
+
+		        $scope.view.property.outputBinding.metadata = {};
+
+
+		        if (!_.isEmpty($scope.view.metadata)) {
+			        _.forEach($scope.view.metadata, function(meta) {
+				        if (!meta.error && meta.key !== '') {
+					        $scope.view.property.outputBinding.metadata[meta.key] = meta.value;
+				        }
+			        });
+		        }
 	        }
 
             var inner = {
@@ -161,14 +170,19 @@ angular.module('registryApp.cliche')
                 if (n === 'array') {
                     $scope.view.itemsType = 'File';
                     $scope.view.items = $scope.view.itemsType;
-	                $scope.view.showFileTypes = true;
+	                $scope.view.isFileType = true;
                 } else {
                     delete $scope.view.items;
-	                $scope.view.showFileTypes = n === 'File';
+	                $scope.view.isFileType = n === 'File';
                 }
             }
         });
 
+		$scope.$watch('view.itemsType', function(n, o) {
+			if (n !== o) {
+				$scope.view.isFileType = n === 'File';
+			}
+		});
 
         /**
          * Update existing glob value with expression or literal

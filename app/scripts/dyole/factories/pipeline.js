@@ -133,13 +133,15 @@ angular.module('registryApp.dyole')
                 });
 
                 this.Event.subscribe('node:deselect', function () {
-                    _.each(_self.selectedNodes, function (node) {
+
+                    _.forEach(_self.selectedNodes, function (node) {
                         if (node.selected) {
                             node._deselect();
                         }
                     });
 
-//                        $rootScope.$broadcast('node:deselect');
+                    _self.selectedNodes.splice(0, _self.selectedNodes.length);
+
                     _self.Event.trigger('controller:node:deselect');
 
                 });
@@ -148,13 +150,17 @@ angular.module('registryApp.dyole')
                     _self.Event.trigger('controller:node:destroy');
                 });
 
-                this.Event.subscribe('node:select', function (model) {
+                this.Event.subscribe('node:select', function (node) {
+                    var model = node.model;
 
-                    if (!model.softwareDescription || model.softwareDescription.type !== 'output') {
-//                            $rootScope.$broadcast('node:select', model, _self.exposed, _self.values, _self.suggestedValues);
-                        _self.Event.trigger('controller:node:select', {}, model, _self.exposed, _self.values, _self.suggestedValues);
+                    //if (!model.softwareDescription || model.softwareDescription.type !== 'output') {
+                    if (!model.softwareDescription) {
+                        if (_self.selectedNodes.length === 0) {
+                            _self.Event.trigger('controller:node:select', {}, model, _self.exposed, _self.values, _self.suggestedValues);
+                        }
                     }
 
+                    _self.selectedNodes.push(node);
 
                 });
 
@@ -509,7 +515,7 @@ angular.module('registryApp.dyole')
 
                 _.each(this.model.relations, function (connection) {
 
-                    _self._createConnection(connection);
+                    _self.createConnectionFromModel(connection);
 
                 });
             },
@@ -521,7 +527,7 @@ angular.module('registryApp.dyole')
              * @param connection
              * @private
              */
-            _createConnection: function (connection) {
+            createConnectionFromModel: function (connection) {
                 var _self = this,
                     input = _self.nodes[connection.start_node].getTerminalById(
                         connection.output_name, 'output'),
@@ -543,6 +549,16 @@ angular.module('registryApp.dyole')
                     connection.id]);
                 _self.nodes[connection.end_node].addConnection(_self.connections[
                     connection.id]);
+            },
+
+            moveSelectedNodes: function (dx, dy, except) {
+
+                _.each(this.selectedNodes, function (node) {
+                    if (node.model.id !== except) {
+                        node.addTranslation(dx, dy);
+                    }
+                });
+
             },
 
             /**
@@ -581,6 +597,10 @@ angular.module('registryApp.dyole')
                     'id': terId,
                     'type': terminal.model.type
                 });
+
+                if (terminal.model['sbg:includeInPorts']) {
+                    model[internalType][0]['sbg:includeInPorts'] = terminal.model['sbg:includeInPorts'];
+                }
 
                 terminalId = terId;
 
@@ -1021,6 +1041,10 @@ angular.module('registryApp.dyole')
                 var node = this.getNodeById(nodeId),
                     nodeModel = node.model,
                     oldLabel = nodeModel.label;
+                
+                var portIncludedInputs = _.filter(node.model.inputs, function (inp) {
+                    return inp['sbg:includeInPorts'];
+                });
 
                 var project = nodeModel['sbg:projectSlug'].split('/'),
                     projectOwner = project[0],
@@ -1062,6 +1086,19 @@ angular.module('registryApp.dyole')
                         y = (y + translation.y) + canvas.top;
 
                         newNode.label = oldLabel;
+
+                        _.forEach(portIncludedInputs, function (inp) {
+
+                            var input = _.find(newNode.inputs, function (i) {
+                                return i.id === inp.id;
+                            });
+
+                            if (input) {
+                                input['sbg:includeInPorts'] = inp['sbg:includeInPorts'];
+                            }
+
+                        });
+
                         _self.addNode(newNode, x, y, false, function (newId) {
 
                             var n = _self.getNodeById(newId);
@@ -1430,6 +1467,11 @@ angular.module('registryApp.dyole')
                     n.description = description;
                     nSchema.description = description;
                 }
+
+                schema['sbg:includeInPorts'] = true;
+                nSchema['sbg:includeInPorts'] = true;
+
+                this.Event.trigger('pipeline:change', true);
             },
 
             /**
@@ -1449,7 +1491,28 @@ angular.module('registryApp.dyole')
                     return model;
                 };
 
+                this.Event.trigger('pipeline:change', true);
+
                 return _mergeSBGProps(metadata, this.model);
+            },
+
+            updateNodePorts: function (nodeId, inputId, value) {
+                var node = this.getNodeById(nodeId);
+                var terminal = _.find(node.model.inputs, function (input) {
+                    return input.id === inputId;
+                });
+
+                if (terminal) {
+                    terminal['sbg:includeInPorts'] = value;
+                    node.reRenderTerminals();
+
+                    if (!value) {
+                        if (node.model.scatter === inputId) {
+                            node.model.scatter = false;
+                            delete node.model.scatter;
+                        }
+                    }
+                }
             },
 
             /**
@@ -1478,15 +1541,28 @@ angular.module('registryApp.dyole')
                         y: node.y
                     };
 
-                    if (typeof node.scatter !== 'undefiend') {
+                    if (typeof node.scatter !== 'undefined') {
                         json.schemas[nodeId].scatter = node.scatter;
                     }
 
-                    if (typeof node.suggestedValue !== 'undefiend') {
+                    if (typeof node.suggestedValue !== 'undefined') {
                         json.schemas[nodeId].suggestedValue = node.suggestedValue;
                     }
 
                     json.schemas[nodeId].label = node.label;
+
+                    _.forEach(node.inputs, function (input) {
+
+                        if (input['sbg:includeInPorts'] !== 'undefined') {
+
+                            var i = _.find(json.schemas[nodeId].inputs, function (inp) {
+                                return input.id === inp.id;
+                            });
+
+                            i['sbg:includeInPorts'] = input['sbg:includeInPorts'];
+
+                        }
+                    });
 
                     delete node.x;
                     delete node.y;

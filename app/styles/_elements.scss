@@ -624,22 +624,25 @@ ul.nav-tabs.nav-borders {
 .change-schema {
 
   .input-group[class*="col-"] {
-    padding: 10px;
+    padding: 15px;
   }
 
-  .input-group {
-    input[type="checkbox"], select {
-      display: inline-block;
-    }
+  .required-checkbox {
+    margin: 9px 0 5px;
+  }
 
-    input[type="checkbox"] {
-      padding: 0;
-      margin: 0;
-      vertical-align: middle;
-      position: relative;
-      top: -1px;
-      overflow: hidden;
-      left: 10px;    }
+  input[type="checkbox"], select {
+    display: inline-block;
+  }
+
+  input[type="checkbox"] {
+    padding: 0;
+    margin: 0;
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+    overflow: hidden;
+    left: 10px;
   }
 
 }
