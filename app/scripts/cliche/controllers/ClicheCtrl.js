@@ -539,8 +539,6 @@ angular.module('registryApp.cliche')
          * Updates $scope.view.tool.categories
          */
         $scope.updateCategories = function() {
-            console.log('doing this thing');
-            
             $scope.view.tool['sbg:categories'] = _.pluck($scope.view.categories, 'text');
         };
 
