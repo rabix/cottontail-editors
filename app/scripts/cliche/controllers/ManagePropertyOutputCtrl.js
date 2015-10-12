@@ -39,13 +39,21 @@ angular.module('registryApp.cliche')
 		$scope.view.description = $scope.view.property.description;
 		$scope.view.fileTypes = $scope.view.property['sbg:fileTypes'];
 
-		$scope.view.metadata = [];
+        $scope.view.fields = Cliche.getFieldsRef($scope.view.property.type);
+
+        var enumObj = Cliche.parseEnum($scope.view.property.type);
+        if ($scope.view.items && $scope.view.itemsType === 'enum') {
+            enumObj = Cliche.parseEnum($scope.view.items);
+        }
+
+
+        $scope.view.metadata = [];
 		if ($scope.view.property.outputBinding && $scope.view.property.outputBinding.metadata) {
 			_.forOwn($scope.view.property.outputBinding.metadata, function (value, key) {
 				$scope.view.metadata.push({value: value, key: key});
 			});
 		}
-		$scope.view.showFileTypes = $scope.view.type === 'File' || $scope.view.itemsType === 'File';
+		$scope.view.isFileType = $scope.view.type === 'File' || $scope.view.itemsType === 'File';
 
         idObj.o = $scope.view.name;
 
@@ -119,7 +127,7 @@ angular.module('registryApp.cliche')
 
             if ($scope.view.form.$invalid) { return false; }
 
-	        if ($scope.view.showFileTypes) {
+	        if ($scope.view.isFileType) {
 		        if (!$scope.view.property.outputBinding) {
 			        $scope.view.property.outputBinding = {};
 		        }
@@ -134,18 +142,37 @@ angular.module('registryApp.cliche')
 				        }
 			        });
 		        }
-	        }
+	        } else {
+                if ($scope.view.property.outputBinding && $scope.view.property.outputBinding.metadata) {
+                    delete $scope.view.property.outputBinding.metadata;
+                }
+            }
+
+            if ($scope.view.type === 'array' && $scope.view.itemsType === 'enum') {
+                $scope.view.items.symbols = $scope.view.symbols;
+            }
+
 
             var inner = {
                 key: key,
                 name: $scope.view.name,
                 required: $scope.view.required,
+                recordName: $scope.view.name, // using the same name for input id and recordName
+                enumName: $scope.view.name, // and for enumName
+                mapName: $scope.view.name, // and for mapName
                 type: $scope.view.type,
-                items: $scope.view.items
+                items: $scope.view.items,
+                symbols: $scope.view.symbols,
+                fields: $scope.view.fields,
+                values: $scope.view.values,
+                label: $scope.view.label,
+                description: $scope.view.description
             };
 
-            $scope.view.property.type = $scope.view.property.schema;
-            delete $scope.view.property.schema;
+            if ($scope.view.property.schema) {
+                $scope.view.property.type = $scope.view.property.schema;
+                delete $scope.view.property.schema;
+            }
 
             var formatted = Cliche.formatProperty(inner, $scope.view.property, 'output');
 
@@ -167,17 +194,73 @@ angular.module('registryApp.cliche')
         /* watch for the type change in order to adjust the property structure */
         $scope.$watch('view.type', function(n, o) {
             if (n !== o) {
-                if (n === 'array') {
-                    $scope.view.itemsType = 'File';
-                    $scope.view.items = $scope.view.itemsType;
-	                $scope.view.showFileTypes = true;
-                } else {
-                    delete $scope.view.items;
-	                $scope.view.showFileTypes = n === 'File';
+                $scope.view.isFileType = false;
+
+                switch(n) {
+                    case 'array':
+                        $scope.view.itemsType = 'File';
+                        $scope.view.items = $scope.view.itemsType;
+
+                        break;
+                    case 'record':
+                        $scope.view.fields = [];
+                        break;
+
+                    case 'map':
+                        $scope.view.values = 'string';
+                        break;
+
+                    case 'File':
+                        $scope.view.isFileType = true;
+                        break;
+                    default:
+
+                        delete $scope.view.items;
+                        break;
                 }
             }
         });
 
+		$scope.$watch('view.itemsType', function(n, o) {
+			if (n !== o) {
+                $scope.view.symbols = enumObj.symbols;
+                $scope.view.isFileType = false;
+
+                switch (n) {
+                    case 'record':
+                        // if itemsType is a record, create object
+                        // items: { type: 'record', fields: []}
+                        $scope.view.items = {};
+                        $scope.view.items.type = 'record';
+                        $scope.view.items.fields = [];
+                        $scope.view.items.name = $scope.view.name;
+                        break;
+
+                    case 'map':
+                        $scope.view.items = {};
+                        $scope.view.items.type = 'map';
+                        $scope.view.items.values = 'string';
+                        $scope.view.items.name = $scope.view.name;
+                        break;
+
+                    case 'enum':
+                        $scope.view.items = {};
+                        $scope.view.items.type = 'enum';
+                        $scope.view.items.name = $scope.view.name;
+                        break;
+
+                    case 'File':
+                        $scope.view.isFileType = true;
+                        break;
+
+                    default:
+                        // if itemType is not a record, make items string
+                        // items: 'string' || 'boolean' || etc.
+                        $scope.view.items = $scope.view.itemsType;
+                        break;
+                }
+			}
+		});
 
         /**
          * Update existing glob value with expression or literal

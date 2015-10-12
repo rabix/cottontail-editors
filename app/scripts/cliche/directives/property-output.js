@@ -30,6 +30,11 @@ angular.module('registryApp.cliche')
             $scope.view.required = Cliche.isRequired(schema);
             $scope.view.items = Cliche.getItemsRef($scope.view.type, $scope.view.property.type);
             $scope.view.itemsType = Cliche.getItemsType($scope.view.items);
+            $scope.view.fields = Cliche.getFieldsRef($scope.view.property.type);
+
+            var enumObj = Cliche.parseEnum($scope.view.property.type);
+            $scope.view.symbols = enumObj.symbols;
+
 
             var tplType = Cliche.getTplType($scope.view.type);
 
@@ -84,7 +89,7 @@ angular.module('registryApp.cliche')
                             mode: 'edit',
                             key: $scope.key,
                             toolType: $scope.type,
-                            property: $scope.prop,
+                            property: angular.copy($scope.prop),
                             properties: $scope.properties,
                             required: $scope.view.required
                         };

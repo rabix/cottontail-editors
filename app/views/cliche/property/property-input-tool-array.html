@@ -68,7 +68,7 @@
 
                 <div class="enum-list-container">
                     <property-input
-                            ng-repeat="property in view.items.fields track by property.name"
+                            ng-repeat="property in view.items.fields | orderBy:sortByPosition track by property.name"
                             ng-model="property"
                             type="{{ type }}"
                             inputs="inputs[view.name]"
