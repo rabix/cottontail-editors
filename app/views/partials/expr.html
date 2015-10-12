@@ -16,7 +16,7 @@
                tooltip-placement="top"
                tooltip-append-to-body="true"
                ng-click="editLiteral()"
-               ng-class="{'btn-warning': (view.mode === 'literal' && view.literal), 'btn-default': (view.mode === 'transform' || !view.literal)}">
+               ng-class="{'btn-primary': (view.mode === 'literal' && view.literal && !view.exprError), 'btn-default': (view.mode === 'transform' || !view.literal && !view.exprError), 'btn-warning': view.exprError}">
                 <i class="fa fa-font"></i>
             </a>
             <a href
@@ -25,7 +25,7 @@
                tooltip-placement="top"
                tooltip-append-to-body="true"
                ng-click="editExpression()"
-               ng-class="{'btn-warning': (view.mode === 'transform'), 'btn-default': (view.mode === 'literal')}">
+               ng-class="{'btn-primary': (view.mode === 'transform' && !view.exprError), 'btn-default': (view.mode === 'literal' && !view.exprError), 'btn-warning': view.exprError}">
                <i class="fa fa-code"></i>
             </a>
         </span>
