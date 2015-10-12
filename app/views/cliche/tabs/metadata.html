@@ -59,8 +59,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="category" class="third-class">Categories <help-message message="help.cliche.metadata.categories"></help-message></label>
-                    <tags-input id="category" class="category-tags" ng-model="view.categories" placeholder="Add a category" on-tag-added="updateCategories($tag)" on-tag-removed="updateCategories($tag)"></tags-input>
+                    <label class="third-class">Categories <help-message message="help.cliche.metadata.categories"></help-message></label>
+                    <categories ng-model="view.categories" on-update="updateCategories()"></categories>
                 </div>
             </div>
 

@@ -20,9 +20,9 @@
 
 .category-tags .tags.focused {
   outline: none;
-  -webkit-box-shadow: 0 0 3px 1px rgba(5, 139, 242, 0.6);
-  -moz-box-shadow: 0 0 3px 1px rgba(5, 139, 242, 0.6);
-  box-shadow: 0 0 3px 1px rgba(5, 139, 242, 0.6);
+  -webkit-box-shadow: 0 0 4px 0 rgba(81, 150, 206, 0.5);
+  -moz-box-shadow: 0 0 4px 0 rgba(81, 150, 206, 0.5);
+  box-shadow: 0 0 4px 0 rgba(81, 150, 206, 0.5);
 }
 .category-tags .tags .tag-list {
   margin: 0;
@@ -38,7 +38,7 @@
   line-height: 25px;
 }
 .category-tags .tags .tag-item .remove-button:active {
-  color: red;
+  color: $brand-danger;
 }
 .category-tags .tags .input {
   border: 0;
@@ -70,6 +70,7 @@
 
 .tags {
   @extend .form-control;
+  padding: 3px;
 }
 
 .host {
@@ -110,4 +111,39 @@
       }
     }
   }
+}
+
+/** autocomplete **/
+tags-input .autocomplete {
+  max-width: 100%;
+  position: absolute;
+  z-index: 2;
+}
+tags-input .autocomplete .suggestion-list {
+  @extend .dropdown-menu;
+  display: block;
+  position: relative;
+}
+tags-input .autocomplete .suggestion-item {
+  padding: 3px 20px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+tags-input .autocomplete .suggestion-item.selected {
+  color: $dropdown-link-active-color;
+  background-color: $dropdown-link-active-bg;
+}
+tags-input .autocomplete .suggestion-item.selected em {
+  font-style: normal;
+  font-weight: bold;
+  color: $dropdown-link-active-color;
+  background-color: $dropdown-link-active-bg;
+}
+tags-input .autocomplete .suggestion-item em {
+  font-style: normal;
+  font-weight: bold;
+  color: black;
+  background-color: white;
 }
