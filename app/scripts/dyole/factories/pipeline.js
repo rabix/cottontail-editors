@@ -203,6 +203,27 @@ angular.module('registryApp.dyole')
                     }
                 });
 
+                /**
+                 * Attach listener for mouse scroll on canvas element.
+                 * Using mouse scroll + CTRL/CMD to zoom in/out.
+                 * wheel event is supported by all browsers
+                 */
+                $canvasArea[0].addEventListener('wheel', function (e) {
+
+                    if (e.ctrlKey) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        e.stopImmediatePropagation();
+
+                        if (e.deltaY > 0) {
+                            _self.zoomOut();
+                        }
+                        else if (e.deltaY < 0) {
+                            _self.zoomIn();
+                        }
+                    }
+                });
+
                 $canvasArea.mousemove(function (e) {
                     _.each(_self.nodes, function (node) {
 
@@ -1604,6 +1625,9 @@ angular.module('registryApp.dyole')
              */
             _zoomingFinish: function () {
                 this._drawScrollbars();
+
+                this.Event.trigger('pipeline:zoom', this.isZoomOutOfConstraint());
+
                 this.model.display.canvas.zoom = this.currentScale;
             },
 
@@ -1679,7 +1703,6 @@ angular.module('registryApp.dyole')
              */
             zoomOut: function () {
                 var canvas = this.getEl(),
-                    zoomLevel = canvas.getScale(),
                     canvasBox = canvas.node.getBBox(),
                     canvasTransform = canvas.node.getCTM(),
                     canvasRect = canvasBox,
