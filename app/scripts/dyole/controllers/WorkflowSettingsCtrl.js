@@ -14,13 +14,14 @@ angular.module('registryApp.dyole')
         $scope.help = HelpMessages;
 
         $scope.view = {};
+        $scope.view.type = data.type || "Workflow";
         $scope.view.requireSBGMetadata = data.requireSBGMetadata;
         $scope.view.instanceHint = {
             class: 'sbg:sbg:AWSInstanceType',
             value: ''
         };
 
-        $scope.view.metadata = data.hints || [];
+        $scope.view.hints = data.hints || [];
 
         //$scope.view.instances = data.instances;
 
@@ -35,7 +36,7 @@ angular.module('registryApp.dyole')
 
 
         $scope.addMetadata = function () {
-            $scope.view.metadata.push({
+            $scope.view.hints.push({
                 class: '',
                 value: ''
             });
@@ -47,12 +48,12 @@ angular.module('registryApp.dyole')
          * @param {integer} index
          */
         $scope.removeMetadata = function (index) {
-            $scope.view.metadata.splice(index, 1);
+            $scope.view.hints.splice(index, 1);
         };
 
 
         var _stripEmptyHints = function() {
-            _.remove($scope.view.metadata, function (meta) {
+            _.remove($scope.view.hints, function (meta) {
                 return meta.class === '';
             });
         };
@@ -63,7 +64,7 @@ angular.module('registryApp.dyole')
 
             $modalInstance.close({
                 requireSBGMetadata: $scope.view.requireSBGMetadata,
-                hints: $scope.view.metadata
+                hints: $scope.view.hints
             });
 
         };

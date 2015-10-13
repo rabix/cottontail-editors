@@ -1,11 +1,11 @@
 <div class="modal-header">
-    <h4 class="modal-title">Workflow settings</h4>
+    <h4 class="modal-title">{{ view.type }} settings</h4>
 </div>
 <div class="modal-body">
     <div class="row workflow-settings">
 
         <div class="col-md-12">
-            <label>Add SBG Metadata requirement: <input class="form-control require-metadata" type="checkbox"
+            <label>Requires SBG metadata extension: <input class="form-control require-metadata" type="checkbox"
                                                         ng-model="view.requireSBGMetadata"></label>
         </div>
 
@@ -18,29 +18,30 @@
         <!--</div>-->
 
         <div class="col-md-12 set-instance">
+            <h4><strong>Hints</strong></h4>
             <div class="enum-list-wrap">
                 <a href ng-click="addMetadata()" class="btn btn-default add-enum-item"><i
                         class="fa fa-plus"></i></a>
 
                 <div class="enum-list-container">
                     <ul class="enum-list">
-                        <li ng-repeat="meta in view.metadata">
+                        <li ng-repeat="hint in view.hints">
                             <div class="enum-field form-group form-group-file">
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control" placeholder="Metadata Class"
-                                           ng-model="meta.class"/>
+                                    <input type="text" class="form-control" placeholder="Requirement class"
+                                           ng-model="hint.class"/>
                                 </div>
                                 <div class="col-md-6">
-                                    <input type="text" class="form-control" placeholder="Metadata Value"
-                                           ng-model="meta.value"/>
+                                    <input type="text" class="form-control" placeholder="Requirement value"
+                                           ng-model="hint.value"/>
                                 </div>
                             </div>
                             <a href class="fa fa-remove remove-btn" ng-click="removeMetadata($index)"></a>
                         </li>
                     </ul>
 
-                    <p class="alert alert-info" ng-if="view.metadata | isEmpty">Click the plus button to add a
-                        metadata key-value pair.</p>
+                    <p class="alert alert-info" ng-if="view.hints | isEmpty">Click the plus button to add a
+                        requirement.</p>
                 </div>
             </div>
         </div>
