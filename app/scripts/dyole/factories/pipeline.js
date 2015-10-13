@@ -1605,15 +1605,12 @@ angular.module('registryApp.dyole')
                 return this.model.requireSBGMetadata;
             },
 
-            updateWorkflowSettings: function (instance, require) {
+            updateWorkflowSettings: function (hints, require) {
 
                 this.model.requireSBGMetadata = require;
 
-                if (instance.value && instance.value !== '') {
-                    this.model.hints.push(instance);
-                } else {
-                    this.model.hints.pop();
-                }
+
+                this.model.hints = hints;
 
                 return true;
             },

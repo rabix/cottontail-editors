@@ -336,8 +336,8 @@ angular.module('registryApp.dyole')
             return Pipeline.getRequireSBGMetadata();
         };
 
-        var updateWorkflowSettings = function (instance, requireSBGMetadata) {
-            return Pipeline.updateWorkflowSettings(instance,requireSBGMetadata);
+        var updateWorkflowSettings = function (hints, requireSBGMetadata) {
+            return Pipeline.updateWorkflowSettings(hints,requireSBGMetadata);
         };
 
         var onNodeInfoOff = $rootScope.$on('node:info', onNodeInfo);

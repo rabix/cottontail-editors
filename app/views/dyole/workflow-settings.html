@@ -1,19 +1,50 @@
 <div class="modal-header">
-    <h4 class="modal-title">Workflow settings</strong></h4>
+    <h4 class="modal-title">strongWorkflow settings</h4>
 </div>
 <div class="modal-body">
     <div class="row workflow-settings">
 
         <div class="col-md-12">
-            <label >Add SBG Metadata requirement: <input class="form-control require-metadata" type="checkbox" ng-model="view.requireSBGMetadata"></label>
+            <label>Add SBG Metadata requirement: <input class="form-control require-metadata" type="checkbox"
+                                                        ng-model="view.requireSBGMetadata"></label>
         </div>
 
+        <!--<div class="col-md-12 set-instance">-->
+        <!--<label>Set instance to run workflow on: </label>-->
+        <!--<select ng-model="view.instanceHint.value"-->
+        <!--ng-options="instance.typeId as instance.typeId for instance in view.instances">-->
+        <!--<option value="">Default</option>-->
+        <!--</select>-->
+        <!--</div>-->
+
         <div class="col-md-12 set-instance">
-            <label>Set instance to run workflow on: </label>
-            <select ng-model="view.instanceHint.value" ng-options="instance.typeId as instance.typeId for instance in view.instances">
-                <option value="">Default</option>
-            </select>
+            <div class="enum-list-wrap">
+                <a href ng-click="addMetadata()" class="btn btn-default add-enum-item"><i
+                        class="fa fa-plus"></i></a>
+
+                <div class="enum-list-container">
+                    <ul class="enum-list">
+                        <li ng-repeat="meta in view.metadata">
+                            <div class="enum-field form-group form-group-file">
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" placeholder="Metadata Class"
+                                           ng-model="meta.class"/>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" placeholder="Metadata Value"
+                                           ng-model="meta.value"/>
+                                </div>
+                            </div>
+                            <a href class="fa fa-remove remove-btn" ng-click="removeMetadata($index)"></a>
+                        </li>
+                    </ul>
+
+                    <p class="alert alert-info" ng-if="view.metadata | isEmpty">Click the plus button to add a
+                        metadata key-value pair.</p>
+                </div>
+            </div>
         </div>
+
 
         <div class="alert alert-danger" ng-if="view.error">{{view.error}}</div>
     </div>

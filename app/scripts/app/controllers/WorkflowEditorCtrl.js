@@ -557,7 +557,7 @@ angular.module('registryApp.app')
             });
 
             modalInstance.result.then(function (result) {
-                PipelineInstance.updateWorkflowSettings(result.instance, result.requireSBGMetadata);
+                PipelineInstance.updateWorkflowSettings(result.hints, result.requireSBGMetadata);
             });
 
         };

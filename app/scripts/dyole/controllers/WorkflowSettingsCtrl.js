@@ -20,23 +20,50 @@ angular.module('registryApp.dyole')
             value: ''
         };
 
-        $scope.view.instances = data.instances;
+        $scope.view.metadata = data.hints || [];
 
-        var hint = _.find(data.hints, function (hint) {
-            return hint.class === $scope.view.instanceHint.class;
-        });
+        //$scope.view.instances = data.instances;
 
-        if (hint && hint.value ) {
-            $scope.view.instanceHint.value = hint.value;
-        }
+        //var hint = _.find(data.hints, function (hint) {
+        //    return hint.class === $scope.view.instanceHint.class;
+        //});
+        //
+        //if (hint && hint.value ) {
+        //    $scope.view.instanceHint.value = hint.value;
+        //}
+
+
+
+        $scope.addMetadata = function () {
+            $scope.view.metadata.push({
+                class: '',
+                value: ''
+            });
+        };
+
+        /**
+         * Remove meta data from the output
+         *
+         * @param {integer} index
+         */
+        $scope.removeMetadata = function (index) {
+            $scope.view.metadata.splice(index, 1);
+        };
+
+
+        var _stripEmptyHints = function() {
+            _.remove($scope.view.metadata, function (meta) {
+                return meta.class === '';
+            });
+        };
 
         $scope.ok = function () {
-            var inst = _.clone($scope.view.instanceHint, true);
-            $scope.view.instanceHint = '';
+
+            _stripEmptyHints();
 
             $modalInstance.close({
                 requireSBGMetadata: $scope.view.requireSBGMetadata,
-                instance: inst
+                hints: $scope.view.metadata
             });
 
         };
