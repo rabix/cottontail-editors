@@ -149,23 +149,30 @@
 
                             <h3 class="tab-title">{{ ::view.json.label }}</h3>
 
-                            <input-field
-                                    ng-if="!view.json.softwareDescription"
-                                    ng-repeat="property in view.json.inputs track by property['id']"
-                                    ng-model="view.values[view.json.id][property['id']]"
-                                    suggested-values="view.suggestedValues"
-                                    values="view.values[view.json.id][property['id']]"
-                                    class="input-field input-field-sm"
-                                    key="id"
-                                    prop="property"
-                                    form="form.jobForm"
-                                    app-name="{{ ::view.json.id }}"
-                                    exposed="view.exposed"
-                                    ignore-files="true"
-                                    handle-expose="onExpose(appName, property['id'])"
-                                    handle-include-in-ports="onIncludeInPorts(appName, property['id'], value)"
-                                    on-un-expose="onUnExpose(appName, property['id'], value)">
-                            </input-field>
+                            <div ng-repeat="(catName, cat) in view.inputCategories" ng-if="!view.json.softwareDescription">
+                                <h4 class="category-title" ng-class="{first: $first}">{{ ::catName == 'undefined' ? 'Uncategorized' : catName }}</h4>
+                                <div class="input-container input-container-sm">
+
+                                    <input-field
+                                            ng-repeat="property in cat track by property['id']"
+                                            ng-model="view.values[view.json.id][property['id']]"
+                                            suggested-values="view.suggestedValues"
+                                            values="view.values[view.json.id][property['id']]"
+                                            class="input-field input-field-sm"
+                                            key="id"
+                                            prop="property"
+                                            form="form.jobForm"
+                                            app-name="{{ ::view.json.id }}"
+                                            exposed="view.exposed"
+                                            ignore-files="true"
+                                            handle-expose="onExpose(appName, property['id'])"
+                                            handle-include-in-ports="onIncludeInPorts(appName, property['id'], value)"
+                                            on-un-expose="onUnExpose(appName, property['id'], value)">
+                                    </input-field>
+                                </div>
+
+                            </div>
+
 
                             <!-- For input suggested files -->
                             <suggested-files

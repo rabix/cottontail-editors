@@ -333,34 +333,53 @@
   }
 }
 
+$inputs-border-color: #d7d7d7;
+
+// category title for grouped params in workflow editor
+.category-title {
+  padding-left: 10px;
+  margin-top: 30px;
+
+  &.first {
+    margin-top: 10px;
+  }
+}
+
+.input-container {
+  @include box-shadow(0 0 4px 2px rgba(0, 0, 0, .02));
+  border: 1px solid $inputs-border-color;
+}
+
+.input-field, .input-field-sm {
+  .form-group {
+    border-bottom: 1px solid $inputs-border-color;
+  }
+
+  &:last-of-type {
+    .form-group {
+      border-bottom: none;
+    }
+  }
+}
+
+.category-container {
+  margin-bottom: 20px;
+  &:last-of-type {
+    margin-bottom: 35px;
+  }
+}
+
 /* Input property box regular */
 .input-property {
-  //& > .form-group {
+
   .form-group {
-    margin: 0 0 10px 0;
-    border: 1px solid #ddd;
+    margin: 0;
 
-    &:hover {
-      @include transition(border 0.3s ease);
-      border: 1px solid #bbb;
-
-      & > .control-label {
-        border-bottom: 1px solid #bbb;
-        background-color: #ddd;
-      }
-      & > .input-property-body {
-        background-color: #f3f3f3;
-      }
-    }
-
-    //& > .control-label {
     .control-label {
-      padding: 5px 10px;
+      padding: 10px 10px 0 10px;
       margin: 0;
       position: relative;
-      border-bottom: 1px solid #ddd;
       display: block;
-      background-color: #eee;
 
       & > .input-key {
         display: inline-block;
@@ -387,11 +406,12 @@
 
     //& > .input-property-body {
     .input-property-body {
-      padding: 10px;
-      background-color: #f9f9f9;
+      padding: 15px;
       overflow: auto;
 
       .checkbox {
+        margin: 0;
+
         label {
           @extend %ellipsis;
           width: 100%;
