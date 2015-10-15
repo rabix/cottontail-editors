@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('registryApp.app')
-    .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$modal', '$templateCache', 'Loading', 'App', 'User', 'Repo', 'Const', 'BeforeRedirect', 'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload', 'Api', 'HotkeyRegistry', 'Notification', function ($scope, $rootScope, $q, $modal, $templateCache, Loading, App, User, Repo, Const, BeforeRedirect, Helper, PipelineService, _, Globals, BeforeUnload, Api, HotkeyRegistry, Notification) {
+    .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$modal', '$templateCache', 'Loading', 'App', 'User', 'Repo', 'Const', 'BeforeRedirect', 'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload', 'Api', 'HotkeyRegistry', 'Notification', 'Cliche', function ($scope, $rootScope, $q, $modal, $templateCache, Loading, App, User, Repo, Const, BeforeRedirect, Helper, PipelineService, _, Globals, BeforeUnload, Api, HotkeyRegistry, Notification, Cliche) {
 
         var PipelineInstance = null,
             prompt = false,
@@ -357,9 +357,24 @@ angular.module('registryApp.app')
                 }
             }, true);
 
+            $scope.view.inputCategories = _($scope.view.json.inputs).filter(filterInputs).groupBy('sbg:category').map(function(value, key){
+                return {
+                    name: key,
+                    inputs: value,
+                    show: true
+                }
+            }).value();
+
             $scope.switchTab('params');
             $scope.$digest();
         };
+
+        function filterInputs (input) {
+            var schema = Cliche.getSchema('input', input, 'tool', false);
+            var type = Cliche.parseType(schema);
+            var items = Cliche.getItemsType(Cliche.getItemsRef(type, schema));
+            return (type !== 'File' && items !== 'File');
+        }
 
         /**
          * Track node deselect
