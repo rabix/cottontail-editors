@@ -803,7 +803,13 @@ angular.module('registryApp.cliche')
          *
          */
         function groupByCategory () {
-            $scope.view.inputCategories = _.groupBy($scope.view.tool.inputs, 'sbg:category');
+            $scope.view.inputCategories = _($scope.view.tool.inputs).groupBy('sbg:category').map(function(value, key) {
+                return {
+                    name: key,
+                    inputs: value,
+                    show: true
+                }
+            }).value();
         }
 
         /**
