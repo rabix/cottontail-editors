@@ -352,7 +352,13 @@ angular.module('registryApp.app')
                 }
             }, true);
 
-            $scope.view.inputCategories = _($scope.view.json.inputs).filter(filterInputs).groupBy('sbg:category').value();
+            $scope.view.inputCategories = _($scope.view.json.inputs).filter(filterInputs).groupBy('sbg:category').map(function(value, key){
+                return {
+                    name: key,
+                    inputs: value,
+                    show: true
+                }
+            }).value();
 
             $scope.switchTab('params');
             $scope.$digest();

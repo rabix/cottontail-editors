@@ -335,19 +335,49 @@
 
 $inputs-border-color: #d7d7d7;
 
-// category title for grouped params in workflow editor
-.category-title {
-  padding-left: 10px;
-  margin-top: 30px;
+/**
+  Input-field directive styles
 
-  &.first {
-    margin-top: 10px;
+  Includes layouts for grouping input-fields in Cliche and Dyole
+
+*/
+.category-container {
+  margin-bottom: 20px;
+  &:last-of-type {
+    margin-bottom: 35px;
+  }
+
+  // category title for grouped params in workflow editor
+  &.sm .category-title {
+    padding-left: 10px;
+    margin-top: 30px;
+
+    &.first {
+      margin-top: 10px;
+    }
+  }
+
+  .category-title {
+    cursor: pointer;
   }
 }
 
 .input-container {
   @include box-shadow(0 0 4px 2px rgba(0, 0, 0, .02));
   border: 1px solid $inputs-border-color;
+
+   //animation for collapse and expand
+  &.ng-hide-animate {
+    transition:0.5s linear all;
+    overflow: hidden;
+    // this is more than it's ever expected to be
+    max-height: 20vh;
+  }
+
+  &.ng-hide {
+    transition:0.5s linear all;
+    max-height: 0;
+  }
 }
 
 .input-field, .input-field-sm {
@@ -361,17 +391,8 @@ $inputs-border-color: #d7d7d7;
     }
   }
 }
-
-.category-container {
-  margin-bottom: 20px;
-  &:last-of-type {
-    margin-bottom: 35px;
-  }
-}
-
 /* Input property box regular */
 .input-property {
-
   .form-group {
     margin: 0;
 
