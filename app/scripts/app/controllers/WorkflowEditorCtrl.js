@@ -568,6 +568,7 @@ angular.module('registryApp.app')
             });
 
             modalInstance.result.then(function (result) {
+                $scope.onWorkflowChange({value: true, isDisplay: false});
                 PipelineInstance.updateWorkflowSettings(result.hints, result.requireSBGMetadata);
             });
 
