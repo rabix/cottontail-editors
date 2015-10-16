@@ -27,6 +27,8 @@ angular.module('registryApp.dyole')
             this.model.schemas = this.model.schemas || {};
             this.model.display = this.model.display || {};
 
+            this.model.hints = this.model.hints || [];
+            this.model.requireSBGMetadata = this.model.requireSBGMetadata || false;
 
             this.nodes = {};
             this.connections = {};
@@ -1571,6 +1573,25 @@ angular.module('registryApp.dyole')
                 json.display.canvas.y = this.getEl().getTranslation().y;
 
                 return Formater.toRabixSchema(json, exposed, values, suggestedValues);
+            },
+
+
+            getHints: function () {
+                return this.model.hints;
+            },
+
+            getRequireSBGMetadata: function () {
+                return this.model.requireSBGMetadata;
+            },
+
+            updateWorkflowSettings: function (hints, require) {
+
+                this.model.requireSBGMetadata = require;
+
+
+                this.model.hints = hints;
+
+                return true;
             },
 
             /**

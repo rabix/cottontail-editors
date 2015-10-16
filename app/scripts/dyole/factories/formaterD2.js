@@ -25,6 +25,10 @@ angular.module('registryApp.dyole')
             'outputs': []
         };
 
+        var MetadataRequirement =  {
+            "class": "sbg:Metadata"
+        };
+
         /**
          * Common used stuff
          *
@@ -792,6 +796,11 @@ angular.module('registryApp.dyole')
                 model['id'] = json['id'] || model['id'];
                 model.label = json.label || model.label;
                 model.description = json.description || '';
+                model.hints = json.hints;
+
+                if (json.requireSBGMetadata) {
+                    model.requirements.push(_.clone(MetadataRequirement, true));
+                }
 
                 return model;
             },
@@ -815,7 +824,13 @@ angular.module('registryApp.dyole')
 
                 relations = _formatter.toPipelineRelations(schemas, json.dataLinks, exposed, json, suggestedValues);
 
+                var requireMetadata = _.find(json.requirements, function(req){
+                    return req.class === MetadataRequirement.class;
+                });
+
                 var model = {
+                    hints: json.hints || [],
+                    requireSBGMetadata: typeof requireMetadata !== 'undefined',
                     exposed: exposed,
                     values: values,
                     suggestedValues: suggestedValues,
