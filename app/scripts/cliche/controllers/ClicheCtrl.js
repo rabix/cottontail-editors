@@ -133,6 +133,7 @@ angular.module('registryApp.cliche')
                 prepareRequirements();
                 prepareStatusCodes();
                 setUpCategories();
+                groupByCategory();
 
                 $scope.toggleConsole();
             });
@@ -426,6 +427,7 @@ angular.module('registryApp.cliche')
             $scope.view.tab = tab;
 
             if (tab === 'test') {
+                groupByCategory();
                 turnOnJobDeepWatch();
             } else {
                 turnOffJobDeepWatch();
@@ -795,6 +797,20 @@ angular.module('registryApp.cliche')
 				delete $scope.view.tool['sbg:links'];
 			}
 		};
+
+        /**
+         * Groups inputs by category and sorts
+         *
+         */
+        function groupByCategory () {
+            $scope.view.inputCategories = _($scope.view.tool.inputs).groupBy('sbg:category').map(function(value, key) {
+                return {
+                    name: key,
+                    inputs: value,
+                    show: true
+                }
+            }).value();
+        }
 
         /**
          * Create new tool and default revision
