@@ -377,15 +377,26 @@
         }
       }
 
-      .checkbox {
+      .icons {
         float: right;
         margin: 0;
-        color: #555;
-        margin-right: 5px;
+        font-size: 14px;
+
+        i {
+          cursor: pointer;
+          padding: 0 4px;
+        }
+
+        .fa-lock {
+          color: $brand-primary;
+        }
+
+        .fa-toggle-on {
+          color: $brand-success;
+        }
       }
     }
 
-    //& > .input-property-body {
     .input-property-body {
       padding: 10px;
       background-color: #f9f9f9;
