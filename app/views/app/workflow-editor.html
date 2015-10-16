@@ -150,7 +150,7 @@
 
                             <div ng-repeat="cat in view.inputCategories" ng-if="!view.json.softwareDescription" class="category-container sm">
                                 <h4 class="category-title" ng-class="{first: $first}"  ng-click="cat.show = !cat.show">
-                                    {{ ::cat.name == 'undefined' ? 'Uncategorized' : cat.name }}
+                                    {{ ::cat.name == 'undefined' || cat.name == '' ? 'Uncategorized' : cat.name }}
                                     <i class="fa pull-right mg-right-10" ng-class="{'fa-caret-up': cat.show, 'fa-caret-down': !cat.show}"></i>
                                 </h4>
                                 <div class="input-container input-container-sm" ng-show="cat.show">
