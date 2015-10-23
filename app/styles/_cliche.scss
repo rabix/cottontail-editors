@@ -427,19 +427,42 @@ $inputs-border-color: #d7d7d7;
       .icons {
         float: right;
         margin: 0;
-        font-size: 14px;
+
+        label {
+          display: inline-block;
+        }
+
+        // hide checkboxes
+        input[type="checkbox"] {
+          display: none;
+        }
 
         i {
           cursor: pointer;
-          padding: 0 4px;
+          padding: 0 5px;
+          vertical-align: middle;
+          @include transition(color .2s ease, opacity .2s linear);
+        }
+
+        .fa-unlock-alt, .fa-lock {
+          font-size: 16px;
         }
 
         .fa-lock {
           color: $brand-primary;
         }
 
+        .fa-toggle-on, .fa-toggle-off {
+          font-size: 18px;
+        }
+
         .fa-toggle-on {
           color: $brand-success;
+        }
+
+        .disabled {
+          opacity: .4;
+          cursor: not-allowed;
         }
       }
     }

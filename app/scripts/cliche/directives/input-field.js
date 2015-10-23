@@ -300,7 +300,6 @@ angular.module('registryApp.cliche')
         };
         
         $scope.includeInPorts = function () {
-            $scope.view.includeInPorts = !$scope.view.includeInPorts;
 
             if ($scope.view.includeInPorts) {
                 $scope.view.expose = false;
