@@ -126,8 +126,8 @@ angular.module('registryApp.common')
 
             var output;
             var map = {
-                file: {path: name + '.ext', 'class': 'File', size: 0, secondaryFiles: []},
-                File: {path: name + '.ext', 'class': 'File', size: 0, secondaryFiles: []},
+                file: {path: '/path/to/' + name + '.ext', 'class': 'File', size: 0, secondaryFiles: []},
+                File: {path: '/path/to/' + name + '.ext', 'class': 'File', size: 0, secondaryFiles: []},
                 'enum': symbols ? symbols[0] : name,
                 string: name,
                 int: 0,
@@ -136,8 +136,8 @@ angular.module('registryApp.common')
 	            record: {},
 	            map: {},
                 array: {
-                    file: [{path: name + '.ext', 'class': 'File', size: 0, secondaryFiles: []}],
-                    File: [{path: name + '.ext', 'class': 'File', size: 0, secondaryFiles: []}],
+                    file: [{path: '/path/to/' + name + '.ext', 'class': 'File', size: 0, secondaryFiles: []}],
+                    File: [{path: '/path/to/' + name + '.ext', 'class': 'File', size: 0, secondaryFiles: []}],
                     string: [name],
                     int: [0],
                     float: [0],
