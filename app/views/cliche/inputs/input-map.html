@@ -2,8 +2,8 @@
      ng-class="{required: view.required, 'has-error': view.required && view.model.length === 0 && !isDisabled}">
 
     <div class="control-label">
-        <div class="icons">
-            <label ng-if="exposed" tooltip="Expose">
+        <div ng-if="exposed" class="icons">
+            <label tooltip="Expose">
                 <input type="checkbox" ng-model="view.expose" ng-change="exposeParams()">
                 <i class="fa" ng-class="{'fa-lock': view.expose, 'fa-unlock-alt': !view.expose}"></i>
             </label>

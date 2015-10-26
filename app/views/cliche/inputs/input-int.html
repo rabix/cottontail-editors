@@ -1,13 +1,13 @@
 <div class="form-group" ng-class="{required: view.required, 'has-error': (inputForm.inputInteger.$invalid && !isDisabled)}">
     <div class="control-label">
 
-        <div class="icons">
-            <label ng-if="exposed" tooltip="Expose">
+        <div class="icons" ng-if="exposed">
+            <label tooltip="Expose">
                 <input ng-disabled="view.includeInPorts" type="checkbox" ng-model="view.expose" ng-change="exposeParams()">
                 <i class="fa" ng-class="{'fa-lock': view.expose, 'fa-unlock-alt': !view.expose, 'disabled': view.includeInPorts}"></i>
             </label>
 
-            <label ng-if="exposed" tooltip="Include in Ports">
+            <label tooltip="Include in Ports">
                 <input type="checkbox" ng-model="view.includeInPorts" ng-change="includeInPorts()">
                 <i class="fa" ng-class="{'fa-toggle-on': view.includeInPorts, 'fa-toggle-off': !view.includeInPorts}"></i>
             </label>

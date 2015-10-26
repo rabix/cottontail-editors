@@ -3,8 +3,8 @@
 
     <div class="control-label">
 
-        <div class="icons">
-            <label ng-if="exposed" tooltip="Expose">
+        <div class="icons" ng-if="exposed">
+            <label tooltip="Expose">
                 <input type="checkbox" ng-model="view.expose" ng-change="exposeParams()">
                 <i class="fa" ng-class="{'fa-lock': view.expose, 'fa-unlock-alt': !view.expose}"></i>
             </label>

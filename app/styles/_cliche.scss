@@ -404,8 +404,8 @@ $inputs-border-color: #d7d7d7;
     margin: 0;
 
     .control-label {
-      padding: 10px 10px 0 10px;
-      margin: 0;
+      padding: 10px 10px 0 15px;
+      margin: 0 0 -5px;
       position: relative;
       display: block;
 
@@ -432,7 +432,7 @@ $inputs-border-color: #d7d7d7;
           display: inline-block;
         }
 
-        // hide checkboxes
+        // hide checkboxes so icons inside the checkbox label will toggle their state
         input[type="checkbox"] {
           display: none;
         }
