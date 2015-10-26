@@ -21,13 +21,15 @@ angular.module('registryApp.common')
 
 			return _(list).filter(function (license) {
 				var nameScore = license.name.toLowerCase().search(regex);
-				var idScore = license.id.toLowerCase().search(regex);
 
-				if (nameScore !== -1 || idScore !== -1) {
-					license.score = nameScore !== -1 ? nameScore : idScore;
+				if (nameScore !== -1) {
+					license.score = nameScore;
 					return license;
 				}
-			}).sortBy('score').value().slice(0, 6);
+			}).sortBy(function (license) {
+                // popular licenses should always be on top
+                return license.isPopular ? '0_' + license.score + license.name.length : '1_' + license.score + license.name.length;
+            }).value().slice(0, 8);
 		}
 
 		$scope.filterResults = function(input) {
