@@ -141,6 +141,12 @@ ul {
   }
 }
 
+/* Tooltip overrides for functionality */
+.tooltip-inner {
+  white-space:pre-wrap;
+  min-width: 200px;
+}
+
 @import "tabs";
 @import "forms";
 @import "tags-overrides";
