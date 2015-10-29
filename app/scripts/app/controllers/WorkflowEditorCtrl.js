@@ -8,6 +8,7 @@ angular.module('registryApp.app')
 
         var PipelineInstance = null,
             prompt = false,
+            Instances = [],
             onBeforeUnloadOff = BeforeUnload.register(function () {
                 return 'Please save your changes before leaving.';
             }, function () {
@@ -572,6 +573,26 @@ angular.module('registryApp.app')
             });
 
             modalInstance.result.then(function (result) {
+                PipelineInstance.updateWorkflowSettings(result.hints, result.requireSBGMetadata);
+            });
+
+        };
+
+        $scope.workflowSettings = function () {
+            var modalInstance = $modal.open({
+                template: $templateCache.get('views/dyole/workflow-settings.html'),
+                controller: 'WorkflowSettingsCtrl',
+                resolve: { data: function () {
+                    return {
+                        hints: PipelineInstance.getWorkflowHints(),
+                        instances: Instances,
+                        requireSBGMetadata: PipelineInstance.getRequireSBGMetadata()
+                    };
+                }}
+            });
+
+            modalInstance.result.then(function (result) {
+                $scope.onWorkflowChange({value: true, isDisplay: false});
                 PipelineInstance.updateWorkflowSettings(result.hints, result.requireSBGMetadata);
             });
 

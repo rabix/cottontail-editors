@@ -348,16 +348,23 @@ $inputs-border-color: #d7d7d7;
   }
 
   // category title for grouped params in workflow editor
-  &.sm .category-title {
-    padding-left: 10px;
-    margin-top: 30px;
+  &.sm {
+    .category-title {
+      padding-left: 10px;
+      margin-top: 30px;
 
-    &.first {
-      margin-top: 10px;
+      &.first {
+        margin-top: 10px;
+      }
+    }
+
+    .input-container {
+      margin-left: 10px;
     }
   }
 
   .category-title {
+    font-weight: bold;
     cursor: pointer;
   }
 }
@@ -397,8 +404,8 @@ $inputs-border-color: #d7d7d7;
     margin: 0;
 
     .control-label {
-      padding: 10px 10px 0 10px;
-      margin: 0;
+      padding: 10px 10px 0 15px;
+      margin: 0 0 -5px;
       position: relative;
       display: block;
 
@@ -417,15 +424,49 @@ $inputs-border-color: #d7d7d7;
         }
       }
 
-      .checkbox {
+      .icons {
         float: right;
         margin: 0;
-        color: #555;
-        margin-right: 5px;
+
+        label {
+          display: inline-block;
+        }
+
+        // hide checkboxes so icons inside the checkbox label will toggle their state
+        input[type="checkbox"] {
+          display: none;
+        }
+
+        i {
+          cursor: pointer;
+          padding: 0 5px;
+          vertical-align: middle;
+          @include transition(color .2s ease, opacity .2s linear);
+        }
+
+        .fa-unlock-alt, .fa-lock {
+          font-size: 16px;
+        }
+
+        .fa-lock {
+          color: $brand-primary;
+        }
+
+        .fa-toggle-on, .fa-toggle-off {
+          font-size: 18px;
+        }
+
+        .fa-toggle-on {
+          color: $brand-success;
+        }
+
+        .disabled {
+          opacity: .4;
+          cursor: not-allowed;
+        }
       }
     }
 
-    //& > .input-property-body {
     .input-property-body {
       padding: 15px;
       overflow: auto;

@@ -721,7 +721,8 @@ angular.module('registryApp.common')
 				},
 				"MIT": {
 					"name": "MIT License",
-					"osiApproved": true
+					"osiApproved": true,
+					"isPopular": true
 				},
 				"Motosoto": {
 					"name": "Motosoto License",

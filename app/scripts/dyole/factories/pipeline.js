@@ -24,11 +24,11 @@ angular.module('registryApp.dyole')
                 this.model = Formater.toPipelineSchema(this.model);
             }
 
-            this.model.hints = this.model.hints || [];
-            this.model.requireSBGMetadata = this.model.requireSBGMetadata || false;
-
             this.model.schemas = this.model.schemas || {};
             this.model.display = this.model.display || {};
+
+            this.model.hints = this.model.hints || [];
+            this.model.requireSBGMetadata = this.model.requireSBGMetadata || false;
 
             this.nodes = {};
             this.connections = {};
@@ -1596,6 +1596,7 @@ angular.module('registryApp.dyole')
 
                 return Formater.toRabixSchema(json, exposed, values, suggestedValues);
             },
+
 
             getHints: function () {
                 return this.model.hints;

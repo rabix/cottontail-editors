@@ -2,12 +2,16 @@
 
     <div ng-if="exposed" class="control-label">
 
-        <div class="checkbox">
-            <label><input ng-disabled="view.includeInPorts" type="checkbox" ng-model="view.expose" ng-change="exposeParams()"> expose</label>
-        </div>
+        <div class="icons">
+            <label tooltip="Expose">
+                <input ng-disabled="view.includeInPorts" type="checkbox" ng-model="view.expose" ng-change="exposeParams()">
+                <i class="fa" ng-class="{'fa-lock': view.expose, 'fa-unlock-alt': !view.expose, 'disabled': view.includeInPorts}"></i>
+            </label>
 
-        <div class="checkbox">
-            <label><input type="checkbox" ng-model="view.includeInPorts" ng-change="includeInPorts()"> Include in Ports</label>
+            <label tooltip="Include in Ports">
+                <input type="checkbox" ng-model="view.includeInPorts" ng-change="includeInPorts()">
+                <i class="fa" ng-class="{'fa-toggle-on': view.includeInPorts, 'fa-toggle-off': !view.includeInPorts}"></i>
+            </label>
         </div>
 
         <span class="input-key" title="{{ view.name }}">{{ view.name }}</span>
