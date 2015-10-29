@@ -147,6 +147,19 @@ ul {
   min-width: 200px;
 }
 
+.icons {
+  .tooltip-inner {
+    min-width:unset;
+  }
+}
+
+// expressions that will have code in their tooltips
+.tooltip-code {
+  .tooltip-inner {
+    text-align: left;
+  }
+}
+
 @import "tabs";
 @import "forms";
 @import "tags-overrides";
