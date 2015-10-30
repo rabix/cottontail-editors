@@ -156,7 +156,7 @@ angular.module('registryApp.cliche')
 		        }
 	        });
 
-	        if ($scope.view.type !== 'File' && $scope.view.itemType !== 'File') {
+	        if ($scope.view.type !== 'File' && $scope.view.itemsType !== 'File') {
 		        delete formatted['sbg:fileTypes'];
 	        }
 
