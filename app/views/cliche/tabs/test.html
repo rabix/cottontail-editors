@@ -42,7 +42,7 @@
 
             <div class="flex-auto category-container" ng-repeat="cat in view.inputCategories">
                 <h4 ng-click="cat.show = !cat.show" class="category-title">
-                    {{ ::cat.name == 'undefined' || cat.name == '' ? 'Uncategorized' : cat.name }}
+                    {{ ::cat.name }}
                     <i class="fa pull-right mg-right-10" ng-class="{'fa-caret-up': cat.show, 'fa-caret-down': !cat.show}"></i>
                 </h4>
 
