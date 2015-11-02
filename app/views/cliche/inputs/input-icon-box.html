@@ -1,4 +1,4 @@
-<div class="icons">
+<div class="icons" ng-if="exposed">
     <label tooltip="Expose" tooltip-placement="left">
         <input ng-disabled="view.includeInPorts" type="checkbox" ng-model="view.expose" ng-change="exposeParams()">
         <i class="fa" ng-class="{'fa-unlock-alt': view.expose, 'fa-lock': !view.expose, 'disabled': view.includeInPorts}"></i>
