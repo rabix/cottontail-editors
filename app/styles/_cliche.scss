@@ -471,6 +471,7 @@ $inputs-border-color: #d7d7d7;
     .input-property-body {
       padding: 15px;
       overflow: auto;
+      min-width: 100%;
 
       .checkbox {
         margin: 0;
