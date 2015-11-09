@@ -307,6 +307,9 @@ angular.module('registryApp.dyole')
                     model.scatter = false;
                     delete model.scatter;
                 }
+
+                $scope.pipelineChangeFn({value: {value: true, isDisplay: false}});
+
             });
 
         };
