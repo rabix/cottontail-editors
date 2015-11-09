@@ -1498,7 +1498,9 @@ angular.module('registryApp.dyole')
             },
 
             updateNodePorts: function (nodeId, inputId, value) {
+
                 var node = this.getNodeById(nodeId);
+
                 var terminal = _.find(node.model.inputs, function (input) {
                     return input.id === inputId;
                 });
@@ -1544,6 +1546,8 @@ angular.module('registryApp.dyole')
 
                     if (typeof node.scatter !== 'undefined') {
                         json.schemas[nodeId].scatter = node.scatter;
+                    } else {
+                        delete json.schemas[nodeId].scatter;
                     }
 
                     if (typeof node.suggestedValue !== 'undefined') {
@@ -1560,7 +1564,7 @@ angular.module('registryApp.dyole')
                                 return input.id === inp.id;
                             });
 
-                            i['sbg:includeInPorts'] = input['sbg:includeInPorts'];
+                            i['sbg:includeInPorts'] = input['sbg:includeInPowrts'];
 
                         }
                     });

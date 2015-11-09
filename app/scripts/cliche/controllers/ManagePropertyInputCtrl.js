@@ -55,6 +55,10 @@ angular.module('registryApp.cliche')
 
         $scope.view.description = $scope.view.property.description || '';
         $scope.view.label = $scope.view.property.label || '';
+		$scope.view.fileTypes = $scope.view.property['sbg:fileTypes'] || '';
+		$scope.view.altPrefix = $scope.view.property['sbg:altPrefix'] || '';
+		$scope.view.toolDefaultValue = $scope.view.property['sbg:toolDefaultValue'] || '';
+
 
 		/**
 		 * Array of additional information fields
@@ -152,7 +156,7 @@ angular.module('registryApp.cliche')
 		        }
 	        });
 
-	        if ($scope.view.type !== 'File' && $scope.view.itemType !== 'File') {
+	        if ($scope.view.type !== 'File' && $scope.view.itemsType !== 'File') {
 		        delete formatted['sbg:fileTypes'];
 	        }
 
