@@ -532,6 +532,8 @@ $inputs-border-color: #d7d7d7;
   margin: 10px 0 0 0;
 }
 
+$selection-color: #51cfff;
+
 /* Json / Command box */
 pre.json-trace,
 .json-trace pre,
@@ -554,6 +556,16 @@ pre.result  {
   }
 }
 
+.json-trace, .console-trace, .result {
+  ::selection {
+    color: #222;
+    background: $selection-color; /* WebKit/Blink Browsers */
+  }
+  ::-moz-selection {
+    color: #222;
+    background: $selection-color; /* Gecko Browsers */
+  }
+}
 pre.result {
   padding: 20px;
 }
