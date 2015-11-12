@@ -557,13 +557,13 @@ pre.result  {
 }
 
 .json-trace, .console-trace, .result {
-  ::selection {
+  ::selection, &::selection {
     color: #222;
-    background: $selection-color; /* WebKit/Blink Browsers */
+    background: $selection-color;
   }
-  ::-moz-selection {
+  ::-moz-selection, &::-moz-selection {
     color: #222;
-    background: $selection-color; /* Gecko Browsers */
+    background: $selection-color;
   }
 }
 pre.result {
