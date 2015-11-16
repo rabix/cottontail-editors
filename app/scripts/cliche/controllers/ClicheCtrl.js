@@ -117,6 +117,8 @@ angular.module('registryApp.cliche')
                         tool.script = tool.script || '';
                     }
 
+                    tool.hints = tool.hints || [];
+
                     Cliche.setTool(tool);
                     var job = $scope.view.revision.job ? JSON.parse($scope.view.revision.job) : null;
 
@@ -229,6 +231,7 @@ angular.module('registryApp.cliche')
             $scope.view.reqCPURequirement = _.find($scope.view.tool.requirements, {'class': 'CPURequirement'});
             $scope.view.reqMemRequirement = _.find($scope.view.tool.requirements, {'class': 'MemRequirement'});
 	        $scope.view.reqCreateFileRequirement = _.find($scope.view.tool.requirements, {'class': 'CreateFileRequirement'});
+            $scope.view.requireSBGMetadata = !!(_.find($scope.view.tool.requirements, {'class': 'sbg:Metadata'}));
 
 	        if ($scope.view.reqCreateFileRequirement && $scope.view.reqCreateFileRequirement.fileDef.length === 0) {
 
@@ -418,6 +421,38 @@ angular.module('registryApp.cliche')
 				_.remove($scope.view.tool.requirements, {'class': 'ExpressionEngineRequirement'});
 			}
 		};
+
+        /**
+         * Show tool settings modal (same modal appears in the workflow editor)
+         */
+        $scope.toolSettings = function() {
+            var modalInstance = $modal.open({
+                template: $templateCache.get('views/cliche/partials/settings-modal.html'),
+                controller: 'ToolSettingsCtrl',
+                resolve: { data: function () {
+                    return {
+                        hints: $scope.view.tool.hints,
+                        requireSBGMetadata: $scope.view.requireSBGMetadata,
+                        type: 'Tool'
+                    };
+                }}
+            });
+
+            modalInstance.result.then(function (result) {
+                $scope.view.tool.hints = result.hints;
+
+                if (result.requireSBGMetadata && !$scope.view.requireSBGMetadata) {
+                    $scope.view.tool.requirements.push({
+                        'class': 'sbg:Metadata'
+                    });
+                } else if(!result.requireSBGMetadata) {
+                    _.remove($scope.view.tool.requirements, {'class': 'sbg:Metadata'});
+                }
+
+                $scope.view.requireSBGMetadata = result.requireSBGMetadata;
+            });
+        };
+
 
         /**
          * Switch the tab
@@ -803,7 +838,16 @@ angular.module('registryApp.cliche')
          *
          */
         function groupByCategory () {
-            $scope.view.inputCategories = _($scope.view.tool.inputs).groupBy('sbg:category').map(function(value, key) {
+            $scope.view.inputCategories = _($scope.view.tool.inputs).groupBy(function (input) {
+                var cat = input['sbg:category'];
+
+                if (_.isUndefined(cat) || _.isEmpty(cat) || cat.toLowerCase().trim() === 'uncategorized') {
+                    cat = 'Uncategorized';
+                }
+
+                return cat;
+            }).map(function(value, key) {
+
                 return {
                     name: key,
                     inputs: value,

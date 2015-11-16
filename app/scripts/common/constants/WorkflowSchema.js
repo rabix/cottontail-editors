@@ -70,6 +70,9 @@ var Schema = {
                 items: {
                     oneOf: [
                         {
+                            $ref: '#/definitions/enumDef'
+                        },
+                        {
                             type: 'object',
                             properties: {
                                 type: {
@@ -260,7 +263,7 @@ var Schema = {
                                 $ref: '#/definitions/adapterDef'
                             },
                             {
-                                // TODO: Temp hack, remove when you figure out why sometimes inputBinding when its not present is undefiend
+                                // TODO: Temp hack, remove when you figure out why sometimes inputBinding when its not present is undefined
                                 type: ['undefined', 'null']
                             }
                         ]

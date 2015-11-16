@@ -757,6 +757,8 @@ angular.module('registryApp.cliche')
          */
         var generateCommand = function() {
 
+            var self = this;
+
             // in case baseCommand is not yet defined
             if (!toolJSON.baseCommand) {
                 toolJSON.baseCommand = [''];
@@ -831,6 +833,23 @@ angular.module('registryApp.cliche')
                         }
                     });
 
+                    _.each(toolJSON.inputs, function (input) {
+
+                        var jobInput;
+
+                        if (isRequired(input.type)) {
+                            jobInput = jobJSON.inputs[input.id.slice(1)];
+
+                            // if it exists, add path
+                            if (jobInput) {
+                                requiredCommand.push(jobInput.path);
+                            }
+                            else {  // if not, add ID without #
+                                requiredCommand.push(input.id.slice(1));
+                            }
+                        }
+                    });
+
                     _.each(toolJSON.baseCommand, function (baseCmd) {
 
                         var deferred = $q.defer();
@@ -874,7 +893,7 @@ angular.module('registryApp.cliche')
                 /* generate final command */
                 .then(function (result) {
 
-                    var cmdPreview = result.baseCommand + ' ' + result.requiredCommand.join(' ' );
+                    var cmdPreview = result.baseCommand + ' ' + result.command.join(' ') + ' ' + result.requiredCommand.join(' ' );
 
                     consoleCMD = result.baseCommand + ' ' + result.command.join(' ');
 

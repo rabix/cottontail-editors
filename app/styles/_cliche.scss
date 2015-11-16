@@ -448,7 +448,7 @@ $inputs-border-color: #d7d7d7;
           font-size: 16px;
         }
 
-        .fa-lock {
+        .fa-unlock-alt {
           color: $brand-primary;
         }
 
@@ -461,6 +461,7 @@ $inputs-border-color: #d7d7d7;
         }
 
         .disabled {
+          color: inherit;
           opacity: .4;
           cursor: not-allowed;
         }
@@ -470,6 +471,7 @@ $inputs-border-color: #d7d7d7;
     .input-property-body {
       padding: 15px;
       overflow: auto;
+      min-width: 100%;
 
       .checkbox {
         margin: 0;
@@ -530,6 +532,8 @@ $inputs-border-color: #d7d7d7;
   margin: 10px 0 0 0;
 }
 
+$selection-color: #51cfff;
+
 /* Json / Command box */
 pre.json-trace,
 .json-trace pre,
@@ -552,6 +556,16 @@ pre.result  {
   }
 }
 
+.json-trace, .console-trace, .result {
+  ::selection, &::selection {
+    color: #222;
+    background: $selection-color;
+  }
+  ::-moz-selection, &::-moz-selection {
+    color: #222;
+    background: $selection-color;
+  }
+}
 pre.result {
   padding: 20px;
 }
