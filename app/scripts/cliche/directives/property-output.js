@@ -38,7 +38,9 @@ angular.module('registryApp.cliche')
 
             var tplType = Cliche.getTplType($scope.view.type);
 
-            $scope.view.tpl = 'views/cliche/property/property-output-' + $scope.type + '-' + tplType  + '.html';
+
+            //$scope.view.tpl = 'views/cliche/property/property-output-' + $scope.type + '-' + tplType  + '.html';
+            $scope.view.tpl = 'views/cliche/property/property-output-tool-' + tplType  + '.html';
         };
 
         /* init parse structure */
