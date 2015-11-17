@@ -1051,8 +1051,6 @@ angular.module('registryApp.dyole')
                     projectOwner = project[0],
                     projectSlug = project[1];
 
-                Notification.primary('Updating node schema...');
-
                 App.getApp(projectOwner, projectSlug, nodeModel['sbg:name']).then(function (result) {
 
                     if (typeof result.message === 'object' && !_.isEmpty(result.message)) {
