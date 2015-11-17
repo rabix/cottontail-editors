@@ -1564,7 +1564,7 @@ angular.module('registryApp.dyole')
                                 return input.id === inp.id;
                             });
 
-                            i['sbg:includeInPorts'] = input['sbg:includeInPowrts'];
+                            i['sbg:includeInPorts'] = input['sbg:includeInPorts'];
 
                         }
                     });
