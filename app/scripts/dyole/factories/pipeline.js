@@ -1073,6 +1073,8 @@ angular.module('registryApp.dyole')
                             return ids.split(Const.exposedSeparator)[0] === nodeId;
                         });
 
+                        var scatterCache = node.model.scatter;
+
                         node.removeNode();
 
                         // we need to do little hacking up since addNode excepts coordinates of a drop
@@ -1154,6 +1156,14 @@ angular.module('registryApp.dyole')
                                     Notification.warning('Cannot find input "' + exposed.id + '" on updated node to expose it.');
                                 }
                             });
+
+                            if (typeof scatterCache === 'string') {
+                                var t = n.getTerminalById(scatterCache, 'input');
+
+                                if (t) {
+                                    n.model.scatter = scatterCache;
+                                }
+                            }
 
 
                             Notification.primary('Successfully updated node schema.');
