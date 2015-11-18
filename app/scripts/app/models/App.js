@@ -78,6 +78,16 @@ angular.module('registryApp.app')
 
         };
 
+        /**
+         * Save SVG string for current workflow
+         *
+         * @param {number} revision
+         * @param {string} svgString
+         */
+        self.updateSvg = function (revision, svgString) {
+            return Api.apps.update({revision: revision, svg: 'svg'}, svgString).$promise;
+        };
+
         self.validateJson = function (json) {
             return Api.validateApp.validate({}, json).$promise;
         };

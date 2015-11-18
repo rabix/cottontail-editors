@@ -241,6 +241,8 @@ angular.module('registryApp.app')
          */
         $scope.save = function () {
 
+            var rev;
+
             if (!$scope.view.isChanged) {
                 Notification.error('Pipeline not updated: Graph has no changes.');
                 return;
@@ -254,7 +256,20 @@ angular.module('registryApp.app')
             var workflow = PipelineInstance.format();
             App.update(workflow, 'workflow')
                 .then(function (data) {
-                    var rev = data.message['sbg:revision'];
+
+                    var svgString = PipelineInstance.getSvgString();
+
+                    rev = data.message['sbg:revision'];
+
+                    if (_.isString(svgString)) {
+                        return App.updateSvg(rev, svgString);
+                    }
+                    else {
+                        return data;
+                    }
+                })
+                .then(function (data) {
+
                     Notification.primary('Workflow successfully updated.');
                     redirectTo(rev);
                 })

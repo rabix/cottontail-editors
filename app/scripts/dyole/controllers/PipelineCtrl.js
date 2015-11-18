@@ -213,6 +213,12 @@ angular.module('registryApp.dyole')
             }
         };
 
+        var getSvgString = function () {
+            if (Pipeline) {
+                return Pipeline.getSvgString();
+            }
+        };
+
         /**
          * Track pipeline change
          */
@@ -414,6 +420,7 @@ angular.module('registryApp.dyole')
                 adjustSize: adjustSize,
                 getEventObj: getEventObj,
                 updateMetadata: updateMetadata,
+                getSvgString: getSvgString,
                 onIncludeInPorts: onIncludeInPorts,
                 getWorkflowHints: getWorkflowHints,
                 getRequireSBGMetadata: getRequireSBGMetadata,

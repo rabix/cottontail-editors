@@ -1497,6 +1497,57 @@ angular.module('registryApp.dyole')
                 return _mergeSBGProps(metadata, this.model);
             },
 
+            /**
+             * Return SVG element converted to string.
+             * @returns {string}
+             */
+            getSvgString: function () {
+
+                var tempSvgContainer = $('<div></div>'), // create temporary DIV element that will contain SVG
+                    pipWrap = this.pipelineWrap.clone(),
+                    leftMost = 0,
+                    topMost = 0,
+                    pipTranslation, pipScale, pipBBox, canvas, scaleDiff;
+
+                // keep pipeline translation for later use
+                pipTranslation = pipWrap.getTranslation();
+
+                // keep pipeline scale factor for later use
+                pipScale = pipWrap.getScale();
+
+                // scale pipeline to 1 scale factor
+                pipWrap.scale(1, 1);
+
+                scaleDiff = Math.abs(pipScale.x - 1) + 1;
+
+                // get negative marginal (x, y) coordinates of all nodes
+                _.each(this.nodes, function (node) {
+
+                    if (leftMost > node.model.x) {
+                        leftMost = node.model.x;
+                    }
+
+                    if (topMost > node.model.y) {
+                        topMost = node.model.y;
+                    }
+                });
+
+                // get pipeline box width and height
+                pipBBox = pipWrap.getBBox();
+
+                // create RaphaelJS SVG canvas, and put it into temporary DIV created above
+                canvas = new Raphael(tempSvgContainer[0], pipBBox.width * scaleDiff, pipBBox.height * scaleDiff);
+
+                //  translate pipeline to (minX, minY) coordinates using most left and most right nodes
+                pipWrap.translate( -leftMost * scaleDiff, -topMost * scaleDiff);
+
+                // Add pipeline node to newly created SVG canvas
+                canvas.canvas.appendChild(pipWrap.node);
+
+                // return SVG element as a string
+                return tempSvgContainer.html();
+            },
+
             updateNodePorts: function (nodeId, inputId, value) {
 
                 var node = this.getNodeById(nodeId);
