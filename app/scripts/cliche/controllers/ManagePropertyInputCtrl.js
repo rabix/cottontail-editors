@@ -153,7 +153,9 @@ angular.module('registryApp.cliche')
 
 		        if ($scope.view[field.name] !== '') {
 			        formatted[prefix + field.name] = $scope.view[field.name];
-		        }
+		        } else {
+					delete formatted[prefix + field.name];
+				}
 	        });
 
 	        if ($scope.view.type !== 'File' && $scope.view.itemsType !== 'File') {
@@ -307,7 +309,7 @@ angular.module('registryApp.cliche')
                 if (cacheAdapter.secondaryFiles) {
                     $scope.view.property.inputBinding = {
                         secondaryFiles: cacheAdapter.secondaryFiles
-                    }
+                    };
                 }
             }
         };

@@ -1051,8 +1051,6 @@ angular.module('registryApp.dyole')
                     projectOwner = project[0],
                     projectSlug = project[1];
 
-                Notification.primary('Updating node schema...');
-
                 App.getApp(projectOwner, projectSlug, nodeModel['sbg:name']).then(function (result) {
 
                     if (typeof result.message === 'object' && !_.isEmpty(result.message)) {
@@ -1072,6 +1070,8 @@ angular.module('registryApp.dyole')
                         var exposedCache = _.filter(_.clone(_self.exposed, true), function (input, ids) {
                             return ids.split(Const.exposedSeparator)[0] === nodeId;
                         });
+
+                        var scatterCache = node.model.scatter;
 
                         node.removeNode();
 
@@ -1154,6 +1154,14 @@ angular.module('registryApp.dyole')
                                     Notification.warning('Cannot find input "' + exposed.id + '" on updated node to expose it.');
                                 }
                             });
+
+                            if (typeof scatterCache === 'string') {
+                                var t = n.getTerminalById(scatterCache, 'input');
+
+                                if (t) {
+                                    n.model.scatter = scatterCache;
+                                }
+                            }
 
 
                             Notification.primary('Successfully updated node schema.');
@@ -1615,7 +1623,7 @@ angular.module('registryApp.dyole')
                                 return input.id === inp.id;
                             });
 
-                            i['sbg:includeInPorts'] = input['sbg:includeInPowrts'];
+                            i['sbg:includeInPorts'] = input['sbg:includeInPorts'];
 
                         }
                     });
