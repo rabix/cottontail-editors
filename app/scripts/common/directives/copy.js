@@ -22,6 +22,7 @@ angular.module('registryApp.common')
                 scope.view.text = 'Copy';
                 scope.view.error = '';
                 scope.view.tooltipMessage = '';
+                scope.view.isTooltipOpen = false;
 
                 var timeoutId;
 
@@ -35,38 +36,36 @@ angular.module('registryApp.common')
                     scope.view.copying = true;
                     scope.$apply();
 
-                    timeoutId = resetText();
+                    timeoutId = resetText(2000);
                 });
 
                 clipboard.on('error', function(e) {
 
                     scope.view.tooltipMessage = fallbackMessage(e.action);
-                    console.error('Action:', e.action);
-                    console.error('Trigger:', e.trigger);
-
-                    timeoutId = resetText();
-
+                    scope.view.isTooltipOpen = true;
                     scope.$apply();
+
+                    timeoutId = resetText(5000);
                 });
 
-                function resetText () {
+                function resetText (time) {
                     return $timeout(function() {
                         scope.view.text = 'Copy';
                         scope.view.copying = false;
-                    }, 2000);
+                        scope.view.isTooltipOpen = false;
+                    }, time);
                 }
 
+                // gotten from clipboard.js website
                 function fallbackMessage(action) {
                     var actionMsg = '';
                     var actionKey = (action === 'cut' ? 'X' : 'C');
 
                     if(/iPhone|iPad/i.test(navigator.userAgent)) {
-                        actionMsg = 'No support :(';
-                    }
-                    else if (/Mac/i.test(navigator.userAgent)) {
+                        actionMsg = 'Not supported';
+                    } else if (/Mac/i.test(navigator.userAgent)) {
                         actionMsg = 'Press ⌘-' + actionKey + ' to ' + action;
-                    }
-                    else {
+                    } else {
                         actionMsg = 'Press Ctrl-' + actionKey + ' to ' + action;
                     }
 
