@@ -6,12 +6,12 @@
 
                 <div class="form-group">
                     <label for="dockerPull" class="control-label">Docker Repository[:Tag]</label>
-                    <input tooltip="{{ ::help.cliche.general.dockerPull }}" tooltip-trigger="focus" type="text" class="form-control" id="dockerPull" name="dockerPull" ng-model="view.reqDockerRequirement.dockerPull">
+                    <input uib-tooltip="{{ ::help.cliche.general.dockerPull }}" tooltip-trigger="focus" type="text" class="form-control" id="dockerPull" name="dockerPull" ng-model="view.reqDockerRequirement.dockerPull">
                 </div>
 
                 <div class="form-group">
                     <label for="imageId" class="control-label">Image ID</label>
-                    <input tooltip="{{ ::help.cliche.general.imageId }}" tooltip-trigger="focus" type="text" class="form-control" id="imageId" name="imageId" ng-model="view.reqDockerRequirement.dockerImageId">
+                    <input uib-tooltip="{{ ::help.cliche.general.imageId }}" tooltip-trigger="focus" type="text" class="form-control" id="imageId" name="imageId" ng-model="view.reqDockerRequirement.dockerImageId">
                 </div>
             </form>
 
@@ -79,7 +79,7 @@
                     <label class="control-label">Base Command</label>
 
                     <div class="enum-list-wrap">
-                        <a tooltip="{{ ::help.cliche.general.addBaseCMD }}" href ng-click="addBaseCmd()" class="btn btn-default add-enum-item"><i class="fa fa-plus"></i></a>
+                        <a uib-tooltip="{{ ::help.cliche.general.addBaseCMD }}" href ng-click="addBaseCmd()" class="btn btn-default add-enum-item"><i class="fa fa-plus"></i></a>
                         <div class="enum-list-container">
                             <ul class="enum-list" ng-class="{wide: view.tool.baseCommand.length === 1}">
                                 <li ng-repeat="baseCmd in view.tool.baseCommand track by $index">
@@ -99,13 +99,20 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label">Stdin</label>
-                            <expr tooltip-msg="{{ ::help.cliche.general.stdin }}" ng-model="view.tool.stdin" handle-item-update="updateCliAdapter(value, null, 'stdin')"></expr>
+                            <expr tooltip-msg="{{ ::help.cliche.general.stdin }}"
+                                  ng-model="view.tool.stdin"
+                                  handle-item-update="updateCliAdapter(value, null, 'stdin')">
+                            </expr>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label">Stdout</label>
-                            <expr tooltip-msg="{{ ::help.cliche.general.stdout }}" ng-model="view.tool.stdout" handle-item-update="updateCliAdapter(value, null, 'stdout')"></expr>
+                            <expr tooltip-msg="{{ ::help.cliche.general.stdout }}"
+                                  tooltip-placement="left"
+                                  ng-model="view.tool.stdout"
+                                  handle-item-update="updateCliAdapter(value, null, 'stdout')">
+                            </expr>
                         </div>
                     </div>
                 </div>
@@ -118,7 +125,7 @@
 
                             <div class="enum-list-wrap">
 
-                                    <a tooltip="{{ ::help.cliche.general.successCodes }}" href ng-click="addStatusCode('successCodes')" class="btn btn-default add-enum-item"><i class="fa fa-plus"></i></a>
+                                    <a uib-tooltip="{{ ::help.cliche.general.successCodes }}" href ng-click="addStatusCode('successCodes')" class="btn btn-default add-enum-item"><i class="fa fa-plus"></i></a>
                                     <div class="enum-list-container">
                                         <ul class="enum-list">
                                             <li ng-repeat="successCode in view.tool.successCodes track by $index">
@@ -144,7 +151,7 @@
 
                             <div class="enum-list-wrap">
 
-                                <a tooltip="{{ ::help.cliche.general.temporaryFailCodes }}" href ng-click="addStatusCode('temporaryFailCodes')" class="btn btn-default add-enum-item"><i class="fa fa-plus"></i></a>
+                                <a uib-tooltip="{{ ::help.cliche.general.temporaryFailCodes }}" href ng-click="addStatusCode('temporaryFailCodes')" class="btn btn-default add-enum-item"><i class="fa fa-plus"></i></a>
                                 <div class="enum-list-container">
                                     <ul class="enum-list" >
                                         <li ng-repeat="temporaryFailCode in view.tool.temporaryFailCodes track by $index">

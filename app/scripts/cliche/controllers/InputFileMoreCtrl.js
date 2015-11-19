@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('InputFileMoreCtrl', ['$scope', '$modalInstance', 'data', 'lodash', function ($scope, $modalInstance, data, _) {
+    .controller('InputFileMoreCtrl', ['$scope', '$uibModalInstance', 'data', 'lodash', function ($scope, $modalInstance, data, _) {
 
         $scope.view = {};
         $scope.view.schema = angular.copy(data.schema);

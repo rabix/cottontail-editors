@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('registryApp')
-    .controller('SettingsCtrl', ['$scope', '$modal', '$templateCache', 'Sidebar', 'User', 'Job', 'Loading', 'lodash', function ($scope, $modal, $templateCache, Sidebar, User, Job, Loading, _) {
+    .controller('SettingsCtrl', ['$scope', '$uibModal', '$templateCache', 'Sidebar', 'User', 'Job', 'Loading', 'lodash', function ($scope, $modal, $templateCache, Sidebar, User, Job, Loading, _) {
 
         Sidebar.setActive('settings');
 

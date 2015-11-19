@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.common')
-    .directive('jsonPreview', ['$templateCache', '$modal', function ($templateCache, $modal) {
+    .directive('jsonPreview', ['$templateCache', '$uibModal', function ($templateCache, $modal) {
         return {
             restrict: 'E',
             replace: true,
@@ -32,10 +32,7 @@ angular.module('registryApp.common')
                             };
                         }}
                     });
-
                 };
-
-
             }
         };
     }]);

@@ -1,15 +1,7 @@
-<span class="copy-btn">
+<button class="btn btn-primary copy-btn"
+        data-clipboard-target="{{ ::src }}"
+        uib-tooltip="{{ tooltipMessage }}">
 
-    <span ng-if="showString" title="{{ ::string }}">{{ ::string }}</span>
+    {{ view.text }}
 
-    <a href
-       ng-hide="view.error"
-       ng-class="{'btn-sm': isSmall}"
-       class="btn btn-orange btn-copy"
-       ng-disabled="view.copying">
-       {{ view.text }}
-    </a>
-
-    <p ng-show="view.error" class="error" title="{{ view.error }}">{{ view.error }}</p>
-
-</span>
+</button>

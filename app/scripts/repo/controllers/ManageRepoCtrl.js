@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('registryApp.repo')
-    .controller('ManageRepoCtrl', ['$scope', '$modalInstance', 'data', 'Repo', function ($scope, $modalInstance, data, Repo) {
+    .controller('ManageRepoCtrl', ['$scope', '$uibModalInstance', 'data', 'Repo', function ($scope, $modalInstance, data, Repo) {
 
         $scope.view = {};
         $scope.view.action = data.repo ? 'update' : 'add';

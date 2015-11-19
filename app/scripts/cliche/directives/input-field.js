@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('InputFieldCtrl', ['$scope', '$modal', '$templateCache', 'Cliche', 'Const', 'lodash', 'ClicheEvents', '$rootScope', function ($scope, $modal, $templateCache, Cliche, Const, _, ClicheEvents, $rootScope) {
+    .controller('InputFieldCtrl', ['$scope', '$uibModal', '$templateCache', 'Cliche', 'Const', 'lodash', 'ClicheEvents', '$rootScope', function ($scope, $modal, $templateCache, Cliche, Const, _, ClicheEvents, $rootScope) {
 
         var watchers = [];
 

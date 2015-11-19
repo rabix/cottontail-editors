@@ -5,7 +5,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('SuggestedFilesCtrl', ['$scope', '$modal', '$templateCache', 'Cliche', 'Const', 'lodash', function ($scope, $modal, $templateCache, Cliche, Const, _) {
+    .controller('SuggestedFilesCtrl', ['$scope', '$uibModal', '$templateCache', 'Cliche', 'Const', 'lodash', function ($scope, $modal, $templateCache, Cliche, Const, _) {
 
         $scope.view = {};
 

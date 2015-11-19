@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('ManagePropertyArgCtrl', ['$scope', '$modalInstance', 'Cliche', 'options', 'lodash', 'SandBox', '$timeout', function ($scope, $modalInstance, Cliche, options, _, SandBox, $timeout) {
+    .controller('ManagePropertyArgCtrl', ['$scope', '$uibModalInstance', 'Cliche', 'options', 'lodash', 'SandBox', '$timeout', function ($scope, $modalInstance, Cliche, options, _, SandBox, $timeout) {
 
         $scope.view = {};
         $scope.view.property = angular.copy(options.property);

@@ -143,14 +143,7 @@ ul {
 
 /* Tooltip overrides for functionality */
 .tooltip-inner {
-  white-space:pre-wrap;
-  min-width: 200px;
-}
-
-.icons {
-  .tooltip-inner {
-    min-width:unset;
-  }
+  white-space: pre-wrap;
 }
 
 // expressions that will have code in their tooltips

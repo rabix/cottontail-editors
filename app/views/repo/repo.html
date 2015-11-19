@@ -9,7 +9,7 @@
             <span ng-if="view.repo.is_public" class="label label-primary">public</span>
 
             <div class="actions pull-right" ng-if="!(view.user | isEmpty)">
-                <i ng-if="view.repo.git" class="fa fa-github github-flag" tooltip="This repo is imported from GitHub" tooltip-placement="left"></i>
+                <i ng-if="view.repo.git" class="fa fa-github github-flag" uib-tooltip="This repo is imported from GitHub" tooltip-placement="left"></i>
                 <a href ng-if="!view.repo.is_public && view.user.id === view.repo.user._id" ng-disabled="view.saving" ng-click="publish()" class="btn btn-primary"><i class="fa fa-check"></i> Publish</a>
                 <a ng-if="!view.repo.git && view.user.login === view.repo.owner" href ng-click="manageRepoModal()" class="btn btn-default"><i class="fa fa-pencil"></i> Edit</a>
             </div>
@@ -45,7 +45,7 @@
                         <tbody>
                             <tr ng-repeat="app in view.tools">
                                 <td><a ui-sref="tool({id: app._id, tab: 'preview'})" class="inline">{{ ::app.name }}</a></td>
-                                <td><p tooltip="{{ ::app.description }}" tooltip-popup-delay="1000">{{ ::app.description }}</p></td>
+                                <td><p uib-tooltip="{{ ::app.description }}" tooltip-popup-delay="1000">{{ ::app.description }}</p></td>
                             </tr>
                             <tr class="empty" ng-if="view.tools.length === 0">
                                 <td colspan="2"><p class="alert alert-info">There are no tools found in this repo</p></td>
@@ -72,7 +72,7 @@
                         <tbody>
                             <tr ng-repeat="app in view.scripts">
                                 <td><a ui-sref="tool({id: app._id, tab: 'preview'})" class="inline">{{ ::app.name }}</a></td>
-                                <td><p tooltip="{{ ::app.description }}" tooltip-popup-delay="1000">{{ ::app.description }}</p></td>
+                                <td><p uib-tooltip="{{ ::app.description }}" tooltip-popup-delay="1000">{{ ::app.description }}</p></td>
                             </tr>
                             <tr class="empty" ng-if="view.scripts.length === 0">
                                 <td colspan="2"><p class="alert alert-info">There are no scripts found in this repo</p></td>
@@ -99,7 +99,7 @@
                         <tbody>
                             <tr ng-repeat="workflow in view.workflows">
                                 <td><a ui-sref="workflow-view({id: workflow.latest._id})">{{ ::workflow.name }}</a></td>
-                                <td><p tooltip="{{ ::workflow.description }}" tooltip-popup-delay="1000">{{ ::workflow.description }}</p></td>
+                                <td><p uib-tooltip="{{ ::workflow.description }}" tooltip-popup-delay="1000">{{ ::workflow.description }}</p></td>
                             </tr>
                             <tr class="empty" ng-if="view.workflows.length === 0">
                                 <td colspan="2"><p class="alert alert-info">There are no workflows found in this repo</p></td>
@@ -133,7 +133,7 @@
                             <td>{{ ::task.author }}</td>
                             <td><a ng-href="{{ ::task.url }}" class="job-link" target="_blank">{{ ::task.url }}</a></td>
                             <td class="right">
-                                <a ui-sref="task({id: task._id})" ng-if="view.user.id === task.user._id" class="btn btn-default" tooltip="Edit Task Template"><i class="fa fa-pencil"></i></a>
+                                <a ui-sref="task({id: task._id})" ng-if="view.user.id === task.user._id" class="btn btn-default" uib-tooltip="Edit Task Template"><i class="fa fa-pencil"></i></a>
                             </td>
                         </tr>
                         <tr class="empty" ng-if="view.tasks.length === 0">
@@ -166,18 +166,18 @@
                             <tr ng-repeat="build in view.builds">
                                 <td class="field-status">
                                     <span class="status fa {{ ::build.status }}"
-                                          tooltip="{{ ::build.status }}"
+                                          uib-tooltip="{{ ::build.status }}"
                                           ng-class="{'fa-check-circle': build.status === 'success', 'fa-time': build.status === 'pending', 'fa-remove-circle': build.status === 'failure', 'fa-repeat': build.status === 'running'}">
                                     </span>
                                 </td>
                                 <td class="field-id">
-                                    <a ui-sref="build({id: build._id})" tooltip="{{ ::build._id }}" tooltip-popup-delay="1000">#{{ ::build._id }}</a>
+                                    <a ui-sref="build({id: build._id})" uib-tooltip="{{ ::build._id }}" tooltip-popup-delay="1000">#{{ ::build._id }}</a>
                                 </td>
                                 <td class="field-message">
-                                    <p tooltip="{{ ::build.head_commit.message }}" tooltip-popup-delay="1000">{{ ::build.head_commit.message }}</p>
+                                    <p uib-tooltip="{{ ::build.head_commit.message }}" tooltip-popup-delay="1000">{{ ::build.head_commit.message }}</p>
                                 </td>
                                 <td class="field-commit">
-                                    <a ng-href="{{ ::build.head_commit.url }}" target="_blank" tooltip="{{ ::build.head_commit.id }}" tooltip-popup-delay="1000">{{ ::build.head_commit.id }}</a>
+                                    <a ng-href="{{ ::build.head_commit.url }}" target="_blank" uib-tooltip="{{ ::build.head_commit.id }}" tooltip-popup-delay="1000">{{ ::build.head_commit.id }}</a>
                                 </td>
                                 <td class="field-committer">{{ ::build.head_commit.committer.name }}</td>
                                 <td class="field-date">{{ ::build.head_commit.timestamp | date:'short' }}</td>

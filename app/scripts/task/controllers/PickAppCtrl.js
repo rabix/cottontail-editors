@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.task')
-    .controller('PickAppCtrl', ['$scope', '$q', '$modalInstance', 'Tool', 'Workflow', 'lodash', function ($scope, $q, $modalInstance, Tool, Workflow, _) {
+    .controller('PickAppCtrl', ['$scope', '$q', '$uibModalInstance', 'Tool', 'Workflow', 'lodash', function ($scope, $q, $modalInstance, Tool, Workflow, _) {
 
         $scope.view = {};
 

@@ -117,7 +117,7 @@ angular.module('registryApp.app')
          */
         $scope.deleteTool = function() {
 
-            var $modal = $injector.get('$modal');
+            var $modal = $injector.get('$uibModal');
             var $templateCache = $injector.get('$templateCache');
 
             var modalInstance = $modal.open({
