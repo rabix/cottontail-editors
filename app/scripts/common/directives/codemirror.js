@@ -38,7 +38,7 @@ angular.module('registryApp.common')
             var code = mirror.getValue();
 
             try {
-                var self = $scope.arg ? {$self: JSON.parse($scope.arg)} : {};
+                var self = $scope.arg ? {$self: JSON.parse($scope.arg)} : ($scope.defaultSelf ? {$self: $scope.defaultSelf} : {});
 
                 SandBox.evaluate(code, self)
                     .then(function (result) {
@@ -66,7 +66,7 @@ angular.module('registryApp.common')
             var code = mirror.getValue();
 
             try {
-                var self = $scope.arg ? {$self: JSON.parse($scope.arg)} : {};
+                var self = $scope.arg ? {$self: JSON.parse($scope.arg)} : ($scope.defaultSelf ? {$self: $scope.defaultSelf} : {});
 
                 SandBox.evaluate(code, self)
                     .then(function () {
@@ -123,6 +123,7 @@ angular.module('registryApp.common')
             scope: {
                 code: '=',
                 arg: '=',
+                defaultSelf: '=',
                 handleLoad: '&',
                 handleCancel: '&',
                 handleClear: '&'

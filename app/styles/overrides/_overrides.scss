@@ -144,6 +144,7 @@ ul {
 /* Tooltip overrides for functionality */
 .tooltip-inner {
   white-space: pre-wrap;
+  word-break: break-all;
 }
 
 // expressions that will have code in their tooltips
