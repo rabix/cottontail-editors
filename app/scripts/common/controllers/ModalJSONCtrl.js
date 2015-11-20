@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('registryApp.common')
-    .controller('ModalJSONCtrl', ['$scope', '$modalInstance', 'data', function ($scope, $modalInstance, data) {
+    .controller('ModalJSONCtrl', ['$scope', '$uibModalInstance', 'data', function ($scope, $modalInstance, data) {
 
         $scope.data = data;
         $scope.view = {};

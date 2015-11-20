@@ -65,6 +65,27 @@
       margin-left: 10px;
     }
   }
+
+  // hack for edit expression modal to be less jerky
+  // it sets editor-like style to background before editor loads
+  .codemirror-editor {
+    min-height: 300px;
+    background-color: #2C2C2C;
+    margin-bottom: 10px;
+    position: relative;
+    &:before {
+      content: '';
+      display: block;
+      position: absolute;
+      height: 300px;
+      width: 28px;
+      background-color: #4e4e4e;
+    }
+
+    .CodeMirror {
+      margin-bottom: 0;
+    }
+  }
 }
 
 /* Modal content override */

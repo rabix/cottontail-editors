@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('registryApp.repo')
-    .controller('PickRepoModalCtrl', ['$scope', '$modalInstance', 'data', 'HotkeyRegistry', function ($scope, $modalInstance, data, HotkeyRegistry) {
+    .controller('PickRepoModalCtrl', ['$scope', '$uibModalInstance', 'data', 'HotkeyRegistry', function ($scope, $modalInstance, data, HotkeyRegistry) {
 
         $scope.view = {};
         $scope.view.repos = data.repos;

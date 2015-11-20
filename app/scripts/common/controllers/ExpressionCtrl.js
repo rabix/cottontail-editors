@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.common')
-    .controller('ExpressionCtrl', ['$scope', '$modalInstance', 'options', function ($scope, $modalInstance, options) {
+    .controller('ExpressionCtrl', ['$scope', '$uibModalInstance', 'options', function ($scope, $modalInstance, options) {
 
         $scope.view = {};
 

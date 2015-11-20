@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.dyole')
-    .controller('PipelineCtrl', ['$scope', '$rootScope', '$element', '$window', '$timeout', '$injector', 'pipeline', 'App', 'rawPipeline', '$modal', '$templateCache', 'PipelineService', 'lodash', 'Notification', 'HotkeyRegistry', 'rawRabixWorkflow', function ($scope, $rootScope, $element, $window, $timeout, $injector, pipeline, App, rawPipeline, $modal, $templateCache, PipelineService, _, Notification, HotkeyRegistry, rawRabixWorkflow) {
+    .controller('PipelineCtrl', ['$scope', '$rootScope', '$element', '$window', '$timeout', '$injector', 'pipeline', 'App', 'rawPipeline', '$uibModal', '$templateCache', 'PipelineService', 'lodash', 'Notification', 'HotkeyRegistry', 'rawRabixWorkflow', function ($scope, $rootScope, $element, $window, $timeout, $injector, pipeline, App, rawPipeline, $modal, $templateCache, PipelineService, _, Notification, HotkeyRegistry, rawRabixWorkflow) {
 
         var Pipeline;
         var selector = '.pipeline';
@@ -111,7 +111,7 @@ angular.module('registryApp.dyole')
 
             $modal.open({
                 template: $templateCache.get('views/partials/job-url-response.html'),
-                controller: ['$scope', '$modalInstance', 'data', function($scope, $modalInstance, data) {
+                controller: ['$scope', '$uibModalInstance', 'data', function($scope, $modalInstance, data) {
 
                     $scope.view = {};
                     $scope.data = data;
@@ -278,7 +278,7 @@ angular.module('registryApp.dyole')
                 });
             };
 
-            var $modal = $injector.get('$modal');
+            var $modal = $injector.get('$uibModal');
             var $templateCache = $injector.get('$templateCache');
 
             var modalInstance = $modal.open({
@@ -316,7 +316,7 @@ angular.module('registryApp.dyole')
 
         var onNodeLabelEdit = function(e, opts, onEdit, onSave, scope) {
 
-            var $modal = $injector.get('$modal');
+            var $modal = $injector.get('$uibModal');
             var $templateCache = $injector.get('$templateCache');
             var name = opts.name;
             var isSystem = opts.isSystem;

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('registryApp.repo')
-    .controller('RepoCtrl', ['$scope', '$stateParams', '$q', '$modal', '$templateCache', 'Repo', 'Build', 'Job', 'User', 'Sidebar', 'Loading', function ($scope, $stateParams, $q, $modal, $templateCache, Repo, Build, Job, User, Sidebar, Loading) {
+    .controller('RepoCtrl', ['$scope', '$stateParams', '$q', '$uibModal', '$templateCache', 'Repo', 'Build', 'Job', 'User', 'Sidebar', 'Loading', function ($scope, $stateParams, $q, $modal, $templateCache, Repo, Build, Job, User, Sidebar, Loading) {
 
         Sidebar.setActive('repos');
 

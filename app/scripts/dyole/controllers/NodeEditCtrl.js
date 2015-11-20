@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('registryApp.dyole')
-    .controller('NodeEditCtrl', ['$scope', '$modalInstance', 'data', '$timeout', function ($scope, $modalInstance, data, $timeout) {
+    .controller('NodeEditCtrl', ['$scope', '$uibModalInstance', 'data', '$timeout', function ($scope, $modalInstance, data, $timeout) {
 
         $scope.data = data;
         $scope.view = {

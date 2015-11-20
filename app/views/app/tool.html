@@ -99,10 +99,10 @@
                             <td class="revision">
                                 <strong class="label label-primary"><i class="fa fa-tag"></i> v{{ ::revision.version }}</strong>
                             </td>
-                            <td><p tooltip="{{ ::revision.description }}" tooltip-popup-delay="1000">{{ ::revision.description }}</p></td>
+                            <td><p uib-tooltip="{{ ::revision.description }}" tooltip-popup-delay="1000">{{ ::revision.description }}</p></td>
                             <td class="right">
-                                <a class="btn btn-sm btn-default" tooltip="View Revision" ui-sref="tool-revision({id: revision._id})"><i class="fa fa-eye"></i></a>
-                                <a class="btn btn-sm btn-default" tooltip="Edit Revision" ui-sref="cliche-edit({type: view.type, id: view.tool._id, revision: revision._id})"><i class="fa fa-pencil"></i></a>
+                                <a class="btn btn-sm btn-default" uib-tooltip="View Revision" ui-sref="tool-revision({id: revision._id})"><i class="fa fa-eye"></i></a>
+                                <a class="btn btn-sm btn-default" uib-tooltip="Edit Revision" ui-sref="cliche-edit({type: view.type, id: view.tool._id, revision: revision._id})"><i class="fa fa-pencil"></i></a>
                             </td>
                         </tr>
                         <tr class="empty" ng-if="view.revisions.length === 0">
@@ -137,7 +137,7 @@
                             <td>{{ ::job.author }}</td>
                             <td><a ng-href="{{ ::job.url }}" class="job-link" target="_blank">{{ ::job.url }}</a></td>
                             <td class="right">
-                                <a ui-sref="task({id: job._id})" ng-if="view.user.id === job.user" class="btn btn-default" tooltip="Edit Task Template"><i class="fa fa-pencil"></i></a>
+                                <a ui-sref="task({id: job._id})" ng-if="view.user.id === job.user" class="btn btn-default" uib-tooltip="Edit Task Template"><i class="fa fa-pencil"></i></a>
                             </td>
                         </tr>
                         <tr class="empty" ng-if="view.jobs.length === 0">

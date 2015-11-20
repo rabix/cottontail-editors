@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.task')
-    .controller('TaskCtrl', ['$scope', '$q', '$modal', '$templateCache', '$state', '$stateParams', 'Sidebar', 'Loading', 'Job', 'User', 'Repo', 'Workflow', 'BeforeUnload', 'BeforeRedirect', 'lodash', function ($scope, $q, $modal, $templateCache, $state, $stateParams, Sidebar, Loading, Job, User, Repo, Workflow, BeforeUnload, BeforeRedirect, _) {
+    .controller('TaskCtrl', ['$scope', '$q', '$uibModal', '$templateCache', '$state', '$stateParams', 'Sidebar', 'Loading', 'Job', 'User', 'Repo', 'Workflow', 'BeforeUnload', 'BeforeRedirect', 'lodash', function ($scope, $q, $modal, $templateCache, $state, $stateParams, Sidebar, Loading, Job, User, Repo, Workflow, BeforeUnload, BeforeRedirect, _) {
 
         Sidebar.setActive('task tpls');
 

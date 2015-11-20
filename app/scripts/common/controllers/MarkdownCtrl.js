@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.common')
-    .controller('MarkdownCtrl', ['$scope', '$modalInstance', 'data', function ($scope, $modalInstance, data) {
+    .controller('MarkdownCtrl', ['$scope', '$uibModalInstance', 'data', function ($scope, $modalInstance, data) {
 
         $scope.view = {};
         $scope.view.description = data.markdown;

@@ -42,7 +42,7 @@
                     <td>{{ ::job.author }}</td>
                     <td><a ng-href="{{ ::job.url }}" class="job-link" target="_blank">{{ ::job.url }}</a></td>
                     <td class="right">
-                        <a ui-sref="task({id: job._id})" ng-if="view.user.id === job.user" class="btn btn-default" tooltip="Edit Task Template"><i class="fa fa-pencil"></i></a>
+                        <a ui-sref="task({id: job._id})" ng-if="view.user.id === job.user" class="btn btn-default" uib-tooltip="Edit Task Template"><i class="fa fa-pencil"></i></a>
                     </td>
                 </tr>
                 <tr class="empty" ng-if="view.jobs.length === 0">

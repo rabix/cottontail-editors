@@ -10,7 +10,7 @@
 'use strict';
 
 angular.module('registryApp.dyole')
-    .controller('DyoleJsonEditorCtrl', ['$scope', '$modalInstance', '$timeout', 'options', 'Workflow', function($scope, $modalInstance, $timeout, options, Workflow) {
+    .controller('DyoleJsonEditorCtrl', ['$scope', '$uibModalInstance', '$timeout', 'options', 'Workflow', function($scope, $modalInstance, $timeout, options, Workflow) {
 
         $scope.view = {};
         $scope.view.user = options.user;

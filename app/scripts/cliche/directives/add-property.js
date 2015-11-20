@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('AddPropertyCtrl', ['$scope', '$modal', '$templateCache', 'Cliche', 'Helper', function ($scope, $modal, $templateCache, Cliche, Helper) {
+    .controller('AddPropertyCtrl', ['$scope', '$uibModal', '$templateCache', 'Cliche', 'Helper', function ($scope, $modal, $templateCache, Cliche, Helper) {
 
         $scope.view = {};
         $scope.view.tooltipMsg = $scope.tooltipMsg || '';
@@ -75,7 +75,7 @@ angular.module('registryApp.cliche')
 
         return {
             restrict: 'E',
-            template: '<a tooltip="{{ ::view.tooltipMsg }}" tooltip-placement="{{ ::view.tooltipPlacement }}" href ng-click="addItem($event)" class="btn btn-default"><i class="fa fa-plus"></i></a>',
+            template: '<a uib-tooltip="{{ ::view.tooltipMsg }}" tooltip-placement="{{ ::view.tooltipPlacement }}" href ng-click="addItem($event)" class="btn btn-default"><i class="fa fa-plus"></i></a>',
             scope: {
                 type: '@',
                 key: '@',

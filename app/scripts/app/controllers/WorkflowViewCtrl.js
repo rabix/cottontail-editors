@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('registryApp.app')
-    .controller('WorkflowViewCtrl', ['$scope', '$q', '$state', '$stateParams', 'Sidebar', 'Loading', 'Workflow', 'User', 'Job', '$modal', '$templateCache', 'Helper', 'lodash', function ($scope, $q, $state, $stateParams, Sidebar, Loading, Workflow, User, Job, $modal, $templateCache, Helper, _) {
+    .controller('WorkflowViewCtrl', ['$scope', '$q', '$state', '$stateParams', 'Sidebar', 'Loading', 'Workflow', 'User', 'Job', '$uibModal', '$templateCache', 'Helper', 'lodash', function ($scope, $q, $state, $stateParams, Sidebar, Loading, Workflow, User, Job, $modal, $templateCache, Helper, _) {
 
         Sidebar.setActive('apps');
 

@@ -20,21 +20,21 @@
                 <tr ng-repeat="build in view.builds">
                     <td class="field-status">
                         <span class="status fa {{ ::build.status }}"
-                              tooltip="{{ ::build.status }}"
+                              uib-tooltip="{{ ::build.status }}"
                               ng-class="{'fa-check-circle': build.status === 'success', 'fa-clock-o': build.status === 'pending', 'fa-times-circle': build.status === 'failure', 'fa-repeat': build.status === 'running'}">
                         </span>
                     </td>
                     <td class="field-id">
-                        <a ui-sref="build({id: build.head_commit.id})" tooltip="{{ ::build.head_commit.id }}" tooltip-popup-delay="1000">#{{ ::build.head_commit.id }}</a>
+                        <a ui-sref="build({id: build.head_commit.id})" uib-tooltip="{{ ::build.head_commit.id }}" tooltip-popup-delay="1000">#{{ ::build.head_commit.id }}</a>
                     </td>
                     <td class="field-repo">
                         <a ui-sref="repo({id: build.repoId._id})">{{ ::build.repoId.owner }}/{{ ::build.repoId.name }}</a>
                     </td>
                     <td class="field-message">
-                        <p tooltip="{{ ::build.head_commit.message }}" tooltip-popup-delay="1000">{{ ::build.head_commit.message }}</p>
+                        <p uib-tooltip="{{ ::build.head_commit.message }}" tooltip-popup-delay="1000">{{ ::build.head_commit.message }}</p>
                     </td>
                     <td class="field-commit">
-                        <a ng-href="{{ ::build.head_commit.url }}" target="_blank" tooltip="{{ ::build.head_commit.id }}" tooltip-popup-delay="1000">{{ ::build.head_commit.id }}</a>
+                        <a ng-href="{{ ::build.head_commit.url }}" target="_blank" uib-tooltip="{{ ::build.head_commit.id }}" tooltip-popup-delay="1000">{{ ::build.head_commit.id }}</a>
                     </td>
                     <td class="field-committer">{{ ::build.head_commit.committer.name }}</td>
                     <td class="field-date">{{ ::build.head_commit.timestamp | date:'short' }}</td>

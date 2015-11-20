@@ -10,7 +10,7 @@
 
 
 angular.module('registryApp.cliche')
-    .controller('ToolSettingsCtrl', ['$scope', '$modalInstance', 'data', 'HelpMessages', 'lodash', function ($scope, $modalInstance, data, HelpMessages, _) {
+    .controller('ToolSettingsCtrl', ['$scope', '$uibModalInstance', 'data', 'HelpMessages', 'lodash', function ($scope, $modalInstance, data, HelpMessages, _) {
         $scope.help = HelpMessages;
 
         $scope.view = {};
