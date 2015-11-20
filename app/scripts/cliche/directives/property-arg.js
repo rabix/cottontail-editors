@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('PropertyArgCtrl', ['$scope', '$templateCache', '$modal', 'SandBox', 'Cliche', 'lodash', function ($scope, $templateCache, $modal, SandBox, Cliche, _) {
+    .controller('PropertyArgCtrl', ['$scope', '$templateCache', '$uibModal', 'SandBox', 'Cliche', 'lodash', function ($scope, $templateCache, $modal, SandBox, Cliche, _) {
 
         $scope.view = {};
         $scope.view.exprError = '';

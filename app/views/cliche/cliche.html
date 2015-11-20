@@ -47,9 +47,9 @@
 
         <div class="console flex-auto" ng-if="view.type === 'tool'" ng-class="{'console-hide': !view.isConsoleVisible}">
             <div ng-click="toggleConsole()" class="heading">Resulting command line <i ng-class="{'fa-chevron-down': view.isConsoleVisible, 'fa-chevron-right': !view.isConsoleVisible}" class="fa pull-right"></i></div>
-            <copy data="{{ view.command }}"></copy>
+            <copy src="#command_line_pre"></copy>
             {{ view.cmdErrors.length }}
-            <pre class="console-trace" ng-class="{wait: view.generatingCommand, error: view.cmdError && !view.command }">{{ view.command || view.cmdError }}</pre>
+            <pre class="console-trace" id="command_line_pre" ng-class="{wait: view.generatingCommand, error: view.cmdError && !view.command }">{{ view.command || view.cmdError }}</pre>
         </div>
         <!-- # .console -->
 

@@ -82,7 +82,7 @@ angular.module('registryApp.repo')
          */
         $scope.manageRepoModal = function(repo) {
 
-            var $modal = $injector.get('$modal');
+            var $modal = $injector.get('$uibModal');
             var $templateCache = $injector.get('$templateCache');
 
             var modalInstance = $modal.open({

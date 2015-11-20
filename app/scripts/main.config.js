@@ -30,7 +30,7 @@ angular
         exposedSeparator: '$',
         generalSeparator: '.'
     })
-    .config(['$stateProvider', '$urlRouterProvider', '$httpProvider', 'markdownConfig', function ($stateProvider, $urlRouterProvider, $httpProvider, markdownConfig) {
+    .config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function ($stateProvider, $urlRouterProvider, $httpProvider) {
         $stateProvider
             .state('home', {
                 url: '/',
@@ -52,8 +52,6 @@ angular
                 templateUrl: 'views/settings.html',
                 controller: 'SettingsCtrl'
             });
-
-        ZeroClipboard.config({swfPath: 'bower_components/zeroclipboard/dist/ZeroClipboard.swf'});
 
         $urlRouterProvider.otherwise('/');
 

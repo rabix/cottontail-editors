@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('ClicheCtrl', ['$scope', '$q', '$modal', '$templateCache', '$rootScope', 'App', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload', 'BeforeRedirect', 'Api', 'User', 'lodash', 'HelpMessages', 'Globals', 'HotkeyRegistry', 'Notification', 'rawTool', 'Helper', 'ClicheEvents','$timeout', function($scope, $q, $modal, $templateCache, $rootScope, App, Cliche, Loading, SandBox, BeforeUnload, BeforeRedirect, Api, User, _, HelpMessages, Globals, HotkeyRegistry, Notification, rawTool, Helper, ClicheEvents, $timeout) {
+    .controller('ClicheCtrl', ['$scope', '$q', '$uibModal', '$templateCache', '$rootScope', 'App', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload', 'BeforeRedirect', 'Api', 'User', 'lodash', 'HelpMessages', 'Globals', 'HotkeyRegistry', 'Notification', 'rawTool', 'Helper', 'ClicheEvents','$timeout', function($scope, $q, $modal, $templateCache, $rootScope, App, Cliche, Loading, SandBox, BeforeUnload, BeforeRedirect, Api, User, _, HelpMessages, Globals, HotkeyRegistry, Notification, rawTool, Helper, ClicheEvents, $timeout) {
         $scope.Loading = Loading;
 
         var cliAdapterWatchers = [],
@@ -852,7 +852,7 @@ angular.module('registryApp.cliche')
                     name: key,
                     inputs: value,
                     show: true
-                }
+                };
             }).value();
         }
 
@@ -987,7 +987,7 @@ angular.module('registryApp.cliche')
 
                 var modalInstance = $modal.open({
                     template: $templateCache.get('views/cliche/partials/revisions.html'),
-                    controller: ['$scope', '$modalInstance', 'data', function ($scope, $modalInstance, data) {
+                    controller: ['$scope', '$uibModalInstance', 'data', function ($scope, $modalInstance, data) {
 
                         $scope.view = data;
 

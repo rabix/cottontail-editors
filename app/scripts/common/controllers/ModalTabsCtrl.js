@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('registryApp.common')
-    .controller('ModalTabsCtrl', ['$scope', '$modalInstance', 'data', 'common', 'lodash', function ($scope, $modalInstance, data, Common, _) {
+    .controller('ModalTabsCtrl', ['$scope', '$uibModalInstance', 'data', 'common', 'lodash', function ($scope, $modalInstance, data, Common, _) {
 
         var schemas = {
             array: {

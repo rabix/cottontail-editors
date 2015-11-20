@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('registryApp.app')
-    .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$modal', '$templateCache', 'Loading', 'App', 'User', 'Repo', 'Const', 'BeforeRedirect', 'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload', 'Api', 'HotkeyRegistry', 'Notification', 'Cliche', function ($scope, $rootScope, $q, $modal, $templateCache, Loading, App, User, Repo, Const, BeforeRedirect, Helper, PipelineService, _, Globals, BeforeUnload, Api, HotkeyRegistry, Notification, Cliche) {
+    .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$uibModal', '$templateCache', 'Loading', 'App', 'User', 'Repo', 'Const', 'BeforeRedirect', 'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload', 'Api', 'HotkeyRegistry', 'Notification', 'Cliche', function ($scope, $rootScope, $q, $modal, $templateCache, Loading, App, User, Repo, Const, BeforeRedirect, Helper, PipelineService, _, Globals, BeforeUnload, Api, HotkeyRegistry, Notification, Cliche) {
 
         var PipelineInstance = null,
             prompt = false,
@@ -611,7 +611,7 @@ angular.module('registryApp.app')
 
                 var modalInstance = $modal.open({
                     template: $templateCache.get('views/cliche/partials/revisions.html'),
-                    controller: ['$scope', '$modalInstance', 'data', function ($scope, $modalInstance, data) {
+                    controller: ['$scope', '$uibModalInstance', 'data', function ($scope, $modalInstance, data) {
 
                         $scope.view = data;
 

@@ -1,18 +1,19 @@
 /**
- * Author: Milica Kadic
- * Date: 11/18/14
- * Time: 14:26 PM
+ * Author: Maja Nedeljkovic
+ * Date: 11/18/15
+ * Time: 13:16 PM
  */
-'use strict';
+
+/* globals Clipboard */
 
 angular.module('registryApp.common')
     .directive('copy', ['$templateCache', '$timeout', function ($templateCache, $timeout) {
+        'use strict';
+
         return {
             restrict: 'E',
             scope: {
-                data: '@',
-                isSmall: '@',
-                showString: '@'
+                src: '@'
             },
             template: $templateCache.get('views/partials/copy.html'),
             link: function(scope, element) {
@@ -20,53 +21,57 @@ angular.module('registryApp.common')
                 scope.view = {};
                 scope.view.text = 'Copy';
                 scope.view.error = '';
+                scope.view.tooltipMessage = '';
+                scope.view.isTooltipOpen = false;
 
                 var timeoutId;
-                var clipboard;
-                var $element = element[0].querySelector('.btn-copy');
-                var clip = new ZeroClipboard($element);
 
-                clip.on('ready', function() {
+                var $button = element.find('button');
+                var clipboard = new Clipboard($button.get(0));
 
-                    clip.on('copy', function (event) {
+                clipboard.on('success', function(e) {
+                    e.clearSelection();
 
-                        scope.view.copying = true;
-
-                        clipboard = event.clipboardData;
-                        clipboard.setData('text/plain', scope.data);
-
-                        scope.$apply();
-                    });
-
-                    clip.on('aftercopy', function () {
-
-                        scope.view.text = 'copied';
-
-                        scope.cancelTimeout();
-
-                        timeoutId = $timeout(function() {
-                            scope.view.text = 'Copy';
-                            scope.view.copying = false;
-                        }, 2000);
-
-                        scope.$apply();
-                    });
-
-                    clip.on('error', function() {
-                        console.log('error');
-                        ZeroClipboard.destroy();
-                    });
-
-                });
-
-                clip.on('error', function(e) {
-
-                    scope.view.error = e.message;
-
-                    ZeroClipboard.destroy();
-
+                    scope.view.text = 'Copied';
+                    scope.view.copying = true;
                     scope.$apply();
+
+                    timeoutId = resetText(2000);
                 });
+
+                clipboard.on('error', function(e) {
+
+                    scope.view.tooltipMessage = fallbackMessage(e.action);
+                    scope.view.isTooltipOpen = true;
+                    scope.$apply();
+
+                    timeoutId = resetText(5000);
+                });
+
+                function resetText (time) {
+                    return $timeout(function() {
+                        scope.view.text = 'Copy';
+                        scope.view.copying = false;
+                        scope.view.isTooltipOpen = false;
+                    }, time);
+                }
+
+                // gotten from clipboard.js website
+                function fallbackMessage(action) {
+                    var actionMsg = '';
+                    var actionKey = (action === 'cut' ? 'X' : 'C');
+
+                    if(/iPhone|iPad/i.test(navigator.userAgent)) {
+                        actionMsg = 'Not supported';
+                    } else if (/Mac/i.test(navigator.userAgent)) {
+                        actionMsg = 'Press ⌘-' + actionKey + ' to ' + action;
+                    } else {
+                        actionMsg = 'Press Ctrl-' + actionKey + ' to ' + action;
+                    }
+
+                    return actionMsg;
+                }
+
 
                 scope.cancelTimeout = function() {
                     if (angular.isDefined(timeoutId)) {
@@ -76,10 +81,9 @@ angular.module('registryApp.common')
                 };
 
                 scope.$on('$destroy', function() {
-                    clip.destroy();
+                    clipboard.destroy();
                     scope.cancelTimeout();
                 });
-
             }
         };
     }]);

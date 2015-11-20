@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('PropertyOutputCtrl', ['$scope', '$modal', '$q', '$templateCache', 'Cliche', 'Helper', 'SandBox', function ($scope, $modal, $q, $templateCache, Cliche, Helper, SandBox) {
+    .controller('PropertyOutputCtrl', ['$scope', '$uibModal', '$q', '$templateCache', 'Cliche', 'Helper', 'SandBox', function ($scope, $modal, $q, $templateCache, Cliche, Helper, SandBox) {
 
         $scope.key = $scope.key || 'name';
 

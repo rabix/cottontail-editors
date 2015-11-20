@@ -28,7 +28,7 @@ angular.module('registryApp.common')
                 longLiteral: '@',
                 min: '@'
             },
-            controller: ['$scope', '$modal', 'SandBox', 'Helper', 'rawTransform', function ($scope, $modal, SandBox, Helper, rawTransform) {
+            controller: ['$scope', '$uibModal', 'SandBox', 'Helper', 'rawTransform', function ($scope, $modal, SandBox, Helper, rawTransform) {
 
                 $scope.view = {};
 
@@ -158,6 +158,25 @@ angular.module('registryApp.common')
 
                 $scope.$watch('selfItemType', function (n, o) { if (n !== o) { checkExpression(); } });
 
+                window.openModal = function () {
+                    var modalInstance = $modal.open({
+                        template: '<div class="modal-body"><button class="btn btn-primary" ng-click="close()">Okay, go away now</button></div>',
+                        controller: function($scope, $uibModalInstance) {
+                            $scope.close = function () {
+                                $uibModalInstance.close();
+                            };
+
+                            window.closeModal = function () {
+                                $uibModalInstance.close();
+                            };
+                        }
+                    });
+
+                    modalInstance.result.then(function() {
+                       console.log('it hath closed');
+                    });
+                };
+
                 /**
                  * Edit custom expression for input value evaluation
                  */
@@ -171,6 +190,7 @@ angular.module('registryApp.common')
                         windowClass: 'modal-expression',
                         backdrop: 'static',
                         size: 'lg',
+                        animation: true,
                         resolve: {
                             options: function () {
                                 return {
@@ -219,7 +239,7 @@ angular.module('registryApp.common')
 				            options: function () {
 					            return {
 						            literal: $scope.view.literal
-					            }
+					            };
 				            }
 			            }
 		            });
@@ -242,7 +262,7 @@ angular.module('registryApp.common')
 
 		            });
 
-	            }
+	            };
 
             }],
             link: function(scope) {

@@ -7,12 +7,12 @@
 
     <div class="property-box-short-info">
 
-        <span ng-if="toolType === 'tool' && (mode === 'input' || mode === 'arg')" class="position" tooltip="position">{{ view.position }}</span>
+        <span ng-if="toolType === 'tool' && (mode === 'input' || mode === 'arg')" class="position" uib-tooltip="position">{{ view.position }}</span>
 
         <div class="info-block">
-            <strong class="name" tooltip="name">{{ name }}</strong>
-            <i class="type" tooltip="type">{{ type }} {{ itemType ? ' (' + itemType + ')' : '' }}</i>
-            <span ng-if="isRequired" class="required" tooltip="required">*</span>
+            <strong class="name" uib-tooltip="name">{{ name }}</strong>
+            <i class="type" uib-tooltip="type">{{ type }} {{ itemType ? ' (' + itemType + ')' : '' }}</i>
+            <span ng-if="isRequired" class="required" uib-tooltip="required">*</span>
         </div>
 
         <div ng-if="symbols" class="info-block">
