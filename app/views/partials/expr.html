@@ -8,13 +8,11 @@
 
         <input tooltip="{{ view.tooltipMsg }}" tooltip-trigger="focus"  ng-blur="runHandler($event)" ng-keypress="runHandler($event)" ng-show="view.mode === 'literal'" type="{{ view.type }}" min="{{ view.min }}" class="form-control" ng-model="view.literal" placeholder="{{ view.placeholder }}" ng-readonly="onlyExpr">
 
-        <span class="input-group-btn">
+        <span class="input-group-btn" ng-class="{'tooltip-code': view.transform && !view.exprError}">
             <a href
                ng-if="view.longLiteral"
                class="btn btn-expression"
                tooltip="{{ !view.transform.script && view.transform ? view.transform : 'Click to add a literal'}}"
-               tooltip-placement="top"
-               tooltip-append-to-body="true"
                ng-click="editLiteral()"
                ng-class="{'btn-primary': (view.mode === 'literal' && view.literal && !view.exprError), 'btn-default': (view.mode === 'transform' || !view.literal && !view.exprError), 'btn-warning': view.exprError}">
                 <i class="fa fa-font"></i>
@@ -22,8 +20,6 @@
             <a href
                class="btn btn-expression"
                tooltip="{{ view.transform.script || 'There is no expression defined. Click to add it' }}"
-               tooltip-placement="top"
-               tooltip-append-to-body="true"
                ng-click="editExpression()"
                ng-class="{'btn-primary': (view.mode === 'transform' && !view.exprError), 'btn-default': (view.mode === 'literal' && !view.exprError), 'btn-warning': view.exprError}">
                <i class="fa fa-code"></i>

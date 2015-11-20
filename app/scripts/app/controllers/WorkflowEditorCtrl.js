@@ -353,7 +353,16 @@ angular.module('registryApp.app')
                 }
             }, true);
 
-            $scope.view.inputCategories = _($scope.view.json.inputs).filter(filterInputs).groupBy('sbg:category').map(function(value, key){
+            $scope.view.inputCategories = _($scope.view.json.inputs).filter(filterInputs).groupBy(function(input) {
+                var cat = input['sbg:category'];
+
+                if (_.isUndefined(cat) || _.isEmpty(cat) || cat.toLowerCase().trim() === 'uncategorized') {
+                    cat = 'Uncategorized';
+                }
+
+                return cat;
+
+            }).map(function(value, key){
                 return {
                     name: key,
                     inputs: value,
