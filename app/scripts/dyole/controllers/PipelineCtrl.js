@@ -38,15 +38,6 @@ angular.module('registryApp.dyole')
             // Will be used to check if any of the buttons needs disabling
             Pipeline.initZoom();
 
-            Pipeline.Event.subscribe('pipeline:zoom', function (zoomCaps) {
-
-                $scope.view.disableZoomIn = zoomCaps.zoomIn;
-                $scope.view.disableZoomOut = zoomCaps.zoomOut;
-
-                if (!$scope.$$phase && !$rootScope.$$phase) {
-                        $scope.$digest();
-                    }
-                });
         };
 
         if ($scope.pipeline){
@@ -389,6 +380,7 @@ angular.module('registryApp.dyole')
         ]);
 
         $scope.pipelineActions = {
+
             zoomIn: function () {
 
                 if (Pipeline) {

@@ -666,6 +666,7 @@ angular.module('registryApp.cliche')
                     prop = _.extend({
                         key: key,
                         type: type,
+                        required: isRequired(property.type),
                         val: '',
                         position: property.inputBinding.position || 0,
                         prefix: prefix,

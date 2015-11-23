@@ -137,6 +137,10 @@ angular.module('registryApp.app')
         self.checkOutdatedInWf = function (list) {
             return Api.checkOutdatedInWf.post({}, list).$promise;
         };
+        
+        self.getValidInstances = function () {
+            return Api.getValidInstances.get().$promise;
+        };
 
         return self;
 

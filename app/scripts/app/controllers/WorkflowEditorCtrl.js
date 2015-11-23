@@ -13,7 +13,8 @@ angular.module('registryApp.app')
                 return 'Please save your changes before leaving.';
             }, function () {
                 return prompt
-            });
+            }),
+            Instances = [];
 
         $scope.$on('pipeline:change', function () {
             prompt = true;
@@ -150,6 +151,7 @@ angular.module('registryApp.app')
 
         });
 
+
         /**
          * Callback when apps are loaded
          *
@@ -174,6 +176,8 @@ angular.module('registryApp.app')
 
             }
 
+            Instances = result[3].message;
+
             $scope.view.loading = false;
         };
 
@@ -185,7 +189,8 @@ angular.module('registryApp.app')
         $q.all([
             App.getMineAppsByProject(),
             App.getPublicAppsByProject(),
-            App.get()
+            App.get(),
+            App.getValidInstances()
         ]).then(appsLoaded);
 
         /**
@@ -574,6 +579,25 @@ angular.module('registryApp.app')
                     $scope.view.workflow = json;
                     $scope.view.isChanged = true;
                 }
+            });
+
+        };
+        
+        $scope.workflowSettings = function () {
+            var modalInstance = $modal.open({
+                template: $templateCache.get('views/dyole/workflow-settings.html'),
+                controller: 'WorkflowSettingsCtrl',
+                resolve: { data: function () {
+                    return {
+                        hints: PipelineInstance.getWorkflowHints(),
+                        instances: Instances,
+                        requireSBGMetadata: PipelineInstance.getRequireSBGMetadata()
+                    };
+                }}
+            });
+
+            modalInstance.result.then(function (result) {
+                PipelineInstance.updateWorkflowSettings(result.hints, result.requireSBGMetadata);
             });
 
         };
