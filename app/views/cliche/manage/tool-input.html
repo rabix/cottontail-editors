@@ -184,10 +184,10 @@
             </div>
             <!-- END Item Separator -->
 
-            <div class="col-md-2" ng-if="!view.disabled && view.items.type !== 'record'">
+            <div class="col-md-3" ng-if="!view.disabled && view.items.type !== 'record'">
                 <div class="form-group">
                     <label class="control-label">Value <help-message message="help.cliche.bindings.value"></help-message></label>
-                    <expr ng-model="view.property.inputBinding.valueFrom" handle-item-update="updateTransform(value)" only-expr="true" self="true" self-type="view.type" self-item-type="view.items.type" placeholder="value"></expr>
+                    <expr ng-model="view.property.inputBinding.valueFrom" handle-item-update="updateTransform(value)" only-expr="true" self="true" self-type="view.type" self-item-type="view.items.type" placeholder="value" prop-id="{{ ::view.property.id }}"></expr>
                 </div>
             </div>
             <!-- END Transform -->

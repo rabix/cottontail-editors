@@ -26,7 +26,8 @@ angular.module('registryApp.common')
                 handleItemBlur: '&',
                 handleNull: '&',
                 longLiteral: '@',
-                min: '@'
+                min: '@',
+                propId: '@'
             },
             controller: ['$scope', '$uibModal', 'SandBox', 'Helper', 'rawTransform', function ($scope, $modal, SandBox, Helper, rawTransform) {
 
@@ -195,7 +196,8 @@ angular.module('registryApp.common')
                             options: function () {
                                 return {
                                     expr: expr,
-                                    self: $scope.self ? true : false
+                                    self: $scope.self ? true : false,
+                                    propId: $scope.propId || ''
                                 };
                             }
                         }
