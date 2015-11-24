@@ -279,10 +279,6 @@ Raphael.fn.group = function () {
                 });
             },
 
-            clone: function () {
-                return _.clone(this);
-            },
-
             unclick: function () {
                 $(this.node).unbind('click');
                 return this;

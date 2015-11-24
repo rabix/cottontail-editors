@@ -254,15 +254,21 @@ angular.module('registryApp.app')
             }
 
             BeforeRedirect.setReload(true);
+
+
             $scope.view.saving = true;
+
+            console.time('Workflow saving');
+            // Saving workflow before fiddling with it's coorindates
+            var workflow = PipelineInstance.format();
+            // Saving SVG string before turning on Loader and removing SVG element from the DOM
+            var svgString = PipelineInstance.getSvgString();
+            console.timeEnd('Workflow saving');
+
             $scope.view.loading = true;
 
-
-            var workflow = PipelineInstance.format();
             App.update(workflow, 'workflow')
                 .then(function (data) {
-
-                    var svgString = PipelineInstance.getSvgString();
 
                     rev = data.message['sbg:revision'];
 

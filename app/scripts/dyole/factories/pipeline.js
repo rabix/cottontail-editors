@@ -1534,48 +1534,42 @@ angular.module('registryApp.dyole')
             getSvgString: function () {
 
                 var tempSvgContainer = $('<div></div>'), // create temporary DIV element that will contain SVG
-                    pipWrap = this.pipelineWrap.clone(),
-                    leftMost = 0,
-                    topMost = 0,
-                    pipTranslation, pipScale, pipBBox, canvas, scaleDiff;
-
-                // keep pipeline translation for later use
-                pipTranslation = pipWrap.getTranslation();
+                    pipWrap = this.pipelineWrap,
+                    scale = 1,
+                    pipScale, pipBBox, canvas, canvasStyle, svgString;
 
                 // keep pipeline scale factor for later use
                 pipScale = pipWrap.getScale();
 
                 // scale pipeline to 1 scale factor
-                pipWrap.scale(1, 1);
+                pipWrap.scale(scale, scale);
 
-                scaleDiff = Math.abs(pipScale.x - 1) + 1;
-
-                // get negative marginal (x, y) coordinates of all nodes
-                _.each(this.nodes, function (node) {
-
-                    if (leftMost > node.model.x) {
-                        leftMost = node.model.x;
-                    }
-
-                    if (topMost > node.model.y) {
-                        topMost = node.model.y;
-                    }
-                });
-
-                // get pipeline box width and height
-                pipBBox = pipWrap.getBBox();
+                // get pipeline element's bounding box
+                // NOTE: SVG element needs to be in DOM for this function to return proper result
+                pipBBox = pipWrap.getElementBBox();
 
                 // create RaphaelJS SVG canvas, and put it into temporary DIV created above
-                canvas = new Raphael(tempSvgContainer[0], pipBBox.width * scaleDiff, pipBBox.height * scaleDiff);
+                canvas = new Raphael(tempSvgContainer[0], Math.round(pipBBox.width * scale), Math.round(pipBBox.height * scale) );
+
+                // remove default style properties
+                canvasStyle = canvas.canvas.style;
+                canvasStyle.removeProperty('position');
+                canvasStyle.setProperty('overflow', 'scroll');
 
                 //  translate pipeline to (minX, minY) coordinates using most left and most right nodes
-                pipWrap.translate( -leftMost * scaleDiff, -topMost * scaleDiff);
+                pipWrap.translate( -Math.round(pipBBox.x * scale), -Math.round(pipBBox.y * scale) );
 
                 // Add pipeline node to newly created SVG canvas
                 canvas.canvas.appendChild(pipWrap.node);
 
+                // get SVG string from the temporary canvas container
+                svgString = tempSvgContainer.html();
+
+                // reset workflow's position to original place
+                pipWrap.translate( Math.round(pipBBox.x * scale), Math.round(pipBBox.y * scale) );
+
                 // return SVG element as a string
-                return tempSvgContainer.html();
+                return svgString;
             },
 
             updateNodePorts: function (nodeId, inputId, value) {
