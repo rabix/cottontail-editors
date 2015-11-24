@@ -1556,6 +1556,9 @@ angular.module('registryApp.dyole')
                 canvasStyle.removeProperty('position');
                 canvasStyle.setProperty('overflow', 'scroll');
 
+                // Setting ID to the pipeline wrapp element so it can be easier to fetch later
+                pipWrap.node.setAttribute('id', 'pipeline-wrapper-node');
+
                 //  translate pipeline to (minX, minY) coordinates using most left and most right nodes
                 pipWrap.translate( -Math.round(pipBBox.x * scale), -Math.round(pipBBox.y * scale) );
 
