@@ -38,7 +38,7 @@ angular.module('registryApp.common')
             var code = mirror.getValue();
 
             try {
-                var self = $scope.arg ? {$self: JSON.parse($scope.arg)} : ($scope.defaultSelf ? {$self: $scope.defaultSelf} : {});
+                var self = $scope.arg ? {$self: JSON.parse($scope.arg)} : (!_.isUndefined($scope.defaultSelf) ? {$self: $scope.defaultSelf} : {});
 
                 SandBox.evaluate(code, self)
                     .then(function (result) {
@@ -66,7 +66,7 @@ angular.module('registryApp.common')
             var code = mirror.getValue();
 
             try {
-                var self = $scope.arg ? {$self: JSON.parse($scope.arg)} : ($scope.defaultSelf ? {$self: $scope.defaultSelf} : {});
+                var self = $scope.arg ? {$self: JSON.parse($scope.arg)} : (!_.isUndefined($scope.defaultSelf) ? {$self: $scope.defaultSelf} : {});
 
                 SandBox.evaluate(code, self)
                     .then(function () {
