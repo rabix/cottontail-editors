@@ -607,7 +607,7 @@ angular.module('registryApp.cliche')
 
             };
 
-            if (_.isArray(input)) {
+            if (_.isArray(input) || _.isNull(input)) {
 
                 if (_.isUndefined(property.inputBinding.valueFrom)) {
                     _.each(input, function (val) {

@@ -237,7 +237,13 @@ angular.module('registryApp.cliche')
         // TODO: Figure this out for complex props, try to avoid this deep watch
         var deepWatcher = $scope.$watch('view.model', function(n, o) {
             if (n !== o) {
-                $scope.model = n;
+                 //Executor treats empty arrays as null, so Cliche should to. This will cause scripts
+                 //relying on [].forEach() or [].sort() to throw an error.
+                if (_.isArray(n) && _.isEmpty(n)) {
+                    $scope.model = null;
+                } else {
+                    $scope.model = n;
+                }
                 $rootScope.$broadcast(ClicheEvents.JOB.CHANGED, {job: n});
             }
         }, true);
