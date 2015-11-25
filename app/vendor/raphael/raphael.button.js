@@ -15,7 +15,7 @@ Raphael.fn.button = function (config, cb) {
 
     function Button(conf, callbacks) {
 
-        var pub, button, click = callbacks.onClick;
+        var pub, button, click = callbacks.onClick, disabled = false;
 
         function initialize() {
             var group = r.group(),
@@ -92,6 +92,14 @@ Raphael.fn.button = function (config, cb) {
 
             getEl: function () {
                 return button;
+            },
+
+            disable: function (shouldDisable) {
+                disabled = shouldDisable;
+            },
+
+            isDisabled: function () {
+                return disabled;
             }
 
         };
