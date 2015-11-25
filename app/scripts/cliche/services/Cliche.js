@@ -3,16 +3,12 @@
  * Date: 2/3/15
  * Time: 3:33 PM
  */
-'use strict';
+
+/* globals angular */
+
 angular.module('registryApp.cliche')
     .factory('Cliche', ['$q', '$injector', 'rawTool', 'rawJob', 'rawTransform', 'lodash', function($q, $injector, rawTool, rawJob, rawTransform, _) {
-
-        /**
-         * Version of the storage
-         *
-         * @type {number}
-         */
-        var version = 1;
+        'use strict';
 
         /**
          * Tool json object
@@ -216,10 +212,10 @@ angular.module('registryApp.cliche')
                 compare,
                 deferred = $q.defer();
 
-            if (prop['id']) {
+            if (prop.id) {
 
                 ids = [
-                    [toolJSON['id']],
+                    [toolJSON.id],
                     _.pluck(toolJSON.inputs, 'id'),
                     _.pluck(toolJSON.outputs, 'id')
                 ];
@@ -228,7 +224,7 @@ angular.module('registryApp.cliche')
 
 
                 idName = 'id';
-                compare = prop['id'];
+                compare = prop.id;
                 exists = _.contains(ids, compare);
             } else {
                 idName = 'name';
@@ -468,8 +464,8 @@ angular.module('registryApp.cliche')
                 return '';
             }
 
-            if (property['id']) {
-                return property['id'] ? property['id'].slice(1) : '';
+            if (property.id) {
+                return property.id ? property.id.slice(1) : '';
             } else {
                 return property.name;
             }
@@ -539,6 +535,7 @@ angular.module('registryApp.cliche')
          *
          * @param transform
          * @param value
+         * @param self
          * @returns {*}
          */
         var applyTransform = function(transform, value, self) {
@@ -598,7 +595,7 @@ angular.module('registryApp.cliche')
                             deferred.reject(error);
                         });
                 } else {
-                    applyTransform(property.inputBinding.valueFrom, (_.isObject(val) ? val.path : val), true)
+                    applyTransform(property.inputBinding.valueFrom, (_.isObject(val) && !_.isArray(val) ? val.path : val), true)
                         .then(function (result) {
                             deferred.resolve(result);
                         }, function (error) {
@@ -610,10 +607,16 @@ angular.module('registryApp.cliche')
 
             };
 
-            if(_.isArray(input)) {
-                _.each(input, function(val) {
-                    promises.push(evaluate(val));
-                });
+            if (_.isArray(input) || _.isNull(input)) {
+
+                if (_.isUndefined(property.inputBinding.valueFrom)) {
+                    _.each(input, function (val) {
+                        promises.push(_.isObject(val) ? val.path : val);
+                    });
+                } else {
+                    promises.push(evaluate(input));
+                }
+
             } else if (_.isString(input)) {
                 promises.push(input);
             }
@@ -653,7 +656,6 @@ angular.module('registryApp.cliche')
 
             /* go through properties */
             _.each(defined, function(property) {
-
                 var deferred = $q.defer(),
                     key = parseName(property),
                     schema = getSchema('input', property, 'tool', false),
@@ -757,8 +759,6 @@ angular.module('registryApp.cliche')
          * @return {string} output
          */
         var generateCommand = function() {
-
-            var self = this;
 
             // in case baseCommand is not yet defined
             if (!toolJSON.baseCommand) {
@@ -1024,7 +1024,7 @@ angular.module('registryApp.cliche')
 		            type: 'record',
 		            name: inner.recordName,
 		            fields: inner.fields
-	            }
+	            };
 
             } else {
                 type = inner.type;
@@ -1057,7 +1057,7 @@ angular.module('registryApp.cliche')
                 /* format structure for required property */
                 tmp.type = inner.required ? [type] : ['null', type];
                 formatted = tmp;
-                formatted['id'] = '#' + inner.name;
+                formatted.id = '#' + inner.name;
 
             /*
             *  schema for every other level
@@ -1154,7 +1154,7 @@ angular.module('registryApp.cliche')
 		 * @param {object} schema
 		 */
 		var getFieldsRef = function (schema) {
-			return schema[0] == 'null' ? schema[1].fields : schema[0].fields;
+			return schema[0] === 'null' ? schema[1].fields : schema[0].fields;
 		};
 
         /**

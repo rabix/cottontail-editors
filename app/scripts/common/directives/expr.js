@@ -26,7 +26,8 @@ angular.module('registryApp.common')
                 handleItemBlur: '&',
                 handleNull: '&',
                 longLiteral: '@',
-                min: '@'
+                min: '@',
+                propId: '@'
             },
             controller: ['$scope', '$uibModal', 'SandBox', 'Helper', 'rawTransform', function ($scope, $modal, SandBox, Helper, rawTransform) {
 
@@ -158,25 +159,6 @@ angular.module('registryApp.common')
 
                 $scope.$watch('selfItemType', function (n, o) { if (n !== o) { checkExpression(); } });
 
-                window.openModal = function () {
-                    var modalInstance = $modal.open({
-                        template: '<div class="modal-body"><button class="btn btn-primary" ng-click="close()">Okay, go away now</button></div>',
-                        controller: function($scope, $uibModalInstance) {
-                            $scope.close = function () {
-                                $uibModalInstance.close();
-                            };
-
-                            window.closeModal = function () {
-                                $uibModalInstance.close();
-                            };
-                        }
-                    });
-
-                    modalInstance.result.then(function() {
-                       console.log('it hath closed');
-                    });
-                };
-
                 /**
                  * Edit custom expression for input value evaluation
                  */
@@ -195,7 +177,8 @@ angular.module('registryApp.common')
                             options: function () {
                                 return {
                                     expr: expr,
-                                    self: $scope.self ? true : false
+                                    self: $scope.self ? true : false,
+                                    propId: $scope.propId || ''
                                 };
                             }
                         }
