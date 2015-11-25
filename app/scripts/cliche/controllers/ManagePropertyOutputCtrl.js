@@ -177,9 +177,26 @@ angular.module('registryApp.cliche')
 
             var formatted = Cliche.formatProperty(inner, $scope.view.property, 'output');
 
-	        if ($scope.view.label !== '') { formatted.label = $scope.view.label; }
-	        if ($scope.view.description !== '') { formatted.description = $scope.view.description; }
-	        if ($scope.view.fileTypes !== '') { formatted['sbg:fileTypes'] = $scope.view.fileTypes; }
+            /**
+             * Setting or deleting extra data
+             */
+            if ($scope.view.label !== '') {
+                formatted.label = $scope.view.label;
+            } else {
+                delete formatted.label;
+            }
+
+            if ($scope.view.description !== '') {
+                formatted.description = $scope.view.description;
+            } else {
+                delete formatted.description;
+            }
+
+            if ($scope.view.fileTypes !== '') {
+                formatted['sbg:fileTypes'] = $scope.view.fileTypes;
+            } else {
+                delete formatted['sbg:fileTypes'];
+            }
 
 	        idObj.n = $scope.view.name;
 
