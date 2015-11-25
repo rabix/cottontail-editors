@@ -65,7 +65,8 @@ angular.module('registryApp.cliche')
         $scope.view.inputs = _.pluck(_.filter(Cliche.getTool().inputs, function(input) {
             var type = Cliche.parseType(input.type),
                 typeObj = Cliche.parseTypeObj(input.type);
-            return type === 'File' || (typeObj.items && typeObj.items === 'File');
+            //@todo: type rec[], rec. recursively check if has file type anywhere either in type, items, or fields
+            return type === 'File' || type === 'record' || (typeObj.items && typeObj.items === 'File') || (typeObj.items && typeObj.items.type === 'record');
         }), 'id');
 
 		if (!_.isEmpty($scope.view.inputs)) {
