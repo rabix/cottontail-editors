@@ -1051,7 +1051,74 @@ angular.module('registryApp.dyole')
                     projectOwner = project[0],
                     projectSlug = project[1];
 
-                App.getApp(projectOwner, projectSlug, nodeModel['sbg:name']).then(function (result) {
+                var _validateAndMatchParams = function (valuesCache, inputs, nid) {
+                    _.forEach(valuesCache, function (value, id) {
+
+                        var inputType, match,
+                            input = _.find(inputs, function (i) {
+                                return id === i.id;
+                            });
+
+                        if (input) {
+
+                            inputType = Common.fullParseType(input.type).toLowerCase();
+                            match = _matchValueType(inputType, value);
+
+                            if (match) {
+
+                                if (typeof _self.values[nid] === 'undefined') {
+                                    _self.values[nid] = {};
+                                }
+
+                                _self.values[nid][input.id] = value;
+
+                            } else {
+                                Notification.warning('Inputs type missmatch, cannot apply parametars to input: ' + input.id);
+                            }
+
+                        } else {
+                            Notification.warning('Input "' + id + '" not found.')
+                        }
+                    })
+                };
+
+                var _matchValueType = function (type, value) {
+                    var valueType;
+
+                    switch(typeof value) {
+                        case 'string':
+                            valueType = 'string';
+                            break;
+                        case 'boolean':
+                            valueType = 'boolean';
+                            break;
+                        case 'number':
+                            valueType = 'int';
+                            break;
+                        case 'object':
+
+                            if (_.isArray(value)) {
+                                valueType = 'array';
+                            }
+
+                            break;
+                        default:
+                            valueType = 'null';
+                            break;
+                    }
+
+                    if (type === 'enum') {
+                        return valueType === 'string';
+                    }
+
+                    if (type === 'float') {
+                        return valueType === 'int' || valueType === 'float';
+                    }
+
+                    return valueType.toLowerCase() === type.toLowerCase();
+                };
+
+                return App.getApp(projectOwner, projectSlug, nodeModel['sbg:name']).then(function (result) {
 
                     if (typeof result.message === 'object' && !_.isEmpty(result.message)) {
 
@@ -1173,74 +1240,8 @@ angular.module('registryApp.dyole')
                         Notification.error('Failed to update node schema: Message: ' + result.message + ', Status: ' + result.status);
                     }
 
+                    return this;
                 });
-
-                var _validateAndMatchParams = function (valuesCache, inputs, nid) {
-                    _.forEach(valuesCache, function (value, id) {
-
-                        var inputType, match,
-                            input = _.find(inputs, function (i) {
-                                return id === i.id;
-                            });
-
-                        if (input) {
-
-                            inputType = Common.fullParseType(input.type).toLowerCase();
-                            match = _matchValueType(inputType, value);
-
-                            if (match) {
-
-                                if (typeof _self.values[nid] === 'undefined') {
-                                    _self.values[nid] = {};
-                                }
-
-                                _self.values[nid][input.id] = value;
-
-                            } else {
-                                Notification.warning('Inputs type missmatch, cannot apply parametars to input: ' + input.id);
-                            }
-
-                        } else {
-                            Notification.warning('Input "' + id + '" not found.')
-                        }
-                    })
-                };
-                
-                var _matchValueType = function (type, value) {
-                    var valueType;
-
-                    switch(typeof value) {
-                        case 'string':
-                            valueType = 'string';
-                            break;
-                        case 'boolean':
-                            valueType = 'boolean';
-                            break;
-                        case 'number':
-                            valueType = 'int';
-                            break;
-                        case 'object':
-
-                            if (_.isArray(value)) {
-                                valueType = 'array';
-                            }
-
-                            break;
-                        default:
-                            valueType = 'null';
-                            break;
-                    }
-
-                    if (type === 'enum') {
-                        return valueType === 'string';
-                    }
-
-                    if (type === 'float') {
-                        return valueType === 'int' || valueType === 'float';
-                    }
-
-                    return valueType.toLowerCase() === type.toLowerCase();
-                };
 
             },
 
