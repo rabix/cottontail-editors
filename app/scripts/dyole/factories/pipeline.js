@@ -1064,7 +1064,7 @@ angular.module('registryApp.dyole')
                 var node = this.getNodeById(nodeId),
                     nodeModel = node.model,
                     oldLabel = nodeModel.label;
-                
+
                 var portIncludedInputs = _.filter(node.model.inputs, function (inp) {
                     return inp['sbg:includeInPorts'];
                 });
@@ -1395,7 +1395,7 @@ angular.module('registryApp.dyole')
                                 }
 
                             });
-                            
+
                         }
 
                     });
@@ -1404,7 +1404,7 @@ angular.module('registryApp.dyole')
                 }, function (err) {
                     console.error(err);
                 });
-                  
+
             },
 
             _fixTrailingSlash: function (url) {
@@ -1537,7 +1537,10 @@ angular.module('registryApp.dyole')
                 var tempSvgContainer = $('<div></div>'), // create temporary DIV element that will contain SVG
                     pipWrap = this.pipelineWrap,
                     scale = 1,
-                    pipScale, pipBBox, canvas, canvasStyle, svgString;
+                    pipTranslation, pipScale, pipBBox, canvas, canvasStyle, svgString;
+
+                // keep pipeline translation factor for restoring it
+                pipTranslation = pipWrap.getTranslation();
 
                 // keep pipeline scale factor for later use
                 pipScale = pipWrap.getScale();
@@ -1564,13 +1567,14 @@ angular.module('registryApp.dyole')
                 pipWrap.translate( -Math.round(pipBBox.x * scale), -Math.round(pipBBox.y * scale) );
 
                 // Add pipeline node to newly created SVG canvas
-                canvas.canvas.appendChild(pipWrap.node);
+                canvas.canvas.appendChild(pipWrap.node.cloneNode());
 
                 // get SVG string from the temporary canvas container
                 svgString = tempSvgContainer.html();
 
-                // reset workflow's position to original place
-                pipWrap.translate( Math.round(pipBBox.x * scale), Math.round(pipBBox.y * scale) );
+                // reset workflow's position and scale to original values
+                pipWrap.translate( pipTranslation.x, pipTranslation.y );
+                pipWrap.scale(pipScale.x, pipScale.y);
 
                 // return SVG element as a string
                 return svgString;
@@ -1747,7 +1751,6 @@ angular.module('registryApp.dyole')
                     );
 
                     this._zoomingFinish();
-                    
                     this.Event.trigger('pipeline:zoom', this.isZoomOutOfConstraint());
                 }
 

@@ -4,7 +4,13 @@
 'use strict';
 
 angular.module('registryApp.app')
-    .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$uibModal', '$templateCache', 'Loading', 'App', 'User', 'Repo', 'Const', 'BeforeRedirect', 'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload', 'Api', 'HotkeyRegistry', 'Notification', 'Cliche', function ($scope, $rootScope, $q, $modal, $templateCache, Loading, App, User, Repo, Const, BeforeRedirect, Helper, PipelineService, _, Globals, BeforeUnload, Api, HotkeyRegistry, Notification, Cliche) {
+    .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$uibModal',
+        '$location', '$templateCache',
+        'Loading', 'App', 'User', 'Repo', 'Const', 'BeforeRedirect',
+        'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload',
+        'Api', 'HotkeyRegistry', 'Notification', 'Cliche',
+
+        function ($scope, $rootScope, $q, $modal, $location, $templateCache, Loading, App, User, Repo, Const, BeforeRedirect, Helper, PipelineService, _, Globals, BeforeUnload, Api, HotkeyRegistry, Notification, Cliche) {
 
         var PipelineInstance = null,
             prompt = false,
@@ -246,7 +252,7 @@ angular.module('registryApp.app')
          */
         $scope.save = function () {
 
-            var rev;
+            var rev, workflowJson;
 
             if (!$scope.view.isChanged) {
                 Notification.error('Pipeline not updated: Graph has no changes.');
@@ -263,12 +269,13 @@ angular.module('registryApp.app')
             var workflow = PipelineInstance.format();
             // Saving SVG string before turning on Loader and removing SVG element from the DOM
             var svgString = PipelineInstance.getSvgString();
-            console.timeEnd('Workflow saving');
 
             $scope.view.loading = true;
 
             App.update(workflow, 'workflow')
                 .then(function (data) {
+
+                    workflowJson = data.message;
 
                     rev = data.message['sbg:revision'];
 
@@ -282,7 +289,21 @@ angular.module('registryApp.app')
                 .then(function (data) {
 
                     Notification.primary('Workflow successfully updated.');
-                    redirectTo(rev);
+
+                    $scope.view.workflow = workflowJson;
+
+                    if (history.pushState) {
+
+                        $location.search({ type: 'workflow', rev: null });
+                    }
+
+                    $scope.view.saving = false;
+                    $scope.view.loading = false;
+                    $scope.view.isChanged = false;
+                    prompt = false;
+
+                    console.timeEnd('Workflow saving');
+
                 })
                 .catch(function (trace) {
                     Notification.error('[Workflow Error] Workflow cannot be saved: ' + trace);
@@ -296,7 +317,7 @@ angular.module('registryApp.app')
             PipelineInstance.adjustSize($scope.view.showSidebar);
 
         };
-        
+
         $scope.onInputFileSet = function () {
             $scope.onWorkflowChange({value: true, isDisplay: false});
         };
@@ -589,6 +610,25 @@ angular.module('registryApp.app')
 
         };
         
+        $scope.workflowSettings = function () {
+            var modalInstance = $modal.open({
+                template: $templateCache.get('views/dyole/workflow-settings.html'),
+                controller: 'WorkflowSettingsCtrl',
+                resolve: { data: function () {
+                    return {
+                        hints: PipelineInstance.getWorkflowHints(),
+                        instances: Instances,
+                        requireSBGMetadata: PipelineInstance.getRequireSBGMetadata()
+                    };
+                }}
+            });
+
+            modalInstance.result.then(function (result) {
+                PipelineInstance.updateWorkflowSettings(result.hints, result.requireSBGMetadata);
+            });
+
+        };
+
         $scope.workflowSettings = function () {
             var modalInstance = $modal.open({
                 template: $templateCache.get('views/dyole/workflow-settings.html'),
