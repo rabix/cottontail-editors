@@ -38,15 +38,6 @@ angular.module('registryApp.dyole')
             // Will be used to check if any of the buttons needs disabling
             Pipeline.initZoom();
 
-            Pipeline.Event.subscribe('pipeline:zoom', function (zoomCaps) {
-
-                $scope.view.disableZoomIn = zoomCaps.zoomIn;
-                $scope.view.disableZoomOut = zoomCaps.zoomOut;
-
-                if (!$scope.$$phase && !$rootScope.$$phase) {
-                        $scope.$digest();
-                    }
-                });
         };
 
         if ($scope.pipeline){
@@ -210,6 +201,12 @@ angular.module('registryApp.dyole')
         var updateMetadata = function (metadata) {
             if (Pipeline) {
                 Pipeline.updateMetadata(metadata);
+            }
+        };
+
+        var getSvgString = function () {
+            if (Pipeline) {
+                return Pipeline.getSvgString();
             }
         };
 
@@ -383,6 +380,7 @@ angular.module('registryApp.dyole')
         ]);
 
         $scope.pipelineActions = {
+
             zoomIn: function () {
 
                 if (Pipeline) {
@@ -414,6 +412,7 @@ angular.module('registryApp.dyole')
                 adjustSize: adjustSize,
                 getEventObj: getEventObj,
                 updateMetadata: updateMetadata,
+                getSvgString: getSvgString,
                 onIncludeInPorts: onIncludeInPorts,
                 getWorkflowHints: getWorkflowHints,
                 getRequireSBGMetadata: getRequireSBGMetadata,

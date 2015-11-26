@@ -1751,7 +1751,6 @@ angular.module('registryApp.dyole')
                     );
 
                     this._zoomingFinish();
-
                     this.Event.trigger('pipeline:zoom', this.isZoomOutOfConstraint());
                 }
 

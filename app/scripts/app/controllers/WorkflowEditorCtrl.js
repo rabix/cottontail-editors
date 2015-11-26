@@ -609,6 +609,25 @@ angular.module('registryApp.app')
             });
 
         };
+        
+        $scope.workflowSettings = function () {
+            var modalInstance = $modal.open({
+                template: $templateCache.get('views/dyole/workflow-settings.html'),
+                controller: 'WorkflowSettingsCtrl',
+                resolve: { data: function () {
+                    return {
+                        hints: PipelineInstance.getWorkflowHints(),
+                        instances: Instances,
+                        requireSBGMetadata: PipelineInstance.getRequireSBGMetadata()
+                    };
+                }}
+            });
+
+            modalInstance.result.then(function (result) {
+                PipelineInstance.updateWorkflowSettings(result.hints, result.requireSBGMetadata);
+            });
+
+        };
 
         $scope.workflowSettings = function () {
             var modalInstance = $modal.open({

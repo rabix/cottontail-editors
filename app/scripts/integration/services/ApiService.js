@@ -33,9 +33,9 @@ angular.module('integration')
 
         var peon = Globals.apiUrls.peon;
 
-        self.apps = $resource(broodAppUrl + '/' + projectOwner + '/' + projectSlug + '/' + appName + '/:revision', {revision: '@revision'}, {
+        self.apps = $resource(broodAppUrl + '/' + projectOwner + '/' + projectSlug + '/' + appName + '/:revision/:svg', {revision: '@revision'}, {
             'post': {method: 'POST', headers: headers},
-            'update': {method: 'POST', headers: headers},
+            'update': {method: 'POST', headers: headers, params: {svg: '@svg'}},
             'get': {method: 'GET', headers: headers, params: {'_role': 'default'}},
             'delete': {method: 'DELETE', headers: headers}
         });
@@ -86,6 +86,8 @@ angular.module('integration')
         self.createAppTask = $resource(peon, {}, {
             'post': {method: 'POST', headers: headers}
         });
+
+        self.getValidInstances = $resource(Globals.base + '/valid-instance-types.json', {}, {});
 
         return self;
 
