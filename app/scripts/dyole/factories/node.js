@@ -5,7 +5,7 @@
 'use strict';
 
 angular.module('registryApp.dyole')
-    .factory('node', ['$rootScope', 'terminal', 'Const', 'common', 'lodash', 'Globals', function ($rootScope, Terminal, Const, Common, _, Globals) {
+    .factory('node', ['$rootScope', 'terminal', 'Const', 'common', 'Notification', 'lodash', 'Globals', function ($rootScope, Terminal, Const, Common, Notification, _, Globals) {
 
         var Node = function (options) {
             var _self = this;
@@ -140,6 +140,7 @@ angular.module('registryApp.dyole')
 
                 update: {
                     fill: '#ffffff',
+                    disabled: '#ccc',
 
                     image: {
                         name: 'icon-update.png',
@@ -683,8 +684,21 @@ angular.module('registryApp.dyole')
             },
             
             _updateNode: function () {
+
+                var updateButton = this.updateNodeButton;
+
+                if (updateButton.isDisabled()) {
+                    Notification.primary('Node is updating. Please, wait...');
+                    return;
+                }
+
                 // call update from Pipeline Instance
-                this.Pipeline.updateNodeSchema(this.model.id, this.model.x, this.model.y);
+                this.Pipeline.updateNodeSchema(this.model.id, this.model.x, this.model.y)
+                    .then(function () {
+                        updateButton.disable(false);
+                    });
+
+                updateButton.disable(true);
             },
 
             deselectAvailableTerminals: function () {

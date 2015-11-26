@@ -65,7 +65,8 @@ angular.module('registryApp.cliche')
         $scope.view.inputs = _.pluck(_.filter(Cliche.getTool().inputs, function(input) {
             var type = Cliche.parseType(input.type),
                 typeObj = Cliche.parseTypeObj(input.type);
-            return type === 'File' || (typeObj.items && typeObj.items === 'File');
+            //@todo: type rec[], rec. recursively check if has file type anywhere either in type, items, or fields
+            return type === 'File' || type === 'record' || (typeObj.items && typeObj.items === 'File') || (typeObj.items && typeObj.items.type === 'record');
         }), 'id');
 
 		if (!_.isEmpty($scope.view.inputs)) {
@@ -176,9 +177,26 @@ angular.module('registryApp.cliche')
 
             var formatted = Cliche.formatProperty(inner, $scope.view.property, 'output');
 
-	        if ($scope.view.label !== '') { formatted.label = $scope.view.label; }
-	        if ($scope.view.description !== '') { formatted.description = $scope.view.description; }
-	        if ($scope.view.fileTypes !== '') { formatted['sbg:fileTypes'] = $scope.view.fileTypes; }
+            /**
+             * Setting or deleting extra data
+             */
+            if ($scope.view.label !== '') {
+                formatted.label = $scope.view.label;
+            } else {
+                delete formatted.label;
+            }
+
+            if ($scope.view.description !== '') {
+                formatted.description = $scope.view.description;
+            } else {
+                delete formatted.description;
+            }
+
+            if ($scope.view.fileTypes !== '') {
+                formatted['sbg:fileTypes'] = $scope.view.fileTypes;
+            } else {
+                delete formatted['sbg:fileTypes'];
+            }
 
 	        idObj.n = $scope.view.name;
 
