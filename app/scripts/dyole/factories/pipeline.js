@@ -256,6 +256,28 @@ angular.module('registryApp.dyole')
                     });
                 });
 
+                /**
+                 * Attach listener for mouse scroll on canvas element.
+                 * Using mouse scroll + CTRL/CMD to zoom in/out.
+                 * wheel event is supported by all browsers
+                 */
+                $canvasArea[0].addEventListener('wheel', function (e) {
+
+                    if (e.ctrlKey) {
+
+                        e.preventDefault();
+                        e.stopPropagation();
+                        e.stopImmediatePropagation();
+
+                        if (e.deltaY > 0) {
+                            _self.zoomOut();
+                        }
+                        else if (e.deltaY < 0) {
+                            _self.zoomIn();
+                        }
+                    }
+                });
+
                 $('body').on('mouseup', function (e) {
 
                     _.each(_self.nodes, function (node) {
@@ -1042,7 +1064,7 @@ angular.module('registryApp.dyole')
                 var node = this.getNodeById(nodeId),
                     nodeModel = node.model,
                     oldLabel = nodeModel.label;
-                
+
                 var portIncludedInputs = _.filter(node.model.inputs, function (inp) {
                     return inp['sbg:includeInPorts'];
                 });
@@ -1373,7 +1395,7 @@ angular.module('registryApp.dyole')
                                 }
 
                             });
-                            
+
                         }
 
                     });
@@ -1382,7 +1404,7 @@ angular.module('registryApp.dyole')
                 }, function (err) {
                     console.error(err);
                 });
-                  
+
             },
 
             _fixTrailingSlash: function (url) {
@@ -1504,6 +1526,58 @@ angular.module('registryApp.dyole')
                 this.Event.trigger('pipeline:change', true);
 
                 return _mergeSBGProps(metadata, this.model);
+            },
+
+            /**
+             * Return SVG element converted to string.
+             * @returns {string}
+             */
+            getSvgString: function () {
+
+                var tempSvgContainer = $('<div></div>'), // create temporary DIV element that will contain SVG
+                    pipWrap = this.pipelineWrap,
+                    scale = 1,
+                    pipTranslation, pipScale, pipBBox, canvas, canvasStyle, svgString;
+
+                // keep pipeline translation factor for restoring it
+                pipTranslation = pipWrap.getTranslation();
+
+                // keep pipeline scale factor for later use
+                pipScale = pipWrap.getScale();
+
+                // scale pipeline to 1 scale factor
+                pipWrap.scale(scale, scale);
+
+                // get pipeline element's bounding box
+                // NOTE: SVG element needs to be in DOM for this function to return proper result
+                pipBBox = pipWrap.getElementBBox();
+
+                // create RaphaelJS SVG canvas, and put it into temporary DIV created above
+                canvas = new Raphael(tempSvgContainer[0], Math.round(pipBBox.width * scale), Math.round(pipBBox.height * scale) );
+
+                // remove default style properties
+                canvasStyle = canvas.canvas.style;
+                canvasStyle.removeProperty('position');
+                canvasStyle.setProperty('overflow', 'scroll');
+
+                // Setting ID to the pipeline wrapp element so it can be easier to fetch later
+                pipWrap.node.setAttribute('id', 'pipeline-wrapper-node');
+
+                //  translate pipeline to (minX, minY) coordinates using most left and most right nodes
+                pipWrap.translate( -Math.round(pipBBox.x * scale), -Math.round(pipBBox.y * scale) );
+
+                // Add pipeline node to newly created SVG canvas
+                canvas.canvas.appendChild(pipWrap.node.cloneNode());
+
+                // get SVG string from the temporary canvas container
+                svgString = tempSvgContainer.html();
+
+                // reset workflow's position and scale to original values
+                pipWrap.translate( pipTranslation.x, pipTranslation.y );
+                pipWrap.scale(pipScale.x, pipScale.y);
+
+                // return SVG element as a string
+                return svgString;
             },
 
             updateNodePorts: function (nodeId, inputId, value) {
@@ -1677,6 +1751,8 @@ angular.module('registryApp.dyole')
                     );
 
                     this._zoomingFinish();
+
+                    this.Event.trigger('pipeline:zoom', this.isZoomOutOfConstraint());
                 }
 
                 return this.currentScale;
@@ -1711,6 +1787,8 @@ angular.module('registryApp.dyole')
                     );
 
                     this._zoomingFinish();
+
+                    this.Event.trigger('pipeline:zoom', this.isZoomOutOfConstraint());
                 }
 
                 return this.currentScale;

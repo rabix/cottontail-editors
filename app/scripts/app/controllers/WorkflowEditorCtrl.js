@@ -4,7 +4,13 @@
 'use strict';
 
 angular.module('registryApp.app')
-    .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$uibModal', '$templateCache', 'Loading', 'App', 'User', 'Repo', 'Const', 'BeforeRedirect', 'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload', 'Api', 'HotkeyRegistry', 'Notification', 'Cliche', function ($scope, $rootScope, $q, $modal, $templateCache, Loading, App, User, Repo, Const, BeforeRedirect, Helper, PipelineService, _, Globals, BeforeUnload, Api, HotkeyRegistry, Notification, Cliche) {
+    .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$uibModal',
+        '$location', '$templateCache',
+        'Loading', 'App', 'User', 'Repo', 'Const', 'BeforeRedirect',
+        'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload',
+        'Api', 'HotkeyRegistry', 'Notification', 'Cliche',
+
+        function ($scope, $rootScope, $q, $modal, $location, $templateCache, Loading, App, User, Repo, Const, BeforeRedirect, Helper, PipelineService, _, Globals, BeforeUnload, Api, HotkeyRegistry, Notification, Cliche) {
 
         var PipelineInstance = null,
             prompt = false,
@@ -13,7 +19,8 @@ angular.module('registryApp.app')
                 return 'Please save your changes before leaving.';
             }, function () {
                 return prompt
-            });
+            }),
+            Instances = [];
 
         $scope.$on('pipeline:change', function () {
             prompt = true;
@@ -150,6 +157,7 @@ angular.module('registryApp.app')
 
         });
 
+
         /**
          * Callback when apps are loaded
          *
@@ -174,6 +182,8 @@ angular.module('registryApp.app')
 
             }
 
+            Instances = result[3].message;
+
             $scope.view.loading = false;
         };
 
@@ -185,7 +195,8 @@ angular.module('registryApp.app')
         $q.all([
             App.getMineAppsByProject(),
             App.getPublicAppsByProject(),
-            App.get()
+            App.get(),
+            App.getValidInstances()
         ]).then(appsLoaded);
 
         /**
@@ -241,22 +252,58 @@ angular.module('registryApp.app')
          */
         $scope.save = function () {
 
+            var rev, workflowJson;
+
             if (!$scope.view.isChanged) {
                 Notification.error('Pipeline not updated: Graph has no changes.');
                 return;
             }
 
             BeforeRedirect.setReload(true);
+
+
             $scope.view.saving = true;
+
+            console.time('Workflow saving');
+            // Saving workflow before fiddling with it's coorindates
+            var workflow = PipelineInstance.format();
+            // Saving SVG string before turning on Loader and removing SVG element from the DOM
+            var svgString = PipelineInstance.getSvgString();
+
             $scope.view.loading = true;
 
-
-            var workflow = PipelineInstance.format();
             App.update(workflow, 'workflow')
                 .then(function (data) {
-                    var rev = data.message['sbg:revision'];
+
+                    workflowJson = data.message;
+
+                    rev = data.message['sbg:revision'];
+
+                    if (_.isString(svgString)) {
+                        return App.updateSvg(rev, svgString);
+                    }
+                    else {
+                        return data;
+                    }
+                })
+                .then(function (data) {
+
                     Notification.primary('Workflow successfully updated.');
-                    redirectTo(rev);
+
+                    $scope.view.workflow = workflowJson;
+
+                    if (history.pushState) {
+
+                        $location.search({ type: 'workflow', rev: null });
+                    }
+
+                    $scope.view.saving = false;
+                    $scope.view.loading = false;
+                    $scope.view.isChanged = false;
+                    prompt = false;
+
+                    console.timeEnd('Workflow saving');
+
                 })
                 .catch(function (trace) {
                     Notification.error('[Workflow Error] Workflow cannot be saved: ' + trace);
@@ -270,7 +317,7 @@ angular.module('registryApp.app')
             PipelineInstance.adjustSize($scope.view.showSidebar);
 
         };
-        
+
         $scope.onInputFileSet = function () {
             $scope.onWorkflowChange({value: true, isDisplay: false});
         };
@@ -559,6 +606,25 @@ angular.module('registryApp.app')
                     $scope.view.workflow = json;
                     $scope.view.isChanged = true;
                 }
+            });
+
+        };
+
+        $scope.workflowSettings = function () {
+            var modalInstance = $modal.open({
+                template: $templateCache.get('views/dyole/workflow-settings.html'),
+                controller: 'WorkflowSettingsCtrl',
+                resolve: { data: function () {
+                    return {
+                        hints: PipelineInstance.getWorkflowHints(),
+                        instances: Instances,
+                        requireSBGMetadata: PipelineInstance.getRequireSBGMetadata()
+                    };
+                }}
+            });
+
+            modalInstance.result.then(function (result) {
+                PipelineInstance.updateWorkflowSettings(result.hints, result.requireSBGMetadata);
             });
 
         };

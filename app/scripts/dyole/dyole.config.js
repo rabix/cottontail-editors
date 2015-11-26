@@ -11,5 +11,13 @@ angular.module('registryApp.dyole', ['registryApp.app', 'ui.bootstrap', 'ui.sort
 		exposedSeparator: '$',
         generalSeparator: '.'
 	})
-	.config([function() {
-	}]);
+	.config([
+        "$locationProvider", function($locationProvider) {
+            if (history.pushState) {
+                $locationProvider.html5Mode({
+                    enabled: true,
+                    requireBase: false
+                });
+            }
+        }
+    ]);
