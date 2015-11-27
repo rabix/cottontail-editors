@@ -182,7 +182,7 @@ angular.module('registryApp.app')
 
             }
 
-            Instances = result[3].message;
+            Instances = result[3];
 
             $scope.view.loading = false;
         };

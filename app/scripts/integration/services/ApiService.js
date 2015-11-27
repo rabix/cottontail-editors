@@ -87,7 +87,11 @@ angular.module('integration')
             'post': {method: 'POST', headers: headers}
         });
 
-        self.getValidInstances = $resource(Globals.base + '/valid-instance-types.json', {}, {});
+        self.getValidInstances = $resource(Globals.apiUrls.manaus + '/packages/instanceTypes.json?bust=' + Date.now(), {}, {
+            get: {
+                isArray: true
+            }
+        });
 
         return self;
 
