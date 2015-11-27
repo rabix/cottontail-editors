@@ -33,8 +33,8 @@
 
             <div class="col-md-4" ng-if="view.type === 'array'">
                 <div class="form-group">
-                    <label class="control-label">Item Type <help-message message="help.cliche.inputs.type"></help-message></label>
-                    <select class="form-control" id="item-type" name="itemType" ng-model="view.itemsType" ng-options="option for option in view.itemTypes"></select>
+                    <label class="control-label" for="item_type">Item Type <help-message message="help.cliche.inputs.type"></help-message></label>
+                    <select class="form-control" id="item_type" name="itemType" ng-model="view.itemsType" ng-options="option for option in view.itemTypes"></select>
                 </div>
             </div>
             <!-- END Item Type -->
@@ -69,16 +69,9 @@
                 </div>
             </div>
             <!-- END Description -->
-
-            <div class="col-md-4">
-                <button class="btn-link mg-top-25" type="button" ng-click="toggleMoreInfo()" uib-tooltip="Show more Additional information fields">
-                    {{ view.showMore ? 'Show Less...' : 'Show More...' }}
-                </button>
-            </div>
-
         </div>
 
-        <div class="row" ng-show="view.showMore">
+        <div class="row">
 
             <div class="col-md-4">
                 <div class="form-group" ng-class="{'has-error': (view.form.altPrefix.$invalid && view.form.$dirty)}">
@@ -88,14 +81,6 @@
             </div>
             <!-- END Alt Prefix -->
 
-            <div class="col-md-4" ng-show="!isFileType">
-                <div class="form-group" ng-class="{'has-error': (view.form.toolDefaultValue.$invalid && view.form.$dirty)}">
-                    <label class="control-label" for="tool_default_value">Tool Default</label>
-                    <input uib-tooltip="{{ ::help.cliche.inputs.toolDefaultValue }}" tooltip-trigger="focus" type="text" class="form-control" id="tool_default_value" name="toolDefaultValue" ng-model="view.toolDefaultValue">
-                </div>
-            </div>
-            <!-- END Category -->
-
 
             <div class="col-md-4">
                 <div class="form-group" ng-class="{'has-error': (view.form.category.$invalid && view.form.$dirty)}">
@@ -104,6 +89,14 @@
                 </div>
             </div>
             <!-- END Category -->
+
+            <div class="col-md-4" ng-show="!isFileType">
+                <div class="form-group" ng-class="{'has-error': (view.form.toolDefaultValue.$invalid && view.form.$dirty)}">
+                    <label class="control-label" for="tool_default_value">Tool Default</label>
+                    <input uib-tooltip="{{ ::help.cliche.inputs.toolDefaultValue }}" tooltip-trigger="focus" type="text" class="form-control" id="tool_default_value" name="toolDefaultValue" ng-model="view.toolDefaultValue">
+                </div>
+            </div>
+            <!-- END Tool Default -->
 
             <div class="col-md-4" ng-show="isFileType">
                 <div class="form-group" ng-class="{'has-error': (view.form.fileTypes.$invalid && view.form.$dirty)}">
@@ -142,7 +135,8 @@
 
         <h3 class="legend-small">
             <label class="checkbox inline">
-                <input type="checkbox" ng-model="view.adapter" ng-change="toggleAdapter()" ng-disabled="view.disabledAll"> Include in command line
+                <input type="checkbox" ng-model="view.adapter" ng-change="toggleAdapter()" ng-disabled="view.disabledAll">
+                Include in command line
             </label>
         </h3>
 

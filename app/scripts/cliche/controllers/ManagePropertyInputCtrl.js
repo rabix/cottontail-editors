@@ -96,7 +96,6 @@ angular.module('registryApp.cliche')
 			$scope.view[field.name] = $scope.view.property[prefix + field.name] || '';
 		});
 
-		$scope.view.showMore = false;
 		$scope.isFileType = $scope.view.type === 'File' || $scope.view.itemsType === 'File';
 
         idObj.o = $scope.view.name;
@@ -336,10 +335,6 @@ angular.module('registryApp.cliche')
                 delete $scope.view.property.inputBinding.secondaryFiles;
             }
         };
-
-		$scope.toggleMoreInfo = function () {
-			$scope.view.showMore = !$scope.view.showMore;
-		};
 
         /**
          * Dismiss modal
