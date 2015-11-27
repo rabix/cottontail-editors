@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('ClicheCtrl', ['$scope', '$q', '$uibModal', '$templateCache', '$rootScope', 'App', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload', 'BeforeRedirect', 'Api', 'User', 'lodash', 'HelpMessages', 'Globals', 'HotkeyRegistry', 'Notification', 'rawTool', 'Helper', 'ClicheEvents','$timeout', function($scope, $q, $modal, $templateCache, $rootScope, App, Cliche, Loading, SandBox, BeforeUnload, BeforeRedirect, Api, User, _, HelpMessages, Globals, HotkeyRegistry, Notification, rawTool, Helper, ClicheEvents, $timeout) {
+    .controller('ClicheCtrl', ['$scope', '$q', '$uibModal', '$templateCache', '$rootScope', 'App', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload', 'BeforeRedirect', 'Api', 'User', 'lodash', 'HelpMessages', 'Globals', 'HotkeyRegistry', 'Notification', 'rawTool', 'Helper', 'ClicheEvents', function($scope, $q, $modal, $templateCache, $rootScope, App, Cliche, Loading, SandBox, BeforeUnload, BeforeRedirect, Api, User, _, HelpMessages, Globals, HotkeyRegistry, Notification, rawTool, Helper, ClicheEvents) {
         $scope.Loading = Loading;
 
         var cliAdapterWatchers = [],
@@ -20,6 +20,8 @@ angular.module('registryApp.cliche')
                 function() {
                     return $scope.form.tool.$dirty
                 });
+
+        // <editor-fold desc="Local $scope variables">
 
         $scope.view = {};
         $scope.form = {};
@@ -79,6 +81,8 @@ angular.module('registryApp.cliche')
 
         /* help messages */
         $scope.help = HelpMessages;
+
+        // </editor-fold>
 
         Loading.setClasses($scope.view.classes);
 
@@ -494,15 +498,13 @@ angular.module('registryApp.cliche')
             });
 
             modalInstance.result.then(function () {
-                var preserve = $scope.view.mode === 'new';
-
                 $scope.view.loading = true;
 
                 $scope.view.tab = 'general';
 
                 var cachedName = $scope.view.tool.label;
 
-                Cliche.flush(preserve, $scope.view.type, cachedName)
+                Cliche.flush($scope.view.type, cachedName)
                     .then(function() {
 
                         $scope.view.loading = false;
@@ -885,14 +887,8 @@ angular.module('registryApp.cliche')
 
             });
 
-            modalInstance.result.then(function(data) {
-
+            modalInstance.result.then(function() {
                 $scope.view.loading = true;
-
-                var repoId = data.repoId,
-                    tool = Cliche.getTool(),
-                    job = Cliche.getJob();
-
             });
 
         };
@@ -949,25 +945,30 @@ angular.module('registryApp.cliche')
 	        removeEmptyFields(tool);
             tool['sbg:job'] = Cliche.getJob();
 
-            App.update(tool, $scope.view.type)
-                .then(function(result) {
-                    $scope.view.loading = false;
+            Cliche.generatePreviewCommand().then(function(previewCommand) {
+                tool['sbg:cmdPreview'] = previewCommand;
 
-                    var newRevision = result.message['sbg:revision'];
-                    BeforeRedirect.setReload(true);
-                    $scope.form.tool.$dirty = false;
-                    Notification.primary('Tool successfully updated');
+                App.update(tool, $scope.view.type)
+                    .then(function(result) {
+                        $scope.view.loading = false;
 
-                    redirectTo(newRevision);
-                    $scope.view.loading = true;
+                        var newRevision = result.message['sbg:revision'];
+                        BeforeRedirect.setReload(true);
+                        $scope.form.tool.$dirty = false;
+                        Notification.primary('Tool successfully updated');
 
-                    deferred.resolve();
+                        redirectTo(newRevision);
+                        $scope.view.loading = true;
 
-                }, function (error) {
-                    $scope.view.loading = false;
-                    $rootScope.$broadcast('httpError', {message: error});
-                    deferred.reject();
-                });
+                        deferred.resolve();
+
+                    }, function (error) {
+                        $scope.view.loading = false;
+                        $rootScope.$broadcast('httpError', {message: error});
+                        deferred.reject();
+                    });
+            });
+
 
             return deferred.promise;
 
