@@ -13,24 +13,26 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group" ng-class="{'has-error': form.job.arCpu.$invalid}">
-                            <label class="control-label">CPU</label>
-                            <input type="{{ view.reqCpuRequirement.value.value ? 'text' : 'number' }}"
+                            <label for="allocated_memory_resource" class="control-label">CPU</label>
+                            <input id="allocated_memory_resource"
+                                   type="{{ view.reqCpuRequirement.value.script ? 'text' : 'number' }}"
                                    class="form-control"
                                    name="arCpu"
                                    ng-model="view.job.allocatedResources.cpu"
-                                   ng-readonly="view.reqCpuRequirement.value.value"
-                                   min="{{ view.reqCpuRequirement.value.value ? 0 : view.reqCpuRequirement.value }}">
+                                   ng-readonly="view.reqCpuRequirement.value.script"
+                                   min="{{ view.reqCpuRequirement.value.script ? 0 : view.reqCpuRequirement.value }}">
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group" ng-class="{'has-error': form.job.arMem.$invalid}">
-                            <label class="control-label">Memory</label>
-                            <input type="{{ view.reqMemRequirement.value.value ? 'text' : 'number' }}"
+                            <label for="allocated_cpu_resource" class="control-label">Memory</label>
+                            <input id="allocated_cpu_resource"
+                                   type="{{ view.reqMemRequirement.value.script ? 'text' : 'number' }}"
                                    class="form-control"
                                    name="arMem"
                                    ng-model="view.job.allocatedResources.mem"
-                                   ng-readonly="view.reqMemRequirement.value.value"
-                                   min="{{ view.reqMemRequirement.value.value ? 0 : view.reqMemRequirement.value }}">
+                                   ng-readonly="view.reqMemRequirement.value.script"
+                                   min="{{ view.reqMemRequirement.value.script ? 0 : view.reqMemRequirement.value }}">
                         </div>
                     </div>
                 </div>

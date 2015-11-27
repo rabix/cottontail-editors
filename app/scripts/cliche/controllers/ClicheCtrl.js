@@ -310,6 +310,9 @@ angular.module('registryApp.cliche')
                 jobWatcher = $scope.$watch('view.job.inputs', function(n, o) {
                     if (n !== o) {
                         checkRequirements();
+                        $scope.updateResource($scope.view.reqMemRequirement.value, 'MemRequirement');
+                        $scope.updateResource($scope.view.reqCPURequirement.value, 'CPURequirement');
+
                         if ($scope.view.isConsoleVisible) {
                             $scope.view.generatingCommand = true;
                             debouncedGenerateCommand();
@@ -633,6 +636,7 @@ angular.module('registryApp.cliche')
 
         /**
          * Initiate command generating
+         *
          */
         $scope.generateCommand = function() {
             Cliche.generateCommand()
