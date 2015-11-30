@@ -290,20 +290,25 @@ angular.module('registryApp.app')
 
                     Notification.primary('Workflow successfully updated.');
 
-                    $scope.view.workflow = workflowJson;
 
-                    if (history.pushState) {
 
-                        $location.search({ type: 'workflow', rev: null });
-                    }
+                    //$scope.view.workflow = workflowJson;
 
-                    $scope.view.saving = false;
-                    $scope.view.loading = false;
-                    $scope.view.isChanged = false;
+                    //if (history.pushState) {
+                    //
+                    //    $location.search({ type: 'workflow', rev: null });
+                    //}
+
+                    //$scope.view.saving = false;
+                    //$scope.view.loading = false;
+                    //$scope.view.isChanged = false;
                     prompt = false;
 
                     console.timeEnd('Workflow saving');
 
+                    /* @todo: workflow could not be saved more than once with reload
+                     turned off. This is a temporary fix until we get the no-reload feature sorted */
+                    redirectTo(rev);
                 })
                 .catch(function (trace) {
                     Notification.error('[Workflow Error] Workflow cannot be saved: ' + trace);
