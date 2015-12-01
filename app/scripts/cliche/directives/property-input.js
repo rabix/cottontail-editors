@@ -254,26 +254,24 @@ angular.module('registryApp.cliche')
                 // RecursionHelper.compile() takes the element and a link function
                 return RecursionHelper.compile(element, function (scope, element, attr, ngModelCtrl) {
                     var originalPristineStatus;
+
                     scope.setDirty = function () {
 
                         if (ngModelCtrl) {
                             if (typeof originalPristineStatus === 'undefined') {
-                                originalPristineStatus = ngModelCtrl.$$parentForm.$pristine;
-                                console.log('originalPristineStatus', originalPristineStatus);
+                                // ngModel parent = inputs, inputs parent = form.tool
+                                originalPristineStatus = ngModelCtrl.$$parentForm.$$parentForm.$pristine;
                             }
-
-                            console.log('setting to dirty');
                             ngModelCtrl.$setDirty();
                         }
                     };
 
                     scope.setPristine = function () {
                         // will not set form to pristine if it was not so originally
-                        console.log('checking if was pristine');
                         if (ngModelCtrl && originalPristineStatus) {
-                            console.log('setting to pristine');
+                            // ngModel -> inputs form -> tool form
+                            ngModelCtrl.$$parentForm.$$parentForm.$setPristine();
                             ngModelCtrl.$setPristine();
-                            ngModelCtrl.$$parentForm.$setPristine();
                         }
                     };
                 });

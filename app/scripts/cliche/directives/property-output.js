@@ -160,9 +160,25 @@ angular.module('registryApp.cliche')
             require: '?ngModel',
             controller: 'PropertyOutputCtrl',
             link: function (scope, element, attr, ngModelCtrl) {
+                var originalPristineStatus;
+
                 scope.setDirty = function () {
+
                     if (ngModelCtrl) {
+                        if (typeof originalPristineStatus === 'undefined') {
+                            // ngModel parent = outputs, outputs parent = form.tool
+                            originalPristineStatus = ngModelCtrl.$$parentForm.$$parentForm.$pristine;
+                        }
                         ngModelCtrl.$setDirty();
+                    }
+                };
+
+                scope.setPristine = function () {
+                    // will not set form to pristine if it was not so originally
+                    if (ngModelCtrl && originalPristineStatus) {
+                        // ngModel -> outputs form -> tool form
+                        ngModelCtrl.$$parentForm.$$parentForm.$setPristine();
+                        ngModelCtrl.$setPristine();
                     }
                 };
             }

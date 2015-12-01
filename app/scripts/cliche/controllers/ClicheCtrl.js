@@ -593,24 +593,9 @@ angular.module('registryApp.cliche')
 
         /**
          * Run app
+         * Will prompt for permission first if form is dirty
          */
         $scope.runApp = function () {
-
-            var modalInstance = $modal.open({
-                controller: 'ModalCtrl',
-                template: $templateCache.get('views/partials/confirm-delete.html'),
-                resolve: { data: function () {
-                    return {
-                        message: 'Run will discard unsaved changes, are you sure you want to perform this action?'
-                    }; }
-                }
-            });
-
-            modalInstance.result.then(function () {
-                createTask();
-            }, function () {
-                return false;
-            });
 
             function createTask() {
                 // create task and redirect to task page for that task
@@ -623,6 +608,28 @@ angular.module('registryApp.cliche')
                 });
             }
 
+            if (!$scope.form.tool.$dirty) {
+                createTask();
+            } else {
+                var modalInstance = $modal.open({
+                    controller: 'ModalCtrl',
+                    template: $templateCache.get('views/partials/confirm-delete.html'),
+                    resolve: {
+                        data: function () {
+                            return {
+                                message: 'There are unsaved changes, running the app will discard them.' +
+                                ' Are you sure you want to perform this action?'
+                            };
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function () {
+                    createTask();
+                }, function () {
+                    return false;
+                });
+            }
         };
 
 
