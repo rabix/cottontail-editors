@@ -38,8 +38,6 @@ angular.module('registryApp.cliche')
 
             var tplType = Cliche.getTplType($scope.view.type);
 
-
-            //$scope.view.tpl = 'views/cliche/property/property-output-' + $scope.type + '-' + tplType  + '.html';
             $scope.view.tpl = 'views/cliche/property/property-output-tool-' + tplType  + '.html';
         };
 
@@ -81,7 +79,7 @@ angular.module('registryApp.cliche')
         $scope.edit = function() {
 
             var modalInstance = $modal.open({
-                template: $templateCache.get('views/cliche/manage/' + $scope.type + '-output.html'),
+                template: $templateCache.get('views/cliche/manage/tool-output.html'),
                 controller: 'ManagePropertyOutputCtrl',
                 windowClass: 'modal-prop',
                 size: 'lg',
@@ -101,13 +99,19 @@ angular.module('registryApp.cliche')
 
             modalInstance.result.then(function(result) {
 
-                Cliche.copyPropertyParams(result.prop, $scope.prop);
+                // checking if they are equal rather than the $dirty/$validity of the form
+                // because not all form elements inside the modal will change the form correctly
+                if (result.prop !== $scope.prop) {
 
-                parseStructure();
-                checkExpression();
+                    Cliche.copyPropertyParams(result.prop, $scope.prop);
 
-                Cliche.generateCommand();
+                    parseStructure();
+                    checkExpression();
 
+                    Cliche.generateCommand();
+
+                    $scope.setDirty();
+                }
             });
 
         };
@@ -127,6 +131,7 @@ angular.module('registryApp.cliche')
             modalInstance.result.then(function () {
                 Cliche.deleteProperty($scope.key, $scope.view.name, $scope.properties);
                 Cliche.generateCommand();
+                $scope.setDirty();
             });
         };
 
@@ -152,7 +157,30 @@ angular.module('registryApp.cliche')
                 prop: '=ngModel',
                 properties: '='
             },
+            require: '?ngModel',
             controller: 'PropertyOutputCtrl',
-            link: function() {}
+            link: function (scope, element, attr, ngModelCtrl) {
+                var originalPristineStatus;
+
+                scope.setDirty = function () {
+
+                    if (ngModelCtrl) {
+                        if (typeof originalPristineStatus === 'undefined') {
+                            // ngModel parent = outputs, outputs parent = form.tool
+                            originalPristineStatus = ngModelCtrl.$$parentForm.$$parentForm.$pristine;
+                        }
+                        ngModelCtrl.$setDirty();
+                    }
+                };
+
+                scope.setPristine = function () {
+                    // will not set form to pristine if it was not so originally
+                    if (ngModelCtrl && originalPristineStatus) {
+                        // ngModel -> outputs form -> tool form
+                        ngModelCtrl.$$parentForm.$$parentForm.$setPristine();
+                        ngModelCtrl.$setPristine();
+                    }
+                };
+            }
         };
     }]);

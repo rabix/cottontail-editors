@@ -57,7 +57,9 @@ angular.module('registryApp.cliche')
          */
         var checkExpression = function () {
 
-            if ($scope.view.property.inputBinding && $scope.view.property.inputBinding.valueFrom && $scope.view.property.inputBinding.valueFrom.value) {
+            if ($scope.view.property.inputBinding &&
+                $scope.view.property.inputBinding.valueFrom &&
+                $scope.view.property.inputBinding.valueFrom.value) {
 
                 var itemType = Cliche.getItemsType($scope.view.items);
                 var self = {$self: Helper.getTestData($scope.view.type, itemType)};
@@ -137,9 +139,10 @@ angular.module('registryApp.cliche')
          * Edit property
          */
         $scope.edit = function() {
+            $scope.setDirty();
 
             var modalInstance = $modal.open({
-                template: $templateCache.get('views/cliche/manage/' + $scope.type + '-input.html'),
+                template: $templateCache.get('views/cliche/manage/tool-input.html'),
                 controller: 'ManagePropertyInputCtrl',
                 windowClass: 'modal-prop',
                 size: 'lg',
@@ -156,25 +159,31 @@ angular.module('registryApp.cliche')
                 }
             });
 
-            modalInstance.result.then(function(result) {
+            modalInstance.result.then(function (result) {
 
                 var oldName = $scope.view.name;
 	            var oldType = $scope.view.type;
 
-                Cliche.copyPropertyParams(result.prop, $scope.prop);
+                // checking if they are equal rather than the $dirty/$validity of the form
+                // because not all form elements inside the modal will change the form correctly
+                if ($scope.prop !== result.prop) {
+                    Cliche.copyPropertyParams(result.prop, $scope.prop);
 
-                parseStructure();
-                checkExpression();
+                    parseStructure();
+                    checkExpression();
 
-                adjustInputs('change', oldName, $scope.view.name);
-                updateDefaultValue(result, oldType);
+                    adjustInputs('change', oldName, $scope.view.name);
+                    updateDefaultValue(result, oldType);
 
-                $scope.handler();
+                    $scope.handler();
 
-                Cliche.generateCommand();
-
+                    Cliche.generateCommand();
+                } else {
+                    $scope.setPristine();
+                }
+            }, function () {
+                $scope.setPristine();
             });
-
         };
 
         /**
@@ -198,7 +207,7 @@ angular.module('registryApp.cliche')
                 $scope.handler();
 
                 Cliche.generateCommand();
-
+                $scope.setDirty();
             });
         };
 
@@ -225,8 +234,6 @@ angular.module('registryApp.cliche')
 			return position;
 		};
 
-
-
 	}])
     .directive('propertyInput', ['$templateCache', 'RecursionHelper', function ($templateCache, RecursionHelper) {
 
@@ -241,9 +248,33 @@ angular.module('registryApp.cliche')
                 inputs: '=',
                 handler: '&'
             },
+            require: '?ngModel',
             controller: 'PropertyInputCtrl',
             compile: function(element) {
-                return RecursionHelper.compile(element, function() {});
+                // RecursionHelper.compile() takes the element and a link function
+                return RecursionHelper.compile(element, function (scope, element, attr, ngModelCtrl) {
+                    var originalPristineStatus;
+
+                    scope.setDirty = function () {
+
+                        if (ngModelCtrl) {
+                            if (typeof originalPristineStatus === 'undefined') {
+                                // ngModel parent = inputs, inputs parent = form.tool
+                                originalPristineStatus = ngModelCtrl.$$parentForm.$$parentForm.$pristine;
+                            }
+                            ngModelCtrl.$setDirty();
+                        }
+                    };
+
+                    scope.setPristine = function () {
+                        // will not set form to pristine if it was not so originally
+                        if (ngModelCtrl && originalPristineStatus) {
+                            // ngModel -> inputs form -> tool form
+                            ngModelCtrl.$$parentForm.$$parentForm.$setPristine();
+                            ngModelCtrl.$setPristine();
+                        }
+                    };
+                });
             }
         };
     }]);

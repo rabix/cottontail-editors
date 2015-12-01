@@ -34,14 +34,23 @@
                 <a href ng-click="changeRevision()" target="_self">
                     {{ ::view.tool['sbg:revision'] }}
                 </a>
+
             </span>
         </div>
+
+        <strong class="changes-mark"
+                ng-if="form.tool.$dirty"
+                uib-tooltip="There are changes in your tool"
+                tooltip-placement="right">
+            <i class="fa fa-asterisk"></i>
+        </strong>
+
         <div class="actions pull-right">
 
             <button type="submit"
                     ng-click="updateTool()"
                     ng-if="view.user && view.user.id === view.app.user._id"
-                    ng-disabled="view.saving"
+                    ng-disabled="view.saving || !form.tool.$dirty"
                     class="app-save-btn btn btn-default">
                 <i class="fa fa-save"></i> Save
             </button>
@@ -55,7 +64,10 @@
                 </button>
                 <ul class="dropdown-menu" role="menu">
                     <li>
-                        <a href ng-click="toolSettings()"><i class="fa fa-cog"></i> <span>Settings</span></a>
+                        <a href ng-click="toolSettings()">
+                            <i class="fa fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
                     </li>
 
                     <li>

@@ -7,7 +7,8 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('AddPropertyCtrl', ['$scope', '$uibModal', '$templateCache', 'Cliche', 'Helper', function ($scope, $modal, $templateCache, Cliche, Helper) {
+    .controller('AddPropertyCtrl', ['$scope', '$uibModal', '$templateCache', 'Cliche', 'Helper', 'lodash',
+        function ($scope, $modal, $templateCache, Cliche, Helper, _) {
 
         $scope.view = {};
         $scope.view.tooltipMsg = $scope.tooltipMsg || '';
@@ -45,7 +46,7 @@ angular.module('registryApp.cliche')
                 /* set default value for the input, but only for the first level */
                 if ($scope.type === 'input' && $scope.inputs) {
 
-                    var name = result.prop['id'].slice(1);
+                    var name = result.prop.id.slice(1);
                     var schema = result.prop.type;
                     var typeObj = schema[0] === 'null' ? schema[1] : schema[0]; //in case property is not required
                     var enumObj = Cliche.parseEnum(typeObj);
@@ -59,12 +60,12 @@ angular.module('registryApp.cliche')
                     $scope.inputs[name] = Helper.getDefaultInputValue(name, enumObj.symbols, type, itemType);
                 }
 
-                if (typeof $scope.handler === 'function') { $scope.handler(); }
-
-                if ($scope.toolType === 'tool') {
-                    Cliche.generateCommand();
+                if (_.isFunction($scope.handler)) {
+                    $scope.handler();
                 }
 
+                Cliche.generateCommand();
+                $scope.setDirty();
             });
 
             return modalInstance;
@@ -84,9 +85,17 @@ angular.module('registryApp.cliche')
                 toolType: '@',
                 properties: '=',
                 inputs: '=?',
-                handler: '&'
+                handler: '&',
+                ngModel: '=?'
             },
+            require: '?ngModel',
             controller: 'AddPropertyCtrl',
-            link: function() {}
+            link: function (scope, element, attr, ngModelCtrl) {
+                scope.setDirty = function () {
+                    if (ngModelCtrl) {
+                        ngModelCtrl.$setDirty();
+                    }
+                };
+            }
         };
     }]);

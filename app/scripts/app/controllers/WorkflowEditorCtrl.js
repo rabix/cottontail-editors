@@ -19,8 +19,7 @@ angular.module('registryApp.app')
                 return 'Please save your changes before leaving.';
             }, function () {
                 return prompt
-            }),
-            Instances = [];
+            });
 
         $scope.$on('pipeline:change', function () {
             prompt = true;
@@ -286,7 +285,7 @@ angular.module('registryApp.app')
                         return data;
                     }
                 })
-                .then(function (data) {
+                .then(function () {
 
                     Notification.primary('Workflow successfully updated.');
 
