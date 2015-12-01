@@ -351,7 +351,7 @@ angular.module('registryApp.cliche')
 
             json = JSON.parse(json);
 
-            var preserve = $scope.view.mode === 'new';
+            var preserve = false;
 
             var cachedName = $scope.view.tool.label;
 

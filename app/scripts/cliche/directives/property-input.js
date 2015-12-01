@@ -40,7 +40,6 @@ angular.module('registryApp.cliche')
 
             tplType = Cliche.getTplType($scope.view.type);
 
-            //$scope.view.tpl = 'views/cliche/property/property-input-' + $scope.type + '-' + tplType  + '.html';
             $scope.view.tpl = 'views/cliche/property/property-input-tool-' + tplType  + '.html';
 
         };
