@@ -1,4 +1,4 @@
-<div class="content">
+<ng-form class="content" name="inputs">
 
     <h3 class="legend-small">
         Input Ports
@@ -9,6 +9,7 @@
         <add-property
                 tooltip-msg="{{ ::help.cliche.inputs.addInput }}"
                 tooltip-placement="right"
+                ng-model="view.newInput"
                 type="input"
                 key="id"
                 tool-type="{{ view.type }}"
@@ -18,15 +19,18 @@
         </add-property>
         <div class="enum-list-container">
             <property-input
-                    ng-repeat="property in view.tool.inputs | orderBy:sortByPosition track by property['id']"
+                    ng-repeat="property in view.tool.inputs | orderBy:sortByPosition track by property.id"
                     ng-model="property"
                     key="id"
+                    name="propertyInput{{ $index }}"
                     type="{{ view.type }}"
                     inputs="view.job.inputs"
                     properties="view.tool.inputs">
             </property-input>
 
-            <p class="alert alert-info large" ng-if="view.tool.inputs.length === 0">Click the plus button to add input ports.</p>
+            <p class="alert alert-info large" ng-if="view.tool.inputs.length === 0">
+                Click the plus button to add input ports.
+            </p>
         </div>
     </div>
-</div>
+</ng-form>
