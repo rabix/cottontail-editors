@@ -950,29 +950,29 @@ angular.module('registryApp.cliche')
          * @returns {boolean}
          */
         $scope.updateTool = function() {
-            var deferred = $q.defer();
+            var tool = Cliche.getTool(),
+                deferred = $q.defer();
 
             if ($scope.view.loading) {
                 return false;
             }
 
-            $scope.view.loading = true;
 
-            var tool = Cliche.getTool();
+            $scope.view.loading = true;
 
 	        removeEmptyFields(tool);
             tool['sbg:job'] = Cliche.getJob();
+
 
             Cliche.generatePreviewCommand().then(function(previewCommand) {
                 tool['sbg:cmdPreview'] = previewCommand;
 
                 App.update(tool, $scope.view.type)
                     .then(function(result) {
+                        $scope.form.tool.$setPristine();
                         $scope.view.loading = false;
 
                         var newRevision = result.message['sbg:revision'];
-                        BeforeRedirect.setReload(true);
-                        $scope.form.tool.$dirty = false;
                         Notification.primary('Tool successfully updated');
 
                         redirectTo(newRevision);

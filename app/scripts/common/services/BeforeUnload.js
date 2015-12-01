@@ -56,19 +56,20 @@ angular.module('registryApp.common')
          * @returns {*}
          */
         var onBeforeUnloadHandler = function(event) {
+            var message,
+                shouldPrompt;
 
-            var message;
-
-            if (typeof callback === 'function') { message = callback(); }
-
+            if (typeof callback === 'function') {
+                message = callback();
+            }
             if (typeof prompt === 'function') {
-                prompt = prompt();
+                shouldPrompt = prompt();
             } else if (_.isUndefined(prompt)) {
                 // always prompt if shouldPrompt is not a function or boolean
-                prompt = true;
+                shouldPrompt = true;
             }
 
-            if (prompt) {
+            if (shouldPrompt) {
                 (event || window.event).returnValue = message;
 
                 return message;
