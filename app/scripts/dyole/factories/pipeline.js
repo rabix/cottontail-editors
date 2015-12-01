@@ -1652,6 +1652,19 @@ angular.module('registryApp.dyole')
                         }
                     });
 
+                    _.forEach(node.outputs, function (output) {
+
+                        if (output['sbg:includeInPorts'] !== 'undefined') {
+
+                            var out = _.find(json.schemas[nodeId].outputs, function (inp) {
+                                return output.id === inp.id;
+                            });
+
+                            out['sbg:includeInPorts'] = output['sbg:includeInPorts'];
+
+                        }
+                    });
+
                     delete node.x;
                     delete node.y;
                 });

@@ -354,7 +354,7 @@ angular.module('registryApp.dyole')
                 _.forEach(workflow.outputs, function (output) {
                     var id = output['id'];
 
-                    if (_common.checkTypeFile(output.type[1] || output.type[0])) {
+                    if (_common.checkTypeFile(output.type[1] || output.type[0]) || output['sbg:includeInPorts']) {
                         system[id] = _self._generateIOSchema('output', output, id);
                     }
                 });
@@ -381,7 +381,7 @@ angular.module('registryApp.dyole')
                     if (typeof input !== 'undefined') {
                         schema = input.type[1] || input.type[0];
 
-                        return input['sbg:includeInPorts']? true : _common.checkTypeFile(schema);
+                        return input['sbg:includeInPorts'] ? true : _common.checkTypeFile(schema);
                     } else {
                         console.log('Input %s not found on node %s', input_id, node_id);
                     }
