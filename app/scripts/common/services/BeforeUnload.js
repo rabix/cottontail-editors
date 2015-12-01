@@ -8,7 +8,7 @@
 
 
 angular.module('registryApp.common')
-    .factory('BeforeUnload', [function() {
+    .factory('BeforeUnload', ['lodash', function(_) {
 
         var callback;
         var prompt;
@@ -78,23 +78,23 @@ angular.module('registryApp.common')
         /**
          * Register beforeunload event
          *
-         * @param c
+         * @param messageCallback
          * @param shouldPrompt {Function | boolean}
          * @returns {Function}
          */
-        var register = function(c, shouldPrompt) {
+        var register = function(messageCallback, shouldPrompt) {
 
             attachEvent('beforeunload', onBeforeUnloadHandler);
 
-            callback = c;
+            callback = messageCallback;
 
             prompt = shouldPrompt;
 
-            return function(c) {
+            return function(messageCallback) {
 
                 detachEvent('beforeunload', onBeforeUnloadHandler);
 
-                if (typeof c === 'function') { c.call(); }
+                if (typeof messageCallback === 'function') { messageCallback.call(); }
             };
         };
 

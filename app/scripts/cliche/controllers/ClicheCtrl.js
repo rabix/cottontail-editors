@@ -18,7 +18,7 @@ angular.module('registryApp.cliche')
                     return 'Please save your changes before leaving.';
                 },
                 function() {
-                    return $scope.form.tool.$dirty
+                    return $scope.form.tool.$dirty;
                 });
 
         // <editor-fold desc="Local $scope variables">
@@ -26,7 +26,7 @@ angular.module('registryApp.cliche')
         $scope.view = {};
         $scope.form = {};
 
-        /* globals gotten from camellia */
+        /* variables gotten from camellia */
         $scope.view.globals = Globals;
 
 
@@ -39,7 +39,9 @@ angular.module('registryApp.cliche')
         $scope.view.job = {};
 
         /* actual tool app from db */
-        $scope.view.app = {is_script: Globals.appType === 'script'};
+        $scope.view.app = {
+            is_script: Globals.appType === 'script'
+        };
         /* actual tool app revision from db */
         $scope.view.revision = {};
 
@@ -55,11 +57,15 @@ angular.module('registryApp.cliche')
         /* console visibility flag */
         $scope.view.isConsoleVisible = false;
 
+        window.clean = function () {
+            $scope.form.tool.$dirty = false;
+        };
+
         /* tool type: tool or script */
         $scope.view.type = Globals.appType;
 
-        /* current tab - available: general, inputs, outputs, metadata, test, script */
-        $scope.view.tab = Globals.appType === 'script' ? 'script' : 'general';
+        /* current tab - available: general, inputs, outputs, metadata, test */
+        $scope.view.tab = 'general';
 
         /* page classes */
         $scope.view.classes = ['page', 'cliche'];
@@ -456,6 +462,7 @@ angular.module('registryApp.cliche')
                     _.remove($scope.view.tool.requirements, {'class': 'sbg:Metadata'});
                 }
 
+                $scope.form.tool.$setDirty();
                 $scope.view.requireSBGMetadata = result.requireSBGMetadata;
             });
         };
@@ -712,7 +719,7 @@ angular.module('registryApp.cliche')
 			$scope.view.reqCreateFileRequirement.fileDef.push({
 				filename: '',
 				fileContent: ''
-			})
+			});
 		};
 
 		/**

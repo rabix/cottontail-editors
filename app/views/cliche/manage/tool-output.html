@@ -1,7 +1,12 @@
 <div class="modal-header">
-    <button type="button" class="close" ng-click="cancel()"><span>&times;</span><span class="sr-only">Close</span></button>
+    <button type="button" class="close" ng-click="cancel()">
+        <span>&times;</span>
+        <span class="sr-only">Close</span>
+    </button>
     <h4 class="modal-title">
-        <span>{{ (view.mode === 'edit') ? 'Edit' : 'Add' }} Output Property</span>
+        <span>
+            {{ (view.mode === 'edit') ? 'Edit' : 'Add' }} Output Property
+        </span>
         <label class="checkbox inline">
             <input type="checkbox" ng-model="view.required"> required
         </label>
@@ -16,33 +21,67 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="form-group" ng-class="{'has-error': (view.form.name.$invalid && view.form.$dirty)}">
-                    <label class="control-label" for="name">{{ view.key === 'id' ? 'ID' : 'Name' }}</label>
-                    <input uib-tooltip="{{ ::help.cliche.outputs.outputId }}" tooltip-trigger="focus" type="text" class="form-control" id="name" name="name" ng-model="view.name" is-valid-name required>
+                    <label class="control-label" for="name">
+                        {{ view.key === 'id' ? 'ID' : 'Name' }}
+                    </label>
+                    <input uib-tooltip="{{ ::help.cliche.outputs.outputId }}"
+                           tooltip-trigger="focus"
+                           type="text"
+                           class="form-control"
+                           id="name"
+                           name="name"
+                           ng-model="view.name"
+                           is-valid-name
+                           required>
                     <span class="help-block">Allowed characters are alphanumerics and _</span>
                 </div>
             </div>
             <!-- END Name -->
 
             <div class="col-md-3">
-                <div class="form-group" ng-class="{'has-error': (view.form.type.$invalid && view.form.$dirty)}">
-                    <label class="control-label" >Type <help-message message="help.cliche.outputs.type"></help-message></label>
-                    <select class="form-control" id="type" name="type" ng-model="view.type" ng-options="option for option in view.types" required></select>
+                <div class="form-group"
+                     ng-class="{'has-error': (view.form.type.$invalid && view.form.$dirty)}">
+                    <label class="control-label">
+                        Type
+                        <help-message message="help.cliche.outputs.type"></help-message>
+                    </label>
+                    <select class="form-control"
+                            id="type"
+                            name="type"
+                            ng-model="view.type"
+                            ng-options="option for option in view.types"
+                            required>
+                    </select>
                 </div>
             </div>
             <!-- END Type-->
 
             <div class="col-md-3" ng-if="view.type === 'array'">
                 <div class="form-group">
-                    <label class="control-label" >Item Type <help-message message="help.cliche.outputs.type"></help-message></label>
-                    <select class="form-control" id="item-type" name="itemType" ng-model="view.itemsType" ng-options="option for option in view.itemTypes"></select>
+                    <label class="control-label">
+                        Item Type
+                        <help-message message="help.cliche.outputs.type"></help-message>
+                    </label>
+                    <select class="form-control"
+                            id="item-type"
+                            name="itemType"
+                            ng-model="view.itemsType"
+                            ng-options="option for option in view.itemTypes">
+                    </select>
                 </div>
             </div>
             <!-- END Item Type -->
 
             <div class="col-md-3" ng-show="view.isFileType">
                 <div class="form-group">
-                    <label class="control-label">Glob <help-message message="help.cliche.outputs.glob"></help-message></label>
-                    <expr ng-model="view.property.outputBinding.glob" handle-item-update="updateGlobValue(value)" placeholder="value"></expr>
+                    <label class="control-label">
+                        Glob
+                        <help-message message="help.cliche.outputs.glob"></help-message>
+                    </label>
+                    <expr ng-model="view.property.outputBinding.glob"
+                          handle-item-update="updateGlobValue(value)"
+                          placeholder="value">
+                    </expr>
                 </div>
             </div>
             <!-- END Glob -->
@@ -61,25 +100,50 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group" ng-class="{'has-error': (view.form.label.$invalid && view.form.$dirty)}">
-                        <label class="control-label" for="label">Label</label>
-                        <input uib-tooltip="{{ ::help.cliche.inputs.label }}" tooltip-trigger="focus" type="text" class="form-control" id="label" name="label" ng-model="view.label">
+                        <label class="control-label" for="label">
+                            Label
+                        </label>
+                        <input uib-tooltip="{{ ::help.cliche.inputs.label }}"
+                               tooltip-trigger="focus"
+                               type="text"
+                               class="form-control"
+                               id="label"
+                               name="label"
+                               ng-model="view.label">
                     </div>
                 </div>
                 <!-- END Label -->
 
 
                 <div class="col-md-4">
-                    <div class="form-group" ng-class="{'has-error': (view.form.description.$invalid && view.form.$dirty)}">
-                        <label class="control-label" for="description">Description</label>
-                        <input uib-tooltip="{{ ::help.cliche.inputs.description }}" tooltip-trigger="focus" type="text" class="form-control" id="description" name="description" ng-model="view.description">
+                    <div class="form-group"
+                         ng-class="{'has-error': (view.form.description.$invalid && view.form.$dirty)}">
+                        <label class="control-label" for="description">
+                            Description
+                        </label>
+                        <input uib-tooltip="{{ ::help.cliche.inputs.description }}"
+                               tooltip-trigger="focus"
+                               type="text"
+                               class="form-control"
+                               id="description"
+                               name="description"
+                               ng-model="view.description">
                     </div>
                 </div>
                 <!-- END Description -->
 
                 <div class="col-md-4" ng-show="view.isFileType">
                     <div class="form-group" ng-class="{'has-error': (view.form.fileTypes.$invalid && view.form.$dirty)}">
-                        <label class="control-label" for="file_types">File Types</label>
-                        <input uib-tooltip="{{ ::help.cliche.inputs.fileTypes }}" tooltip-trigger="focus" type="text" class="form-control" id="file_types" name="fileTypes" ng-model="view.fileTypes">
+                        <label class="control-label" for="file_types">
+                            File Types
+                        </label>
+                        <input uib-tooltip="{{ ::help.cliche.inputs.fileTypes }}"
+                               tooltip-trigger="focus"
+                               type="text"
+                               class="form-control"
+                               id="file_types"
+                               name="fileTypes"
+                               ng-model="view.fileTypes">
                     </div>
                 </div>
                 <!-- END File Types -->
@@ -90,32 +154,54 @@
 
         <div ng-show="view.isFileType">
             <h3 class="legend-small">
-                Metadata <help-message message="help.cliche.outputs.metadata"></help-message>
+                Metadata
+                <help-message message="help.cliche.outputs.metadata"></help-message>
             </h3>
 
             <div class="meta-list" >
                 <div class="row">
                     <div class="col-md-12">
                         <div class="enum-list-wrap">
-                            <a href ng-click="addMetadata()" class="btn btn-default add-enum-item"><i class="fa fa-plus"></i></a>
+                            <a href ng-click="addMetadata()" class="btn btn-default add-enum-item">
+                                <i class="fa fa-plus"></i>
+                            </a>
 
                             <div class="enum-list-container">
                                 <ul class="enum-list">
-                                    <li ng-repeat="meta in view.metadata" ng-if="meta.key !== '__inherit__'" ng-class="{'has-error': meta.error}">
+                                    <li ng-repeat="meta in view.metadata"
+                                        ng-if="meta.key !== '__inherit__'"
+                                        ng-class="{'has-error': meta.error}">
                                         <div class="enum-field form-group form-group-file">
                                             <div class="col-md-6">
-                                                <i class="fa fa-warning error" ng-if="meta.error" title="Duplicate metadata key. This key value pair will not be saved."></i>
-                                                <input key-changer key="meta.key" items="view.metadata" has-error="meta.error" type="text" class="form-control" placeholder="Metadata Key" ng-model="meta.key"/>
+                                                <i class="fa fa-warning error"
+                                                   ng-if="meta.error"
+                                                   title="Duplicate metadata key. This key value pair will not be saved.">
+                                                </i>
+                                                <input key-changer
+                                                       key="meta.key"
+                                                       items="view.metadata"
+                                                       has-error="meta.error"
+                                                       type="text"
+                                                       class="form-control"
+                                                       placeholder="Metadata Key"
+                                                       ng-model="meta.key"/>
                                             </div>
                                             <div class="col-md-6">
-                                                <expr ng-model="meta.value" index="{{ $index }}" type="string"  handle-item-update="updateMetaValue(index, value)" placeholder="Metadata Value"></expr>
+                                                <expr ng-model="meta.value"
+                                                      index="{{ $index }}"
+                                                      type="string"
+                                                      handle-item-update="updateMetaValue(index, value)"
+                                                      placeholder="Metadata Value">
+                                                </expr>
                                             </div>
                                         </div>
                                         <a href class="fa fa-remove remove-btn" ng-click="removeMetadata($index)"></a>
                                     </li>
                                 </ul>
 
-                                <p class="alert alert-info" ng-if="view.metadata | isEmpty">Click the plus button to add a metadata key-value pair.</p>
+                                <p class="alert alert-info" ng-if="view.metadata | isEmpty">
+                                    Click the plus button to add a metadata key-value pair.
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -124,9 +210,15 @@
 
             <div class="row" ng-if="view.isFileType">
                 <div class="col-md-5">
-                    <label for="property-meta-inherit-{{ view.uniqueId }}" class="control-label">Inherit Metadata From Input</label>
+                    <label for="property-meta-inherit-{{ view.uniqueId }}" class="control-label">
+                        Inherit Metadata From Input
+                    </label>
                     <div class="form-group">
-                        <select class="form-control" id="property-meta-inherit-{{ view.uniqueId }}" name="{{ name }}-meta-inherit" ng-model="view.property.outputBinding['sbg:inheritMetadataFrom']" ng-options="value for value in view.inputs">
+                        <select class="form-control"
+                                id="property-meta-inherit-{{ view.uniqueId }}"
+                                name="{{ name }}-meta-inherit"
+                                ng-model="view.property.outputBinding['sbg:inheritMetadataFrom']"
+                                ng-options="value for value in view.inputs">
                             <option value>-- none --</option>
                         </select>
                     </div>
@@ -137,7 +229,8 @@
 
         <div ng-show="view.isFileType">
             <h3 class="legend-small">
-                Secondary Files <help-message message="help.cliche.outputs.secondaryFilesInfo"></help-message>
+                Secondary Files
+                <help-message message="help.cliche.outputs.secondaryFilesInfo"></help-message>
             </h3>
 
             <div class="row">
@@ -155,7 +248,10 @@
                             <!--</ul>-->
                         <!--</div>-->
                     <!--</div>-->
-                    <enum ng-if="!view.isSecondaryFilesExpr" ng-model="view.property.outputBinding.secondaryFiles" type="'string'"></enum>
+                    <enum ng-if="!view.isSecondaryFilesExpr"
+                          ng-model="view.property.outputBinding.secondaryFiles"
+                          type="'string'">
+                    </enum>
                 </div>
             </div>
         </div>
@@ -166,7 +262,11 @@
 
         <div class="form-group main-actions">
             <a href class="btn btn-warning" ng-click="cancel()">Cancel</a>
-            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="submit"
+                    class="btn btn-primary"
+                    ng-disabled="view.form.$pristine || view.form.$invalid">
+                Save
+            </button>
         </div>
 
     </form>

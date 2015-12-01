@@ -59,12 +59,12 @@ angular.module('registryApp.cliche')
                     $scope.inputs[name] = Helper.getDefaultInputValue(name, enumObj.symbols, type, itemType);
                 }
 
-                if (typeof $scope.handler === 'function') { $scope.handler(); }
-
-                if ($scope.toolType === 'tool') {
-                    Cliche.generateCommand();
+                if (_.isFunction($scope.handler)) {
+                    $scope.handler();
                 }
 
+                Cliche.generateCommand();
+                $scope.setDirty();
             });
 
             return modalInstance;
@@ -84,9 +84,17 @@ angular.module('registryApp.cliche')
                 toolType: '@',
                 properties: '=',
                 inputs: '=?',
-                handler: '&'
+                handler: '&',
+                ngModel: '=?'
             },
+            require: '?ngModel',
             controller: 'AddPropertyCtrl',
-            link: function() {}
+            link: function (scope, element, attr, ngModelCtrl) {
+                scope.setDirty = function () {
+                    if (ngModelCtrl) {
+                        ngModelCtrl.$setDirty();
+                    }
+                };
+            }
         };
     }]);
