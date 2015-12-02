@@ -19,6 +19,7 @@ angular.module('registryApp.cliche')
          * @param e
          */
         $scope.addItem = function(e) {
+            $scope.setDirty();
 
             e.stopPropagation();
 
@@ -66,6 +67,10 @@ angular.module('registryApp.cliche')
 
                 Cliche.generateCommand();
                 $scope.setDirty();
+
+            }, function() {
+
+                $scope.setPristine();
             });
 
             return modalInstance;
@@ -91,9 +96,26 @@ angular.module('registryApp.cliche')
             require: '?ngModel',
             controller: 'AddPropertyCtrl',
             link: function (scope, element, attr, ngModelCtrl) {
+                var originalPristineStatus;
+
                 scope.setDirty = function () {
+
                     if (ngModelCtrl) {
+                        if (typeof originalPristineStatus === 'undefined') {
+                            // ngModel parent = inputs, inputs parent = form.tool
+                            originalPristineStatus = ngModelCtrl.$$parentForm.$$parentForm.$pristine;
+                        }
                         ngModelCtrl.$setDirty();
+                    }
+                };
+
+                scope.setPristine = function () {
+                    // will not set form to pristine if it was not so originally
+                    if (ngModelCtrl && originalPristineStatus) {
+                        // ngModel -> inputs form -> tool form
+                        ngModelCtrl.$$parentForm.$$parentForm.$setPristine();
+                        ngModelCtrl.$$parentForm.$setPristine();
+                        ngModelCtrl.$setPristine();
                     }
                 };
             }

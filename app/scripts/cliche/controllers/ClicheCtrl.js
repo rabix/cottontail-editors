@@ -382,6 +382,7 @@ angular.module('registryApp.cliche')
 
             Cliche.setTool(json, preserve);
             $scope.view.tool = Cliche.getTool();
+            $scope.form.tool.$setDirty();
 
             if ($scope.view.mode === 'edit') { $scope.view.tool.label = cachedName; }
 
