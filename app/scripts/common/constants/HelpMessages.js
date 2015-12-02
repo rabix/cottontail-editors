@@ -32,7 +32,8 @@ angular.module('registryApp.common').constant('HelpMessages', {
             label: 'Name to show when presenting the input on graphical interfaces.',
             description: 'Help text to show when presenting the input on graphical interfaces.',
             category: 'Category where this input will be grouped under.',
-            inputBinding: 'Include this input into command line, and it will show in command line preview bellow.'
+            inputBinding: 'Include this input into command line, and it will show in command line preview bellow.',
+            secondaryFiles: 'Extension to be appended on the name of the file to get the name of the secondary file. For each extension already on the file, add a caret `^` to remove the extension. The remaining string will be appended as the extension of the secondary file.\n\nFor example, if the file is `input.bam` and the secondaryFile field is `.bai` then the resulting file path will be `input.bam.bai`. If secondaryFile field is `^.bai` then the file path will be `input.bai`.'
 		},
 		outputs: {
 			properties: 'Define tool output ports.',
@@ -41,9 +42,8 @@ angular.module('registryApp.common').constant('HelpMessages', {
             type: 'Represents output type.',
             itemType: 'Represents array item type. Allowed characters are alphanum and _.',
             glob: 'File(s) matching this glob expression will be reported as output(s) on this port.',
-            metadata: 'File metadata is a map of string->string. If value depends on tool inputs, use an expression (</>) \n\n like $job.inputs.reads.meta.sample. more info (link to advanced features -> metadata)',
-            secondaryFiles: 'click + to enumerate index files that should accompany this output.',
-            secondaryFilesInfo: 'If a tool creates index files, list them here using file naming rules: ".ext" means that ".ext" is appended \n\n to original file name; "^.ext" means ".ext" is appended to file base name (after original extension is removed).'
+            metadata: 'File metadata is a map of string->string. If value depends on tool inputs, use an expression (</>) \n\nlike $job.inputs.reads.meta.sample. more info (link to advanced features -> metadata)',
+            secondaryFiles: 'If a tool creates index files, list them here. \n\nFor each extension already on the index file, add a caret `^` to remove the extension. The remaining string will be appended as the extension of the secondary file.\n\nFor example, if the output file is `output.bam` and the index file is `output.bam.bai`, then the secondaryFile field should be `.bam`. If index file is `output.bai` then secondaryFile field should be `^.bai`.'
 		},
         // inputBindings and outputBindings
         bindings: {
