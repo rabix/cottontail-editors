@@ -123,7 +123,7 @@
                                         <ul class="apps-inner-list">
                                             <!--<li ng-if="apps.length !== 0"><span class="label label-info section-name">Apps</span></li>-->
 
-                                            <li ng-repeat="app in filteredApps = (apps | filter:view.searchTerm)"
+                                            <li ng-repeat="app in filteredApps = (apps | repoApps:view.searchTerm)"
                                                 ng-if="(view.workflow['sbg:projectSlug'] + '/' + view.workflow['sbg:name']) !== (app.project + '/' + app.app_name)" >
 
                                                 <a href drag="app">

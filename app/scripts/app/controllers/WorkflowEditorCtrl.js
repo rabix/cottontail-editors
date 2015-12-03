@@ -5,12 +5,12 @@
 
 angular.module('registryApp.app')
     .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$uibModal',
-        '$location', '$templateCache',
+        '$location', '$templateCache', '$filter',
         'Loading', 'App', 'User', 'Repo', 'Const', 'BeforeRedirect',
         'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload',
         'Api', 'HotkeyRegistry', 'Notification', 'Cliche',
 
-        function ($scope, $rootScope, $q, $modal, $location, $templateCache, Loading, App, User, Repo, Const, BeforeRedirect, Helper, PipelineService, _, Globals, BeforeUnload, Api, HotkeyRegistry, Notification, Cliche) {
+        function ($scope, $rootScope, $q, $modal, $location, $templateCache, $filter, Loading, App, User, Repo, Const, BeforeRedirect, Helper, PipelineService, _, Globals, BeforeUnload, Api, HotkeyRegistry, Notification, Cliche) {
 
         var PipelineInstance = null,
             prompt = false,
