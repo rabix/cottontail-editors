@@ -58,31 +58,31 @@
             <button class="btn btn-default" ng-click="runApp()" ng-disabled="view.saving" ><i class="fa fa-play"></i> Run</button>
 
             <div class="btn-group right"  uib-dropdown is-open="status.isopen">
-                <button type="button"  class="btn btn-default dropdown-toggle" uib-dropdown-toggle >
+                <button type="button"  class="btn btn-default dropdown-toggle" uib-dropdown-toggle id="main_dropdown_button">
                     <i class="fa fa-cog"></i>
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
                     <li>
-                        <a href ng-click="toolSettings()">
+                        <a href ng-click="toolSettings()" id="dropdown_settings">
                             <i class="fa fa-cog"></i>
                             <span>Settings</span>
                         </a>
                     </li>
 
                     <li>
-                        <a href ng-click="loadJsonEditor()">
+                        <a href ng-click="loadJsonEditor()" id="dropdown_import">
                             <i class="fa fa-cloud-download"></i>
                             <span>Import</span>
                         </a>
                     </li>
 
                     <li>
-                        <json-preview title="Tool JSON" json="{{ view.tool }}"></json-preview>
+                        <json-preview title="Tool JSON" json="{{ view.tool }}" id="dropdown_tool_json"></json-preview>
                     </li>
 
                     <li>
-                        <json-preview title="Job JSON" json="{{ view.job }}"></json-preview>
+                        <json-preview title="Job JSON" json="{{ view.job }}" id="dropdown_job_json"></json-preview>
                     </li>
                 </ul>
             </div>

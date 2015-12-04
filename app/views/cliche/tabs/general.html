@@ -5,23 +5,23 @@
                 <h3 class="legend-small">Docker Container <help-message message="help.cliche.general.environment"></help-message></h3>
 
                 <div class="form-group">
-                    <label for="dockerPull" class="control-label">Docker Repository[:Tag]</label>
+                    <label for="docker_pull" class="control-label">Docker Repository[:Tag]</label>
                     <input uib-tooltip="{{ ::help.cliche.general.dockerPull }}"
                            tooltip-trigger="focus"
                            type="text"
                            class="form-control"
-                           id="dockerPull"
+                           id="docker_pull"
                            name="dockerPull"
                            ng-model="view.reqDockerRequirement.dockerPull">
                 </div>
 
                 <div class="form-group">
-                    <label for="imageId" class="control-label">Image ID</label>
+                    <label for="image_id" class="control-label">Image ID</label>
                     <input uib-tooltip="{{ ::help.cliche.general.imageId }}"
                            tooltip-trigger="focus"
                            type="text"
                            class="form-control"
-                           id="imageId"
+                           id="image_id"
                            name="imageId"
                            ng-model="view.reqDockerRequirement.dockerImageId">
                 </div>
@@ -40,6 +40,7 @@
                                   ng-model="view.reqCPURequirement.value"
                                   min="0"
                                   type="number"
+                                  id="cpu_resource"
                                   handle-null="removeResourceRequirement('CPURequirement')"
                                   handle-item-update="updateResource(value, 'CPURequirement')">
                             </expr>
@@ -52,6 +53,7 @@
                             <expr tooltip-msg="{{ ::help.cliche.general.memory }}"
                                   ng-model="view.reqMemRequirement.value"
                                   type="number"
+                                  id="memory_resource"
                                   handle-null="removeResourceRequirement('MemRequirement')"
                                   handle-item-update="updateResource(value, 'MemRequirement')">
                             </expr>
@@ -128,7 +130,9 @@
                                 <li ng-repeat="baseCmd in view.tool.baseCommand track by $index">
                                     <div class="enum-field form-group form-group-file">
                                         <expr tooltip-msg="{{ ::help.cliche.general.baseCMD }}"
-                                              ng-model="baseCmd" index="{{ $index }}"
+                                              id="base_command_field_{{ $index + 1 }}"
+                                              ng-model="baseCmd"
+                                              index="{{ $index }}"
                                               handle-item-update="updateCliAdapter(value, index, 'baseCommand')"
                                               handle-item-blur="splitBaseCmd(value, index)">
                                         </expr>
@@ -151,6 +155,7 @@
                             <label class="control-label">Stdin</label>
                             <expr tooltip-msg="{{ ::help.cliche.general.stdin }}"
                                   ng-model="view.tool.stdin"
+                                  id="stdin_field"
                                   handle-item-update="updateCliAdapter(value, null, 'stdin')">
                             </expr>
                         </div>
@@ -160,6 +165,7 @@
                             <label class="control-label">Stdout</label>
                             <expr tooltip-msg="{{ ::help.cliche.general.stdout }}"
                                   tooltip-placement="left"
+                                  id="stdout_field"
                                   ng-model="view.tool.stdout"
                                   handle-item-update="updateCliAdapter(value, null, 'stdout')">
                             </expr>
@@ -178,32 +184,36 @@
 
                             <div class="enum-list-wrap">
 
-                                    <button uib-tooltip="{{ ::help.cliche.general.successCodes }}"
-                                            ng-click="addStatusCode('successCodes')"
-                                            class="btn btn-default add-enum-item">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
-                                    <div class="enum-list-container">
-                                        <ul class="enum-list">
-                                            <li ng-repeat="successCode in view.tool.successCodes track by $index">
-                                                <div class="enum-field form-group form-group-file ">
-                                                    <div class="input-group status-codes">
-                                                        <input class="form-control" type="number"
-                                                               ng-model="view.tool.successCodes[$index]" />
-                                                    </div>
+                                <button uib-tooltip="{{ ::help.cliche.general.successCodes }}"
+                                        ng-click="addStatusCode('successCodes')"
+                                        class="btn btn-default add-enum-item"
+                                        id="success_codes_add_button">
+                                    <i class="fa fa-plus"></i>
+                                </button>
+
+                                <div class="enum-list-container">
+                                    <ul class="enum-list">
+                                        <li ng-repeat="successCode in view.tool.successCodes track by $index">
+                                            <div class="enum-field form-group form-group-file ">
+                                                <div class="input-group status-codes">
+                                                    <input class="form-control"
+                                                           type="number"
+                                                           id="success_codes_field_{{ $index + 1}}"
+                                                           ng-model="view.tool.successCodes[$index]" />
                                                 </div>
-                                                <button class="fa fa-remove btn-link remove-btn"
-                                                        ng-click="removeStatusCode('successCodes', $index)">
-                                                </button>
-                                            </li>
-                                        </ul>
+                                            </div>
+                                            <button class="fa fa-remove btn-link remove-btn"
+                                                    ng-click="removeStatusCode('successCodes', $index)">
+                                            </button>
+                                        </li>
+                                    </ul>
 
-                                        <p class="alert alert-info"
-                                           ng-if="view.tool.successCodes | isEmpty">
-                                            Click the plus button to add codes
-                                        </p>
+                                    <p class="alert alert-info"
+                                       ng-if="view.tool.successCodes | isEmpty">
+                                        Click the plus button to add codes
+                                    </p>
 
-                                    </div>
+                                </div>
 
                             </div>
                         </div>
@@ -219,7 +229,8 @@
 
                                 <button uib-tooltip="{{ ::help.cliche.general.temporaryFailCodes }}"
                                         ng-click="addStatusCode('temporaryFailCodes')"
-                                        class="btn btn-default add-enum-item">
+                                        class="btn btn-default add-enum-item"
+                                        id="temporary_fail_codes_add_button">
                                     <i class="fa fa-plus"></i>
                                 </button>
 
@@ -230,6 +241,7 @@
                                                 <div class="input-group status-codes">
                                                     <input class="form-control"
                                                            type="number"
+                                                           id="temporary_fail_codes_field_{{ $index + 1}}"
                                                            ng-model="view.tool.temporaryFailCodes[$index]"/>
                                                 </div>
                                             </div>
