@@ -16,8 +16,6 @@ angular.module('registryApp.cliche')
                 type: '@',
                 toolType: '@',
                 mode: '@',
-                index: '=',
-                idPrefix: '@',
                 itemType: '@',
                 isRequired: '=',
                 adapter: '=?',

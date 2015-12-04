@@ -8,35 +8,35 @@
 
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="additional_info_label" class="control-label">Label</label>
+                    <label for="label" class="control-label">Label</label>
                     <input uib-tooltip="{{ ::help.cliche.metadata.label }}"
                            tooltip-trigger="focus"
                            class="form-control"
                            ng-model="view.tool.label"
-                           id="additional_info_label"
+                           id="label"
                            name="label"
                            type="text"/>
                 </div>
 
                 <div class="form-group">
-                    <label for="additional_info_toolkit" class="control-label">Toolkit</label>
+                    <label for="toolkit" class="control-label">Toolkit</label>
                     <input uib-tooltip="{{ ::help.cliche.metadata.toolkit }}"
                            tooltip-trigger="focus"
                            class="form-control"
                            ng-model="view.tool['sbg:toolkit']"
-                           id="additional_info_toolkit"
+                           id="toolkit"
                            name="toolkit"
                            type="text"/>
                 </div>
 
                 <div class="form-group">
-                    <label class="control-label" for="additional_info_toolkit_version">Toolkit Version</label>
+                    <label class="control-label" for="toolkit-version">Toolkit Version</label>
                     <input uib-tooltip="{{ ::help.cliche.metadata.toolkitVersion }}"
                            tooltip-trigger="focus"
                            class="form-control"
                            name="toolkitVersion"
                            ng-model="view.tool['sbg:toolkitVersion']"
-                           id="additional_info_toolkit_version"
+                           id="toolkit-version"
                            type="text"/>
                 </div>
 
@@ -77,20 +77,20 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="additional_info_author">Tool Author/Organization</label>
+                    <label for="author">Tool Author/Organization</label>
                     <input uib-tooltip="{{ ::help.cliche.metadata.author }}"
                            tooltip-trigger="focus"
                            type="text"
-                           id="additional_info_author"
+                           id="author"
                            class="form-control"
                            ng-model="view.tool['sbg:toolAuthor']"/>
                 </div>
 
                 <div class="form-group">
-                    <label for="additional_info_license">
+                    <label for="license">
                         Tool License
                     </label>
-                    <license-picker id="additional_info_license" ng-model="view.tool['sbg:license']"></license-picker>
+                    <license-picker id="license" ng-model="view.tool['sbg:license']"></license-picker>
                 </div>
 
                 <div class="form-group">
@@ -103,12 +103,12 @@
             </div>
 
             <div class="col-md-6">
-                <label class="control-label" for="additional_info_description">
+                <label class="control-label" for="description">
                     Description
                     <help-message message="help.cliche.metadata.description"></help-message>
                 </label>
                 <div ng-hide="view.preview" class="form-group">
-                    <textarea id="additional_info_description"
+                    <textarea id="description"
                               class="form-control"
                               ng-model="view.tool.description"
                               name="description"

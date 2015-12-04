@@ -21,14 +21,14 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="form-group" ng-class="{'has-error': (view.form.name.$invalid && view.form.$dirty)}">
-                    <label class="control-label" for="output_modal_id">
+                    <label class="control-label" for="name">
                         {{ view.key === 'id' ? 'ID' : 'Name' }}
                     </label>
                     <input uib-tooltip="{{ ::help.cliche.outputs.outputId }}"
                            tooltip-trigger="focus"
                            type="text"
                            class="form-control"
-                           id="output_modal_id"
+                           id="name"
                            name="name"
                            ng-model="view.name"
                            is-valid-name
@@ -46,7 +46,7 @@
                         <help-message message="help.cliche.outputs.type"></help-message>
                     </label>
                     <select class="form-control"
-                            id="output_modal_type"
+                            id="type"
                             name="type"
                             ng-model="view.type"
                             ng-options="option for option in view.types"
@@ -63,7 +63,7 @@
                         <help-message message="help.cliche.outputs.type"></help-message>
                     </label>
                     <select class="form-control"
-                            id="output_modal_item_type"
+                            id="item-type"
                             name="itemType"
                             ng-model="view.itemsType"
                             ng-options="option for option in view.itemTypes">
@@ -80,7 +80,6 @@
                     </label>
                     <expr ng-model="view.property.outputBinding.glob"
                           handle-item-update="updateGlobValue(value)"
-                          id="output_modal_glob"
                           placeholder="value">
                     </expr>
                 </div>
@@ -135,14 +134,14 @@
 
                 <div class="col-md-4" ng-show="view.isFileType">
                     <div class="form-group" ng-class="{'has-error': (view.form.fileTypes.$invalid && view.form.$dirty)}">
-                        <label class="control-label" for="output_modal_file_types">
+                        <label class="control-label" for="file_types">
                             File Types
                         </label>
                         <input uib-tooltip="{{ ::help.cliche.inputs.fileTypes }}"
                                tooltip-trigger="focus"
                                type="text"
                                class="form-control"
-                               id="output_modal_file_types"
+                               id="file_types"
                                name="fileTypes"
                                ng-model="view.fileTypes">
                     </div>
@@ -211,12 +210,12 @@
 
             <div class="row" ng-if="view.isFileType">
                 <div class="col-md-5">
-                    <label for="output_modal_property_meta-inherit_{{ view.uniqueId }}" class="control-label">
+                    <label for="property-meta-inherit-{{ view.uniqueId }}" class="control-label">
                         Inherit Metadata From Input
                     </label>
                     <div class="form-group">
                         <select class="form-control"
-                                id="output_modal_property_meta-inherit_{{ view.uniqueId }}"
+                                id="property-meta-inherit-{{ view.uniqueId }}"
                                 name="{{ name }}-meta-inherit"
                                 ng-model="view.property.outputBinding['sbg:inheritMetadataFrom']"
                                 ng-options="value for value in view.inputs">
@@ -265,8 +264,7 @@
             <a href class="btn btn-warning" ng-click="cancel()">Cancel</a>
             <button type="submit"
                     class="btn btn-primary"
-                    ng-disabled="view.form.$pristine || view.form.$invalid"
-                    id="output_modal_save_button">
+                    ng-disabled="view.form.$pristine || view.form.$invalid">
                 Save
             </button>
         </div>

@@ -12,10 +12,9 @@ angular.module('registryApp.common')
             replace: true,
             scope: {
                 title: '@',
-                json: '@',
-                id: '@'
+                json: '@'
             },
-            template: '<a href ng-click="showJson()" id="{{ ::id }}"><i class="fa fa-code"></i> {{ title || \'JSON\' }}</a>',
+            template: '<a href ng-click="showJson()"><i class="fa fa-code"></i> {{ title || \'JSON\' }}</a>',
             link: function(scope) {
 
                 /**

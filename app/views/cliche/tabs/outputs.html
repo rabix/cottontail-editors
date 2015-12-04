@@ -14,8 +14,7 @@
                 key="id"
                 tool-type="{{ view.type }}"
                 properties="view.tool.outputs"
-                class="add-enum-item large"
-                id="output_add_button">>
+                class="add-enum-item large">
         </add-property>
 
         <div class="enum-list-container">
@@ -25,9 +24,7 @@
                     key="id"
                     name="propertyOutput{{$index}}"
                     type="{{ view.type }}"
-                    properties="view.tool.outputs"
-                    index="$index"
-                    id-prefix="output">
+                    properties="view.tool.outputs">
             </property-output>
 
             <p class="alert alert-info large" ng-if="view.tool.outputs.length === 0">

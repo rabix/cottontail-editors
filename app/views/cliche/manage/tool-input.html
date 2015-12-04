@@ -17,12 +17,12 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group" ng-class="{'has-error': (view.form.name.$invalid && view.form.$dirty)}">
-                    <label class="control-label" for="input_modal_id">{{ view.key === 'id' ? 'ID' : 'Name' }}</label>
+                    <label class="control-label" for="name">{{ view.key === 'id' ? 'ID' : 'Name' }}</label>
                     <input uib-tooltip="{{ ::help.cliche.inputs.inputId }}"
                            tooltip-trigger="focus"
                            type="text"
                            class="form-control"
-                           id="input_modal_id"
+                           id="name"
                            name="name"
                            ng-model="view.name"
                            is-valid-name
@@ -34,11 +34,11 @@
 
             <div class="col-md-4">
                 <div class="form-group" ng-class="{'has-error': (view.form.type.$invalid && view.form.$dirty)}">
-                    <label class="control-label" for="input_modal_type">Type
+                    <label class="control-label" for="type">Type
                         <help-message message="help.cliche.inputs.type"></help-message>
                     </label>
                     <select class="form-control"
-                            id="input_modal_type"
+                            id="type"
                             name="type"
                             ng-model="view.type"
                             ng-options="option for option in view.types"
@@ -49,11 +49,11 @@
 
             <div class="col-md-4" ng-if="view.type === 'array'">
                 <div class="form-group">
-                    <label class="control-label" for="input_modal_item_type">Item Type
+                    <label class="control-label" for="item_type">Item Type
                         <help-message message="help.cliche.inputs.type"></help-message>
                     </label>
                     <select class="form-control"
-                            id="input_modal_item_type"
+                            id="item_type"
                             name="itemType"
                             ng-model="view.itemsType"
                             ng-options="option for option in view.itemTypes"></select>
@@ -77,12 +77,12 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group" ng-class="{'has-error': (view.form.label.$invalid && view.form.$dirty)}">
-                    <label class="control-label" for="input_modal_label">Label</label>
+                    <label class="control-label" for="label">Label</label>
                     <input uib-tooltip="{{ ::help.cliche.inputs.label }}"
                            tooltip-trigger="focus"
                            type="text"
                            class="form-control"
-                           id="input_modal_label"
+                           id="label"
                            name="label"
                            ng-model="view.label">
                 </div>
@@ -92,12 +92,12 @@
 
             <div class="col-md-4">
                 <div class="form-group" ng-class="{'has-error': (view.form.description.$invalid && view.form.$dirty)}">
-                    <label class="control-label" for="input_modal_description">Description</label>
+                    <label class="control-label" for="description">Description</label>
                     <input uib-tooltip="{{ ::help.cliche.inputs.description }}"
                            tooltip-trigger="focus"
                            type="text"
                            class="form-control"
-                           id="input_modal_description"
+                           id="description"
                            name="description"
                            ng-model="view.description">
                 </div>
@@ -109,12 +109,12 @@
 
             <div class="col-md-4">
                 <div class="form-group" ng-class="{'has-error': (view.form.altPrefix.$invalid && view.form.$dirty)}">
-                    <label class="control-label" for="input_modal_alt_prefix">Alternative Prefix</label>
+                    <label class="control-label" for="alt_prefix">Alternative Prefix</label>
                     <input uib-tooltip="{{ ::help.cliche.inputs.altPrefix }}"
                            tooltip-trigger="focus"
                            type="text"
                            class="form-control"
-                           id="input_modal_alt_prefix"
+                           id="alt_prefix"
                            name="altPrefix"
                            ng-model="view.altPrefix">
                 </div>
@@ -124,12 +124,12 @@
 
             <div class="col-md-4">
                 <div class="form-group" ng-class="{'has-error': (view.form.category.$invalid && view.form.$dirty)}">
-                    <label class="control-label" for="input_modal_category">Category</label>
+                    <label class="control-label" for="category">Category</label>
                     <input uib-tooltip="{{ ::help.cliche.inputs.category }}"
                            tooltip-trigger="focus"
                            type="text"
                            class="form-control"
-                           id="input_modal_category"
+                           id="category"
                            name="category"
                            ng-model="view.category">
                 </div>
@@ -139,12 +139,12 @@
             <div class="col-md-4" ng-show="!isFileType">
                 <div class="form-group"
                      ng-class="{'has-error': (view.form.toolDefaultValue.$invalid && view.form.$dirty)}">
-                    <label class="control-label" for="input_modal_tool_default_value">Tool Default</label>
+                    <label class="control-label" for="tool_default_value">Tool Default</label>
                     <input uib-tooltip="{{ ::help.cliche.inputs.toolDefaultValue }}"
                            tooltip-trigger="focus"
                            type="text"
                            class="form-control"
-                           id="input_modal_tool_default_value"
+                           id="tool_default_value"
                            name="toolDefaultValue"
                            ng-model="view.toolDefaultValue">
                 </div>
@@ -153,12 +153,12 @@
 
             <div class="col-md-4" ng-show="isFileType">
                 <div class="form-group" ng-class="{'has-error': (view.form.fileTypes.$invalid && view.form.$dirty)}">
-                    <label class="control-label" for="input_modal_file_types">File Types</label>
+                    <label class="control-label" for="file_types">File Types</label>
                     <input uib-tooltip="{{ ::help.cliche.inputs.fileTypes }}"
                            tooltip-trigger="focus"
                            type="text"
                            class="form-control"
-                           id="input_modal_file_types"
+                           id="file_types"
                            name="fileTypes"
                            ng-model="view.fileTypes">
                 </div>
@@ -205,8 +205,7 @@
                 <input type="checkbox"
                        ng-model="view.adapter"
                        ng-change="toggleAdapter()"
-                       ng-disabled="view.disabledAll"
-                       id="input_modal_include_in_cl">
+                       ng-disabled="view.disabledAll">
                 Include in command line
             </label>
         </h3>
@@ -215,14 +214,14 @@
 
             <div class="col-md-2">
                 <div class="form-group" ng-class="{'has-error': (view.form.position.$invalid && view.form.$dirty)}">
-                    <label class="control-label" for="input_modal_position">
+                    <label class="control-label" for="position">
                         Position
                     </label>
                     <input uib-tooltip="{{ ::help.cliche.bindings.position }}"
                            tooltip-trigger="focus"
                            type="number"
                            class="form-control"
-                           id="input_modal_position"
+                           id="position"
                            name="position"
                            ng-model="view.property.inputBinding.position">
                 </div>
@@ -231,12 +230,12 @@
 
             <div class="col-md-2">
                 <div class="form-group">
-                    <label class="control-label" for="input_modal_prefix">Prefix</label>
+                    <label class="control-label" for="prefix">Prefix</label>
                     <input uib-tooltip="{{ ::help.cliche.bindings.prefix }}"
                            tooltip-trigger="focus"
                            type="text"
                            class="form-control"
-                           id="input_modal_prefix"
+                           id="prefix"
                            name="prefix"
                            ng-model="view.property.inputBinding.prefix"
                            ng-disabled="view.disabled">
@@ -247,14 +246,13 @@
             <div class="col-md-3">
                 <div class="form-group">
 
-                    <label class="control-label" for="input_modal_separate">
+                    <label class="control-label">
                         Separate prefix with
                         <help-message message="help.cliche.bindings.separatePrefix"></help-message>
                     </label>
 
                     <separator type="list"
                                model="view.property.inputBinding.separate"
-                               id="input_modal_separate"
                                is-disabled="view.disabled">
                     </separator>
                 </div>
@@ -263,12 +261,10 @@
 
             <div ng-if="view.type === 'array'" class="col-md-2">
                 <div class="form-group">
-                    <label class="control-label" for="input_modal_separator">
-                        Item Separator
+                    <label class="control-label">Item Separator
                         <help-message message="help.cliche.bindings.itemSeparator"></help-message>
                     </label>
                     <separator type="item"
-                               id="input_modal_separator"
                                model="view.property.inputBinding.itemSeparator"
                                is-disabled="view.disabled">
                     </separator>
@@ -278,15 +274,13 @@
 
             <div class="col-md-3" ng-if="!view.disabled && view.items.type !== 'record'">
                 <div class="form-group">
-                    <label class="control-label" for="input_modal_value">
-                        Value
+                    <label class="control-label">Value
                         <help-message message="help.cliche.bindings.value"></help-message>
                     </label>
                     <expr ng-model="view.property.inputBinding.valueFrom"
                           handle-item-update="updateTransform(value)"
                           only-expr="true"
                           self="true"
-                          id="input_modal_value"
                           self-type="view.type"
                           self-item-type="view.items.type"
                           placeholder="value"
@@ -306,7 +300,6 @@
             <a href class="btn btn-warning" ng-click="cancel()">Cancel</a>
             <button type="submit"
                     class="btn btn-primary"
-                    id="input_modal_save_button"
                     ng-disabled="view.form.$pristine || view.form.$invalid">
                 Save
             </button>

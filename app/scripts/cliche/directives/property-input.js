@@ -242,8 +242,6 @@ angular.module('registryApp.cliche')
             scope: {
                 type: '@',
                 key: '@',
-                idPrefix: '@',
-                index: '=',
                 prop: '=ngModel',
                 properties: '=',
                 inputs: '=',
