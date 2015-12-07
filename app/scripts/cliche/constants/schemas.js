@@ -16,24 +16,13 @@ angular.module('registryApp.cliche')
     .constant('rawTool', {
         'id': '',
         'class': 'CommandLineTool',
-        '@context': 'https://github.com/common-workflow-language/common-workflow-language/blob/draft-1/specification/tool-description.md',
         label: '',
         description: '',
-        owner: [],
-        contributor: [],
         requirements: [
             {
                 'class': 'DockerRequirement',
                 dockerImageId: '',
                 dockerPull: ''
-            },
-            {
-                'class': 'CPURequirement',
-                value: 1
-            },
-            {
-                'class': 'MemRequirement',
-                value: 1000
             },
             {
                 'class': 'ExpressionEngineRequirement',
@@ -52,6 +41,16 @@ angular.module('registryApp.cliche')
         ],
         inputs: [],
         outputs: [],
+        hints: [
+            {
+                'class': 'CPURequirement',
+                value: 1
+            },
+            {
+                'class': 'MemRequirement',
+                value: 1000
+            }
+        ],
         //moved CLI adapter to root
         baseCommand: [''],
         stdin: '',

@@ -187,20 +187,11 @@ var Schema = {
             type: 'string',
             enum: ['CommandLineTool']
         },
-        '@context': {
-            type: 'string'
-        },
         label: {
             type: 'string'
         },
         description: {
             type: 'string'
-        },
-        owner: {
-            type: 'array'
-        },
-        contributor: {
-            type: 'array'
         },
         requirements: {
             type: 'array',
@@ -280,7 +271,7 @@ var Schema = {
                                 $ref: '#/definitions/adapterDef'
                             },
                             {
-                                // TODO: Temp hack, remove when you figure out why sometimes inputBinding when its not present is undefiend
+                                // TODO: Temp hack, remove when you figure out why sometimes inputBinding when its not present is undefined
                                 type: ['undefined', 'null']
                             }
                         ]
@@ -327,7 +318,7 @@ var Schema = {
             }
         }
     },
-    required: ['id', 'class', '@context', 'baseCommand', 'arguments', 'label', 'owner', 'inputs', 'outputs']
+    required: ['id', 'class', 'baseCommand', 'arguments', 'label', 'inputs', 'outputs']
 };
 
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {

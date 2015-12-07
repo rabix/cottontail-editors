@@ -11,13 +11,16 @@ angular.module('registryApp.cliche')
 
         var cliAdapterWatchers = [],
             jobWatcher,
-            reqMap = {CPURequirement: 'cpu', MemRequirement: 'mem'},
-	        reqDefaults = {CPURequirement: 1, MemRequirement: 1024},
+            reqMap = {
+                CPURequirement: 'cpu',
+                MemRequirement: 'mem'
+            },
+            reqDefaults = {CPURequirement: 1, MemRequirement: 1024},
             onBeforeUnloadOff = BeforeUnload.register(
-                function() {
+                function () {
                     return 'Please save your changes before leaving.';
                 },
-                function() {
+                function () {
                     return $scope.form.tool.$dirty;
                 });
 
@@ -56,10 +59,6 @@ angular.module('registryApp.cliche')
 
         /* console visibility flag */
         $scope.view.isConsoleVisible = false;
-
-        window.clean = function () {
-            $scope.form.tool.$dirty = false;
-        };
 
         /* tool type: tool or script */
         $scope.view.type = Globals.appType;
