@@ -267,7 +267,7 @@ angular.module('registryApp.app')
             // Saving workflow before fiddling with it's coorindates
             var workflow = PipelineInstance.format();
             // Saving SVG string before turning on Loader and removing SVG element from the DOM
-            var svgString = PipelineInstance.getSvgString();
+            //var svgString = PipelineInstance.getSvgString();
 
             $scope.view.loading = true;
 
@@ -278,14 +278,14 @@ angular.module('registryApp.app')
 
                     rev = data.message['sbg:revision'];
 
-                    if (_.isString(svgString)) {
-                        return App.updateSvg(rev, svgString);
-                    }
-                    else {
-                        return data;
-                    }
-                })
-                .then(function () {
+                //    if (_.isString(svgString)) {
+                //        return App.updateSvg(rev, svgString);
+                //    }
+                //    else {
+                //        return data;
+                //    }
+                //})
+                //.then(function () {
 
                     Notification.primary('Workflow successfully updated.');
 
