@@ -15,7 +15,8 @@
                 tool-type="{{ view.type }}"
                 properties="view.tool.inputs"
                 inputs="view.job.inputs"
-                class="add-enum-item large">
+                class="add-enum-item large"
+                id="input_add_button">
         </add-property>
         <div class="enum-list-container">
             <property-input
@@ -25,7 +26,9 @@
                     name="propertyInput{{ $index }}"
                     type="{{ view.type }}"
                     inputs="view.job.inputs"
-                    properties="view.tool.inputs">
+                    properties="view.tool.inputs"
+                    index="$index"
+                    id-prefix="input">
             </property-input>
 
             <p class="alert alert-info large" ng-if="view.tool.inputs.length === 0">
