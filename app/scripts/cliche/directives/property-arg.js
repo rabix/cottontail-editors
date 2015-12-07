@@ -57,6 +57,7 @@ angular.module('registryApp.cliche')
             modalInstance.result.then(function () {
                 Cliche.deleteArg($scope.prop);
                 Cliche.generateCommand();
+                $scope.setDirty();
             });
         };
 
@@ -82,13 +83,20 @@ angular.module('registryApp.cliche')
             });
 
             modalInstance.result.then(function(result) {
+                if (result.prop !== $scope.prop) {
+                    _.each(result.prop, function(value, key) {
+                        $scope.prop[key] = value;
+                    });
 
-                _.each(result.prop, function(value, key) {
-                    $scope.prop[key] = value;
-                });
+                    checkExpression();
+                    Cliche.generateCommand();
+                    $scope.setDirty();
+                } else {
+                    $scope.setPristine();
+                }
 
-                checkExpression();
-                Cliche.generateCommand();
+            }, function () {
+                $scope.setPristine();
             });
 
             return modalInstance;
@@ -115,7 +123,30 @@ angular.module('registryApp.cliche')
                 prop: '=ngModel',
                 index: '@'
             },
+            require: '?ngModel',
             controller: 'PropertyArgCtrl',
-            link: function() {}
+            link: function (scope, element, attr, ngModelCtrl) {
+                var originalPristineStatus;
+
+                scope.setDirty = function () {
+
+                    if (ngModelCtrl) {
+                        if (typeof originalPristineStatus === 'undefined') {
+                            // ngModel parent = general, general parent = form.tool
+                            originalPristineStatus = ngModelCtrl.$$parentForm.$$parentForm.$pristine;
+                        }
+                        ngModelCtrl.$setDirty();
+                    }
+                };
+
+                scope.setPristine = function () {
+                    // will not set form to pristine if it was not so originally
+                    if (ngModelCtrl && originalPristineStatus) {
+                        // ngModel -> general form -> tool form
+                        ngModelCtrl.$$parentForm.$$parentForm.$setPristine();
+                        ngModelCtrl.$setPristine();
+                    }
+                };
+            }
         };
     }]);
