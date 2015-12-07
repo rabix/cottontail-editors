@@ -522,7 +522,10 @@ angular.module('registryApp.cliche')
                     /* generate command */
                     _.each(props, function(prop) {
                         var separation = parseSeparation(prop.separate);
-                        command.push(prop.prefix + separation + prop.val);
+
+                        if (!_.isNull(prop.val)) {
+                            command.push(prop.prefix + separation + prop.val);
+                        }
                     });
 
                     return command.join(' ');

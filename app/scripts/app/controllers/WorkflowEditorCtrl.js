@@ -19,8 +19,7 @@ angular.module('registryApp.app')
                 return 'Please save your changes before leaving.';
             }, function () {
                 return prompt
-            }),
-            Instances = [];
+            });
 
         $scope.$on('pipeline:change', function () {
             prompt = true;
@@ -268,7 +267,7 @@ angular.module('registryApp.app')
             // Saving workflow before fiddling with it's coorindates
             var workflow = PipelineInstance.format();
             // Saving SVG string before turning on Loader and removing SVG element from the DOM
-            var svgString = PipelineInstance.getSvgString();
+            //var svgString = PipelineInstance.getSvgString();
 
             $scope.view.loading = true;
 
@@ -279,36 +278,34 @@ angular.module('registryApp.app')
 
                     rev = data.message['sbg:revision'];
 
-                    if (_.isString(svgString)) {
-                        return App.updateSvg(rev, svgString);
-                    }
-                    else {
-                        return data;
-                    }
-                })
-                .then(function (data) {
+                //    if (_.isString(svgString)) {
+                //        return App.updateSvg(rev, svgString);
+                //    }
+                //    else {
+                //        return data;
+                //    }
+                //})
+                //.then(function () {
 
                     Notification.primary('Workflow successfully updated.');
 
+                    $scope.view.workflow = workflowJson;
 
+                    if (history.pushState) {
 
-                    //$scope.view.workflow = workflowJson;
+                        $location.search({ type: 'workflow', rev: rev });
+                    }
 
-                    //if (history.pushState) {
-                    //
-                    //    $location.search({ type: 'workflow', rev: null });
-                    //}
-
-                    //$scope.view.saving = false;
-                    //$scope.view.loading = false;
-                    //$scope.view.isChanged = false;
+                    $scope.view.saving = false;
+                    $scope.view.loading = false;
+                    $scope.view.isChanged = false;
                     prompt = false;
 
                     console.timeEnd('Workflow saving');
 
                     /* @todo: workflow could not be saved more than once with reload
                      turned off. This is a temporary fix until we get the no-reload feature sorted */
-                    redirectTo(rev);
+//                    redirectTo(rev);
                 })
                 .catch(function (trace) {
                     Notification.error('[Workflow Error] Workflow cannot be saved: ' + trace);

@@ -407,6 +407,8 @@ angular.module('registryApp.dyole')
                         input: false
                     }, modelOutputs[i]);
 
+                    data['sbg:includeInPorts'] = data['sbg:includeInPorts'] || true;
+
                     outputs.push(Terminal.getInstance({
                         model: data,
                         parent: this,

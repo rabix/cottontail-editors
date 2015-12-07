@@ -18,7 +18,7 @@ angular.module('registryApp.cliche')
                     return 'Please save your changes before leaving.';
                 },
                 function() {
-                    return $scope.form.tool.$dirty
+                    return $scope.form.tool.$dirty;
                 });
 
         // <editor-fold desc="Local $scope variables">
@@ -26,7 +26,7 @@ angular.module('registryApp.cliche')
         $scope.view = {};
         $scope.form = {};
 
-        /* globals gotten from camellia */
+        /* variables gotten from camellia */
         $scope.view.globals = Globals;
 
 
@@ -39,7 +39,9 @@ angular.module('registryApp.cliche')
         $scope.view.job = {};
 
         /* actual tool app from db */
-        $scope.view.app = {is_script: Globals.appType === 'script'};
+        $scope.view.app = {
+            is_script: Globals.appType === 'script'
+        };
         /* actual tool app revision from db */
         $scope.view.revision = {};
 
@@ -55,11 +57,15 @@ angular.module('registryApp.cliche')
         /* console visibility flag */
         $scope.view.isConsoleVisible = false;
 
+        window.clean = function () {
+            $scope.form.tool.$dirty = false;
+        };
+
         /* tool type: tool or script */
         $scope.view.type = Globals.appType;
 
-        /* current tab - available: general, inputs, outputs, metadata, test, script */
-        $scope.view.tab = Globals.appType === 'script' ? 'script' : 'general';
+        /* current tab - available: general, inputs, outputs, metadata, test */
+        $scope.view.tab = 'general';
 
         /* page classes */
         $scope.view.classes = ['page', 'cliche'];
@@ -345,7 +351,7 @@ angular.module('registryApp.cliche')
 
             json = JSON.parse(json);
 
-            var preserve = $scope.view.mode === 'new';
+            var preserve = false;
 
             var cachedName = $scope.view.tool.label;
 
@@ -376,6 +382,7 @@ angular.module('registryApp.cliche')
 
             Cliche.setTool(json, preserve);
             $scope.view.tool = Cliche.getTool();
+            $scope.form.tool.$setDirty();
 
             if ($scope.view.mode === 'edit') { $scope.view.tool.label = cachedName; }
 
@@ -456,6 +463,7 @@ angular.module('registryApp.cliche')
                     _.remove($scope.view.tool.requirements, {'class': 'sbg:Metadata'});
                 }
 
+                $scope.form.tool.$setDirty();
                 $scope.view.requireSBGMetadata = result.requireSBGMetadata;
             });
         };
@@ -586,24 +594,9 @@ angular.module('registryApp.cliche')
 
         /**
          * Run app
+         * Will prompt for permission first if form is dirty
          */
         $scope.runApp = function () {
-
-            var modalInstance = $modal.open({
-                controller: 'ModalCtrl',
-                template: $templateCache.get('views/partials/confirm-delete.html'),
-                resolve: { data: function () {
-                    return {
-                        message: 'Run will discard unsaved changes, are you sure you want to perform this action?'
-                    }; }
-                }
-            });
-
-            modalInstance.result.then(function () {
-                createTask();
-            }, function () {
-                return false;
-            });
 
             function createTask() {
                 // create task and redirect to task page for that task
@@ -616,6 +609,28 @@ angular.module('registryApp.cliche')
                 });
             }
 
+            if (!$scope.form.tool.$dirty) {
+                createTask();
+            } else {
+                var modalInstance = $modal.open({
+                    controller: 'ModalCtrl',
+                    template: $templateCache.get('views/partials/confirm-delete.html'),
+                    resolve: {
+                        data: function () {
+                            return {
+                                message: 'There are unsaved changes, running the app will discard them.' +
+                                ' Are you sure you want to perform this action?'
+                            };
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function () {
+                    createTask();
+                }, function () {
+                    return false;
+                });
+            }
         };
 
 
@@ -712,7 +727,7 @@ angular.module('registryApp.cliche')
 			$scope.view.reqCreateFileRequirement.fileDef.push({
 				filename: '',
 				fileContent: ''
-			})
+			});
 		};
 
 		/**
@@ -936,29 +951,29 @@ angular.module('registryApp.cliche')
          * @returns {boolean}
          */
         $scope.updateTool = function() {
-            var deferred = $q.defer();
+            var tool = Cliche.getTool(),
+                deferred = $q.defer();
 
             if ($scope.view.loading) {
                 return false;
             }
 
-            $scope.view.loading = true;
 
-            var tool = Cliche.getTool();
+            $scope.view.loading = true;
 
 	        removeEmptyFields(tool);
             tool['sbg:job'] = Cliche.getJob();
+
 
             Cliche.generatePreviewCommand().then(function(previewCommand) {
                 tool['sbg:cmdPreview'] = previewCommand;
 
                 App.update(tool, $scope.view.type)
                     .then(function(result) {
+                        $scope.form.tool.$setPristine();
                         $scope.view.loading = false;
 
                         var newRevision = result.message['sbg:revision'];
-                        BeforeRedirect.setReload(true);
-                        $scope.form.tool.$dirty = false;
                         Notification.primary('Tool successfully updated');
 
                         redirectTo(newRevision);

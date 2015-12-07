@@ -77,19 +77,12 @@ angular.module('registryApp.cliche')
 						delete $scope.view.property.outputBinding;
 					}
 				}
-			})
+			});
 		}
 
-
         /**
-         * Toggle secondary files into array (not currently using)
+         * Add a blank metadata object to the array
          */
-        //$scope.toggleToList = function() {
-        //    $scope.view.property.outputBinding.secondaryFiles = [];
-        //    $scope.view.property.outputBinding.secondaryFiles.push('');
-        //    $scope.view.isSecondaryFilesExpr = false;
-        //};
-
 		$scope.addMetadata = function () {
 			$scope.view.metadata.push({
 				key: '',

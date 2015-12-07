@@ -58,9 +58,11 @@ angular.module('registryApp.dyole')
              * @param relations
              * @param exposed
              * @param workflow
+             * @param suggestedValues
+             * @param schemas
              * @returns {Array}
              */
-            toRabixRelations: function (relations, exposed, workflow, suggestedValues) {
+            toRabixRelations: function (relations, exposed, workflow, suggestedValues, schemas) {
                 var _self = this,
                     dataLinks = [];
 
@@ -74,13 +76,13 @@ angular.module('registryApp.dyole')
                         dataLink.position = rel.position;
                     }
 
-                    if (rel.input_name === rel.end_node) {
+                    if (rel.input_name === rel.end_node && Common.checkSystem(schemas[rel.end_node])) {
                         dataLink.destination = rel.end_node;
                     } else {
                         dataLink.destination = rel.end_node + Const.generalSeparator + rel.input_name.slice(1);
                     }
 
-                    if (rel.output_name === rel.start_node) {
+                    if (rel.output_name === rel.start_node && Common.checkSystem(schemas[rel.start_node])) {
                         dataLink.source = rel.start_node;
                     } else {
                         dataLink.source = rel.start_node + Const.generalSeparator + rel.output_name.slice(1);
@@ -352,7 +354,7 @@ angular.module('registryApp.dyole')
                 _.forEach(workflow.outputs, function (output) {
                     var id = output['id'];
 
-                    if (_common.checkTypeFile(output.type[1] || output.type[0])) {
+                    if (_common.checkTypeFile(output.type[1] || output.type[0]) || output['sbg:includeInPorts']) {
                         system[id] = _self._generateIOSchema('output', output, id);
                     }
                 });
@@ -379,7 +381,7 @@ angular.module('registryApp.dyole')
                     if (typeof input !== 'undefined') {
                         schema = input.type[1] || input.type[0];
 
-                        return input['sbg:includeInPorts']? true : _common.checkTypeFile(schema);
+                        return input['sbg:includeInPorts'] ? true : _common.checkTypeFile(schema);
                     } else {
                         console.log('Input %s not found on node %s', input_id, node_id);
                     }
@@ -786,7 +788,7 @@ angular.module('registryApp.dyole')
                     model = _.clone(RabixModel, true);
 
                 model.display = json.display;
-                model.dataLinks = _formatter.toRabixRelations(json.relations, exposed, model, suggestedValues);
+                model.dataLinks = _formatter.toRabixRelations(json.relations, exposed, model, suggestedValues, json.schemas);
                 model.steps = _formatter.createSteps(json.schemas);
 
                 _formatter.addValuesToSteps(model.steps, values);
