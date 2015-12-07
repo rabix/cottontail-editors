@@ -279,29 +279,29 @@ angular.module('registryApp.app')
 
                     rev = data.message['sbg:revision'];
 
-                    if (_.isString(svgString)) {
-                        return App.updateSvg(rev, svgString);
-                    }
-                    else {
-                        return data;
-                    }
-                })
-                .then(function (data) {
+                //    if (_.isString(svgString)) {
+                //        return App.updateSvg(rev, svgString);
+                //    }
+                //    else {
+                //        return data;
+                //    }
+                //})
+                //.then(function (data) {
 
                     Notification.primary('Workflow successfully updated.');
 
 
 
-                    //$scope.view.workflow = workflowJson;
+                    $scope.view.workflow = workflowJson;
 
-                    //if (history.pushState) {
-                    //
-                    //    $location.search({ type: 'workflow', rev: null });
-                    //}
+                    if (history.pushState) {
 
-                    //$scope.view.saving = false;
-                    //$scope.view.loading = false;
-                    //$scope.view.isChanged = false;
+                        $location.search({ type: 'workflow', rev: null });
+                    }
+
+                    $scope.view.saving = false;
+                    $scope.view.loading = false;
+                    $scope.view.isChanged = false;
                     prompt = false;
 
                     console.timeEnd('Workflow saving');

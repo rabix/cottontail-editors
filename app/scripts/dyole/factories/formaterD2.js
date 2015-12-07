@@ -811,7 +811,8 @@ angular.module('registryApp.dyole')
                     relations, nodes, schemas, display,
                     exposed = {},
                     suggestedValues = {},
-                    values = {};
+                    values = {},
+                    idParts;
 
                 schemas = _formatter.createSchemasFromSteps(json.steps, values);
 
@@ -841,8 +842,11 @@ angular.module('registryApp.dyole')
                     relations: relations
                 };
 
-                model['id'] = json['id'];
-                model.label = json.label || json.id;
+                idParts = json['sbg:id'].split('/');
+
+                model['id'] = json['sbg:id'];
+                model.label = json.label || json['sbg:id'];
+                model['sbg:name'] = idParts[2];
                 model.description = json.description || '';
                 model = _mergeSBGProps(json, model);
 
