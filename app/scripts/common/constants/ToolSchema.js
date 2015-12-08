@@ -178,7 +178,7 @@ var Schema = {
          * @typedef {object} Binding
          *
          * @property {number} position
-         * @property {ValueFrom} valueFrom
+         * @property {Expression} valueFrom
          * @property {boolean} separate
          * @property {string} prefix
          * @property {string|null} itemSeparator
@@ -190,7 +190,7 @@ var Schema = {
                     type: 'number'
                 },
                 /**
-                 * @typedef {string|number|object} ValueFrom
+                 * @typedef {string|number|object} Expression
                  * @property {string} [class]
                  * @property {string} [engine]
                  * @property {string} [script]

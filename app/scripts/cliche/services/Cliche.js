@@ -188,7 +188,7 @@ angular.module('registryApp.cliche')
         /**
          * Get schema for transformation
          *
-         * @returns {ValueFrom}
+         * @returns {Expression}
          */
         var getTransformSchema = function() {
 
@@ -543,7 +543,7 @@ angular.module('registryApp.cliche')
         /**
          * Apply the transformation function (this is just the mock)
          *
-         * @param {ValueFrom|string} transform
+         * @param {Expression|string} transform
          * @param {*} value
          * @param {boolean} self
          * @returns {*}
