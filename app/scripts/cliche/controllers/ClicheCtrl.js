@@ -38,13 +38,16 @@ angular.module('registryApp.cliche')
         $scope.form.job = {};
 
         /* tool schema holder and job json for testing */
+        /** @type CWLTool */
         $scope.view.tool = {};
+        /** @type SBGJob */
         $scope.view.job = {};
 
         /* actual tool app from db */
         $scope.view.app = {
             is_script: Globals.appType === 'script'
         };
+
         /* actual tool app revision from db */
         $scope.view.revision = {};
 
@@ -118,7 +121,9 @@ angular.module('registryApp.cliche')
 
                     var tool = _.assign(_.cloneDeep(rawTool), result[0].message);
 
+                    /** @type CWLTool */
                     $scope.view.app = tool;
+                    /** @type CWLTool */
                     $scope.view.tool = tool;
 
                     if (tool.class === 'ExpressionTool') {
@@ -142,7 +147,7 @@ angular.module('registryApp.cliche')
 
                 setUpCliche();
                 prepareRequirements();
-                prepareStatusCodes();
+                _prepareStatusCodes();
                 setUpCategories();
                 groupByCategory();
 
@@ -236,9 +241,10 @@ angular.module('registryApp.cliche')
          */
         var prepareRequirements = function() {
 
+            //@todo: fix this logic to be more flexible/scalable
             $scope.view.reqDockerRequirement = _.find($scope.view.tool.requirements, {'class': 'DockerRequirement'});
-            $scope.view.reqCPURequirement = _.find($scope.view.tool.requirements, {'class': 'CPURequirement'});
-            $scope.view.reqMemRequirement = _.find($scope.view.tool.requirements, {'class': 'MemRequirement'});
+            $scope.view.reqCPURequirement = _.find($scope.view.tool.hints, {'class': 'CPURequirement'});
+            $scope.view.reqMemRequirement = _.find($scope.view.tool.hints, {'class': 'MemRequirement'});
 	        $scope.view.reqCreateFileRequirement = _.find($scope.view.tool.requirements, {'class': 'CreateFileRequirement'});
             $scope.view.requireSBGMetadata = !!(_.find($scope.view.tool.requirements, {'class': 'sbg:Metadata'}));
 
@@ -258,7 +264,7 @@ angular.module('registryApp.cliche')
 		 *
 		 * @param {string} key
 		 */
-        var connectRequirement = function(key){
+        var _connectRequirement = function(key){
             var tempRequirement = _.find($scope.view.tool.requirements, {'class': key});
             if (!tempRequirement) {
                 $scope.view.tool.requirements.push(_.clone(_.find(rawTool.requirements, {'class': key})));
@@ -268,7 +274,7 @@ angular.module('registryApp.cliche')
             }
         };
 
-        var prepareStatusCodes = function () {
+        var _prepareStatusCodes = function () {
             if (typeof $scope.view.tool.successCodes === 'undefined') {
                 $scope.view.tool.successCodes = [];
             }
@@ -344,51 +350,48 @@ angular.module('registryApp.cliche')
         /**
          * Import external tool
          *
-         * @param {Object} json
+         * @param {string} json
          */
         var importTool = function(json) {
 
-            json = JSON.parse(json);
-
-            var preserve = false;
+            /** @type CWLTool */
+            var newTool = JSON.parse(json);
 
             var cachedName = $scope.view.tool.label;
 
-            if (angular.isDefined(json) && angular.isString(json.baseCommand)) {
-                json.baseCommand = [json.baseCommand];
+            if (angular.isDefined(newTool) && angular.isString(newTool.baseCmd)) {
+                newTool.baseCmd = [newTool.baseCmd];
             }
 
             if (Globals.appType === 'script') {
-                json.engine = Cliche.getTransformSchema().engine;
-                delete json.baseCommand;
-                delete json.stdin;
-                delete json.stdout;
-                delete json.arguments;
-                delete json.transform;
+                newTool.engine = Cliche.getTransformSchema().engine;
+                delete newTool.baseCmd;
+                delete newTool.stdin;
+                delete newTool.stdout;
+                delete newTool.arguments;
 
-                json.requirements.forEach(function(req, index) {
+                newTool.requirements.forEach(function(req, index) {
                     if (req.class !== 'ExpressionEngineRequirement') {
-                        json.requirements.splice(index, 1);
+                        newTool.requirements.splice(index, 1);
                     }
                 });
 
             } else {
-                if (angular.isDefined(json.transform)) { delete json.transform; }
-                if (angular.isDefined(json.engine)) { delete json.engine; }
-                if (angular.isDefined(json.script)) { delete json.script; }
-
+                if (angular.isDefined(newTool.transform)) { delete newTool.transform; }
+                if (angular.isDefined(newTool.engine)) { delete newTool.engine; }
+                if (angular.isDefined(newTool.script)) { delete newTool.script; }
             }
 
-            Cliche.setTool(json, preserve);
+            Cliche.setTool(newTool);
             $scope.view.tool = Cliche.getTool();
             $scope.form.tool.$setDirty();
 
             if ($scope.view.mode === 'edit') { $scope.view.tool.label = cachedName; }
 
-	        if (!_.isUndefined(json['sbg:job'])) {
-		        Cliche.setJob(json['sbg:job'], preserve);
+	        if (!_.isUndefined(newTool['sbg:job'])) {
+		        Cliche.setJob(newTool['sbg:job']);
 	        } else {
-		        Cliche.setJob(null, preserve);
+		        Cliche.setJob(null);
 	        }
 
             $scope.view.job = Cliche.getJob();
@@ -667,7 +670,7 @@ angular.module('registryApp.cliche')
          */
         $scope.updateResource = function (transform, key) {
 
-            connectRequirement(key);
+            _connectRequirement(key);
             //in case field has not yet been defined
             var req = $scope.view['req' + key];
 
@@ -720,7 +723,7 @@ angular.module('registryApp.cliche')
 		 */
 		$scope.addFileDef = function () {
 			if (!$scope.view.reqCreateFileRequirement) {
-				connectRequirement('CreateFileRequirement');
+				_connectRequirement('CreateFileRequirement');
 			}
 
 			$scope.view.reqCreateFileRequirement.fileDef.push({

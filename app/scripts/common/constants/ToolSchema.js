@@ -8,6 +8,9 @@ var Schema = {
     $schema: 'http://json-schema.org/schema#',
     type: 'object',
     definitions: {
+        /**
+         * @typedef {string[]|EnumType|ArrayType|RecordType|MapType} Type
+         */
         schemaDef: {
             type: 'array',
             minItems: 1,
@@ -44,6 +47,13 @@ var Schema = {
             type: 'string',
             enum: ['string', 'boolean', 'File', 'float', 'int', 'null']
         },
+        /**
+         * @typedef {object} EnumType
+         *
+         * @property {string} type - always 'enum'
+         * @property {string} name
+         * @property {string[]} symbols
+         */
         enumDef: {
             type: 'object',
             properties: {
@@ -63,6 +73,12 @@ var Schema = {
             },
             required: ['type', 'name', 'symbols']
         },
+        /**
+         * @typedef {object} ArrayType
+         *
+         * @property {string} type - always 'array'
+         * @property {string|EnumType|RecordType|MapType} items
+         */
         arrayDef: {
             type: 'object',
             properties: {
@@ -98,6 +114,12 @@ var Schema = {
             },
             required: ['type', 'items']
         },
+        /**
+         * @typedef {object} RecordType
+         *
+         * @property {string} type - always 'record'
+         * @property {Input[]} fields
+         */
         recordDef: {
             type: 'object',
             properties: {
@@ -111,6 +133,12 @@ var Schema = {
             },
             required: ['type', 'fields']
         },
+        /**
+         * @typedef {object} MapType
+         *
+         * @property {string} type - always 'map'
+         * @property {string} values - currently always 'string'
+         */
 	    mapDef: {
 		    type: 'object',
 		    properties: {
@@ -136,19 +164,37 @@ var Schema = {
                     name: {
                         type: 'string'
                     },
-                    adapter: {
+                    inputBinding: {
+                        type: 'object'
+                    },
+                    outputBinding: {
                         type: 'object'
                     }
                 },
                 required: ['type', 'name']
             }
         },
+        /**
+         * @typedef {object} Binding
+         *
+         * @property {number} position
+         * @property {ValueFrom} valueFrom
+         * @property {boolean} separate
+         * @property {string} prefix
+         * @property {string|null} itemSeparator
+         */
         adapterDef: {
             type: 'object',
             properties: {
                 position: {
                     type: 'number'
                 },
+                /**
+                 * @typedef {string|number|object} ValueFrom
+                 * @property {string} [class]
+                 * @property {string} [engine]
+                 * @property {string} [script]
+                 */
                 valueFrom: {
                     oneOf: [
                         {
@@ -160,10 +206,10 @@ var Schema = {
                                 'class': {
                                     type: 'string'
                                 },
-                                lang: {
+                                engine: {
                                     type: 'string'
                                 },
-                                value: {
+                                script: {
                                     type: 'string'
                                 }
                             }
@@ -253,6 +299,13 @@ var Schema = {
         inputs: {
             type: 'array',
             items: {
+                /**
+                 * @typedef {object} Input
+                 * @property {string} id
+                 * @property {Type} type
+                 * @property {string} [name]
+                 * @property {Binding} [inputBinding]
+                 */
                 type: 'object',
                 properties: {
                     type: {
@@ -275,9 +328,6 @@ var Schema = {
                                 type: ['undefined', 'null']
                             }
                         ]
-                    },
-                    outputBinding: {
-                        $ref: '#/definitions/adapterDef'
                     }
                 },
                 required: ['type', 'id']
@@ -286,6 +336,13 @@ var Schema = {
         outputs: {
             type: 'array',
             items: {
+                /**
+                 * @typedef {object} Output
+                 * @property {string} id
+                 * @property {Type} type
+                 * @property {string} [name]
+                 * @property {Binding} [outputBinding]
+                 */
                 type: 'object',
                 properties: {
                     'id': {
@@ -294,6 +351,9 @@ var Schema = {
                     },
                     type: {
                         $ref: '#/definitions/schemaDef'
+                    },
+                    outputBinding: {
+                        $ref: '#/definitions/adapterDef'
                     }
                 },
                 required: ['type', 'id']
@@ -313,6 +373,11 @@ var Schema = {
         },
         arguments: {
             type: 'array',
+            /**
+             * @typedef {object} Argument
+             * @description Type of Binding that is applied directly to the tool
+             * @augments Binding
+             */
             items: {
                 $ref: '#/definitions/adapterDef'
             }
