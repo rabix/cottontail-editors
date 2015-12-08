@@ -8,7 +8,6 @@ angular.module('registryApp.dyole')
     .factory('node', ['$rootScope', 'terminal', 'Const', 'common', 'Notification', 'lodash', 'Globals', function ($rootScope, Terminal, Const, Common, Notification, _, Globals) {
 
         var Node = function (options) {
-            var _self = this;
 
             this.canvas = options.canvas;
 

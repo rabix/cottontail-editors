@@ -1385,13 +1385,10 @@ angular.module('registryApp.dyole')
                             _.forEach(_self.nodes, function (node) {
 
                                 if (!Common.checkSystem(node.model)) {
-                                    var n1 = _self._fixTrailingSlash(node.model.appId),
-                                        n2 = _self._fixTrailingSlash(nodeId);
 
-                                    if ( n1 === n2 ) {
+                                    if ( node.model['sbg:id'] === nodeId ) {
                                         node.setOutdated(true);
                                     }
-
                                 }
 
                             });
@@ -1405,15 +1402,6 @@ angular.module('registryApp.dyole')
                     console.error(err);
                 });
 
-            },
-
-            _fixTrailingSlash: function (url) {
-
-                if (url.charAt(url.length-1) === '/') {
-                    url = url.slice(0, -1);
-                }
-
-                return url;
             },
 
             /**
