@@ -1371,7 +1371,7 @@ angular.module('registryApp.dyole')
 
                 _.forEach(this.model.nodes, function (node) {
                     if (!Common.checkSystem(node)) {
-                        list.push(node.appId);
+                        list.push(node['sbg:id']);
                     }
                 });
 

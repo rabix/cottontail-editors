@@ -811,7 +811,7 @@ angular.module('registryApp.dyole')
                         .push(_self.removeNodeButton.getEl());
 
                     if (this.isOutdated) {
-                        _self.el.push(_self.updateNodeButton.getEl())
+                        _self.el.push(_self.updateNodeButton.getEl());
                     }
 
                 }
