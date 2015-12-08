@@ -164,13 +164,18 @@ angular.module('registryApp.app')
          * @param {Object} result
          */
         var appsLoaded = function (result) {
+
+            var workflow = result[2].message;
+
             $scope.view.filtering = false;
             $scope.view.message = result[0].status;
 
             $scope.view.repoTypes.MyApps = result[0].message;
             $scope.view.repoTypes.PublicApps = result[1].message;
 
-            $scope.view.workflow = result[2].message;
+            workflow['sbg:name'] = workflow['sbg:id'].split('/')[2];
+
+            $scope.view.workflow = workflow;
 
             if ($scope.view.workflow['sbg:validationErrors'] && $scope.view.workflow['sbg:validationErrors'].length > 0) {
                 var rev = parseInt($scope.view.workflow['sbg:revision']);
