@@ -1134,17 +1134,6 @@ angular.module('registryApp.dyole')
                 this._removeValues();
 
                 this.destroy();
-
-                this.Pipeline.nodes[this.model.id] = null;
-                this.Pipeline.model.schemas[this.model.id] = null;
-
-                delete this.Pipeline.model.schemas[this.model.id];
-                delete this.Pipeline.nodes[this.model.id];
-
-                _.remove(this.Pipeline.nodes, function (n) {
-                    return n.model.id === _self.model.id;
-                });
-
             },
 
             destroy: function () {
@@ -1155,7 +1144,7 @@ angular.module('registryApp.dyole')
 
                 this.el.remove();
 
-                this.Pipeline.Event.trigger('node:destroy', this.id);
+                this.Pipeline.Event.trigger('node:destroy', this.model);
 
             }
         };

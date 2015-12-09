@@ -236,6 +236,7 @@ angular.module('registryApp.app')
          * Callback when workflow is changed
          */
         $scope.onWorkflowChange = function (value) {
+
             $scope.view.isChanged = value.value;
 
             if (!value.value) {

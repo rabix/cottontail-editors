@@ -14,11 +14,10 @@ angular.module('registryApp.dyole')
         /**
          * Bare Rabix schema model
          *
-         * @type {{class: string, @context: string, steps: Array, dataLinks: Array, inputs: Array, outputs: Array}}
+         * @type {{class: string, steps: Array, dataLinks: Array, inputs: Array, outputs: Array}}
          */
         var RabixModel = {
             'class': 'Workflow',
-            '@context': 'https://raw.githubusercontent.com/common-workflow-language/common-workflow-language/draft2/specification/context.json',
             'steps': [],
             'requirements': [],
             'dataLinks': [],
@@ -169,7 +168,7 @@ angular.module('registryApp.dyole')
 
                 _.forEach(schemas, function (sc, appId) {
 
-                    var schema = sc,
+                    var schema = _.clone(sc),
                         id = appId,
                         step = {
                             'id': id,
@@ -177,6 +176,10 @@ angular.module('registryApp.dyole')
                             inputs: [],
                             outputs: []
                         };
+
+                    step.run['sbg:x'] = step.run.display.x;
+                    step.run['sbg:y'] = step.run.display.y;
+                    delete step.run.display;
 
                     if (typeof schema.scatter !== 'undefined' && typeof schema.scatter === 'string') {
                         step.scatter = id + Const.generalSeparator + schema.scatter.slice(1);
@@ -787,7 +790,11 @@ angular.module('registryApp.dyole')
                 var json = _.clone(p, true),
                     model = _.clone(RabixModel, true);
 
-                model.display = json.display;
+                //model.display = json.display;
+                model['sbg:canvas_x'] = json.display.canvas.x;
+                model['sbg:canvas_y'] = json.display.canvas.y;
+                model['sbg:canvas_zoom'] = json.display.canvas.zoom;
+
                 model.dataLinks = _formatter.toRabixRelations(json.relations, exposed, model, suggestedValues, json.schemas);
                 model.steps = _formatter.createSteps(json.schemas);
 
@@ -801,6 +808,10 @@ angular.module('registryApp.dyole')
                 model.description = json.description || '';
                 model.hints = json.hints;
 
+                delete model.display;
+                delete model.dataLinks;
+                delete model['sbg:name'];
+
                 if (json.requireSBGMetadata) {
                     model.requirements.push(_.clone(MetadataRequirement, true));
                 }
@@ -809,6 +820,7 @@ angular.module('registryApp.dyole')
             },
 
             toPipelineSchema: function (p) {
+
                 var json = _.clone(p, true),
                     relations, nodes, schemas, display,
                     exposed = {},

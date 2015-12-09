@@ -50,9 +50,14 @@ angular.module('registryApp.dyole')
                 return false;
             },
 
-            checkSystem: function (node_schema) {
+            /**
+             * Check if nodes are existing tools or IO nodes which are virtual nodes
+             * @param {object} nodeSchema
+             * @returns {boolean}
+             */
+            checkSystem: function (nodeSchema) {
 
-                return node_schema.softwareDescription && node_schema.softwareDescription.repo_name === 'system';
+                return nodeSchema.softwareDescription && nodeSchema.softwareDescription.repo_name === 'system';
             },
 
             /**
