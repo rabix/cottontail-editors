@@ -11,16 +11,16 @@ angular.module('registryApp.cliche')
          * Skeleton of JobJSON object
          *
          * @typedef {?object} SBGJob
-         * @property {object.<string, *>} inputs - Maps test data to inputs of ToolJson
-         * @property {AllocatedResources} allocatedResources - CPU and MEM allocated for tool
+         * @property {object.<string, *>} inputs Maps test data to inputs of ToolJson
+         * @property {AllocatedResources} allocatedResources CPU and MEM allocated for tool
          */
     {
         inputs: {},
 
         /**
          * @typedef {object} AllocatedResources
-         * @property {int} cpu
-         * @property {int} mem
+         * @property {int} cpu CPU recourse, set in ToolJSON.hints
+         * @property {int} mem Memory resource, set in ToolJSON.hints
          */
         allocatedResources: {
             cpu: 0,
@@ -83,7 +83,7 @@ angular.module('registryApp.cliche')
             /**
              * @typedef {object} Hint
              * @property {string} class
-             * @property {*} value
+             * @property {string|number|Expression} value
              */
             {
                 'class': 'CPURequirement',
@@ -103,7 +103,7 @@ angular.module('registryApp.cliche')
         arguments: []
     })
     .constant('rawTransform', {
-        // defined in ToolSchema.js as ValueFrom
+        // defined in ToolSchema.js as Expression
         'class': 'Expression',
         engine: '#cwl-js-engine',
         script: ''

@@ -35,8 +35,10 @@
                                                ng-model="hint.class"/>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" class="form-control" placeholder="Requirement value"
-                                               ng-model="hint.value"/>
+                                        <expr type="text"
+                                              placeholder="Requirement value"
+                                              ng-model="hint.value" ng-disabled="hint.class.toLowerCase() === 'cpurequirement' || hint.class.toLowerCase() === 'memrequirement'">
+                                        </expr>
                                     </div>
                                 </div>
                                 <a href class="fa fa-remove remove-btn" ng-click="removeMetadata($index)"></a>

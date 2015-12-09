@@ -37,10 +37,10 @@
                         <div class="form-group">
                             <label class="control-label">CPU</label>
                             <expr tooltip-msg="{{ ::help.cliche.general.cpu }}"
-                                  ng-model="view.reqCPURequirement.value"
+                                  ng-model="view.resCPURequirement.value"
                                   min="0"
                                   type="number"
-                                  handle-null="removeResourceRequirement('CPURequirement')"
+                                  handle-null="removeResourceHint('CPURequirement')"
                                   handle-item-update="updateResource(value, 'CPURequirement')">
                             </expr>
                         </div>
@@ -50,9 +50,9 @@
                         <div class="form-group">
                             <label class="control-label">Memory (MB)</label>
                             <expr tooltip-msg="{{ ::help.cliche.general.memory }}"
-                                  ng-model="view.reqMemRequirement.value"
+                                  ng-model="view.resMemRequirement.value"
                                   type="number"
-                                  handle-null="removeResourceRequirement('MemRequirement')"
+                                  handle-null="removeResourceHint('MemRequirement')"
                                   handle-item-update="updateResource(value, 'MemRequirement')">
                             </expr>
                         </div>

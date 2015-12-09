@@ -11,7 +11,7 @@ angular.module('registryApp.cliche')
 
         var cliAdapterWatchers = [],
             jobWatcher,
-            reqMap = {
+            resourceMap = {
                 CPURequirement: 'cpu',
                 MemRequirement: 'mem'
             },
@@ -102,7 +102,7 @@ angular.module('registryApp.cliche')
 		 * Cliche events that can be broadcast by various components
 		 */
 		$scope.$on(ClicheEvents.EXPRESSION.CHANGED, function() {
-			checkExpressionRequirement();
+			_checkExpressionRequirement();
 		});
 
         $scope.$watch('Loading.classes', function(n, o) {
@@ -145,10 +145,10 @@ angular.module('registryApp.cliche')
 
                 $scope.view.user = result[1].user;
 
-                setUpCliche();
-                prepareRequirements();
+                _setUpCliche();
+                _readRequirementsAndResources();
                 _prepareStatusCodes();
-                setUpCategories();
+                _setUpCategories();
                 groupByCategory();
 
                 $scope.toggleConsole();
@@ -156,8 +156,9 @@ angular.module('registryApp.cliche')
 
         /**
          * Set up cliche form
+         * @private
          */
-        var setUpCliche = function() {
+        var _setUpCliche = function() {
 
             $scope.view.command = '';
 
@@ -171,8 +172,9 @@ angular.module('registryApp.cliche')
 
         /**
          * Output error message if something was wrong with expressions evaluation
+         * @private
          */
-        var outputError = function () {
+        var _outputError = function () {
 
             $scope.view.generatingCommand = false;
             $scope.view.command = '';
@@ -184,8 +186,9 @@ angular.module('registryApp.cliche')
          * Output command generated from the form
          *
          * @param {string} command
+         * @private
          */
-        var outputCommand = function (command) {
+        var _outputCommand = function (command) {
 
             $scope.view.generatingCommand = false;
             $scope.view.command = command;
@@ -196,7 +199,7 @@ angular.module('registryApp.cliche')
         /**
          * Turn on cliAdapter deep watch when console visible
          */
-        var turnOnCliAdapterDeepWatch = function() {
+        var _turnOnCliAdapterDeepWatch = function() {
 
             if (Globals.appType === 'tool') {
 
@@ -227,7 +230,7 @@ angular.module('registryApp.cliche')
         /**
          * Turn off cliAdapter deep watch when console tab is hidden
          */
-        var turnOffCliAdapterDeepWatch = function() {
+        var _turnOffCliAdapterDeepWatch = function() {
 
             _.each(cliAdapterWatchers, function(watcher) {
                 if (_.isFunction(watcher)) { watcher.call(); }
@@ -239,17 +242,23 @@ angular.module('registryApp.cliche')
         /**
          * Split requirements in separate objects in order to use them directly
          */
-        var prepareRequirements = function() {
+        var _readRequirementsAndResources = function() {
 
-            //@todo: fix this logic to be more flexible/scalable
+            // resources
+            /** @type Hint */
+            $scope.view.resCPURequirement = _.find($scope.view.tool.hints, {'class': 'CPURequirement'});
+            /** @type Hint */
+            $scope.view.resMemRequirement = _.find($scope.view.tool.hints, {'class': 'MemRequirement'});
+
+            // requirements
+            /** @type Requirement */
             $scope.view.reqDockerRequirement = _.find($scope.view.tool.requirements, {'class': 'DockerRequirement'});
-            $scope.view.reqCPURequirement = _.find($scope.view.tool.hints, {'class': 'CPURequirement'});
-            $scope.view.reqMemRequirement = _.find($scope.view.tool.hints, {'class': 'MemRequirement'});
-	        $scope.view.reqCreateFileRequirement = _.find($scope.view.tool.requirements, {'class': 'CreateFileRequirement'});
+            /** @type Requirement */
+            $scope.view.reqCreateFileRequirement = _.find($scope.view.tool.requirements, {'class': 'CreateFileRequirement'});
+            /** @type boolean */
             $scope.view.requireSBGMetadata = !!(_.find($scope.view.tool.requirements, {'class': 'sbg:Metadata'}));
 
 	        if ($scope.view.reqCreateFileRequirement && $scope.view.reqCreateFileRequirement.fileDef.length === 0) {
-
 		        _.remove($scope.view.tool.requirements, {'class': 'CreateFileRequirement'});
 		        delete $scope.view.reqCreateFileRequirement;
 	        }
@@ -263,14 +272,30 @@ angular.module('registryApp.cliche')
 		 * rawTool and make view object a reference to object in array.
 		 *
 		 * @param {string} key
+         * @private
 		 */
-        var _connectRequirement = function(key){
+        var _connectRequirement = function (key){
             var tempRequirement = _.find($scope.view.tool.requirements, {'class': key});
             if (!tempRequirement) {
                 $scope.view.tool.requirements.push(_.clone(_.find(rawTool.requirements, {'class': key})));
                 $scope.view['req'+key] = _.find($scope.view.tool.requirements, {'class': key});
             } else {
                 $scope.view['req'+key] = tempRequirement;
+            }
+        };
+
+        /**
+         *
+         * @param key One of ['MemRequirement', 'CPURequirement']
+         * @private
+         */
+        var _connectResource = function (key) {
+            var tempResource = _.find($scope.view.tool.hints, {'class': key});
+            if (!tempResource) {
+                $scope.view.tool.hints.push(_.clone(_.find(rawTool.hints, {'class': key})));
+                $scope.view['res'+key] = _.find($scope.view.tool.hints, {'class': key});
+            } else {
+                $scope.view['res'+key] = tempResource;
             }
         };
 
@@ -287,15 +312,18 @@ angular.module('registryApp.cliche')
         /**
          * Check if there are expressions applied on cpu and mem requirements and evaluate
          * them in order to refresh result for the allocated resources
+         *
+         * @private
          */
-        var checkRequirements = function () {
+        var _evaluateResources = function () {
+            /** @type Hint */
+            var resource;
 
-            var req;
+            _.each(resourceMap, function (key, reqName) {
+                resource = $scope.view['res' + reqName];
 
-            _.each(reqMap, function (key, reqName) {
-                req = $scope.view['req' + reqName];
-                if (req && req.value && _.isObject(req.value) && _.contains(req.value.value, '$job')) {
-                    SandBox.evaluate(req.value.script, {})
+                if (resource && resource.value && _.isObject(resource.value) && _.contains(resource.value.value, '$job')) {
+                    SandBox.evaluate(resource.value.script, {})
                         .then(function (result) {
                             $scope.view.job.allocatedResources[key] = result;
                         });
@@ -304,41 +332,40 @@ angular.module('registryApp.cliche')
         };
 
         /**
-         * Watch the job's inputs in order to evaluate
+         * Watch the job in order to evaluate
          * expression which include $job as context
+         *
+         * @private
          */
-        var turnOnJobDeepWatch = function() {
+        var _turnOnJobDeepWatch = function() {
 
-            if (Globals.appType === 'tool') {
+            _evaluateResources();
 
-                checkRequirements();
-
-                if ($scope.view.isConsoleVisible) {
-                    $scope.view.generatingCommand = true;
-                    debouncedGenerateCommand();
-                }
-
-                jobWatcher = $scope.$watch('view.job.inputs', function(n, o) {
-                    if (n !== o) {
-                        checkRequirements();
-                        $scope.updateResource($scope.view.reqMemRequirement.value, 'MemRequirement');
-                        $scope.updateResource($scope.view.reqCPURequirement.value, 'CPURequirement');
-
-                        if ($scope.view.isConsoleVisible) {
-                            $scope.view.generatingCommand = true;
-                            debouncedGenerateCommand();
-                        }
-                    }
-                }, true);
-
+            if ($scope.view.isConsoleVisible) {
+                $scope.view.generatingCommand = true;
+                debouncedGenerateCommand();
             }
 
+            jobWatcher = $scope.$watch('view.job.inputs', function(n, o) {
+                if (n !== o) {
+                    _evaluateResources();
+                    $scope.updateResource($scope.view.resMemRequirement.value, 'MemRequirement');
+                    $scope.updateResource($scope.view.resCPURequirement.value, 'CPURequirement');
+
+                    if ($scope.view.isConsoleVisible) {
+                        $scope.view.generatingCommand = true;
+                        debouncedGenerateCommand();
+                    }
+                }
+            }, true);
         };
 
         /**
          * Unwatch job's inputs
+         *
+         * @private
          */
-        var turnOffJobDeepWatch = function() {
+        var _turnOffJobDeepWatch = function() {
 
             if (_.isFunction(jobWatcher)) {
                 jobWatcher.call();
@@ -351,8 +378,9 @@ angular.module('registryApp.cliche')
          * Import external tool
          *
          * @param {string} json
+         * @private
          */
-        var importTool = function(json) {
+        var _importTool = function(json) {
 
             /** @type CWLTool */
             var newTool = JSON.parse(json);
@@ -396,8 +424,8 @@ angular.module('registryApp.cliche')
 
             $scope.view.job = Cliche.getJob();
 
-            prepareRequirements();
-            setUpCategories();
+            _readRequirementsAndResources();
+            _setUpCategories();
 
         };
 
@@ -405,15 +433,16 @@ angular.module('registryApp.cliche')
          * Redirect to the other page
          *
          * @param revisionId
+         * @private
          */
-        var redirectTo = function(revisionId) {
+        var _redirectTo = function(revisionId) {
             window.location = '/u/' + Globals.projectOwner + '/' + Globals.projectSlug + '/apps/' + Globals.appName + '/edit?type=' + Globals.appType + '&rev=' + revisionId;
         };
 
         /**
          * Prepares categories for tagsInput directive
          */
-        var setUpCategories = function() {
+        var _setUpCategories = function() {
             $scope.view.categories = _.map($scope.view.tool['sbg:categories'], function(cat) {
 
                 return {text: cat};
@@ -425,8 +454,10 @@ angular.module('registryApp.cliche')
 		 *
 		 * Apps with expressions require an expression engine. It adds an expression engine
 		 * requirement to apps with any expressions.
+         *
+         * @private
 		 */
-		var checkExpressionRequirement = function () {
+		var _checkExpressionRequirement = function () {
 			if (Helper.deepPropertyExists($scope.view.tool, 'script')) {
 				$scope.view.expReq = true;
 				if (!_.find($scope.view.tool.requirements, {'class': 'ExpressionEngineRequirement'})) {
@@ -473,16 +504,16 @@ angular.module('registryApp.cliche')
 
         /**
          * Switch the tab
-         * @param tab
+         * @param {string} tab
          */
         $scope.switchTab = function(tab) {
             $scope.view.tab = tab;
 
             if (tab === 'test') {
                 groupByCategory();
-                turnOnJobDeepWatch();
+                _turnOnJobDeepWatch();
             } else {
-                turnOffJobDeepWatch();
+                _turnOffJobDeepWatch();
             }
 
         };
@@ -522,9 +553,9 @@ angular.module('registryApp.cliche')
 
                         $scope.view.loading = false;
 
-                        setUpCliche();
-                        prepareRequirements();
-                        setUpCategories();
+                        _setUpCliche();
+                        _readRequirementsAndResources();
+                        _setUpCategories();
 
                     });
 
@@ -546,7 +577,7 @@ angular.module('registryApp.cliche')
             });
 
             modalInstance.result.then(function (json) {
-                importTool(json);
+                _importTool(json);
             });
 
             return modalInstance;
@@ -600,7 +631,7 @@ angular.module('registryApp.cliche')
          */
         $scope.runApp = function () {
 
-            function createTask() {
+            function _createTask() {
                 // create task and redirect to task page for that task
                 App.createAppTask().then(function (task) {
                     BeforeRedirect.setReload(true);
@@ -612,7 +643,7 @@ angular.module('registryApp.cliche')
             }
 
             if (!$scope.form.tool.$dirty) {
-                createTask();
+                _createTask();
             } else {
                 var modalInstance = $modal.open({
                     controller: 'ModalCtrl',
@@ -628,7 +659,7 @@ angular.module('registryApp.cliche')
                 });
 
                 modalInstance.result.then(function () {
-                    createTask();
+                    _createTask();
                 }, function () {
                     return false;
                 });
@@ -644,9 +675,9 @@ angular.module('registryApp.cliche')
             $scope.view.isConsoleVisible = !$scope.view.isConsoleVisible;
 
             if ($scope.view.isConsoleVisible) {
-                turnOnCliAdapterDeepWatch();
+                _turnOnCliAdapterDeepWatch();
             } else {
-                turnOffCliAdapterDeepWatch();
+                _turnOffCliAdapterDeepWatch();
             }
 
         };
@@ -657,7 +688,7 @@ angular.module('registryApp.cliche')
          */
         $scope.generateCommand = function() {
             Cliche.generateCommand()
-            .then(outputCommand, outputError);
+            .then(_outputCommand, _outputError);
         };
 
         var debouncedGenerateCommand = _.debounce($scope.generateCommand, 200);
@@ -665,26 +696,26 @@ angular.module('registryApp.cliche')
         /**
          * Update tool resources and apply transformation on allocated resources if needed
          *
-         * @param {*} transform
+         * @param {Expression|string} expression
          * @param {string} key
          */
-        $scope.updateResource = function (transform, key) {
+        $scope.updateResource = function (expression, key) {
 
-            _connectRequirement(key);
             //in case field has not yet been defined
-            var req = $scope.view['req' + key];
+            _connectResource(key);
 
-            req.value = transform;
+            var resource = $scope.view['res' + key];
+            resource.value = expression;
 
-            if (_.isObject(transform)) {
+            if (_.isObject(expression)) {
 
-                SandBox.evaluate(transform.script, {})
+                SandBox.evaluate(expression.script, {})
                     .then(function (result) {
-                        $scope.view.job.allocatedResources[reqMap[key]] = result;
+                        $scope.view.job.allocatedResources[resourceMap[key]] = result;
                     });
 
             } else {
-                $scope.view.job.allocatedResources[reqMap[key]] = transform;
+                $scope.view.job.allocatedResources[resourceMap[key]] = expression;
             }
 
         };
@@ -758,7 +789,7 @@ angular.module('registryApp.cliche')
 				delete $scope.view.reqCreateFileRequirement;
 
 			}
-            checkExpressionRequirement();
+            _checkExpressionRequirement();
 		};
 
         $scope.addStatusCode = function (codeType) {
@@ -915,16 +946,16 @@ angular.module('registryApp.cliche')
         };
 
 		/**
-		 * Removes the memory or cpu requirement when value is set to null or is an empty string
+		 * Removes the memory or cpu hints when value is set to null or is an empty string
 		 *
 		 * Sets default values in jobJson
 		 */
-        $scope.removeResourceRequirement = function(key) {
-            _.remove($scope.view.tool.requirements, {'class': key});
-            delete $scope.view['req' + key];
+        $scope.removeResourceHint = function(key) {
+            _.remove($scope.view.tool.hints, {'class': key});
+            delete $scope.view['res' + key];
 
-	        $scope.view.job.allocatedResources[reqMap[key]] = reqDefaults[key]; // set default value
-			checkExpressionRequirement();
+	        $scope.view.job.allocatedResources[resourceMap[key]] = reqDefaults[key]; // set default value
+			_checkExpressionRequirement();
         };
 
 		/**
@@ -978,7 +1009,7 @@ angular.module('registryApp.cliche')
                         var newRevision = result.message['sbg:revision'];
                         Notification.primary('Tool successfully updated');
 
-                        redirectTo(newRevision);
+                        _redirectTo(newRevision);
                         $scope.view.loading = true;
 
                         deferred.resolve();
@@ -1028,7 +1059,7 @@ angular.module('registryApp.cliche')
                 });
 
                 modalInstance.result.then(function (revisionId) {
-                    redirectTo(revisionId);
+                    _redirectTo(revisionId);
 
                     // to indicate that something is happening while the page redirects
                     $scope.view.loading = true;
