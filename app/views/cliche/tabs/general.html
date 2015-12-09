@@ -128,7 +128,8 @@
                                 <li ng-repeat="baseCmd in view.tool.baseCommand track by $index">
                                     <div class="enum-field form-group form-group-file">
                                         <expr tooltip-msg="{{ ::help.cliche.general.baseCMD }}"
-                                              ng-model="baseCmd" index="{{ $index }}"
+                                              ng-model="baseCmd"
+                                              index="{{ $index }}"
                                               handle-item-update="updateCliAdapter(value, index, 'baseCommand')"
                                               handle-item-blur="splitBaseCmd(value, index)">
                                         </expr>

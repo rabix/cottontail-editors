@@ -9,7 +9,7 @@ var Schema = {
     type: 'object',
     definitions: {
         /**
-         * @typedef {string[]|EnumType|ArrayType|RecordType|MapType} Type
+         * @typedef {string[]|EnumType[]|ArrayType[]|RecordType[]|MapType[]} Type
          */
         schemaDef: {
             type: 'array',
@@ -49,6 +49,7 @@ var Schema = {
         },
         /**
          * @typedef {object} EnumType
+         * @extends Type
          *
          * @property {string} type - always 'enum'
          * @property {string} name

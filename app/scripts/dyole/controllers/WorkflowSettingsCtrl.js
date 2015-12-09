@@ -11,17 +11,23 @@
 
 angular.module('registryApp.dyole')
     .controller('WorkflowSettingsCtrl', ['$scope', '$uibModalInstance', 'data', 'HelpMessages', 'lodash', function ($scope, $modalInstance, data, HelpMessages, _) {
+        'use strict';
+
         $scope.help = HelpMessages;
 
         $scope.view = {};
-        $scope.view.type = data.type || "Workflow";
-        $scope.view.requireSBGMetadata = data.requireSBGMetadata;
+        $scope.view.type = data.type || 'Workflow';
+        $scope.view.requireSBGMetadata = _.clone(data.requireSBGMetadata);
         $scope.view.instanceHint = {
             class: 'sbg:sbg:AWSInstanceType',
             value: ''
         };
 
-        $scope.view.hints = data.hints || [];
+        /** @type Hint[] */
+        $scope.view.hints = _.clone(data.hints) || [];
+
+        // angular form
+        $scope.view.appSettings = {};
 
         //$scope.view.instances = data.instances;
 
@@ -49,7 +55,19 @@ angular.module('registryApp.dyole')
          */
         $scope.removeMetadata = function (index) {
             $scope.view.hints.splice(index, 1);
+
+            $scope.view.appSettings.$setDirty();
         };
+
+        /**
+         * Updates hint value when it is changed
+         * @param {string|Expression} value
+         * @param {number} index
+         */
+        $scope.updateHintValue = function (value, index) {
+            $scope.view.hints[index].value = value;
+        };
+
 
 
         var _stripEmptyHints = function() {

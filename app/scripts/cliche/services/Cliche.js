@@ -64,7 +64,7 @@ angular.module('registryApp.cliche')
          *
          * Removes unnecessary/disallowed properties based on the tool type.
          *
-         * @param {String} type Can be 'script' or 'tool'
+         * @param {string} type Can be 'script' or 'tool'
          * @param {CWLTool} json
          */
         var transformToolJson = function(type, json) {
@@ -258,12 +258,15 @@ angular.module('registryApp.cliche')
              * @param {string} name
              * @param {Input[]} inputs
              * @param {boolean} isFirstLevel
+             *
+             * @private
              * @returns {boolean}
              */
-            var checkInner = function(name, inputs, isFirstLevel) {
+            function _checkInner(name, inputs, isFirstLevel) {
 
                 var exists = false;
 
+                //@todo this logic is broken, doesn't actually check names of enum and record items
                 _.each(inputs, function(i) {
 
                     /** @type Input */
@@ -278,7 +281,7 @@ angular.module('registryApp.cliche')
                             return false;
                         }
                     } else if (type === 'array' && input.items && input.items.type === 'record' || type === 'record') {
-                        exists = checkInner(name, input.items.fields, false);
+                        exists = _checkInner(name, input.items.fields, false);
                         if (exists) {
                             return false;
                         }
@@ -287,18 +290,18 @@ angular.module('registryApp.cliche')
 
                 return exists;
 
-            };
+            }
 
             if (mode === 'edit') {
 
                 if (nameObj.name !== nameObj.newName) {
-                    return checkInner(nameObj.newName, toolJSON.inputs, true);
+                    return _checkInner(nameObj.newName, toolJSON.inputs, true);
                 } else {
                     return false;
                 }
 
             } else if (mode === 'add') {
-                return checkInner(nameObj.newName, toolJSON.inputs, true);
+                return _checkInner(nameObj.newName, toolJSON.inputs, true);
             }
 
         };
@@ -442,7 +445,7 @@ angular.module('registryApp.cliche')
         /**
          * Extract enum symbols and name if available
          *
-         * @param {EnumType} enumType
+         * @param {Type} enumType
          * @returns {*}
          */
         var parseEnum = function(enumType) {
@@ -646,7 +649,7 @@ angular.module('registryApp.cliche')
          * Prepare properties for the command line generating
          *
          * @param {Input[]} properties
-         * @param {SBGJob.input} inputs
+         * @param {SBGJob.inputs} inputs
          * @returns {Promise} props
          */
         var prepareProperties = function(properties, inputs) {

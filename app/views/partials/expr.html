@@ -13,7 +13,7 @@
                type="text"
                class="form-control"
                ng-model="view.transform.script"
-               readonly>
+               ng-readonly="!view.disabled">
 
         <input uib-tooltip="{{ view.tooltipMsg }}"
                tooltip-trigger="focus"
@@ -26,24 +26,26 @@
                class="form-control"
                ng-model="view.literal"
                placeholder="{{ view.placeholder }}"
-               ng-readonly="onlyExpr">
+               ng-readonly="onlyExpr && !view.disabled">
 
         <span class="input-group-btn" ng-class="{'tooltip-code': view.transform && !view.exprError}">
-            <a href
+            <button
                ng-if="view.longLiteral"
+               ng-disabled="view.disabled"
                class="btn btn-expression"
                uib-tooltip="{{ !view.transform.script && view.transform ? view.transform : 'Click to add a literal'}}"
                ng-click="editLiteral()"
                ng-class="{'btn-primary': (view.mode === 'literal' && view.literal && !view.exprError), 'btn-default': (view.mode === 'transform' || !view.literal && !view.exprError), 'btn-warning': view.exprError}">
                 <i class="fa fa-font"></i>
-            </a>
-            <a href
+            </button>
+            <button
+               ng-disabled="view.disabled"
                class="btn btn-expression"
                uib-tooltip="{{ view.transform.script || 'There is no expression defined. Click to add it' }}"
                ng-click="editExpression()"
                ng-class="{'btn-primary': (view.mode === 'transform' && !view.exprError), 'btn-default': (view.mode === 'literal' && !view.exprError), 'btn-warning': view.exprError}">
                 <i class="fa fa-code"></i>
-            </a>
+            </button>
         </span>
     </div>
 

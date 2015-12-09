@@ -11,14 +11,19 @@
 
 angular.module('registryApp.cliche')
     .controller('ToolSettingsCtrl', ['$scope', '$uibModalInstance', 'data', 'HelpMessages', 'lodash', function ($scope, $modalInstance, data, HelpMessages, _) {
+        'use strict';
+
         $scope.help = HelpMessages;
 
         $scope.view = {};
         $scope.view.type = data.type || 'Workflow';
-        $scope.view.requireSBGMetadata = data.requireSBGMetadata;
+        $scope.view.requireSBGMetadata = _.clone(data.requireSBGMetadata);
 
-        $scope.view.hints = data.hints || [];
+        /** @type Hint[] */
+        $scope.view.hints = _.clone(data.hints) || [];
 
+        // angular form
+        $scope.view.appSettings = {};
         $scope.addMetadata = function () {
             $scope.view.hints.push({
                 class: '',
@@ -27,20 +32,38 @@ angular.module('registryApp.cliche')
         };
 
         /**
+         * Updates hint value when it is changed
+         * @param {string|Expression} value
+         * @param {number} index
+         */
+        $scope.updateHintValue = function (value, index) {
+          $scope.view.hints[index].value = value;
+        };
+
+        /**
          * Remove meta data from the output
          *
-         * @param {integer} index
+         * @param {number} index
          */
         $scope.removeMetadata = function (index) {
             $scope.view.hints.splice(index, 1);
+
+            $scope.view.appSettings.$setDirty();
         };
 
+        /**
+         * Removes hints with blank class fields
+         * @private
+         */
         function _stripEmptyHints() {
             _.remove($scope.view.hints, function (meta) {
                 return meta.class === '';
             });
         }
 
+        /**
+         * Close modal and apply changes
+         */
         $scope.ok = function () {
 
             _stripEmptyHints();
@@ -51,6 +74,8 @@ angular.module('registryApp.cliche')
             });
 
         };
+
+
         /**
          * Close the modal window
          */
