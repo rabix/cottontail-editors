@@ -18,6 +18,7 @@ angular.module('registryApp.cliche')
 		$scope.view.uniqueId = _.uniqueId();
         $scope.view.key = key;
         $scope.view.mode = options.mode;
+        /** @type Output */
         $scope.view.property = options.property || {};
         $scope.view.property.type = Cliche.getSchema('output', options.property, options.toolType, false);
 
@@ -48,8 +49,8 @@ angular.module('registryApp.cliche')
 
 
         $scope.view.metadata = [];
-		if ($scope.view.property.outputBinding && $scope.view.property.outputBinding.metadata) {
-			_.forOwn($scope.view.property.outputBinding.metadata, function (value, key) {
+		if ($scope.view.property.outputBinding && $scope.view.property.outputBinding['sbg:metadata']) {
+			_.forOwn($scope.view.property.outputBinding['sbg:metadata'], function (value, key) {
 				$scope.view.metadata.push({value: value, key: key});
 			});
 		}
@@ -126,19 +127,19 @@ angular.module('registryApp.cliche')
 			        $scope.view.property.outputBinding = {};
 		        }
 
-		        $scope.view.property.outputBinding.metadata = {};
+		        $scope.view.property.outputBinding['sbg:metadata'] = {};
 
 
 		        if (!_.isEmpty($scope.view.metadata)) {
 			        _.forEach($scope.view.metadata, function(meta) {
 				        if (!meta.error && meta.key !== '') {
-					        $scope.view.property.outputBinding.metadata[meta.key] = meta.value;
+					        $scope.view.property.outputBinding['sbg:metadata'][meta.key] = meta.value;
 				        }
 			        });
 		        }
 	        } else {
-                if ($scope.view.property.outputBinding && $scope.view.property.outputBinding.metadata) {
-                    delete $scope.view.property.outputBinding.metadata;
+                if ($scope.view.property.outputBinding && $scope.view.property.outputBinding['sbg:metadata']) {
+                    delete $scope.view.property.outputBinding['sbg:metadata'];
                 }
             }
 

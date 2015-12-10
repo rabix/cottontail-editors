@@ -51,7 +51,7 @@ var Schema = {
          * @typedef {object} EnumType
          * @extends Type
          *
-         * @property {string} type - always 'enum'
+         * @property {string} type always 'enum'
          * @property {string} name
          * @property {string[]} symbols
          */
@@ -77,7 +77,7 @@ var Schema = {
         /**
          * @typedef {object} ArrayType
          *
-         * @property {string} type - always 'array'
+         * @property {string} type  always 'array'
          * @property {string|EnumType|RecordType|MapType} items
          */
         arrayDef: {
@@ -118,7 +118,7 @@ var Schema = {
         /**
          * @typedef {object} RecordType
          *
-         * @property {string} type - always 'record'
+         * @property {string} type  always 'record'
          * @property {Input[]} fields
          */
         recordDef: {
@@ -137,8 +137,8 @@ var Schema = {
         /**
          * @typedef {object} MapType
          *
-         * @property {string} type - always 'map'
-         * @property {string} values - currently always 'string'
+         * @property {string} type  always 'map'
+         * @property {string} values  currently always 'string'
          */
 	    mapDef: {
 		    type: 'object',
