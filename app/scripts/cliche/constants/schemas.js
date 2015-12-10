@@ -58,11 +58,6 @@ angular.module('registryApp.cliche')
              * @property {string} class
              */
             {
-                'class': 'DockerRequirement',
-                dockerImageId: '',
-                dockerPull: ''
-            },
-            {
                 'class': 'ExpressionEngineRequirement',
                 id: '#cwl-js-engine',
                 requirements: [
@@ -83,7 +78,7 @@ angular.module('registryApp.cliche')
             /**
              * @typedef {object} Hint
              * @property {string} class
-             * @property {string|number|Expression} value
+             * @property {string|number|Expression} [value]
              */
             {
                 'class': 'sbg:CPURequirement',
@@ -92,6 +87,11 @@ angular.module('registryApp.cliche')
             {
                 'class': 'sbg:MemRequirement',
                 value: 1000
+            },
+            {
+                'class': 'DockerRequirement',
+                dockerImageId: '',
+                dockerPull: ''
             }
         ],
         //moved CLI adapter to root
