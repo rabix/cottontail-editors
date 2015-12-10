@@ -246,13 +246,13 @@ angular.module('registryApp.cliche')
 
             // resources
             /** @type Hint */
-            $scope.view.resCPURequirement = _.find($scope.view.tool.hints, {'class': 'CPURequirement'});
+            $scope.view.resCPURequirement = _.find($scope.view.tool.hints, {'class': 'sbg:CPURequirement'});
             /** @type Hint */
-            $scope.view.resMemRequirement = _.find($scope.view.tool.hints, {'class': 'MemRequirement'});
+            $scope.view.resMemRequirement = _.find($scope.view.tool.hints, {'class': 'sbg:MemRequirement'});
+            /** @type Hint */
+            $scope.view.reqDockerRequirement = _.find($scope.view.tool.hints, {'class': 'DockerRequirement'});
 
             // requirements
-            /** @type Requirement */
-            $scope.view.reqDockerRequirement = _.find($scope.view.tool.requirements, {'class': 'DockerRequirement'});
             /** @type Requirement */
             $scope.view.reqCreateFileRequirement = _.find($scope.view.tool.requirements, {'class': 'CreateFileRequirement'});
             /** @type boolean */
@@ -290,10 +290,10 @@ angular.module('registryApp.cliche')
          * @private
          */
         var _connectResource = function (key) {
-            var tempResource = _.find($scope.view.tool.hints, {'class': key});
+            var tempResource = _.find($scope.view.tool.hints, {'class': 'sbg:' + key});
             if (!tempResource) {
-                $scope.view.tool.hints.push(_.clone(_.find(rawTool.hints, {'class': key})));
-                $scope.view['res'+key] = _.find($scope.view.tool.hints, {'class': key});
+                $scope.view.tool.hints.push(_.clone(_.find(rawTool.hints, {'class': 'sbg:' + key})));
+                $scope.view['res'+key] = _.find($scope.view.tool.hints, {'class': 'sbg:' + key});
             } else {
                 $scope.view['res'+key] = tempResource;
             }
@@ -951,7 +951,7 @@ angular.module('registryApp.cliche')
 		 * Sets default values in jobJson
 		 */
         $scope.removeResourceHint = function(key) {
-            _.remove($scope.view.tool.hints, {'class': key});
+            _.remove($scope.view.tool.hints, {'class': 'sbg:' + key});
             delete $scope.view['res' + key];
 
 	        $scope.view.job.allocatedResources[resourceMap[key]] = reqDefaults[key]; // set default value

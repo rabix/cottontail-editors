@@ -34,7 +34,7 @@
                                         <input type="text"
                                                class="form-control"
                                                placeholder="Requirement class"
-                                               ng-disabled="hint.class.toLowerCase() === 'cpurequirement' || hint.class.toLowerCase() === 'memrequirement'"
+                                               ng-disabled="hint.class.toLowerCase() === 'sbg:cpurequirement' || hint.class.toLowerCase() === 'sbg:memrequirement'"
                                                ng-model="hint.class"/>
                                     </div>
                                     <div class="col-md-6">
@@ -43,13 +43,13 @@
                                               ng-model="hint.value"
                                               index="{{ $index }}"
                                               handle-item-update="updateHintValue(value, index)"
-                                              ng-disabled="hint.class.toLowerCase() === 'cpurequirement' || hint.class.toLowerCase() === 'memrequirement'">
+                                              ng-disabled="hint.class.toLowerCase() === 'sbg:cpurequirement' || hint.class.toLowerCase() === 'sbg:memrequirement'">
                                         </expr>
                                     </div>
                                 </div>
                                 <a href
                                    class="fa fa-remove remove-btn"
-                                   ng-hide="hint.class.toLowerCase() === 'cpurequirement' || hint.class.toLowerCase() === 'memrequirement'"
+                                   ng-hide="hint.class.toLowerCase() === 'sbg:cpurequirement' || hint.class.toLowerCase() === 'sbg:memrequirement'"
                                    ng-click="removeMetadata($index)">
                                 </a>
                             </li>

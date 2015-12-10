@@ -86,11 +86,11 @@ angular.module('registryApp.cliche')
              * @property {string|number|Expression} value
              */
             {
-                'class': 'CPURequirement',
+                'class': 'sbg:CPURequirement',
                 value: 1
             },
             {
-                'class': 'MemRequirement',
+                'class': 'sbg:MemRequirement',
                 value: 1000
             }
         ],
