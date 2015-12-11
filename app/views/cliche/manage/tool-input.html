@@ -1,16 +1,17 @@
-<div class="modal-header">
-    <button type="button" class="close" ng-click="cancel()"><span>&times;</span><span class="sr-only">Close</span>
-    </button>
-    <h4 class="modal-title">
-        <span>{{ (view.mode === 'edit') ? 'Edit' : 'Add' }} Input Property</span>
-        <label class="checkbox inline">
-            <input type="checkbox" ng-model="view.required"> required
-        </label>
-    </h4>
-</div>
-<div class="modal-body">
+<form ng-submit="save()" name="view.form" novalidate>
 
-    <form ng-submit="save()" name="view.form" novalidate>
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="cancel()"><span>&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">
+            <span>{{ (view.mode === 'edit') ? 'Edit' : 'Add' }} Input Property</span>
+            <label class="checkbox inline">
+                <input type="checkbox" ng-model="view.required" name="required" id="input_modal_required"> required
+            </label>
+        </h4>
+    </div>
+
+    <div class="modal-body">
 
         <p ng-if="view.error" class="alert alert-danger">{{ view.error }}</p>
 
@@ -312,6 +313,7 @@
             </button>
         </div>
 
-    </form>
 
-</div>
+    </div>
+</form>
+
