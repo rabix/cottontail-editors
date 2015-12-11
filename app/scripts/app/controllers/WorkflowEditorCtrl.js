@@ -18,7 +18,7 @@ angular.module('registryApp.app')
             onBeforeUnloadOff = BeforeUnload.register(function () {
                 return 'Please save your changes before leaving.';
             }, function () {
-                return prompt
+                return prompt;
             });
 
         $scope.$on('pipeline:change', function () {
@@ -564,6 +564,7 @@ angular.module('registryApp.app')
                 });
 
                 modalInstance.result.then(function () {
+                    prompt = false;
                     createTask();
                 }, function () {
                     return false;
