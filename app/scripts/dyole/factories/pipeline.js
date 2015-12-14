@@ -1618,7 +1618,7 @@ angular.module('registryApp.dyole')
                 json.nodes = this._getNodes();
 
                 _.each(json.nodes, function (node) {
-                    var nodeId = node.id;
+                    var nodeId = node['sbg:id'];
 
                     json.schemas[nodeId].display = {
                         x: node.x,
