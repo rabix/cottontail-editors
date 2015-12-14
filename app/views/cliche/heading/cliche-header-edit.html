@@ -1,27 +1,31 @@
 <div class="heading">
     <div class="main-heading">
 
-        <div class="tool-name">
+        <span class="tool-name">
             <span class="heading-text">
                 <!--Username-->
-                <a href="/" title="Go to dashboard" target="_self">
-                    {{ ::view.globals['projectOwner'] }}
-                </a>
+                <span class="user-name">
+                    <a href="/" title="Go to dashboard" target="_self">
+                        {{ ::view.globals['projectOwner'] }}
+                    </a>
+                </span>
 
                 <span class="separator">/</span>
 
                 <!--Project-->
-                <a href="" ng-href="/u/{{ ::view.globals['projectOwner'] }}/{{ ::view.globals['projectSlug']}}/apps/"
-                   title="Go to project"
-                   target="_self">
-                    {{ ::view.globals.projectSlug }}
-                </a>
+                <span class="project-name">
+                    <a href="" ng-href="/u/{{ ::view.globals['projectOwner'] }}/{{ ::view.globals['projectSlug']}}/apps/"
+                       title="Go to project"
+                       target="_self">
+                        {{ ::view.globals.projectSlug }}
+                    </a>
+                </span>
 
                 <span class="separator">/</span>
 
                 <!--App name-->
-                <strong>
-                    <a ng-href="/u/{{ ::view.globals['projectOwner']}}/{{ ::view.globals['projectSlug']}}/apps/#{{ ::view.tool['sbg:name'] }}/"
+                <strong class="app-name">
+                    <a ng-href="/u/{{ ::view.globals['projectOwner']}}/{{ ::view.globals['projectSlug']}}/apps/#{{ ::view.globals['appName'] }}/"
                        title="Go to tool's detail page"
                        target="_self">
                         {{ ::view.globals.appName }}
@@ -31,19 +35,23 @@
                 <span class="separator">/</span>
 
                 <!--Revision-->
-                <a href ng-click="changeRevision()" target="_self">
-                    {{ ::view.tool['sbg:revision'] }}
-                </a>
+                <span class="app-revision">
+                    <a href ng-click="changeRevision()" target="_self">
+                        {{ ::view.tool['sbg:revision'] }}
+                    </a>
 
+                            <strong class="changes-mark"
+                                    ng-if="form.tool.$dirty"
+                                    uib-tooltip="There are changes in your tool"
+                                    tooltip-placement="right">
+                                <i class="fa fa-asterisk"></i>
+                            </strong>
+                </span>
             </span>
-        </div>
 
-        <strong class="changes-mark"
-                ng-if="form.tool.$dirty"
-                uib-tooltip="There are changes in your tool"
-                tooltip-placement="right">
-            <i class="fa fa-asterisk"></i>
-        </strong>
+        </span>
+
+
 
         <div class="actions pull-right">
 

@@ -1,47 +1,58 @@
 <div ng-class="view.classes" loading="view.loading">
 
     <div class="heading">
-
         <div class="main-heading">
+
             <span class="workflow-name">
                 <span class="heading-text">
                     <!--Username-->
-                    <a title="Go to dashboard" href="/" target="_self">
-                        {{ ::view.globals['projectOwner'] }}
-                    </a>
+                    <span class="user-name">
+                        <a title="Go to dashboard" href="/" target="_self">
+                            {{ ::view.globals['projectOwner'] }}
+                        </a>
+                    </span>
 
                     <span class="separator">/</span>
 
                     <!--Project-->
-                    <a href="" ng-href="/u/{{ ::view.globals['projectOwner'] }}/{{view.globals['projectSlug']}}/apps/"
-                       title="Go to project"
-                       target="_self">
-                        {{ ::view.globals.projectSlug }}
-                    </a>
+                    <span class="project-name">
+                        <a href=""
+                           ng-href="/u/{{ ::view.globals['projectOwner'] }}/{{view.globals['projectSlug']}}/apps/"
+                           title="Go to project"
+                           target="_self">
+                                {{ ::view.globals.projectSlug }}
+                        </a>
+                    </span>
 
                     <span class="separator">/</span>
 
                     <!--App name-->
-                    <strong>
-                        <a ng-href="/u/{{ ::view.globals['projectOwner']}}/{{ ::view.globals['projectSlug']}}/apps/#{{ ::view.workflow['sbg:name'] }}/"
+                    <strong class="app-name">
+                        <a ng-href="/u/{{ ::view.globals['projectOwner']}}/{{ ::view.globals['projectSlug']}}/apps/#{{ ::view.globals['appName'] }}/"
                            title="Go to workflow's detail page"
                            target="_self">
                             {{ ::view.globals.appName }}
                         </a>
                     </strong>
 
+
                     <span class="separator">/</span>
 
                     <!--Revision-->
-                    <a href ng-click="changeRevision()" target="_self">
-                        {{ view.workflow['sbg:revision'] }}
-                    </a>
+                    <span class="app-revision">
+                        <a href ng-click="changeRevision()" target="_self">
+                            {{ view.workflow['sbg:revision'] }}
+                        </a>
+
+                        <strong class="changes-mark" ng-if="view.isChanged" uib-tooltip="There are changes in your workflow" tooltip-placement="right">
+                            <i class="fa fa-asterisk"></i>
+                        </strong>
+
+                    </span>
+
                 </span>
             </span>
 
-            <strong class="changes-mark" ng-if="view.isChanged" uib-tooltip="There are changes in your workflow" tooltip-placement="right">
-                <i class="fa fa-asterisk"></i>
-            </strong>
 
             <div class="actions pull-right">
 
@@ -148,7 +159,7 @@
                                             <!--<li ng-if="apps.length !== 0"><span class="label label-info section-name">Apps</span></li>-->
 
                                             <li ng-repeat="app in filteredApps = (apps | filter:view.searchTerm)"
-                                                ng-if="(view.workflow['sbg:projectSlug'] + '/' + view.workflow['sbg:name']) !== (app.project + '/' + app.app_name)" >
+                                                ng-if="(view.workflow['sbg:project'] + '/' + view.workflow['sbg:name']) !== (app.project + '/' + app.app_name)" >
 
                                                 <a href drag="app">
                                                     <i class="fa"><img ng-src="{{ view.globals.base }}img/rabix/{{ ::app.type }}-hex.png" alt=""/></i>

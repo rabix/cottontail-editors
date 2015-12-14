@@ -857,7 +857,7 @@ angular.module('registryApp.cliche')
 
                         var deferred = $q.defer();
 
-                        applyTransform(baseCmd, baseCmd)
+                        applyTransform(baseCmd, baseCmd, false)
                             .then(function (result) {
                                 deferred.resolve(result);
                             }, function (error) {
@@ -868,8 +868,8 @@ angular.module('registryApp.cliche')
                     });
 
                     return $q.all(baseCmdPromises)
-                        .then(function (cmds) {
-                            return {command: command, baseCommand: cmds.join(' ')};
+                        .then(function (commands) {
+                            return {command: command, baseCommand: commands.join(' ')};
                         }, function (error) { return $q.reject(error); });
 
                 })
