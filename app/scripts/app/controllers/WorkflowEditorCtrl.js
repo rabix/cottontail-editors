@@ -18,8 +18,9 @@ angular.module('registryApp.app')
             onBeforeUnloadOff = BeforeUnload.register(function () {
                 return 'Please save your changes before leaving.';
             }, function () {
-                return prompt;
-            });
+                return prompt
+            }),
+            Instances = [];
 
         $scope.$on('pipeline:change', function () {
             prompt = true;
@@ -267,7 +268,7 @@ angular.module('registryApp.app')
             // Saving workflow before fiddling with it's coorindates
             var workflow = PipelineInstance.format();
             // Saving SVG string before turning on Loader and removing SVG element from the DOM
-            //var svgString = PipelineInstance.getSvgString();
+            var svgString = PipelineInstance.getSvgString();
 
             $scope.view.loading = true;
 
@@ -285,15 +286,17 @@ angular.module('registryApp.app')
                 //        return data;
                 //    }
                 //})
-                //.then(function () {
+                //.then(function (data) {
 
                     Notification.primary('Workflow successfully updated.');
+
+
 
                     $scope.view.workflow = workflowJson;
 
                     if (history.pushState) {
 
-                        $location.search({ type: 'workflow', rev: rev });
+                        $location.search({ type: 'workflow', rev: null });
                     }
 
                     $scope.view.saving = false;
@@ -305,7 +308,7 @@ angular.module('registryApp.app')
 
                     /* @todo: workflow could not be saved more than once with reload
                      turned off. This is a temporary fix until we get the no-reload feature sorted */
-//                    redirectTo(rev);
+                    redirectTo(rev);
                 })
                 .catch(function (trace) {
                     Notification.error('[Workflow Error] Workflow cannot be saved: ' + trace);
@@ -564,7 +567,6 @@ angular.module('registryApp.app')
                 });
 
                 modalInstance.result.then(function () {
-                    prompt = false;
                     createTask();
                 }, function () {
                     return false;
