@@ -1340,14 +1340,14 @@ angular.module('registryApp.dyole')
                     // Cache App id to place it in step.run
                     // and use generated id from label
                     if (model.id) {
-                        model.appId = model['sbg:id'];
+                        model.appId = model.id;
                     }
 
                     var _id = Common.generateNodeId(model, _self.nodes);
 
-                    model['sbg:id'] = _id;
+                    model.id = _id;
 
-                    _self.model.schemas[ model['sbg:id'] ] = rawModel;
+                    _self.model.schemas[ model.id ] = rawModel;
 
                     _self.Event.trigger('node:add', model);
 
@@ -1604,7 +1604,7 @@ angular.module('registryApp.dyole')
             /**
              * Get pipeline model
              *
-             * @returns {*}
+             * @returns {{}}
              */
             getJSON: function () {
                 var json = angular.copy(this.model),
@@ -1618,7 +1618,7 @@ angular.module('registryApp.dyole')
                 json.nodes = this._getNodes();
 
                 _.each(json.nodes, function (node) {
-                    var nodeId = node['sbg:id'];
+                    var nodeId = node.id;
 
                     json.schemas[nodeId].display = {
                         x: node.x,
