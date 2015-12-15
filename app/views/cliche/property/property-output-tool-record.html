@@ -5,6 +5,8 @@
      type="{{ view.type }}"
      tool-type="tool"
      mode="output"
+     id-prefix="{{ ::idPrefix }}"
+     index="index"
      is-required="view.required"
      handle="handleAction(action)">
 </div>
@@ -22,6 +24,7 @@
                 <add-property
                         type="input"
                         tool-type="tool"
+                        ng-model="view.newField"
                         properties="view.fields"
                         class="add-enum-item large">
                 </add-property>
