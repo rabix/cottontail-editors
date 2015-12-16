@@ -24,7 +24,7 @@
                 <span class="separator">/</span>
 
                 <!--App name-->
-                <strong>
+                <strong class="app-name">
                     <a ng-href="/u/{{ ::view.globals['projectOwner']}}/{{ ::view.globals['projectSlug']}}/apps/#{{ ::view.globals['appName'] }}/"
                        title="Go to tool's detail page"
                        target="_self">
@@ -40,12 +40,12 @@
                         {{ ::view.tool['sbg:revision'] }}
                     </a>
 
-                            <strong class="changes-mark"
-                                    ng-if="form.tool.$dirty"
-                                    uib-tooltip="There are changes in your tool"
-                                    tooltip-placement="right">
-                                <i class="fa fa-asterisk"></i>
-                            </strong>
+                    <strong class="changes-mark"
+                            ng-if="form.tool.$dirty"
+                            uib-tooltip="There are changes in your tool"
+                            tooltip-placement="right">
+                        <i class="fa fa-asterisk"></i>
+                    </strong>
                 </span>
             </span>
 
