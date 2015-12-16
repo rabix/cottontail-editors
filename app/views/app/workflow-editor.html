@@ -1,28 +1,33 @@
 <div ng-class="view.classes" loading="view.loading">
 
     <div class="heading">
-
         <div class="main-heading">
+
             <span class="workflow-name">
                 <span class="heading-text">
                     <!--Username-->
-                    <a title="Go to dashboard" href="/" target="_self">
-                        {{ ::view.globals['projectOwner'] }}
-                    </a>
+                    <span class="user-name">
+                        <a title="Go to dashboard" href="/" target="_self">
+                            {{ ::view.globals['projectOwner'] }}
+                        </a>
+                    </span>
 
                     <span class="separator">/</span>
 
                     <!--Project-->
-                    <a href="" ng-href="/u/{{ ::view.globals['projectOwner'] }}/{{view.globals['projectSlug']}}/apps/"
-                       title="Go to project"
-                       target="_self">
-                        {{ ::view.globals.projectSlug }}
-                    </a>
+                    <span class="project-name">
+                        <a href=""
+                           ng-href="/u/{{ ::view.globals['projectOwner'] }}/{{view.globals['projectSlug']}}/apps/"
+                           title="Go to project"
+                           target="_self">
+                                {{ ::view.globals.projectSlug }}
+                        </a>
+                    </span>
 
                     <span class="separator">/</span>
 
                     <!--App name-->
-                    <strong>
+                    <strong class="app-name">
                         <a ng-href="/u/{{ ::view.globals['projectOwner']}}/{{ ::view.globals['projectSlug']}}/apps/#{{ ::view.globals['appName'] }}/"
                            title="Go to workflow's detail page"
                            target="_self">
@@ -30,18 +35,24 @@
                         </a>
                     </strong>
 
+
                     <span class="separator">/</span>
 
                     <!--Revision-->
-                    <a href ng-click="changeRevision()" target="_self">
-                        {{ view.workflow['sbg:revision'] }}
-                    </a>
+                    <span class="app-revision">
+                        <a href ng-click="changeRevision()" target="_self">
+                            {{ view.workflow['sbg:revision'] }}
+                        </a>
+
+                        <strong class="changes-mark" ng-if="view.isChanged" uib-tooltip="There are changes in your workflow" tooltip-placement="right">
+                            <i class="fa fa-asterisk"></i>
+                        </strong>
+
+                    </span>
+
                 </span>
             </span>
 
-            <strong class="changes-mark" ng-if="view.isChanged" uib-tooltip="There are changes in your workflow" tooltip-placement="right">
-                <i class="fa fa-asterisk"></i>
-            </strong>
 
             <div class="actions pull-right">
 

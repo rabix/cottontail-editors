@@ -4,7 +4,8 @@
 
         <i class="fa fa-warning error" ng-if="view.exprError" title="{{ view.exprError }}"></i>
 
-        <input uib-tooltip="{{ view.tooltipMsg }}"
+        <input id="{{ id }}"
+               uib-tooltip="{{ view.tooltipMsg }}"
                tooltip-trigger="focus"
                ng-blur="runHandler($event)"
                ng-keypress="runHandler($event)"
@@ -15,7 +16,8 @@
                ng-model="view.transform.script"
                ng-readonly="!view.disabled">
 
-        <input uib-tooltip="{{ view.tooltipMsg }}"
+        <input id="{{ id }}"
+               uib-tooltip="{{ view.tooltipMsg }}"
                tooltip-trigger="focus"
                ng-blur="runHandler($event)"
                ng-keypress="runHandler($event)"

@@ -28,6 +28,7 @@ angular.module('registryApp.common')
                 handleItemBlur: '&',
                 handleNull: '&',
                 longLiteral: '@',
+                id: '@',
                 min: '@',
                 propId: '@'
             },
