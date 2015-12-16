@@ -6,17 +6,34 @@
             <li ng-repeat="item in view.list" ng-class="{'has-error': item.error}">
                 <div class="enum-field form-group form-group-file">
                     <div class="col-md-6">
-                        <i class="fa fa-warning error" ng-if="item.error" title="Duplicate map key. This key value pair will not be saved."></i>
-                        <input key-changer key="item.key" items="view.list" has-error="item.error" type="text" class="form-control" placeholder="{{ ::keyLabel || 'Enter Key'}}" ng-model="item.key"/>
+                        <i class="fa fa-warning error"
+                           ng-if="item.error"
+                           title="Duplicate map key. This key value pair will not be saved."></i>
+                        <input ng-disabled="ngDisabled"
+                               key-changer
+                               key="item.key"
+                               items="view.list"
+                               has-error="item.error"
+                               type="text"
+                               class="form-control"
+                               placeholder="{{ ::keyLabel || 'Enter Key'}}"
+                               ng-model="item.key"/>
                     </div>
                     <div class="col-md-6">
-                        <input ng-if="!hasExpr" ng-model="item.value" type="text"  placeholder="{{ ::valueLabel || 'Enter Value' }}">
+                        <input ng-disabled="ngDisabled"
+                               ng-if="!hasExpr"
+                               ng-model="item.value"
+                               type="text"
+                               class="form-control"
+                               placeholder="{{ ::valueLabel || 'Enter Value' }}">
                     </div>
                 </div>
                 <a href class="fa fa-remove remove-btn" ng-click="removeItem(item, $index)"></a>
             </li>
         </ul>
 
-        <p class="alert alert-info" ng-if="view.list | isEmpty">{{ ::emptyListLabel || 'Click the plus button to add a key-value pair.' }}</p>
+        <p class="alert alert-info" ng-if="view.list | isEmpty">
+            {{ ::emptyListLabel || 'Click the plus button to add a key-value pair.' }}
+        </p>
     </div>
 </div>
