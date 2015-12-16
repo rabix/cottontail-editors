@@ -17,13 +17,7 @@ var Schema = {
             items: {
                 oneOf: [
                     {
-                        type: 'object',
-                        properties: {
-                            type: {
-                                $ref: '#/definitions/stringTypeDef'
-                            }
-                        },
-                        required: ['type']
+                        $ref: '#/definitions/recordDef'
                     },
                     {
                         $ref: '#/definitions/enumDef'
@@ -34,12 +28,18 @@ var Schema = {
                     {
                         $ref: '#/definitions/stringTypeDef'
                     },
-                    {
-                        $ref: '#/definitions/recordDef'
-                    },
 	                {
 		                $ref: '#/definitions/mapDef'
-	                }
+	                },
+                    {
+                        type: 'object',
+                        properties: {
+                            type: {
+                                $ref: '#/definitions/stringTypeDef'
+                            }
+                        },
+                        required: ['type']
+                    }
                 ]
             }
         },
@@ -290,9 +290,9 @@ var Schema = {
                         properties: {
                             'class': {
                                 type: 'string'
-                            },
-                            required: ['class']
-                        }
+                            }
+                        },
+                        required: ['class']
                     }
                 ]
             }
@@ -325,8 +325,7 @@ var Schema = {
                                 $ref: '#/definitions/adapterDef'
                             },
                             {
-                                // TODO: Temp hack, remove when you figure out why sometimes inputBinding when its not present is undefined
-                                type: ['undefined', 'null']
+                                type: ['null']
                             }
                         ]
                     }

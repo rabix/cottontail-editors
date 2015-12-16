@@ -25,7 +25,11 @@ angular.module('registryApp.cliche')
         $scope.view.name = Cliche.parseName($scope.prop);
         $scope.view.property = $scope.prop || {};
         $scope.view.property.type = Cliche.getSchema('input', $scope.prop, $scope.type, true);
-        $scope.view.property.inputBinding = Cliche.getAdapter($scope.prop, false, 'input');
+
+        if ($scope.prop.inputBinding) {
+            $scope.view.property.inputBinding = Cliche.getAdapter($scope.prop, false, 'input');
+        }
+
         $scope.view.type = Cliche.parseType($scope.view.property.type);
         $scope.view.required = Cliche.isRequired($scope.view.property.type);
         $scope.view.items = Cliche.getItemsRef($scope.view.type, $scope.view.property.type);
@@ -147,7 +151,7 @@ angular.module('registryApp.cliche')
                 }
             });
         }
-        
+
         var inputScheme;
 
         var setModelDefaultValue = function () {
@@ -304,7 +308,7 @@ angular.module('registryApp.cliche')
             }
 
         };
-        
+
         $scope.includeInPorts = function () {
 
             if ($scope.view.includeInPorts) {

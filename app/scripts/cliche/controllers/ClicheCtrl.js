@@ -976,7 +976,26 @@ angular.module('registryApp.cliche')
 					return link.id === '' && link.label === '';
 				});
 			}
-		}
+
+            _.forEach(tool.inputs, function(input) {
+                _deleteUndefinedInputBinding(input);
+            });
+
+            return tool;
+        }
+
+        function _deleteUndefinedInputBinding (input) {
+            var type = Cliche.parseTypeObj(Cliche.getSchema('input', input, 'tool', true));
+            if(type.type === 'record') {
+                _.forEach(type.fields, function(field) {
+                    _deleteUndefinedInputBinding(field);
+                });
+            }
+
+            if (_.isUndefined(input.inputBinding)) {
+                delete input.inputBinding;
+            }
+        }
 
         /**
          * Update current tool
@@ -994,7 +1013,8 @@ angular.module('registryApp.cliche')
 
             $scope.view.loading = true;
 
-	        removeEmptyFields(tool);
+            tool = removeEmptyFields(tool);
+
             tool['sbg:job'] = Cliche.getJob();
 
 
