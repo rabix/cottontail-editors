@@ -121,6 +121,7 @@ module.exports = function(grunt) {
             }
         },
 
+/*
         // Empties folders to start fresh
         clean: {
             options: {
@@ -131,7 +132,7 @@ module.exports = function(grunt) {
                     dot: true,
                     src: [
                         '.tmp',
-                        '<%= yeoman.dist %>/{,*/}*',
+                        '<%= yeoman.dist %>/{,*!/}*',
                         '!<%= yeoman.dist %>/.git*',
                         '!<%= yeoman.dist %>/fonts'
                     ]
@@ -139,6 +140,7 @@ module.exports = function(grunt) {
             },
             server: '.tmp'
         },
+*/
 
         // Add vendor prefixed styles
         autoprefixer: {
@@ -169,6 +171,7 @@ module.exports = function(grunt) {
                 ignorePath: /(\.\.\/){1,2}bower_components\//
             }
         },
+/*
 
         sass: {
             server: {
@@ -198,6 +201,7 @@ module.exports = function(grunt) {
                 }]
             }
         },
+*/
 
         // Renames files for browser caching purposes
         filerev: {
@@ -252,7 +256,7 @@ module.exports = function(grunt) {
                 }
             }
         },
-        uglify: {
+        /*uglify: {
             dist: {
                 files: {
                     '<%= yeoman.dist %>/scripts/vendor.min.js': [
@@ -271,45 +275,45 @@ module.exports = function(grunt) {
                     ]
                 }
             }
-        },
-        concat: {
+        },*/
+        /*concat: {
             options: {
                 separator: ';'
             },
             common: {
                 src: [
-                    '<%= yeoman.app %>/scripts/util/*.js',
-                    '<%= yeoman.app %>/scripts/util/**/*.js',
-                    '<%= yeoman.app %>/scripts/app/*.js',
-                    '<%= yeoman.app %>/scripts/app/**/*.js',
-                    '<%= yeoman.app %>/scripts/repo/*.js',
-                    '<%= yeoman.app %>/scripts/repo/**/*.js',
-                    '<%= yeoman.app %>/scripts/common/*.js',
-                    '<%= yeoman.app %>/scripts/common/**/*.js'
+                    '<%= yeoman.app %>/scripts/util/!*.js',
+                    '<%= yeoman.app %>/scripts/util/!**!/!*.js',
+                    '<%= yeoman.app %>/scripts/app/!*.js',
+                    '<%= yeoman.app %>/scripts/app/!**!/!*.js',
+                    '<%= yeoman.app %>/scripts/repo/!*.js',
+                    '<%= yeoman.app %>/scripts/repo/!**!/!*.js',
+                    '<%= yeoman.app %>/scripts/common/!*.js',
+                    '<%= yeoman.app %>/scripts/common/!**!/!*.js'
                 ],
                 dest: 'dist/scripts/util.js'
             },
             dyole: {
                 src: [
-                    '<%= yeoman.app %>/scripts/cliche/**/*.js',
-                    '<%= yeoman.app %>/scripts/dyole-app/*.js',
+                    '<%= yeoman.app %>/scripts/cliche/!**!/!*.js',
+                    '<%= yeoman.app %>/scripts/dyole-app/!*.js',
                     '<%= yeoman.app %>/scripts/dyole/dyole.config.js',
-                    '<%= yeoman.app %>/scripts/dyole/**/*.js'
+                    '<%= yeoman.app %>/scripts/dyole/!**!/!*.js'
                 ],
                 dest: 'dist/scripts/dyole.js'
             },
             cliche: {
                 src: [
-                    '<%= yeoman.app %>/scripts/cliche-app/*.js',
-                    '<%= yeoman.app %>/scripts/cliche/*.js',
-                    '<%= yeoman.app %>/scripts/cliche/**/*.js'
+                    '<%= yeoman.app %>/scripts/cliche-app/!*.js',
+                    '<%= yeoman.app %>/scripts/cliche/!*.js',
+                    '<%= yeoman.app %>/scripts/cliche/!**!/!*.js'
                 ],
                 dest: 'dist/scripts/cliche.js'
             },
             integration: {
                 src: [
-                    '<%= yeoman.app %>/scripts/integration/*.js',
-                    '<%= yeoman.app %>/scripts/integration/**/*.js'
+                    '<%= yeoman.app %>/scripts/integration/!*.js',
+                    '<%= yeoman.app %>/scripts/integration/!**!/!*.js'
                 ],
                 dest: 'dist/scripts/integration.js'
             },
@@ -337,14 +341,15 @@ module.exports = function(grunt) {
                 ],
                 dest: 'dist/scripts/vendor.js'
             }
-        },
+        },*/
+/*
 
         imagemin: {
             dist: {
                 files: [{
                     expand: true,
                     cwd: '<%= yeoman.app %>/images',
-                    src: '{,*/}*.{png,jpg,jpeg,gif}',
+                    src: '{,*!/}*.{png,jpg,jpeg,gif}',
                     dest: '<%= yeoman.dist %>/images'
                 }]
             }
@@ -355,11 +360,12 @@ module.exports = function(grunt) {
                 files: [{
                     expand: true,
                     cwd: '<%= yeoman.app %>/images',
-                    src: '{,*/}*.svg',
+                    src: '{,*!/}*.svg',
                     dest: '<%= yeoman.dist %>/images'
                 }]
             }
         },
+*/
 
         htmlmin: {
             dist: {
@@ -452,6 +458,7 @@ module.exports = function(grunt) {
             //                src: '{,*/}*.css'
             //            }
         },
+/*
 
         // Run some tasks in parallel to speed up the build process
         concurrent: {
@@ -467,6 +474,7 @@ module.exports = function(grunt) {
                 'svgmin'
             ]
         },
+*/
 
         // Test settings
         karma: {
@@ -474,66 +482,66 @@ module.exports = function(grunt) {
                 configFile: 'karma.conf.js',
                 singleRun: true
             }
-        },
-
-        ngtemplates: {
-            app: {
-                cwd: '<%= yeoman.app %>',
-                src: [
-                    'views/{,*/}*.html',
-                    'views/cliche/{,*/}*.html',
-                    'views/app/{,*/}*.html',
-                    'views/repo/{,*/}*.html',
-                    'views/task/{,*/}*.html'
-                ],
-                dest: '<%= yeoman.app %>/scripts/template.js',
-                options: {
-                    module: 'registryApp',
-                    htmlmin: {
-                        collapseWhitespace: true,
-                        collapseBooleanAttributes: true
-                    }
-                }
-            },
-
-            cliche: {
-                cwd: '<%= yeoman.app %>',
-                src: [
-                    'views/{,*/}*.html',
-                    'views/cliche/{,*/}*.html',
-                    'views/app/{,*/}*.html',
-                    'views/repo/{,*/}*.html',
-                    'views/task/{,*/}*.html'
-                ],
-                dest: '<%= yeoman.app %>/scripts/cliche-app/template.js',
-                options: {
-                    module: 'clicheApp',
-                    htmlmin: {
-                        collapseWhitespace: true,
-                        collapseBooleanAttributes: true
-                    }
-                }
-            },
-
-            dyole: {
-                cwd: '<%= yeoman.app %>',
-                src: [
-                    'views/{,*/}*.html',
-                    'views/dyole/{,*/}*.html',
-                    'views/cliche/{,*/}*.html',
-                    'views/app/{,*/}*.html',
-                    'views/repo/{,*/}*.html',
-                    'views/task/{,*/}*.html'
-                ],
-                dest: '<%= yeoman.app %>/scripts/dyole-app/template.js',
-                options: {
-                    module: 'dyoleApp',
-                    htmlmin: {
-                        collapseWhitespace: true,
-                        collapseBooleanAttributes: true
-                    }
-                }
-            }
+        //},
+        //
+        //ngtemplates: {
+        //    app: {
+        //        cwd: '<%= yeoman.app %>',
+        //        src: [
+        //            'views/{,*/}*.html',
+        //            'views/cliche/{,*/}*.html',
+        //            'views/app/{,*/}*.html',
+        //            'views/repo/{,*/}*.html',
+        //            'views/task/{,*/}*.html'
+        //        ],
+        //        dest: '<%= yeoman.app %>/scripts/template.js',
+        //        options: {
+        //            module: 'registryApp',
+        //            htmlmin: {
+        //                collapseWhitespace: true,
+        //                collapseBooleanAttributes: true
+        //            }
+        //        }
+        //    },
+        //
+        //    cliche: {
+        //        cwd: '<%= yeoman.app %>',
+        //        src: [
+        //            'views/{,*/}*.html',
+        //            'views/cliche/{,*/}*.html',
+        //            'views/app/{,*/}*.html',
+        //            'views/repo/{,*/}*.html',
+        //            'views/task/{,*/}*.html'
+        //        ],
+        //        dest: '<%= yeoman.app %>/scripts/cliche-app/template.js',
+        //        options: {
+        //            module: 'clicheApp',
+        //            htmlmin: {
+        //                collapseWhitespace: true,
+        //                collapseBooleanAttributes: true
+        //            }
+        //        }
+        //    },
+        //
+        //    dyole: {
+        //        cwd: '<%= yeoman.app %>',
+        //        src: [
+        //            'views/{,*/}*.html',
+        //            'views/dyole/{,*/}*.html',
+        //            'views/cliche/{,*/}*.html',
+        //            'views/app/{,*/}*.html',
+        //            'views/repo/{,*/}*.html',
+        //            'views/task/{,*/}*.html'
+        //        ],
+        //        dest: '<%= yeoman.app %>/scripts/dyole-app/template.js',
+        //        options: {
+        //            module: 'dyoleApp',
+        //            htmlmin: {
+        //                collapseWhitespace: true,
+        //                collapseBooleanAttributes: true
+        //            }
+        //        }
+        //    }
         }
 
 
@@ -641,9 +649,9 @@ module.exports = function(grunt) {
         'concurrent:dist',
         'ngtemplates:dyole',
         'ngtemplates:cliche',
-        'autoprefixer',
+        //'autoprefixer',
         'concat',
-        'ngAnnotate',
+        //'ngAnnotate',
         'copy:dist',
         'cssmin',
         'uglify'
