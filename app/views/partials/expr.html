@@ -31,7 +31,8 @@
                ng-readonly="onlyExpr && !view.disabled">
 
         <span class="input-group-btn" ng-class="{'tooltip-code': view.transform && !view.exprError}">
-            <button
+            <!--have to be a tags, otherwise the modal over which expression editor opens will be dismissed-->
+            <a href
                ng-if="view.longLiteral"
                ng-disabled="view.disabled"
                class="btn btn-expression"
@@ -39,15 +40,15 @@
                ng-click="editLiteral()"
                ng-class="{'btn-primary': (view.mode === 'literal' && view.literal && !view.exprError), 'btn-default': (view.mode === 'transform' || !view.literal && !view.exprError), 'btn-warning': view.exprError}">
                 <i class="fa fa-font"></i>
-            </button>
-            <button
+            </a>
+            <a href
                ng-disabled="view.disabled"
                class="btn btn-expression"
                uib-tooltip="{{ view.transform.script || 'There is no expression defined. Click to add it' }}"
                ng-click="editExpression()"
                ng-class="{'btn-primary': (view.mode === 'transform' && !view.exprError), 'btn-default': (view.mode === 'literal' && !view.exprError), 'btn-warning': view.exprError}">
                 <i class="fa fa-code"></i>
-            </button>
+            </a>
         </span>
     </div>
 
