@@ -27,7 +27,7 @@ angular.module('registryApp.dyole')
          */
         var initPipeline = function (obj) {
 
-            $scope.view.explanation = !obj || (obj.steps && obj.steps.length === 0) || (obj.dataLinks && obj.dataLinks.length === 0);
+            $scope.view.explanation = !obj || (obj.steps && obj.steps.length === 0); // || (obj.dataLinks && obj.dataLinks.length === 0);
 
             Pipeline = pipeline.getInstance({
                 model: typeof obj.steps !== 'undefined' ? obj || rawPipeline : rawPipeline,
