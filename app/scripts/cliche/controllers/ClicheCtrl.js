@@ -22,7 +22,8 @@ angular.module('registryApp.cliche')
                 },
                 function () {
                     return $scope.form.tool.$dirty;
-                });
+                }),
+            instances = [];
 
         // <editor-fold desc="Local $scope variables">
 
@@ -111,7 +112,8 @@ angular.module('registryApp.cliche')
 
         $q.all([
                 App.get(),
-                User.getUser()
+                User.getUser(),
+                App.getValidInstances()
             ])
             .then(function(result) {
 
@@ -144,6 +146,8 @@ angular.module('registryApp.cliche')
                 }
 
                 $scope.view.user = result[1].user;
+
+                instances = result[2];
 
                 _setUpCliche();
                 _readRequirementsAndResources();
@@ -478,6 +482,7 @@ angular.module('registryApp.cliche')
                 controller: 'ToolSettingsCtrl',
                 resolve: { data: function () {
                     return {
+                        instances: instances,
                         hints: $scope.view.tool.hints,
                         requireSBGMetadata: $scope.view.requireSBGMetadata,
                         type: 'Tool'

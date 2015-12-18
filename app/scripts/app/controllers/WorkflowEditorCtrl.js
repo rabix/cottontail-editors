@@ -18,7 +18,7 @@ angular.module('registryApp.app')
             onBeforeUnloadOff = BeforeUnload.register(function () {
                 return 'Please save your changes before leaving.';
             }, function () {
-                return prompt
+                return prompt;
             });
 
         $scope.$on('pipeline:change', function () {
@@ -185,7 +185,6 @@ angular.module('registryApp.app')
                 }
 
             }
-
             Instances = result[3];
 
             $scope.view.loading = false;
@@ -616,44 +615,6 @@ angular.module('registryApp.app')
                     $scope.view.workflow = json;
                     $scope.view.isChanged = true;
                 }
-            });
-
-        };
-        
-        $scope.workflowSettings = function () {
-            var modalInstance = $modal.open({
-                template: $templateCache.get('views/dyole/workflow-settings.html'),
-                controller: 'WorkflowSettingsCtrl',
-                resolve: { data: function () {
-                    return {
-                        hints: PipelineInstance.getWorkflowHints(),
-                        instances: Instances,
-                        requireSBGMetadata: PipelineInstance.getRequireSBGMetadata()
-                    };
-                }}
-            });
-
-            modalInstance.result.then(function (result) {
-                PipelineInstance.updateWorkflowSettings(result.hints, result.requireSBGMetadata);
-            });
-
-        };
-
-        $scope.workflowSettings = function () {
-            var modalInstance = $modal.open({
-                template: $templateCache.get('views/dyole/workflow-settings.html'),
-                controller: 'WorkflowSettingsCtrl',
-                resolve: { data: function () {
-                    return {
-                        hints: PipelineInstance.getWorkflowHints(),
-                        instances: Instances,
-                        requireSBGMetadata: PipelineInstance.getRequireSBGMetadata()
-                    };
-                }}
-            });
-
-            modalInstance.result.then(function (result) {
-                PipelineInstance.updateWorkflowSettings(result.hints, result.requireSBGMetadata);
             });
 
         };

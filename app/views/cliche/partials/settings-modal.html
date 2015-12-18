@@ -22,6 +22,7 @@
 
             <div class="col-md-12 set-instance">
                 <h4 class="legend-small">Hints</h4>
+
                 <div class="enum-list-wrap">
                     <a href ng-click="addMetadata()" class="btn btn-default add-enum-item"><i
                             class="fa fa-plus"></i></a>
@@ -34,29 +35,35 @@
                                         <input type="text"
                                                class="form-control"
                                                placeholder="Requirement class"
-                                               ng-disabled="hint.class.toLowerCase() === 'sbg:cpurequirement'
-                                               || hint.class.toLowerCase() === 'sbg:memrequirement'
-                                               || hint.class.toLowerCase() === 'dockerrequirement'"
+                                               ng-disabled="hint.class === 'sbg:CPURequirement'
+                                              || hint.class === 'sbg:MemRequirement'
+                                              || hint.class === 'DockerRequirement'"
                                                ng-model="hint.class"/>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-6" ng-show="hint.class.toLowerCase() !== 'sbg:awsinstancetype'">
                                         <expr type="text"
                                               placeholder="Requirement value"
                                               ng-model="hint.value"
                                               index="{{ $index }}"
                                               handle-item-update="updateHintValue(value, index)"
-                                              ng-disabled="hint.class.toLowerCase() === 'sbg:cpurequirement'
-                                              || hint.class.toLowerCase() === 'sbg:memrequirement'
-                                              || hint.class.toLowerCase() === 'dockerrequirement'">
+                                              ng-disabled="hint.class === 'sbg:CPURequirement'
+                                              || hint.class === 'sbg:MemRequirement'
+                                              || hint.class === 'DockerRequirement'">
                                         </expr>
+                                    </div>
+                                    <div class="col-md-6"
+                                         ng-show="hint.class === 'sbg:AWSInstanceType'">
+                                        <input type="text"
+                                               class="form-control"
+                                               ng-model="hint.value"
+                                               uib-typeahead="instance.text for instance in autoSuggestInstances($viewValue)">
                                     </div>
                                 </div>
                                 <a href
                                    class="fa fa-remove remove-btn"
-                                   ng-hide="hint.class.toLowerCase() === 'sbg:cpurequirement'
-                                   || hint.class.toLowerCase() === 'sbg:memrequirement'
-                                   || hint.class.toLowerCase() === 'dockerrequirement'"
-                                   ng-click="removeMetadata($index)">
+                                   ng-click="hint.class === 'sbg:CPURequirement'
+                                              || hint.class === 'sbg:MemRequirement'
+                                              || hint.class === 'DockerRequirement' ||removeMetadata($index)">
                                 </a>
                             </li>
                         </ul>

@@ -10,14 +10,19 @@
 
 
 angular.module('registryApp.cliche')
-    .controller('ToolSettingsCtrl', ['$scope', '$uibModalInstance', 'data', 'HelpMessages', 'lodash', function ($scope, $modalInstance, data, HelpMessages, _) {
+    .controller('ToolSettingsCtrl', ['$scope', '$uibModalInstance', 'data', 'HelpMessages', 'lodash','$q', function ($scope, $modalInstance, data, HelpMessages, _, $q) {
         'use strict';
 
         $scope.help = HelpMessages;
 
         $scope.view = {};
-        $scope.view.type = data.type || 'Workflow';
+        $scope.view.type = data.type || 'Tool';
         $scope.view.requireSBGMetadata = _.clone(data.requireSBGMetadata);
+        var instances = _.map(data.instances, function(instance) {
+            return {
+                text: instance.typeId
+            };
+        });
 
         /** @type Hint[] */
         $scope.view.hints = _.clone(data.hints) || [];
@@ -60,6 +65,31 @@ angular.module('registryApp.cliche')
                 return meta.class === '';
             });
         }
+
+
+        /**
+         * Calculates fuzzy finder score for each available instance
+         *
+         * @param {string} value
+         * @returns {*}
+         */
+        $scope.autoSuggestInstances = function (value) {
+            var deferred = $q.defer();
+
+            var regex = new RegExp(value.toLowerCase().split('').join('.*'));
+
+            deferred.resolve(_(instances).filter(function (instance) {
+                var score = instance.text.toLowerCase().search(regex);
+
+                if (score !== -1 ) {
+                    instance.score = score;
+                    return instance;
+                }
+            }).sortBy('score').value().slice(0, 6));
+
+            return deferred.promise;
+        };
+
 
         /**
          * Close modal and apply changes
