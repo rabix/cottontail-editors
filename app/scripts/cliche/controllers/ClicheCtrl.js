@@ -850,8 +850,6 @@ angular.module('registryApp.cliche')
          */
         $scope.splitBaseCmd = function (value, index) {
             value = value.replace(/\s+/g, ' ');
-            debugger;
-
             var baseCommands = value.split(' ');
             var adapterBaseCmd = $scope.view.tool.baseCommand;
 
