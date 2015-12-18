@@ -38,9 +38,9 @@
                                                ng-disabled="hint.class === 'sbg:CPURequirement'
                                               || hint.class === 'sbg:MemRequirement'
                                               || hint.class === 'DockerRequirement'"
-                                               ng-model="hint.class"/>
+                                               ng-model="hint.class" typeahead="class for class in ['sbg:AWSInstanceType'] | filter:$viewValue"/>
                                     </div>
-                                    <div class="col-md-6" ng-show="hint.class.toLowerCase() !== 'sbg:awsinstancetype'">
+                                    <div class="col-md-6" ng-show="hint.class !== 'sbg:AWSInstanceType'">
                                         <expr type="text"
                                               placeholder="Requirement value"
                                               ng-model="hint.value"
