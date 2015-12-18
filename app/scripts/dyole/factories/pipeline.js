@@ -1333,9 +1333,9 @@ angular.module('registryApp.dyole')
 
                     var _id = Common.generateNodeId(model, _self.nodes);
 
-                    model['sbg:id'] = _id;
+                    model['sbg:id'] = model.id = _id;
 
-                    _self.model.schemas[ model['sbg:id'] ] = rawModel;
+                    _self.model.schemas[ model.id ] = rawModel;
 
                     _self.Event.trigger('node:add', model);
 
