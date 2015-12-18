@@ -30,6 +30,10 @@ angular.module('registryApp.cliche')
         $scope.view = {};
         $scope.form = {};
 
+
+        /* temporary hack because base command cannot have expressions */
+        $scope.disableCmdExpressions = true;
+
         /* variables gotten from camellia */
         $scope.view.globals = Globals;
 
@@ -846,6 +850,7 @@ angular.module('registryApp.cliche')
          */
         $scope.splitBaseCmd = function (value, index) {
             value = value.replace(/\s+/g, ' ');
+            debugger;
 
             var baseCommands = value.split(' ');
             var adapterBaseCmd = $scope.view.tool.baseCommand;

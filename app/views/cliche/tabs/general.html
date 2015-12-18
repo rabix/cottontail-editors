@@ -2,7 +2,9 @@
     <div class="row-margin">
         <div class="col-md-6">
             <form class="section">
-                <h3 class="legend-small">Docker Container <help-message message="help.cliche.general.environment"></help-message></h3>
+                <h3 class="legend-small">Docker Container
+                    <help-message message="help.cliche.general.environment"></help-message>
+                </h3>
 
                 <div class="form-group">
                     <label for="docker_pull" class="control-label">Docker Repository[:Tag]</label>
@@ -29,7 +31,9 @@
 
             <div ng-if="view.type === 'tool'" class="section">
 
-                <h3 class="legend-small">Resources <help-message message="help.cliche.general.resources"></help-message></h3>
+                <h3 class="legend-small">Resources
+                    <help-message message="help.cliche.general.resources"></help-message>
+                </h3>
 
                 <div class="row-margin">
 
@@ -67,10 +71,12 @@
             <div ng-if="view.type === 'tool'" class="section">
 
                 <h3 class="legend-small">
-                    Create Files <help-message message="help.cliche.general.createFiles"></help-message>
+                    Create Files
+                    <help-message message="help.cliche.general.createFiles"></help-message>
                 </h3>
 
-                <div class="enum-list-wrap" ng-class="{'enum-labeled': view.reqCreateFileRequirement.fileDef.length > 0}">
+                <div class="enum-list-wrap"
+                     ng-class="{'enum-labeled': view.reqCreateFileRequirement.fileDef.length > 0}">
                     <a href ng-click="addFileDef()" class="btn btn-default add-enum-item"><i class="fa fa-plus"></i></a>
 
                     <div class="enum-list-container">
@@ -96,9 +102,9 @@
                                     </div>
                                 </div>
                                 <button
-                                   class="fa fa-remove btn-link remove-btn"
-                                   ng-class="{'labeled': $index === 0}"
-                                   ng-click="removeFileDef($index)">
+                                        class="fa fa-remove btn-link remove-btn"
+                                        ng-class="{'labeled': $index === 0}"
+                                        ng-click="removeFileDef($index)">
                                 </button>
                             </li>
                         </ul>
@@ -114,7 +120,9 @@
 
         <div class="col-md-6">
             <div class="section">
-                <h3 class="legend-small">Command <help-message message="help.cliche.general.command"></help-message></h3>
+                <h3 class="legend-small">Command
+                    <help-message message="help.cliche.general.command"></help-message>
+                </h3>
 
                 <div class="form-group">
                     <label class="control-label">Base Command</label>
@@ -125,21 +133,32 @@
                            class="btn btn-default add-enum-item">
                             <i class="fa fa-plus"></i>
                         </a>
+
                         <div class="enum-list-container">
                             <ul class="enum-list" ng-class="{wide: view.tool.baseCommand.length === 1}">
                                 <li ng-repeat="baseCmd in view.tool.baseCommand track by $index">
                                     <div class="enum-field form-group form-group-file">
+
                                         <expr tooltip-msg="{{ ::help.cliche.general.baseCMD }}"
+                                              ng-if="baseCmd.script"
                                               id="base_command_field_{{ $index + 1 }}"
                                               ng-model="baseCmd"
                                               index="{{ $index }}"
                                               handle-item-update="updateCliAdapter(value, index, 'baseCommand')"
-                                              handle-item-blur="splitBaseCmd(value, index)">
+                                              handle-item-blur="splitBaseCmd(value, index)"
+                                              ng-disabled="disableCmdExpressions">
                                         </expr>
+
+                                        <input type="text"
+                                               ng-show="!baseCmd.script"
+                                               class="form-control"
+                                               ng-blur="splitBaseCmd(baseCmd, $index)"
+                                               id="base_command_field_{{ $index + 1 }}"
+                                               ng-model="baseCmd">
                                     </div>
                                     <button ng-hide="view.tool.baseCommand.length === 1"
-                                       class="fa fa-remove btn-link remove-btn"
-                                       ng-click="removeBaseCmd($index)">
+                                            class="fa fa-remove btn-link remove-btn"
+                                            ng-click="removeBaseCmd($index)">
                                     </button>
                                 </li>
                             </ul>
@@ -199,7 +218,7 @@
                                                     <input class="form-control"
                                                            type="number"
                                                            id="success_codes_field_{{ $index + 1}}"
-                                                           ng-model="view.tool.successCodes[$index]" />
+                                                           ng-model="view.tool.successCodes[$index]"/>
                                                 </div>
                                             </div>
                                             <button class="fa fa-remove btn-link remove-btn"
