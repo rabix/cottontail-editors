@@ -4,9 +4,29 @@
 
         <i class="fa fa-warning error" ng-if="view.exprError" title="{{ view.exprError }}"></i>
 
-        <input uib-tooltip="{{ view.tooltipMsg }}" tooltip-trigger="focus"  ng-blur="runHandler($event)" ng-keypress="runHandler($event)" ng-show="view.mode === 'transform'" type="text" class="form-control" ng-model="view.transform.script" readonly>
+        <input id="{{ id }}"
+               uib-tooltip="{{ view.tooltipMsg }}"
+               tooltip-trigger="focus"
+               ng-blur="runHandler($event)"
+               ng-keypress="runHandler($event)"
+               ng-if="view.mode === 'transform'"
+               type="text"
+               class="form-control"
+               ng-model="view.transform.script"
+               readonly>
 
-        <input uib-tooltip="{{ view.tooltipMsg }}" tooltip-trigger="focus"  ng-blur="runHandler($event)" ng-keypress="runHandler($event)" ng-show="view.mode === 'literal'" type="{{ view.type }}" min="{{ view.min }}" class="form-control" ng-model="view.literal" placeholder="{{ view.placeholder }}" ng-readonly="onlyExpr">
+        <input id="{{ id }}"
+               uib-tooltip="{{ view.tooltipMsg }}"
+               tooltip-trigger="focus"
+               ng-blur="runHandler($event)"
+               ng-keypress="runHandler($event)"
+               ng-if="view.mode === 'literal'"
+               type="{{ view.type }}"
+               min="{{ view.min }}"
+               class="form-control"
+               ng-model="view.literal"
+               placeholder="{{ view.placeholder }}"
+               ng-readonly="onlyExpr">
 
         <span class="input-group-btn" ng-class="{'tooltip-code': view.transform && !view.exprError}">
             <a href
@@ -22,7 +42,7 @@
                uib-tooltip="{{ view.transform.script || 'There is no expression defined. Click to add it' }}"
                ng-click="editExpression()"
                ng-class="{'btn-primary': (view.mode === 'transform' && !view.exprError), 'btn-default': (view.mode === 'literal' && !view.exprError), 'btn-warning': view.exprError}">
-               <i class="fa fa-code"></i>
+                <i class="fa fa-code"></i>
             </a>
         </span>
     </div>

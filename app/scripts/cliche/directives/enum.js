@@ -116,6 +116,7 @@ angular.module('registryApp.cliche')
         $scope.$watch('model', function(n, o) {
             if (n !== o) {
                 $scope.transformList(n);
+                $scope.setDirty();
             }
         });
 
@@ -134,6 +135,7 @@ angular.module('registryApp.cliche')
         return {
             restrict: 'E',
             template: $templateCache.get('views/cliche/partials/enum.html'),
+            require: '?ngModel',
             scope: {
                 model: '=ngModel',
                 type: '=',
@@ -148,6 +150,12 @@ angular.module('registryApp.cliche')
 	            symbols: '=?'
             },
             controller: 'EnumCtrl',
-            link: function() {}
+            link: function (scope, element, attr, ngModelCtrl) {
+                scope.setDirty = function () {
+                    if (ngModelCtrl) {
+                        ngModelCtrl.$setDirty();
+                    }
+                };
+            }
         };
     }]);

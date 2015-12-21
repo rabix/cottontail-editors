@@ -135,6 +135,8 @@ form,
   input[type="search"],
   .tags,
   .form-control {
+    background-color: lighten(#D91E18, 47);
+
     &:hover, &:focus, &:hover:focus, &.focused {
       border-color: darken(#D91E18, 10);
     }

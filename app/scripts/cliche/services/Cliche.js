@@ -62,6 +62,8 @@ angular.module('registryApp.cliche')
         /**
          * Transform tool json into appropriate structure
          *
+         * Removes unnecessary/disallowed properties based on the tool type.
+         *
          * @param {String} type
          * @param {Object} json
          */
@@ -78,7 +80,7 @@ angular.module('registryApp.cliche')
                 delete transformed.baseCommand;
                 delete transformed.stdin;
                 delete transformed.stdout;
-                delete transformed.arguments;
+                delete transformed['arguments'];
                 // requirements
 	            // scripts by default should only have the ExpressionEngineRequirement
 	            transformed.requirements = _.filter(transformed.requirements, {class: 'ExpressionEngineRequirement'});
@@ -91,12 +93,12 @@ angular.module('registryApp.cliche')
                 if (angular.isUndefined(transformed.baseCommand) ||
                     angular.isUndefined(transformed.stdin) ||
                     angular.isUndefined(transformed.stdout) ||
-                    angular.isUndefined(transformed.arguments)) {
+                    angular.isUndefined(transformed['arguments'])) {
 
                     transformed.baseCommand = angular.copy(rawTool.baseCommand);
                     transformed.stdin = angular.copy(rawTool.stdin);
                     transformed.stdout = angular.copy(rawTool.stdout);
-                    transformed.arguments = angular.copy(rawTool['arguments']);
+                    transformed['arguments'] = angular.copy(rawTool['arguments']);
                 }
                 if (angular.isUndefined(transformed.requirements)) {
                     transformed.requirements = angular.copy(rawTool.requirements);
@@ -168,19 +170,18 @@ angular.module('registryApp.cliche')
         /**
          * Cleanup the local db and prepare fresh cliche vars
          *
-         * @param {Boolean} preserve
          * @param {String} type
          * @param {String} label
          * @returns {Promise}
          */
-        var flush = function(preserve, type, label) {
+        var flush = function(type, label) {
 
             consoleCMD = '';
 
             var tool = transformToolJson(type, rawTool);
             tool.label = label;
 
-            return $q.all([setTool(tool, preserve), setJob(null, preserve)]);
+            return $q.all([setTool(tool), setJob(null)]);
 
         };
 
@@ -521,7 +522,10 @@ angular.module('registryApp.cliche')
                     /* generate command */
                     _.each(props, function(prop) {
                         var separation = parseSeparation(prop.separate);
-                        command.push(prop.prefix + separation + prop.val);
+
+                        if (!_.isNull(prop.val)) {
+                            command.push(prop.prefix + separation + prop.val);
+                        }
                     });
 
                     return command.join(' ');
@@ -533,9 +537,9 @@ angular.module('registryApp.cliche')
         /**
          * Apply the transformation function (this is just the mock)
          *
-         * @param transform
-         * @param value
-         * @param self
+         * @param {String|Object} transform
+         * @param {*} value
+         * @param {Boolean} self
          * @returns {*}
          */
         var applyTransform = function(transform, value, self) {
@@ -660,7 +664,6 @@ angular.module('registryApp.cliche')
                     key = parseName(property),
                     schema = getSchema('input', property, 'tool', false),
                     type = parseType(schema),
-                    items = getItemsRef(type, schema),
 	                fields = getFieldsRef(schema),
                     prefix = property.inputBinding.prefix || '',
                     itemSeparator = parseItemSeparator(property.inputBinding.itemSeparator),
@@ -668,7 +671,6 @@ angular.module('registryApp.cliche')
                     prop = _.extend({
                         key: key,
                         type: type,
-                        required: isRequired(property.type),
                         val: '',
                         position: property.inputBinding.position || 0,
                         prefix: prefix,
@@ -754,24 +756,46 @@ angular.module('registryApp.cliche')
         };
 
         /**
+         * Generate preview command for app details page
+         *
+         * @returns {Promise} command
+         */
+        var generatePreviewCommand = function() {
+            var requiredInputs;
+
+            requiredInputs = _.filter(toolJSON.inputs, function (input) {
+                var inputSchema = getSchema('input', input, 'tool', false);
+                return isRequired(inputSchema);
+            });
+
+            return generateCommand(requiredInputs).then(function(previewCommand) {
+                return previewCommand;
+            });
+        };
+
+
+        /**
          * Generate the command
          *
-         * @return {string} output
+         * @return {Promise} command
          */
-        var generateCommand = function() {
+        var generateCommand = function(toolInputs, jobInputs, args) {
+            toolInputs = toolInputs || toolJSON.inputs;
+            jobInputs = jobInputs || jobJSON.inputs;
+            args = args || toolJSON.arguments;
 
             // in case baseCommand is not yet defined
             if (!toolJSON.baseCommand) {
                 toolJSON.baseCommand = [''];
             }
 
-            return prepareProperties(toolJSON.inputs, jobJSON.inputs)
+            return prepareProperties(toolInputs, jobInputs)
                 /* go through arguments and concat then with inputs */
-                .then(function (props) {
+                .then(function (inputs) {
 
                     var argsPromises = [];
 
-                    _.each(toolJSON.arguments, function(arg, key) {
+                    _.each(args, function(arg, key) {
 
                         var deferred = $q.defer(),
                             prefix = arg.prefix || '',
@@ -790,22 +814,21 @@ angular.module('registryApp.cliche')
 
                     return $q.all(argsPromises)
                         .then(function (args) {
-                            return _.sortBy(props.concat(args), 'position');
+                            return _.sortBy(inputs.concat(args), 'position');
                         }, function (error) { return $q.reject(error); });
 
                 })
                 /* generate command from arguments and inputs and apply transforms on baseCmd */
-                .then(function (joined) {
+                .then(function (inputsAndArgs) {
 
 		            function isBlank(val) {
 			            return val === '' || _.isNull(val);
 		            }
 
                     var command = [],
-                        requiredCommand = [],
                         baseCmdPromises = [];
 
-                    _.each(joined, function(arg) {
+                    _.each(inputsAndArgs, function(arg) {
 
                         var separate = parseSeparation(arg.separate),
                             value = _.isUndefined(arg.val) ? '' : arg.val,
@@ -826,27 +849,6 @@ angular.module('registryApp.cliche')
 
                             if (!_.isEmpty(cmd)) {
                                 command.push(cmd);
-
-                                if (arg.required) {
-                                    requiredCommand.push(cmd);
-                                }
-                            }
-                        }
-                    });
-
-                    _.each(toolJSON.inputs, function (input) {
-
-                        var jobInput;
-
-                        if (isRequired(input.type)) {
-                            jobInput = jobJSON.inputs[input.id.slice(1)];
-
-                            // if it exists, add path
-                            if (jobInput) {
-                                requiredCommand.push(jobInput.path);
-                            }
-                            else {  // if not, add ID without #
-                                requiredCommand.push(input.id.slice(1));
                             }
                         }
                     });
@@ -855,7 +857,7 @@ angular.module('registryApp.cliche')
 
                         var deferred = $q.defer();
 
-                        applyTransform(baseCmd, baseCmd)
+                        applyTransform(baseCmd, baseCmd, false)
                             .then(function (result) {
                                 deferred.resolve(result);
                             }, function (error) {
@@ -866,12 +868,8 @@ angular.module('registryApp.cliche')
                     });
 
                     return $q.all(baseCmdPromises)
-                        .then(function (cmds) {
-                            return {
-                                command: command,
-                                requiredCommand: requiredCommand,
-                                baseCommand: cmds.join(' ')
-                            };
+                        .then(function (commands) {
+                            return {command: command, baseCommand: commands.join(' ')};
                         }, function (error) { return $q.reject(error); });
 
                 })
@@ -880,46 +878,33 @@ angular.module('registryApp.cliche')
                     return $q.all([
                             applyTransform(toolJSON.stdin, toolJSON.stdin),
                             applyTransform(toolJSON.stdout, toolJSON.stdout)
-                        ])
-                        .then(function(result) {
-                            return {
-                                command: res.command,
-                                requiredCommand: res.requiredCommand,
-                                baseCommand: res.baseCommand,
-                                stdin: result[0],
-                                stdout: result[1]
-                            };
+                        ]).then(function(result) {
+                            return {command: res.command, baseCommand: res.baseCommand, stdin: result[0], stdout: result[1]};
                         }, function (error) { return $q.reject(error); });
                 })
                 /* generate final command */
                 .then(function (result) {
 
-                    var cmdPreview = result.baseCommand + ' ' + result.command.join(' ') + ' ' + result.requiredCommand.join(' ' );
-
                     consoleCMD = result.baseCommand + ' ' + result.command.join(' ');
 
                     if (result.stdin) {
                         consoleCMD += ' < ' + result.stdin;
-                        cmdPreview += ' < ' + result.stdin;
                     }
 
                     if (result.stdout) {
                         consoleCMD += ' > ' + result.stdout;
-                        cmdPreview += ' > ' + result.stdout;
                     }
 
                     if (_.isFunction(consoleCMDCallback)) {
                         consoleCMDCallback(consoleCMD);
                     }
 
-		            consoleCMD = consoleCMD.trim();
+                    return consoleCMD.trim();
 
-                    toolJSON['sbg:cmdPreview'] = cmdPreview.trim();
-
-                    return consoleCMD;
                 })
-                .catch(function (error) { return $q.reject(error); });
-
+                .catch(function (error) {
+                    return $q.reject(error);
+                });
         };
 
         /**
@@ -936,11 +921,11 @@ angular.module('registryApp.cliche')
         /**
          * Subscribe on command generating
          *
-         * @param f
+         * @param func
          */
-        var subscribe = function(f) {
+        var subscribe = function(func) {
 
-            consoleCMDCallback = f;
+            consoleCMDCallback = func;
 
         };
 
@@ -1164,7 +1149,7 @@ angular.module('registryApp.cliche')
          * @param {object} property
          * @param {string} toolType - tool or script
          * @param {boolean} ref
-         * @returns {*}
+         * @returns {Array} type
          */
         var getSchema = function(type, property, toolType, ref) {
 
@@ -1210,6 +1195,7 @@ angular.module('registryApp.cliche')
             flush: flush,
             getTransformSchema: getTransformSchema,
             generateCommand: generateCommand,
+            generatePreviewCommand: generatePreviewCommand,
             getCommand: getCommand,
             isRequired: isRequired,
             parseType: parseType,

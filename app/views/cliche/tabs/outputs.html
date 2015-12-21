@@ -1,4 +1,4 @@
-<div class="content">
+<ng-form class="content" name="outputs">
 
     <h3 class="legend-small">
         Output Ports
@@ -9,25 +9,32 @@
         <add-property
                 tooltip-msg="{{ ::help.cliche.outputs.addOutput }}"
                 tooltip-placement="right"
+                ng-model="view.newOutput"
                 type="output"
                 key="id"
                 tool-type="{{ view.type }}"
                 properties="view.tool.outputs"
-                class="add-enum-item large">
+                class="add-enum-item large"
+                id="output_add_button">>
         </add-property>
 
         <div class="enum-list-container">
             <property-output
-                    ng-repeat="property in view.tool.outputs track by property['id']"
+                    ng-repeat="property in view.tool.outputs track by property.id"
                     ng-model="property"
                     key="id"
+                    name="propertyOutput{{$index}}"
                     type="{{ view.type }}"
-                    properties="view.tool.outputs">
+                    properties="view.tool.outputs"
+                    index="$index"
+                    id-prefix="output">
             </property-output>
 
-            <p class="alert alert-info large" ng-if="view.tool.outputs.length === 0">Click the plus button to add output ports.</p>
+            <p class="alert alert-info large" ng-if="view.tool.outputs.length === 0">
+                 Click the plus button to add output ports.
+            </p>
         </div>
     </div>
-</div>
+</ng-form>
 
 

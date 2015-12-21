@@ -12,6 +12,7 @@ angular.module('registryApp.common')
         return {
             restrict: 'E',
             template: $templateCache.get('views/partials/expr.html'),
+            require: '?ngModel',
             scope: {
                 ngModel: '=',
                 type: '@',
@@ -26,6 +27,7 @@ angular.module('registryApp.common')
                 handleItemBlur: '&',
                 handleNull: '&',
                 longLiteral: '@',
+                id: '@',
                 min: '@',
                 propId: '@'
             },
@@ -201,6 +203,8 @@ angular.module('registryApp.common')
                             $scope.view.literal = undefined;
                         }
 
+                        $scope.setDirty();
+
                     });
 
 
@@ -248,7 +252,13 @@ angular.module('registryApp.common')
 	            };
 
             }],
-            link: function(scope) {
+            link: function(scope, element, attr, ngModelCtrl) {
+                scope.setDirty = function () {
+                    if (ngModelCtrl) {
+                        ngModelCtrl.$setDirty();
+                    }
+                };
+
                 function runHandler(event) {
 
                     if (event.type === 'keypress' && event.which === 13 || event.type === 'blur' || event.type === 'init' /* for initial load */) {

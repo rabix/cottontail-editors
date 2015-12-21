@@ -182,7 +182,7 @@ angular.module('registryApp.app')
 
             }
 
-            Instances = result[3].message;
+            Instances = result[3];
 
             $scope.view.loading = false;
         };
@@ -279,16 +279,18 @@ angular.module('registryApp.app')
 
                     rev = data.message['sbg:revision'];
 
-                    if (_.isString(svgString)) {
-                        return App.updateSvg(rev, svgString);
-                    }
-                    else {
-                        return data;
-                    }
-                })
-                .then(function (data) {
+                //    if (_.isString(svgString)) {
+                //        return App.updateSvg(rev, svgString);
+                //    }
+                //    else {
+                //        return data;
+                //    }
+                //})
+                //.then(function (data) {
 
                     Notification.primary('Workflow successfully updated.');
+
+
 
                     $scope.view.workflow = workflowJson;
 
@@ -304,6 +306,9 @@ angular.module('registryApp.app')
 
                     console.timeEnd('Workflow saving');
 
+                    /* @todo: workflow could not be saved more than once with reload
+                     turned off. This is a temporary fix until we get the no-reload feature sorted */
+                    redirectTo(rev);
                 })
                 .catch(function (trace) {
                     Notification.error('[Workflow Error] Workflow cannot be saved: ' + trace);

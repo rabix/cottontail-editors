@@ -4,7 +4,5 @@
 'use strict';
 
 angular.module('dyoleApp', ['registryApp.dyole', 'registryApp.cliche', 'integration'])
-	.controller('DyoleAppCtrl', ['$scope', function ($scope) {
-	}])
-	.config([function() {
+	.controller('DyoleAppCtrl', [function () {
 	}]);

@@ -1069,7 +1069,7 @@ angular.module('registryApp.dyole')
                     return inp['sbg:includeInPorts'];
                 });
 
-                var project = nodeModel['sbg:projectSlug'].split('/'),
+                var project = nodeModel['sbg:project'].split('/'),
                     projectOwner = project[0],
                     projectSlug = project[1];
 
@@ -1328,14 +1328,14 @@ angular.module('registryApp.dyole')
                     // Cache App id to place it in step.run
                     // and use generated id from label
                     if (model.id) {
-                        model.appId = model.id;
+                        model.appId = model['sbg:id'];
                     }
 
                     var _id = Common.generateNodeId(model, _self.nodes);
 
-                    model.id = _id;
+                    model['sbg:id'] = _id;
 
-                    _self.model.schemas[model.id] = rawModel;
+                    _self.model.schemas[ model['sbg:id'] ] = rawModel;
 
                     _self.Event.trigger('node:add', model);
 
@@ -1371,7 +1371,7 @@ angular.module('registryApp.dyole')
 
                 _.forEach(this.model.nodes, function (node) {
                     if (!Common.checkSystem(node)) {
-                        list.push(node.appId);
+                        list.push(node['sbg:id']);
                     }
                 });
 
@@ -1648,6 +1648,19 @@ angular.module('registryApp.dyole')
                             });
 
                             i['sbg:includeInPorts'] = input['sbg:includeInPorts'];
+
+                        }
+                    });
+
+                    _.forEach(node.outputs, function (output) {
+
+                        if (output['sbg:includeInPorts'] !== 'undefined') {
+
+                            var out = _.find(json.schemas[nodeId].outputs, function (inp) {
+                                return output.id === inp.id;
+                            });
+
+                            out['sbg:includeInPorts'] = output['sbg:includeInPorts'];
 
                         }
                     });

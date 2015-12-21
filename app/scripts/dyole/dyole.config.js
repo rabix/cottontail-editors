@@ -12,7 +12,7 @@ angular.module('registryApp.dyole', ['registryApp.app', 'ui.bootstrap', 'ui.sort
         generalSeparator: '.'
 	})
 	.config([
-        "$locationProvider", function($locationProvider) {
+        '$locationProvider', function($locationProvider) {
             if (history.pushState) {
                 $locationProvider.html5Mode({
                     enabled: true,

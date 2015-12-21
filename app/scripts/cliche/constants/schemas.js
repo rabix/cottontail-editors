@@ -18,9 +18,9 @@ angular.module('registryApp.cliche')
         'class': 'CommandLineTool',
         '@context': 'https://github.com/common-workflow-language/common-workflow-language/blob/draft-1/specification/tool-description.md',
         label: '',
-        description: '',
         owner: [],
         contributor: [],
+        description: '',
         requirements: [
             {
                 'class': 'DockerRequirement',

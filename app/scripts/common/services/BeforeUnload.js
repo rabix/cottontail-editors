@@ -8,7 +8,7 @@
 
 
 angular.module('registryApp.common')
-    .factory('BeforeUnload', [function() {
+    .factory('BeforeUnload', ['lodash', function(_) {
 
         var callback;
         var prompt;
@@ -56,19 +56,20 @@ angular.module('registryApp.common')
          * @returns {*}
          */
         var onBeforeUnloadHandler = function(event) {
+            var message,
+                shouldPrompt;
 
-            var message;
-
-            if (typeof callback === 'function') { message = callback(); }
-
+            if (typeof callback === 'function') {
+                message = callback();
+            }
             if (typeof prompt === 'function') {
-                prompt = prompt();
+                shouldPrompt = prompt();
             } else if (_.isUndefined(prompt)) {
                 // always prompt if shouldPrompt is not a function or boolean
-                prompt = true;
+                shouldPrompt = true;
             }
 
-            if (prompt) {
+            if (shouldPrompt) {
                 (event || window.event).returnValue = message;
 
                 return message;
@@ -78,23 +79,23 @@ angular.module('registryApp.common')
         /**
          * Register beforeunload event
          *
-         * @param c
+         * @param messageCallback
          * @param shouldPrompt {Function | boolean}
          * @returns {Function}
          */
-        var register = function(c, shouldPrompt) {
+        var register = function(messageCallback, shouldPrompt) {
 
             attachEvent('beforeunload', onBeforeUnloadHandler);
 
-            callback = c;
+            callback = messageCallback;
 
             prompt = shouldPrompt;
 
-            return function(c) {
+            return function(messageCallback) {
 
                 detachEvent('beforeunload', onBeforeUnloadHandler);
 
-                if (typeof c === 'function') { c.call(); }
+                if (typeof messageCallback === 'function') { messageCallback.call(); }
             };
         };
 
