@@ -145,16 +145,8 @@
                                               ng-model="baseCmd"
                                               index="{{ $index }}"
                                               handle-item-update="updateCliAdapter(value, index, 'baseCommand')"
-                                              handle-item-blur="splitBaseCmd(value, index)"
-                                              ng-disabled="disableCmdExpressions">
+                                              handle-item-blur="splitBaseCmd(value, index)">
                                         </expr>
-
-                                        <input type="text"
-                                               ng-show="!baseCmd.script"
-                                               class="form-control"
-                                               ng-blur="splitBaseCmd(baseCmd, $index)"
-                                               id="base_command_field_{{ $index + 1 }}"
-                                               ng-model="baseCmd">
                                     </div>
                                     <button ng-hide="view.tool.baseCommand.length === 1"
                                             class="fa fa-remove btn-link remove-btn"
