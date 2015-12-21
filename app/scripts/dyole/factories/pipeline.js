@@ -1340,12 +1340,12 @@ angular.module('registryApp.dyole')
                     // Cache App id to place it in step.run
                     // and use generated id from label
                     if (model.id) {
-                        model.appId = model.id;
+                        model.appId = model['sbg:id'];
                     }
 
                     var _id = Common.generateNodeId(model, _self.nodes);
 
-                    model.id = _id;
+                    model['sbg:id'] = model.id = _id;
 
                     _self.model.schemas[ model.id ] = rawModel;
 
