@@ -1537,13 +1537,7 @@ angular.module('registryApp.dyole')
                 var tempSvgContainer = $('<div></div>'), // create temporary DIV element that will contain SVG
                     pipWrap = this.pipelineWrap,
                     scale = 1,
-                    pipTranslation, pipScale, pipBBox, canvas, canvasStyle, svgString;
-
-                // keep pipeline translation factor for restoring it
-                pipTranslation = pipWrap.getTranslation();
-
-                // keep pipeline scale factor for later use
-                pipScale = pipWrap.getScale();
+                    pipBBox, canvas, canvasStyle, svgString;
 
                 // scale pipeline to 1 scale factor
                 pipWrap.scale(scale, scale);
@@ -1567,14 +1561,10 @@ angular.module('registryApp.dyole')
                 pipWrap.translate( -Math.round(pipBBox.x * scale), -Math.round(pipBBox.y * scale) );
 
                 // Add pipeline node to newly created SVG canvas
-                canvas.canvas.appendChild(pipWrap.node.cloneNode());
+                canvas.canvas.appendChild(pipWrap.node);
 
                 // get SVG string from the temporary canvas container
                 svgString = tempSvgContainer.html();
-
-                // reset workflow's position and scale to original values
-                pipWrap.translate( pipTranslation.x, pipTranslation.y );
-                pipWrap.scale(pipScale.x, pipScale.y);
 
                 // return SVG element as a string
                 return svgString;

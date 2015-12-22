@@ -293,6 +293,9 @@ angular.module('registryApp.app')
 
                     Notification.primary('Workflow successfully updated.');
 
+                    // reinstantiate whole workflow after the save, in order to re-render SVG
+                    PipelineService.register($scope.view.id, onInstanceRegister, onInstanceRegister);
+
                     $scope.view.workflow = workflowJson;
 
                     if (history.pushState) {
