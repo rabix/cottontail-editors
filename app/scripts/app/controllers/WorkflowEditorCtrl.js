@@ -268,7 +268,7 @@ angular.module('registryApp.app')
             // Saving workflow before fiddling with it's coorindates
             var workflow = PipelineInstance.format();
             // Saving SVG string before turning on Loader and removing SVG element from the DOM
-            var svgString = PipelineInstance.getSvgString();
+            //var svgString = PipelineInstance.getSvgString();
 
             $scope.view.loading = true;
 
@@ -278,6 +278,10 @@ angular.module('registryApp.app')
                     workflowJson = data.message;
 
                     rev = data.message['sbg:revision'];
+
+                    // If user hits RUN button immediately after saving (before page reload,
+                    // this will use latest revision of the workflow instead current one
+                    Globals.revision = rev;
 
                 //    if (_.isString(svgString)) {
                 //        return App.updateSvg(rev, svgString);
@@ -296,7 +300,7 @@ angular.module('registryApp.app')
 
                     if (history.pushState) {
 
-                        $location.search({ type: 'workflow', rev: null });
+                        $location.search({ type: 'workflow', rev: rev });
                     }
 
                     $scope.view.saving = false;
@@ -308,7 +312,7 @@ angular.module('registryApp.app')
 
                     /* @todo: workflow could not be saved more than once with reload
                      turned off. This is a temporary fix until we get the no-reload feature sorted */
-                    redirectTo(rev);
+                    //redirectTo(rev);
                 })
                 .catch(function (trace) {
                     Notification.error('[Workflow Error] Workflow cannot be saved: ' + trace);
