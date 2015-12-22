@@ -287,16 +287,17 @@ angular.module('registryApp.app')
                     }
                 })
                 .then(function (data) {
+                    // If user hits RUN button immediately after saving (before page reload,
+                    // this will use latest revision of the workflow instead current one
+                    Globals.revision = rev;
 
                     Notification.primary('Workflow successfully updated.');
-
-
 
                     $scope.view.workflow = workflowJson;
 
                     if (history.pushState) {
 
-                        $location.search({ type: 'workflow', rev: null });
+                        $location.search({ type: 'workflow', rev: rev });
                     }
 
                     $scope.view.saving = false;
