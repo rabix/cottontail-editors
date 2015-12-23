@@ -6,8 +6,10 @@
   @extend .clearfix;
 
   .actions {
-    .btn,
-    .btn-group {
+    // hack to eliminate the extra space between inline-block elements
+    font-size: 0;
+
+    .btn {
       margin-left: 10px;
       vertical-align: bottom;
     }
