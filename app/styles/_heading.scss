@@ -1,7 +1,8 @@
 .main-heading {
   margin: 0;
   padding: 13px 0 13px 0;
-  font-size: 26px;
+  font-size: 18px;
+  line-height: 34px;
   @extend .clearfix;
 
   .actions {
@@ -25,7 +26,6 @@
   @extend .flex-auto;
 
   .separator {
-    float: left;
     margin: 0 5px;
     color: #aaa;
   }
@@ -50,26 +50,19 @@
       display: inline-block;
       vertical-align: bottom;
 
-      .project-name, .user-name, .app-name, .app-revision {
-        display: block;
-        float: left;
-        a {
-          @extend %ellipsis;
-        }
-      }
-
-      // truncate just the project and app name so that the revision is always visible
-      .project-name, .app-name {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 33%;
+      .project-name,
+      .user-name,
+      .app-name,
+      .app-revision,
+      .separator {
+        display: inline-block;
       }
     }
   }
 
   .changes-mark {
     position: relative;
-    top: -4px;
+    top: -2px;
     margin: 0;
   }
 }
