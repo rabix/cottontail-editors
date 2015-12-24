@@ -278,7 +278,7 @@ angular.module('registryApp.dyole')
                     }
                 });
 
-                $('body').on('mouseup', function (e) {
+                $('body').on('mouseup', function () {
 
                     _.each(_self.nodes, function (node) {
 
@@ -306,7 +306,7 @@ angular.module('registryApp.dyole')
                 });
             },
 
-            _fixDisplay: function (model) {
+            _fixDisplay: function () {
 
                 if (typeof this.model.display === 'undefined') {
                     this.model.display = {};
@@ -710,7 +710,6 @@ angular.module('registryApp.dyole')
                 hBar = this.horizontalBar;
                 vBar = this.verticalBar;
                 canvasTransform = canvas.node.getCTM(); // || matrix.identity;
-                canvasTranslation = canvas.getTranslation();
                 surface = this.canvas;
                 surfaceDimensions = {
                     width: surface.width,
@@ -833,9 +832,7 @@ angular.module('registryApp.dyole')
              * @private
              */
             _transformWorkflowModel: function (nodeModel) {
-                var model = nodeModel.json;
-
-                return model;
+                return nodeModel.json;
             },
 
             /**
@@ -898,7 +895,7 @@ angular.module('registryApp.dyole')
              * @returns {*}
              */
             getNodeById: function (nodeId) {
-                return this.nodes[nodeId]
+                return this.nodes[nodeId];
             },
 
             /**
@@ -1099,9 +1096,9 @@ angular.module('registryApp.dyole')
                             }
 
                         } else {
-                            Notification.warning('Input "' + id + '" not found.')
+                            Notification.warning('Input "' + id + '" not found.');
                         }
-                    })
+                    });
                 };
 
                 var _matchValueType = function (type, value) {
@@ -1151,7 +1148,7 @@ angular.module('registryApp.dyole')
                             return false;
                         }
 
-                        var connections = _.map(node.connections, function (connection, id) {
+                        var connections = _.map(node.connections, function (connection) {
                             return connection.model;
                         });
 
@@ -1234,7 +1231,7 @@ angular.module('registryApp.dyole')
 
                             _.forEach(exposedCache, function (exposed) {
                                 var inp = _.find(n.model.inputs, function (i) {
-                                    return i.id === exposed.id
+                                    return i.id === exposed.id;
                                 });
 
                                 if (inp) {
@@ -1547,7 +1544,7 @@ angular.module('registryApp.dyole')
                 pipBBox = pipWrap.getElementBBox();
 
                 // create RaphaelJS SVG canvas, and put it into temporary DIV created above
-                canvas = new Raphael(tempSvgContainer[0], Math.round(pipBBox.width * scale), Math.round(pipBBox.height * scale) );
+                canvas = new Raphael(tempSvgContainer[0], Math.ceil(pipBBox.width * scale), Math.ceil(pipBBox.height * scale) );
 
                 // remove default style properties
                 canvasStyle = canvas.canvas.style;
@@ -1557,14 +1554,21 @@ angular.module('registryApp.dyole')
                 // Setting ID to the pipeline wrapp element so it can be easier to fetch later
                 pipWrap.node.setAttribute('id', 'pipeline-wrapper-node');
 
-                //  translate pipeline to (minX, minY) coordinates using most left and most right nodes
-                pipWrap.translate( -Math.round(pipBBox.x * scale), -Math.round(pipBBox.y * scale) );
+                //  translate pipeline to (0, 0) coordinates
+                pipWrap.translate(0, 0);
+
+                // translate each node by negating pipeline's bounding box (x, y) values
+                _.each(this.nodes, function (node) {
+                    node.addTranslation(-pipBBox.x, -pipBBox.y);
+                }, this);
 
                 // Add pipeline node to newly created SVG canvas
                 canvas.canvas.appendChild(pipWrap.node);
 
                 // get SVG string from the temporary canvas container
                 svgString = tempSvgContainer.html();
+
+                canvas.canvas.remove();
 
                 // return SVG element as a string
                 return svgString;
