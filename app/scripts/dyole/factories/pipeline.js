@@ -1137,11 +1137,16 @@ angular.module('registryApp.dyole')
                 };
 
                 // split app ID and remove revision element, then join it again into string
-                var appId = nodeModel['sbg:id'].split('/');
-                appId.splice(-1);
-                appId = appId.join('/');
+                var appId = nodeModel['sbg:id'].split('/'),
+                    appData;
 
-                return App.getApp(appId).then(function (result) {
+                appData = {
+                    projectOwner: appId[0],
+                    projectSlug: appId[1],
+                    appName: appId[2]
+                }
+
+                return App.getApp(appData).then(function (result) {
 
                     if (typeof result.message === 'object' && !_.isEmpty(result.message)) {
 

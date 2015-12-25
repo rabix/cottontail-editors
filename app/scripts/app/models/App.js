@@ -53,14 +53,14 @@ angular.module('registryApp.app')
         };
 
         /**
-         * Fetch app's JSON object. If app revision is not passed, latest revision will be fetched.
+         * Fetch app's JSON object.
          *
-         * @param {string} appId    String containt owner username, project slug, app name and (optionally) revision.
+         * @param {Object} appData    Object containt owner username, project slug, app name.
          * @returns {Promise}
          */
-        self.getApp = function(appId) {
+        self.getApp = function(appData) {
 
-            return Api.getApp.get({ appId: appId }).$promise;
+            return Api.getApp.get(appData).$promise;
         };
 
         /**
