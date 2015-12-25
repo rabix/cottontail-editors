@@ -1069,10 +1069,6 @@ angular.module('registryApp.dyole')
                     return inp['sbg:includeInPorts'];
                 });
 
-                var project = nodeModel['sbg:project'].split('/'),
-                    projectOwner = project[0],
-                    projectSlug = project[1];
-
                 var _validateAndMatchParams = function (valuesCache, inputs, nid) {
                     _.forEach(valuesCache, function (value, id) {
 
@@ -1140,7 +1136,12 @@ angular.module('registryApp.dyole')
                     return valueType.toLowerCase() === type.toLowerCase();
                 };
 
-                return App.getApp(projectOwner, projectSlug, nodeModel['sbg:name']).then(function (result) {
+                // split app ID and remove revision element, then join it again into string
+                var appId = nodeModel['sbg:id'].split('/');
+                appId.splice(-1);
+                appId = appId.join('/');
+
+                return App.getApp(appId).then(function (result) {
 
                     if (typeof result.message === 'object' && !_.isEmpty(result.message)) {
 
