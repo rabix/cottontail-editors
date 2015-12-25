@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('ManagePropertyInputCtrl', ['$scope', '$uibModalInstance', 'Cliche', 'options', 'lodash', 'HelpMessages',  function ($scope, $modalInstance, Cliche, options, _, HelpMessages) {
+    .controller('ManagePropertyInputCtrl', ['$scope', '$uibModalInstance', 'Cliche', 'options', 'lodash',  function ($scope, $modalInstance, Cliche, options, _) {
 
         var key = options.key || 'name';
         var idObj = {n: '', o: ''};
@@ -17,8 +17,6 @@ angular.module('registryApp.cliche')
         };
 
         var cachedInputBinding;
-
-        $scope.help = HelpMessages;
 
         $scope.view = {};
         $scope.view.key = key;

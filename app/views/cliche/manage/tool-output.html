@@ -24,7 +24,7 @@
                     <label class="control-label" for="output_modal_id">
                         {{ view.key === 'id' ? 'ID' : 'Name' }}
                     </label>
-                    <input uib-tooltip="{{ ::help.cliche.outputs.outputId }}"
+                    <input uib-tooltip="{{ :: 'clicheOutputsOutputId' | loc }}"
                            tooltip-trigger="focus"
                            type="text"
                            class="form-control"
@@ -43,7 +43,7 @@
                      ng-class="{'has-error': (view.form.type.$invalid && view.form.$dirty)}">
                     <label class="control-label">
                         Type
-                        <help-message message="help.cliche.outputs.type"></help-message>
+                        <help-message message="{{ :: 'clicheOutputsType' | loc }}"></help-message>
                     </label>
                     <select class="form-control"
                             id="output_modal_type"
@@ -60,7 +60,7 @@
                 <div class="form-group">
                     <label class="control-label">
                         Item Type
-                        <help-message message="help.cliche.outputs.type"></help-message>
+                        <help-message message="{{ :: 'clicheOutputsType' | loc }}"></help-message>
                     </label>
                     <select class="form-control"
                             id="output_modal_item_type"
@@ -76,7 +76,7 @@
                 <div class="form-group">
                     <label class="control-label">
                         Glob
-                        <help-message message="help.cliche.outputs.glob"></help-message>
+                        <help-message message="{{ :: 'clicheOutputsGlob' | loc }}"></help-message>
                     </label>
                     <expr ng-model="view.property.outputBinding.glob"
                           handle-item-update="updateGlobValue(value)"
@@ -104,7 +104,7 @@
                         <label class="control-label" for="label">
                             Label
                         </label>
-                        <input uib-tooltip="{{ ::help.cliche.inputs.label }}"
+                        <input uib-tooltip="{{ :: 'clicheInputsLabel' | loc }}"
                                tooltip-trigger="focus"
                                type="text"
                                class="form-control"
@@ -122,7 +122,7 @@
                         <label class="control-label" for="description">
                             Description
                         </label>
-                        <input uib-tooltip="{{ ::help.cliche.inputs.description }}"
+                        <input uib-tooltip="{{ :: 'clicheInputsDescription' | loc }}"
                                tooltip-trigger="focus"
                                type="text"
                                class="form-control"
@@ -138,7 +138,7 @@
                         <label class="control-label" for="output_modal_file_types">
                             File Types
                         </label>
-                        <input uib-tooltip="{{ ::help.cliche.inputs.fileTypes }}"
+                        <input uib-tooltip="{{ :: 'clicheInputsFileTypes' | loc }}"
                                tooltip-trigger="focus"
                                type="text"
                                class="form-control"
@@ -156,7 +156,7 @@
         <div ng-show="view.isFileType">
             <h3 class="legend-small">
                 Metadata
-                <help-message message="help.cliche.outputs.metadata"></help-message>
+                <help-message message="{{ :: 'clicheOutputsMetadata' | loc }}"></help-message>
             </h3>
 
             <div class="meta-list" >
@@ -231,7 +231,7 @@
         <div ng-show="view.isFileType">
             <h3 class="legend-small">
                 Secondary Files
-                <help-message message="help.cliche.outputs.secondaryFiles"></help-message>
+                <help-message message="{{ :: 'clicheOutputsSecondaryFiles' | loc }}"></help-message>
             </h3>
 
             <div class="row">

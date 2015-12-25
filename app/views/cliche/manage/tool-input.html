@@ -19,7 +19,7 @@
             <div class="col-md-4">
                 <div class="form-group" ng-class="{'has-error': (view.form.name.$invalid && view.form.$dirty)}">
                     <label class="control-label" for="input_modal_id">{{ view.key === 'id' ? 'ID' : 'Name' }}</label>
-                    <input uib-tooltip="{{ ::help.cliche.inputs.inputId }}"
+                    <input uib-tooltip="{{ :: 'clicheInputsInputId' | loc }}"
                            tooltip-trigger="focus"
                            type="text"
                            class="form-control"
@@ -35,8 +35,9 @@
 
             <div class="col-md-4">
                 <div class="form-group" ng-class="{'has-error': (view.form.type.$invalid && view.form.$dirty)}">
-                    <label class="control-label" for="input_modal_type">Type
-                        <help-message message="help.cliche.inputs.type"></help-message>
+                    <label class="control-label">
+                        Type
+                        <help-message message="{{ :: 'clicheInputsType' | loc }}"></help-message>
                     </label>
                     <select class="form-control"
                             id="input_modal_type"
@@ -50,8 +51,9 @@
 
             <div class="col-md-4" ng-if="view.type === 'array'">
                 <div class="form-group">
-                    <label class="control-label" for="input_modal_item_type">Item Type
-                        <help-message message="help.cliche.inputs.type"></help-message>
+                    <label class="control-label">
+                        Item Type
+                        <help-message message="{{ :: 'clicheInputsItemType' | loc }}"></help-message>
                     </label>
                     <select class="form-control"
                             id="input_modal_item_type"
@@ -78,8 +80,10 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group" ng-class="{'has-error': (view.form.label.$invalid && view.form.$dirty)}">
-                    <label class="control-label" for="input_modal_label">Label</label>
-                    <input uib-tooltip="{{ ::help.cliche.inputs.label }}"
+                    <label class="control-label" for="input_modal_label">
+                        Label
+                    </label>
+                    <input uib-tooltip="{{ :: 'clicheInputsLabel' | loc }}"
                            tooltip-trigger="focus"
                            type="text"
                            class="form-control"
@@ -93,8 +97,10 @@
 
             <div class="col-md-4">
                 <div class="form-group" ng-class="{'has-error': (view.form.description.$invalid && view.form.$dirty)}">
-                    <label class="control-label" for="input_modal_description">Description</label>
-                    <input uib-tooltip="{{ ::help.cliche.inputs.description }}"
+                    <label class="control-label" for="input_modal_description">
+                        Description
+                    </label>
+                    <input uib-tooltip="{{ :: 'clicheInputsDescription' | loc }}"
                            tooltip-trigger="focus"
                            type="text"
                            class="form-control"
@@ -110,8 +116,10 @@
 
             <div class="col-md-4">
                 <div class="form-group" ng-class="{'has-error': (view.form.altPrefix.$invalid && view.form.$dirty)}">
-                    <label class="control-label" for="input_modal_alt_prefix">Alternative Prefix</label>
-                    <input uib-tooltip="{{ ::help.cliche.inputs.altPrefix }}"
+                    <label class="control-label" for="input_modal_alt_prefix">
+                        Alternative Prefix
+                    </label>
+                    <input uib-tooltip="{{ :: 'clicheInputsAltPrefix' | loc }}"
                            tooltip-trigger="focus"
                            type="text"
                            class="form-control"
@@ -125,8 +133,10 @@
 
             <div class="col-md-4">
                 <div class="form-group" ng-class="{'has-error': (view.form.category.$invalid && view.form.$dirty)}">
-                    <label class="control-label" for="input_modal_category">Category</label>
-                    <input uib-tooltip="{{ ::help.cliche.inputs.category }}"
+                    <label class="control-label" for="input_modal_category">
+                        Category
+                    </label>
+                    <input uib-tooltip="{{ :: 'clicheInputsCategory' | loc }}"
                            tooltip-trigger="focus"
                            type="text"
                            class="form-control"
@@ -140,8 +150,10 @@
             <div class="col-md-4" ng-show="!isFileType">
                 <div class="form-group"
                      ng-class="{'has-error': (view.form.toolDefaultValue.$invalid && view.form.$dirty)}">
-                    <label class="control-label" for="input_modal_tool_default_value">Tool Default</label>
-                    <input uib-tooltip="{{ ::help.cliche.inputs.toolDefaultValue }}"
+                    <label class="control-label" for="input_modal_tool_default_value">
+                        Tool Default
+                    </label>
+                    <input uib-tooltip="{{ :: 'clicheInputsToolDefaultValue' | loc }}"
                            tooltip-trigger="focus"
                            type="text"
                            class="form-control"
@@ -154,8 +166,10 @@
 
             <div class="col-md-4" ng-show="isFileType">
                 <div class="form-group" ng-class="{'has-error': (view.form.fileTypes.$invalid && view.form.$dirty)}">
-                    <label class="control-label" for="input_modal_file_types">File Types</label>
-                    <input uib-tooltip="{{ ::help.cliche.inputs.fileTypes }}"
+                    <label class="control-label" for="input_modal_file_types">
+                        File Types
+                    </label>
+                    <input uib-tooltip="{{ :: 'clicheInputsFileTypes' | loc }}"
                            tooltip-trigger="focus"
                            type="text"
                            class="form-control"
@@ -171,7 +185,7 @@
         <div ng-if="view.type === 'File'">
             <h3 class="legend-small">
                 Secondary Files
-                <help-message message="help.cliche.inputs.secondaryFiles"></help-message>
+                <help-message message="{{ :: 'clicheInputsSecondaryFiles' | loc }}"></help-message>
 
             </h3>
 
@@ -219,7 +233,7 @@
                     <label class="control-label" for="input_modal_position">
                         Position
                     </label>
-                    <input uib-tooltip="{{ ::help.cliche.bindings.position }}"
+                    <input uib-tooltip="{{ :: 'clicheBindingsPosition' | loc }}"
                            tooltip-trigger="focus"
                            type="number"
                            class="form-control"
@@ -233,7 +247,7 @@
             <div class="col-md-2">
                 <div class="form-group">
                     <label class="control-label" for="input_modal_prefix">Prefix</label>
-                    <input uib-tooltip="{{ ::help.cliche.bindings.prefix }}"
+                    <input uib-tooltip="{{ :: 'clicheBindingsPrefix' | loc }}"
                            tooltip-trigger="focus"
                            type="text"
                            class="form-control"
@@ -250,7 +264,7 @@
 
                     <label class="control-label" for="input_modal_separate">
                         Separate prefix with
-                        <help-message message="help.cliche.bindings.separatePrefix"></help-message>
+                        <help-message message="{{ :: 'clicheBindingsSeparatePrefix' | loc }}"></help-message>
                     </label>
 
                     <separator type="list"
@@ -266,7 +280,7 @@
                 <div class="form-group">
                     <label class="control-label" for="input_modal_separator">
                         Item Separator
-                        <help-message message="help.cliche.bindings.itemSeparator"></help-message>
+                        <help-message message="{{ :: 'clicheBindingsItemSeparator' | loc }}"></help-message>
                     </label>
                     <separator type="item"
                                id="input_modal_separator"
@@ -281,7 +295,7 @@
                 <div class="form-group">
                     <label class="control-label" for="input_modal_value">
                         Value
-                        <help-message message="help.cliche.bindings.value"></help-message>
+                        <help-message message="{{ :: 'clicheBindingsValue' | loc }}"></help-message>
                     </label>
                     <expr ng-model="view.property.inputBinding.valueFrom"
                           handle-item-update="updateTransform(value)"

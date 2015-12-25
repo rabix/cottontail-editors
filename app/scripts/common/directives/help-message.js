@@ -7,7 +7,7 @@ angular.module('registryApp.common')
 	.directive('helpMessage', ['lodash', function(_) {
 		return {
 			scope: {
-				message: '='
+				message: '@'
 			},
 			restrict: 'E',
 			replace: true,

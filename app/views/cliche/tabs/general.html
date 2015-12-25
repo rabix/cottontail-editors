@@ -3,12 +3,12 @@
         <div class="col-md-6">
             <form class="section">
                 <h3 class="legend-small">Docker Container
-                    <help-message message="help.cliche.general.environment"></help-message>
+                    <help-message message="{{ :: 'clicheGeneralEnvironment' | loc }}"></help-message>
                 </h3>
 
                 <div class="form-group">
                     <label for="docker_pull" class="control-label">Docker Repository[:Tag]</label>
-                    <input uib-tooltip="{{ ::help.cliche.general.dockerPull }}"
+                    <input uib-tooltip="{{ ::'clicheGeneralDockerPull' | loc }}"
                            tooltip-trigger="focus"
                            type="text"
                            class="form-control"
@@ -19,7 +19,7 @@
 
                 <div class="form-group">
                     <label for="image_id" class="control-label">Image ID</label>
-                    <input uib-tooltip="{{ ::help.cliche.general.imageId }}"
+                    <input uib-tooltip="{{ :: 'clicheGeneralImageId' | loc }}"
                            tooltip-trigger="focus"
                            type="text"
                            class="form-control"
@@ -32,7 +32,7 @@
             <div ng-if="view.type === 'tool'" class="section">
 
                 <h3 class="legend-small">Resources
-                    <help-message message="help.cliche.general.resources"></help-message>
+                    <help-message message="{{ :: 'clicheGeneralResources' | loc }}"></help-message>
                 </h3>
 
                 <div class="row-margin">
@@ -40,7 +40,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label">CPU</label>
-                            <expr tooltip-msg="{{ ::help.cliche.general.cpu }}"
+                            <expr tooltip-msg="{{ ::'clicheGeneralCpu' | loc }}"
                                   ng-model="view.resCPURequirement.value"
                                   min="0"
                                   type="number"
@@ -54,7 +54,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label">Memory (MB)</label>
-                            <expr tooltip-msg="{{ ::help.cliche.general.memory }}"
+                            <expr tooltip-msg="{{ ::'clicheGeneralMemory' | loc }}"
                                   ng-model="view.resMemRequirement.value"
                                   type="number"
                                   id="memory_resource"
@@ -72,7 +72,7 @@
 
                 <h3 class="legend-small">
                     Create Files
-                    <help-message message="help.cliche.general.createFiles"></help-message>
+                    <help-message message="{{ :: 'clicheGeneralCreateFiles' | loc}}"></help-message>
                 </h3>
 
                 <div class="enum-list-wrap"
@@ -121,14 +121,14 @@
         <div class="col-md-6">
             <div class="section">
                 <h3 class="legend-small">Command
-                    <help-message message="help.cliche.general.command"></help-message>
+                    <help-message message="{{ :: 'clicheGeneralCommand' | loc}}"></help-message>
                 </h3>
 
                 <div class="form-group">
                     <label class="control-label">Base Command</label>
 
                     <div class="enum-list-wrap">
-                        <a uib-tooltip="{{ ::help.cliche.general.addBaseCMD }}"
+                        <a uib-tooltip="{{ ::'clicheGeneralAddBaseCMD' | loc }}"
                            href ng-click="addBaseCmd()"
                            class="btn btn-default add-enum-item">
                             <i class="fa fa-plus"></i>
@@ -139,7 +139,7 @@
                                 <li ng-repeat="baseCmd in view.tool.baseCommand track by $index">
                                     <div class="enum-field form-group form-group-file">
 
-                                        <expr tooltip-msg="{{ ::help.cliche.general.baseCMD }}"
+                                        <expr tooltip-msg="{{ ::'clicheGeneralBaseCMD' | loc }}"
                                               id="base_command_field_{{ $index + 1 }}"
                                               ng-model="baseCmd"
                                               index="{{ $index }}"
@@ -163,7 +163,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label">Stdin</label>
-                            <expr tooltip-msg="{{ ::help.cliche.general.stdin }}"
+                            <expr tooltip-msg="{{ ::'clicheGeneralStdin' |loc}}"
                                   ng-model="view.tool.stdin"
                                   id="stdin_field"
                                   handle-item-update="updateCliAdapter(value, null, 'stdin')">
@@ -173,7 +173,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label">Stdout</label>
-                            <expr tooltip-msg="{{ ::help.cliche.general.stdout }}"
+                            <expr tooltip-msg="{{ ::'clicheGeneralStdout' | loc }}"
                                   tooltip-placement="left"
                                   id="stdout_field"
                                   ng-model="view.tool.stdout"
@@ -189,12 +189,12 @@
                         <div class="form-group">
                             <label class="control-label">
                                 Success Codes
-                                <help-message message="help.cliche.general.successCodes"></help-message>
+                                <help-message message="{{ ::'clicheGeneralSuccessCodes' |loc }}"></help-message>
                             </label>
 
                             <div class="enum-list-wrap">
 
-                                <button uib-tooltip="{{ ::help.cliche.general.successCodes }}"
+                                <button uib-tooltip="{{ :: 'clicheGeneralSuccessCodes' | loc }}"
                                         ng-click="addStatusCode('successCodes')"
                                         class="btn btn-default add-enum-item"
                                         id="success_codes_add_button">
@@ -232,12 +232,12 @@
                         <div class="form-group">
                             <label class="control-label">
                                 Temporary Fail Codes
-                                <help-message message="help.cliche.general.tempFailCodes"></help-message>
+                                <help-message message="{{ :: 'clicheGeneralTempFailCodes' | loc }}"></help-message>
                             </label>
 
                             <div class="enum-list-wrap">
 
-                                <button uib-tooltip="{{ ::help.cliche.general.temporaryFailCodes }}"
+                                <button uib-tooltip="{{ :: 'clicheGeneralTemporaryFailCodes' | loc }}"
                                         ng-click="addStatusCode('temporaryFailCodes')"
                                         class="btn btn-default add-enum-item"
                                         id="temporary_fail_codes_add_button">
@@ -278,13 +278,13 @@
             <div class="section">
                 <h3 class="legend-small">
                     Arguments
-                    <help-message message="help.cliche.general.arguments"></help-message>
+                    <help-message message="{{ :: 'clicheGeneralArguments' | loc }}"></help-message>
                 </h3>
 
 
                 <div class="enum-list-wrap">
                     <add-property
-                            tooltip-msg="{{ ::help.cliche.general.addArgument }}"
+                            tooltip-msg="{{ ::'clicheGeneralAddArgument' | loc }}"
                             type="arg"
                             handler="generateCommand()"
                             ng-model="view.newArgument"

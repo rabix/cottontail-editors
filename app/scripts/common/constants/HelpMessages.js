@@ -3,8 +3,7 @@
  */
 'use strict';
 
-angular.module('registryApp.common').service('HelpMessages', function() {
-    var dockerImgUrl = document.l10n.getSync('companyName', {type: 'short'}) === 'CGC' ? 'cgc-images.sbgenomics.com' : 'images.sbgenomics.com';
+angular.module('registryApp.common').service('HelpMessages', [function() {
 
     return {
         cliche: {
@@ -13,8 +12,7 @@ angular.module('registryApp.common').service('HelpMessages', function() {
                 resources: 'Tool execution resource requirements.',
                 command: 'Static part of the command line is described using a list of strings and stdin/stdout redirection.',
                 arguments: 'Additional command line arguments, if not bound to any input (e.g. dynamic number of threads).',
-                dockerPull: 'Enter image repository and (optionally) tag. For example, "' + dockerImgUrl +
-                '/jsmith/mytool:latest" or "ubuntu". We suggest using the SevenBridges image registry (' + dockerImgUrl + ') to speed up transfer of image data to compute nodes.',
+                dockerPull: 'Enter image repository and (optionally) tag. For example, "images.sbgenomics.com/jsmith/mytool:latest" or "ubuntu". We suggest using the SevenBridges image registry (images.sbgenomics.com) to speed up transfer of image data to compute nodes.',
                 imageId: 'Optionally set to ID of the image to make sure same image is used every time.',
                 cpu: 'Leave at 0 for multi-threaded tools or set 1 for single threaded tools.',
                 memory: 'Amount of RAM (in MB) required by the tool.',
@@ -77,5 +75,5 @@ angular.module('registryApp.common').service('HelpMessages', function() {
         dyole: {},
         main: {},
         app: {}
-    }
-});
+    };
+}]);
