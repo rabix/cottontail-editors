@@ -113,7 +113,7 @@ var Schema = {
                     ]
                 }
             },
-            required: ['type', 'items']
+            required: ['type', 'items', 'name']
         },
         /**
          * @typedef {object} RecordType
@@ -132,7 +132,7 @@ var Schema = {
                     $ref: '#/definitions/fieldsDef'
                 }
             },
-            required: ['type', 'fields']
+            required: ['type', 'fields', 'name']
         },
         /**
          * @typedef {object} MapType

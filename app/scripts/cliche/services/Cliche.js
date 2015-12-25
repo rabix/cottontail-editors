@@ -266,7 +266,6 @@ angular.module('registryApp.cliche')
 
                 var exists = false;
 
-                //@todo this logic is broken, doesn't actually check names of enum and record items
                 _.each(inputs, function(i) {
 
                     /** @type Input */
@@ -280,8 +279,8 @@ angular.module('registryApp.cliche')
                             exists = true;
                             return false;
                         }
-                    } else if (type === 'array' && input.items && input.items.type === 'record' || type === 'record') {
-                        exists = _checkInner(name, input.items.fields, false);
+                    } else if (type === 'array' && input.type.items && input.type.items.type === 'record' || type === 'record') {
+                        exists = _checkInner(name, input.type.items.fields, false);
                         if (exists) {
                             return false;
                         }
@@ -993,6 +992,7 @@ angular.module('registryApp.cliche')
 
                 type = {
                     type: 'array',
+                    name: inner.name,
                     items: inner.items
                 };
 
