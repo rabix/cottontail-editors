@@ -178,8 +178,12 @@ angular.module('registryApp.app')
                     _.forEach($scope.view.workflow['sbg:validationErrors'], function (err) {
                         Notification.error('[Workflow Error] ' + err);
                     });
-                }
 
+                    $scope.view.isValid = false;
+                }
+            }
+            else {
+                $scope.view.isValid = true;
             }
 
             Instances = result[3];
