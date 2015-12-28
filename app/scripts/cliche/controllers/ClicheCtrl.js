@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('ClicheCtrl', ['$scope', '$q', '$uibModal', '$templateCache', '$rootScope', 'App', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload', 'BeforeRedirect', 'Api', 'User', 'lodash', 'HelpMessages', 'Globals', 'HotkeyRegistry', 'Notification', 'rawTool', 'Helper', 'ClicheEvents', function($scope, $q, $modal, $templateCache, $rootScope, App, Cliche, Loading, SandBox, BeforeUnload, BeforeRedirect, Api, User, _, HelpMessages, Globals, HotkeyRegistry, Notification, rawTool, Helper, ClicheEvents) {
+    .controller('ClicheCtrl', ['$scope', '$q', '$uibModal', '$templateCache', '$rootScope', 'App', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload', 'BeforeRedirect', 'Api', 'User', 'lodash', 'HelpMessages', 'Globals', 'HotkeyRegistry', 'Notification', 'rawTool', 'Helper', 'ClicheEvents', '$location', function($scope, $q, $modal, $templateCache, $rootScope, App, Cliche, Loading, SandBox, BeforeUnload, BeforeRedirect, Api, User, _, HelpMessages, Globals, HotkeyRegistry, Notification, rawTool, Helper, ClicheEvents, $location) {
         $scope.Loading = Loading;
 
         var cliAdapterWatchers = [],
@@ -973,11 +973,20 @@ angular.module('registryApp.cliche')
                         $scope.form.tool.$setPristine();
                         $scope.view.loading = false;
 
-                        var newRevision = result.message['sbg:revision'];
                         Notification.primary('Tool successfully updated');
 
-                        redirectTo(newRevision);
-                        $scope.view.loading = true;
+                        $scope.view.tool = result.message;
+                        Cliche.setTool($scope.view.tool);
+
+                        var newRevision = result.message['sbg:revision'];
+
+                        // check if reload can be skipped while changing the URL
+                        if (history.pushState) {
+                            $location.search({ type: 'workflow', rev: newRevision });
+                        } else {
+                            redirectTo(newRevision);
+                            $scope.view.loading = true;
+                        }
 
                         deferred.resolve();
 

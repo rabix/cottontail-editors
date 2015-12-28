@@ -10,4 +10,14 @@ angular.module('registryApp.cliche', ['ui.bootstrap', 'registryApp.common', 'reg
     .constant('Const', {
         exposedSeparator: '$',
         generalSeparator: '.'
-    });
+    })
+    .config([
+        '$locationProvider', function($locationProvider) {
+            if (history.pushState) {
+                $locationProvider.html5Mode({
+                    enabled: true,
+                    requireBase: false
+                });
+            }
+        }
+    ]);
