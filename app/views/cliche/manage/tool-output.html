@@ -1,20 +1,20 @@
-<div class="modal-header">
-    <button type="button" class="close" ng-click="cancel()">
-        <span>&times;</span>
-        <span class="sr-only">Close</span>
-    </button>
-    <h4 class="modal-title">
+<form ng-submit="save()" name="view.form" novalidate>
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="cancel()">
+            <span>&times;</span>
+            <span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title">
         <span>
             {{ (view.mode === 'edit') ? 'Edit' : 'Add' }} Output Property
         </span>
-        <label class="checkbox inline">
-            <input type="checkbox" ng-model="view.required"> required
-        </label>
-    </h4>
-</div>
-<div class="modal-body">
+            <label class="checkbox inline">
+                <input type="checkbox" ng-model="view.required"> required
+            </label>
+        </h4>
+    </div>
+    <div class="modal-body">
 
-    <form ng-submit="save()" name="view.form" novalidate>
 
         <p ng-if="view.error" class="alert alert-danger">{{ view.error }}</p>
 
@@ -134,7 +134,8 @@
                 <!-- END Description -->
 
                 <div class="col-md-4" ng-show="view.isFileType">
-                    <div class="form-group" ng-class="{'has-error': (view.form.fileTypes.$invalid && view.form.$dirty)}">
+                    <div class="form-group"
+                         ng-class="{'has-error': (view.form.fileTypes.$invalid && view.form.$dirty)}">
                         <label class="control-label" for="output_modal_file_types">
                             File Types
                         </label>
@@ -159,7 +160,7 @@
                 <help-message message="help.cliche.outputs.metadata"></help-message>
             </h3>
 
-            <div class="meta-list" >
+            <div class="meta-list">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="enum-list-wrap">
@@ -237,17 +238,17 @@
             <div class="row">
                 <div class="col-md-12">
                     <!--<div ng-if="view.isSecondaryFilesExpr" class="enum-list-wrap">-->
-                        <!--<a href ng-click="toggleToList()" class="btn btn-default add-enum-item"><i-->
-                                <!--class="fa fa-plus"></i></a>-->
+                    <!--<a href ng-click="toggleToList()" class="btn btn-default add-enum-item"><i-->
+                    <!--class="fa fa-plus"></i></a>-->
 
-                        <!--<div class="enum-list-container">-->
-                            <!--<ul class="enum-list wide">-->
-                                <!--<li>-->
-                                    <!--<expr ng-model="view.property.outputBinding.secondaryFiles" only-expr="true"-->
-                                          <!--handle-item-update="updateSecondaryFilesValue(value)"></expr>-->
-                                <!--</li>-->
-                            <!--</ul>-->
-                        <!--</div>-->
+                    <!--<div class="enum-list-container">-->
+                    <!--<ul class="enum-list wide">-->
+                    <!--<li>-->
+                    <!--<expr ng-model="view.property.outputBinding.secondaryFiles" only-expr="true"-->
+                    <!--handle-item-update="updateSecondaryFilesValue(value)"></expr>-->
+                    <!--</li>-->
+                    <!--</ul>-->
+                    <!--</div>-->
                     <!--</div>-->
                     <enum ng-if="!view.isSecondaryFilesExpr"
                           ng-model="view.property.outputBinding.secondaryFiles"
@@ -257,8 +258,6 @@
             </div>
         </div>
         <!-- END Secondary Files-->
-
-
 
 
         <div class="form-group main-actions">
@@ -271,6 +270,6 @@
             </button>
         </div>
 
-    </form>
+    </div>
 
-</div>
+</form>

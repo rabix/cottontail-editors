@@ -52,9 +52,15 @@ angular.module('registryApp.app')
             }
         };
 
-        self.getApp = function(projectOwner, projectSlug, appName) {
+        /**
+         * Fetch app's JSON object.
+         *
+         * @param {Object} appData    Object containt owner username, project slug, app name.
+         * @returns {Promise}
+         */
+        self.getApp = function(appData) {
 
-            return Api.getApp.get({projectOwner: projectOwner, projectSlug: projectSlug, appName: appName}).$promise;
+            return Api.getApp.get(appData).$promise;
         };
 
         /**
