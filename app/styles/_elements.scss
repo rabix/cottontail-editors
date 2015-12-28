@@ -1,6 +1,6 @@
-.page {
+@import "heading";
 
-  @import "heading";
+.page {
 
   /* Page description */
   .description {
@@ -522,10 +522,13 @@ legend {
 }
 
 .changes-mark {
-  font-size: 13px;
   color: #aa0000;
   cursor: pointer;
   margin: 0 10px;
+
+  .fa {
+    font-size: 12px;
+  }
   .tooltip {
     font-weight: normal;
   }

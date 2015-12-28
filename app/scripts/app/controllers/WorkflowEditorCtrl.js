@@ -5,12 +5,12 @@
 
 angular.module('registryApp.app')
     .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$uibModal',
-        '$location', '$templateCache',
+        '$location', '$templateCache', '$filter',
         'Loading', 'App', 'User', 'Repo', 'Const', 'BeforeRedirect',
         'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload',
         'Api', 'HotkeyRegistry', 'Notification', 'Cliche',
 
-        function ($scope, $rootScope, $q, $modal, $location, $templateCache, Loading, App, User, Repo, Const, BeforeRedirect, Helper, PipelineService, _, Globals, BeforeUnload, Api, HotkeyRegistry, Notification, Cliche) {
+        function ($scope, $rootScope, $q, $modal, $location, $templateCache, $filter, Loading, App, User, Repo, Const, BeforeRedirect, Helper, PipelineService, _, Globals, BeforeUnload, Api, HotkeyRegistry, Notification, Cliche) {
 
         var PipelineInstance = null,
             prompt = false,
@@ -182,8 +182,12 @@ angular.module('registryApp.app')
                     _.forEach($scope.view.workflow['sbg:validationErrors'], function (err) {
                         Notification.error('[Workflow Error] ' + err);
                     });
-                }
 
+                    $scope.view.isValid = false;
+                }
+            }
+            else {
+                $scope.view.isValid = true;
             }
             Instances = result[3];
 
@@ -283,36 +287,41 @@ angular.module('registryApp.app')
 
                     rev = data.message['sbg:revision'];
 
-                //    if (_.isString(svgString)) {
-                //        return App.updateSvg(rev, svgString);
-                //    }
-                //    else {
-                //        return data;
-                //    }
-                //})
-                //.then(function (data) {
+                    if (_.isString(svgString)) {
+                        return App.updateSvg(rev, svgString);
+                    }
+                    else {
+                        return data;
+                    }
+                })
+                .then(function (data) {
+                    // If user hits RUN button immediately after saving (before page reload,
+                    // this will use latest revision of the workflow instead current one
+                    Globals.revision = rev;
 
                     Notification.primary('Workflow successfully updated.');
 
-
+                    // reinstantiate whole workflow after the save, in order to re-render SVG
+                    PipelineService.register($scope.view.id, onInstanceRegister, onInstanceRegister);
 
                     $scope.view.workflow = workflowJson;
 
-                    if (history.pushState) {
 
-                        $location.search({ type: 'workflow', rev: null });
-                    }
 
                     $scope.view.saving = false;
                     $scope.view.loading = false;
                     $scope.view.isChanged = false;
                     prompt = false;
 
-                    console.timeEnd('Workflow saving');
+                    // check if reload can be skipped while changing the URL
+                    if (history.pushState) {
+                        $location.search({ type: 'workflow', rev: rev });
+                    } else {
+                        $scope.view.loading = true;
+                        redirectTo(rev);
+                    }
 
-                    /* @todo: workflow could not be saved more than once with reload
-                     turned off. This is a temporary fix until we get the no-reload feature sorted */
-                    redirectTo(rev);
+                    console.timeEnd('Workflow saving');
                 })
                 .catch(function (trace) {
                     Notification.error('[Workflow Error] Workflow cannot be saved: ' + trace);
@@ -571,6 +580,7 @@ angular.module('registryApp.app')
                 });
 
                 modalInstance.result.then(function () {
+                    prompt = false;
                     createTask();
                 }, function () {
                     return false;

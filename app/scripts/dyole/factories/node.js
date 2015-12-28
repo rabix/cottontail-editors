@@ -40,10 +40,10 @@ angular.module('registryApp.dyole')
             this.inputRefs = this.model.inputs;
 
             this.inputRefs.sort(function (a, b) {
-                if (a['id'] < b['id']) {
+                if (a.id < b.id) {
                     return 1;
                 }
-                if (b['id'] < a['id']) {
+                if (b.id < a.id) {
                     return -1;
                 }
                 return 0;
@@ -52,10 +52,10 @@ angular.module('registryApp.dyole')
             this.outputRefs = this.model.outputs;
 
             this.outputRefs.sort(function (a, b) {
-                if (a['id'] < b['id']) {
+                if (a.id < b.id) {
                     return 1;
                 }
-                if (b['id'] < a['id']) {
+                if (b.id < a.id) {
                     return -1;
                 }
                 return 0;
@@ -194,7 +194,7 @@ angular.module('registryApp.dyole')
                 borders = canvas.group();
                 borders.push(outerBorder).push(innerBorder);
 
-                var name = model.label ? model.label : model['id'];
+                var name = model.label ? model.label : model.id;
 
                 if (model.softwareDescription && model.softwareDescription.label) {
                     name = model.softwareDescription.label.charAt(0) === '#' ? model.softwareDescription.label.slice(1) : model.softwareDescription.name;
@@ -231,7 +231,7 @@ angular.module('registryApp.dyole')
                     if (this.inputs.length === 0) {
                         imgUrl = this.icons.input;
                         modification.left = -2;
-                        modification.top = -1
+                        modification.top = -1;
                     } else {
                         imgUrl = this.icons.output;
                         modification.left = 1;
@@ -470,9 +470,7 @@ angular.module('registryApp.dyole')
                 var _self = this,
                     node = this.el,
                     borders = this.circle,
-                    outerBorder = this._outerBorder,
-                    inputs = this.inputs,
-                    outputs = this.outputs;
+                    outerBorder = this._outerBorder;
 
                 borders.mouseover(function () {
 
@@ -590,6 +588,31 @@ angular.module('registryApp.dyole')
                 }
             },
 
+            /**
+             * Get current node translation.
+             *
+             * @returns {x:number, y:number}
+             */
+            getTranslation: function () {
+                return this.el.getTranslation();
+            },
+
+            /**
+             * Set translation coordinates to provided (x, y).
+             *
+             * @param {number} x
+             * @param {number} y
+             */
+            translate: function (x, y) {
+                this.el.setTranslation(x, y);
+            },
+
+            /**
+             * Add provided (x, y) to current translation corrdinates.
+             *
+             * @param {number} dx
+             * @param {number} dy
+             */
             addTranslation: function (dx, dy) {
                 var translate = this.el.getTranslation();
                 //var parent = this.parent,
@@ -599,7 +622,7 @@ angular.module('registryApp.dyole')
                 var x = translate.x + dx,
                     y = translate.y + dy;
 
-                this.el.setTranslation(x, y);
+                this.translate(x, y);
 
                 this.redrawConnections();
 
@@ -647,7 +670,7 @@ angular.module('registryApp.dyole')
             },
 
             redrawConnections: function () {
-                _.each(this.connections, function (connection, id) {
+                _.each(this.connections, function (connection) {
                     if (connection) {
                         connection.draw();
                     }
@@ -1044,7 +1067,6 @@ angular.module('registryApp.dyole')
             },
 
             _deselect: function () {
-                var nodeId = this.id;
                 this._destroyButtons();
 
                 // Show default state

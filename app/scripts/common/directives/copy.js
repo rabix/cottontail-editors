@@ -36,7 +36,7 @@ angular.module('registryApp.common')
                     scope.view.copying = true;
                     scope.$apply();
 
-                    timeoutId = resetText(2000);
+                    timeoutId = _resetText(2000);
                 });
 
                 clipboard.on('error', function(e) {
@@ -45,10 +45,10 @@ angular.module('registryApp.common')
                     scope.view.isTooltipOpen = true;
                     scope.$apply();
 
-                    timeoutId = resetText(5000);
+                    timeoutId = _resetText(5000);
                 });
 
-                function resetText (time) {
+                function _resetText (time) {
                     return $timeout(function() {
                         scope.view.text = 'Copy';
                         scope.view.copying = false;

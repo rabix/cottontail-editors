@@ -5,15 +5,6 @@
 
             <span class="workflow-name">
                 <span class="heading-text">
-                    <!--Username-->
-                    <span class="user-name">
-                        <a title="Go to dashboard" href="/" target="_self">
-                            {{ ::view.globals['projectOwner'] }}
-                        </a>
-                    </span>
-
-                    <span class="separator">/</span>
-
                     <!--Project-->
                     <span class="project-name">
                         <a href=""
@@ -61,7 +52,7 @@
                     <i class="fa fa-save"></i>
                    Save
                 </button>
-                <button class="btn btn-default" ng-click="runWorkflow()" ng-disabled="view.saving" ><i class="fa fa-play"></i> Run</button>
+                <button class="btn btn-default" ng-click="runWorkflow()" ng-disabled="!view.isValid && view.saving" ><i class="fa fa-play"></i> Run</button>
 
                 <div class="btn-group right" uib-dropdown is-open="status.isopen">
                     <button type="button" class="btn btn-default dropdown-toggle" uib-dropdown-toggle>

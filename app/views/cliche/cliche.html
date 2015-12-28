@@ -23,7 +23,7 @@
                 </li>
                 <li ng-class="{active: view.tab === 'metadata'}">
                     <a href ng-click="switchTab('metadata')" title="Additional Information" id="additional_info_tab">
-                        Additional Information
+                        Additional Info
                     </a>
                 </li>
                 <li ng-class="{active: view.tab === 'test'}">
@@ -72,6 +72,7 @@
 
             <pre class="console-trace"
                  id="command_line_pre"
+                 select-all
                  ng-class="{wait: view.generatingCommand, error: view.cmdError && !view.command }">{{ view.command || view.cmdError }}</pre>
         </div>
         <!-- # .console -->

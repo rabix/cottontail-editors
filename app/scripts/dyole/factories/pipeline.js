@@ -290,7 +290,7 @@ angular.module('registryApp.dyole')
                     }
                 });
 
-                $('body').on('mouseup', function (e) {
+                $('body').on('mouseup', function () {
 
                     _.each(_self.nodes, function (node) {
 
@@ -318,7 +318,7 @@ angular.module('registryApp.dyole')
                 });
             },
 
-            _fixDisplay: function (model) {
+            _fixDisplay: function () {
 
                 if (typeof this.model.display === 'undefined') {
                     this.model.display = {};
@@ -722,7 +722,6 @@ angular.module('registryApp.dyole')
                 hBar = this.horizontalBar;
                 vBar = this.verticalBar;
                 canvasTransform = canvas.node.getCTM(); // || matrix.identity;
-                canvasTranslation = canvas.getTranslation();
                 surface = this.canvas;
                 surfaceDimensions = {
                     width: surface.width,
@@ -845,9 +844,7 @@ angular.module('registryApp.dyole')
              * @private
              */
             _transformWorkflowModel: function (nodeModel) {
-                var model = nodeModel.json;
-
-                return model;
+                return nodeModel.json;
             },
 
             /**
@@ -910,7 +907,7 @@ angular.module('registryApp.dyole')
              * @returns {*}
              */
             getNodeById: function (nodeId) {
-                return this.nodes[nodeId]
+                return this.nodes[nodeId];
             },
 
             /**
@@ -1081,10 +1078,6 @@ angular.module('registryApp.dyole')
                     return inp['sbg:includeInPorts'];
                 });
 
-                var project = nodeModel['sbg:project'].split('/'),
-                    projectOwner = project[0],
-                    projectSlug = project[1];
-
                 var _validateAndMatchParams = function (valuesCache, inputs, nid) {
                     _.forEach(valuesCache, function (value, id) {
 
@@ -1111,9 +1104,9 @@ angular.module('registryApp.dyole')
                             }
 
                         } else {
-                            Notification.warning('Input "' + id + '" not found.')
+                            Notification.warning('Input "' + id + '" not found.');
                         }
-                    })
+                    });
                 };
 
                 var _matchValueType = function (type, value) {
@@ -1152,7 +1145,17 @@ angular.module('registryApp.dyole')
                     return valueType.toLowerCase() === type.toLowerCase();
                 };
 
-                return App.getApp(projectOwner, projectSlug, nodeModel['sbg:name']).then(function (result) {
+                // split app ID and remove revision element, then join it again into string
+                var appId = nodeModel['sbg:id'].split('/'),
+                    appData;
+
+                appData = {
+                    projectOwner: appId[0],
+                    projectSlug: appId[1],
+                    appName: appId[2]
+                }
+
+                return App.getApp(appData).then(function (result) {
 
                     if (typeof result.message === 'object' && !_.isEmpty(result.message)) {
 
@@ -1163,7 +1166,7 @@ angular.module('registryApp.dyole')
                             return false;
                         }
 
-                        var connections = _.map(node.connections, function (connection, id) {
+                        var connections = _.map(node.connections, function (connection) {
                             return connection.model;
                         });
 
@@ -1246,7 +1249,7 @@ angular.module('registryApp.dyole')
 
                             _.forEach(exposedCache, function (exposed) {
                                 var inp = _.find(n.model.inputs, function (i) {
-                                    return i.id === exposed.id
+                                    return i.id === exposed.id;
                                 });
 
                                 if (inp) {
@@ -1402,13 +1405,9 @@ angular.module('registryApp.dyole')
                                         node.setOutdated(true);
                                     }
                                 }
-
                             });
-
                         }
-
                     });
-
 
                 }, function (err) {
                     console.error(err);
@@ -1537,13 +1536,7 @@ angular.module('registryApp.dyole')
                 var tempSvgContainer = $('<div></div>'), // create temporary DIV element that will contain SVG
                     pipWrap = this.pipelineWrap,
                     scale = 1,
-                    pipTranslation, pipScale, pipBBox, canvas, canvasStyle, svgString;
-
-                // keep pipeline translation factor for restoring it
-                pipTranslation = pipWrap.getTranslation();
-
-                // keep pipeline scale factor for later use
-                pipScale = pipWrap.getScale();
+                    pipBBox, canvas, canvasStyle, svgString;
 
                 // scale pipeline to 1 scale factor
                 pipWrap.scale(scale, scale);
@@ -1553,7 +1546,7 @@ angular.module('registryApp.dyole')
                 pipBBox = pipWrap.getElementBBox();
 
                 // create RaphaelJS SVG canvas, and put it into temporary DIV created above
-                canvas = new Raphael(tempSvgContainer[0], Math.round(pipBBox.width * scale), Math.round(pipBBox.height * scale) );
+                canvas = new Raphael(tempSvgContainer[0], Math.ceil(pipBBox.width * scale), Math.ceil(pipBBox.height * scale) );
 
                 // remove default style properties
                 canvasStyle = canvas.canvas.style;
@@ -1563,18 +1556,21 @@ angular.module('registryApp.dyole')
                 // Setting ID to the pipeline wrapp element so it can be easier to fetch later
                 pipWrap.node.setAttribute('id', 'pipeline-wrapper-node');
 
-                //  translate pipeline to (minX, minY) coordinates using most left and most right nodes
-                pipWrap.translate( -Math.round(pipBBox.x * scale), -Math.round(pipBBox.y * scale) );
+                //  translate pipeline to (0, 0) coordinates
+                pipWrap.translate(0, 0);
+
+                // translate each node by negating pipeline's bounding box (x, y) values
+                _.each(this.nodes, function (node) {
+                    node.addTranslation(-pipBBox.x, -pipBBox.y);
+                }, this);
 
                 // Add pipeline node to newly created SVG canvas
-                canvas.canvas.appendChild(pipWrap.node.cloneNode());
+                canvas.canvas.appendChild(pipWrap.node);
 
                 // get SVG string from the temporary canvas container
                 svgString = tempSvgContainer.html();
 
-                // reset workflow's position and scale to original values
-                pipWrap.translate( pipTranslation.x, pipTranslation.y );
-                pipWrap.scale(pipScale.x, pipScale.y);
+                canvas.canvas.remove();
 
                 // return SVG element as a string
                 return svgString;
