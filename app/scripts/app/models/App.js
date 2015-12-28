@@ -85,7 +85,7 @@ angular.module('registryApp.app')
          * @param {string} svgString
          */
         self.updateSvg = function (revision, svgString) {
-            return Api.apps.update({revision: revision, svg: 'svg'}, svgString).$promise;
+            return Api.apps.update({revision: revision, svg: 'svg'}, { svg: svgString }).$promise;
         };
 
         self.validateJson = function (json) {
