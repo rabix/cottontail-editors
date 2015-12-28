@@ -298,21 +298,22 @@ angular.module('registryApp.app')
 
                     $scope.view.workflow = workflowJson;
 
-                    if (history.pushState) {
 
-                        $location.search({ type: 'workflow', rev: rev });
-                    }
 
                     $scope.view.saving = false;
                     $scope.view.loading = false;
                     $scope.view.isChanged = false;
                     prompt = false;
 
-                    console.timeEnd('Workflow saving');
+                    // check if reload can be skipped while changing the URL
+                    if (history.pushState) {
+                        $location.search({ type: 'workflow', rev: rev });
+                    } else {
+                        $scope.view.loading = true;
+                        redirectTo(rev);
+                    }
 
-                    /* @todo: workflow could not be saved more than once with reload
-                     turned off. This is a temporary fix until we get the no-reload feature sorted */
-                    //redirectTo(rev);
+                    console.timeEnd('Workflow saving');
                 })
                 .catch(function (trace) {
                     Notification.error('[Workflow Error] Workflow cannot be saved: ' + trace);
