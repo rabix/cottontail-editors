@@ -1066,10 +1066,6 @@ angular.module('registryApp.dyole')
                     return inp['sbg:includeInPorts'];
                 });
 
-                var project = nodeModel['sbg:project'].split('/'),
-                    projectOwner = project[0],
-                    projectSlug = project[1];
-
                 var _validateAndMatchParams = function (valuesCache, inputs, nid) {
                     _.forEach(valuesCache, function (value, id) {
 
@@ -1137,7 +1133,17 @@ angular.module('registryApp.dyole')
                     return valueType.toLowerCase() === type.toLowerCase();
                 };
 
-                return App.getApp(projectOwner, projectSlug, nodeModel['sbg:name']).then(function (result) {
+                // split app ID and remove revision element, then join it again into string
+                var appId = nodeModel['sbg:id'].split('/'),
+                    appData;
+
+                appData = {
+                    projectOwner: appId[0],
+                    projectSlug: appId[1],
+                    appName: appId[2]
+                }
+
+                return App.getApp(appData).then(function (result) {
 
                     if (typeof result.message === 'object' && !_.isEmpty(result.message)) {
 
@@ -1382,21 +1388,14 @@ angular.module('registryApp.dyole')
                             _.forEach(_self.nodes, function (node) {
 
                                 if (!Common.checkSystem(node.model)) {
-                                    var n1 = _self._fixTrailingSlash(node.model.appId),
-                                        n2 = _self._fixTrailingSlash(nodeId);
 
-                                    if ( n1 === n2 ) {
+                                    if ( node.model['sbg:id'] === nodeId ) {
                                         node.setOutdated(true);
                                     }
-
                                 }
-
                             });
-
                         }
-
                     });
-
 
                 }, function (err) {
                     console.error(err);

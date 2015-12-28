@@ -132,11 +132,14 @@ angular.module('registryApp.dyole')
             $scope.view.loading = true;
             $scope.view.explanation = false;
 
-            var project = app.project.split('/'),
-                projectOwner = project[0],
-                projectSlug = project[1];
+            var appProject = app.project.split('/'),
+                appData = {
+                    projectOwner: appProject[0],
+                    projectSlug: appProject[1],
+                    appName: app.app_name
+                };
 
-            App.getApp(projectOwner, projectSlug, app.app_name).then(function(result) {
+            App.getApp(appData).then(function(result) {
 
                 $scope.view.loading = false;
 
