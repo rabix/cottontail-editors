@@ -576,6 +576,7 @@ angular.module('registryApp.app')
                 });
 
                 modalInstance.result.then(function () {
+                    prompt = false;
                     createTask();
                 }, function () {
                     return false;
