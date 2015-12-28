@@ -21,5 +21,8 @@ $table-bg-active: #F3F8FC;
 // modal overrides
 $modal-xl: 1100px;
 
+// tooltip overrides
+$tooltip-max-width: 250px;
+
 @import "../../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap/variables";
 @import 'overrides/sbg-variables';
