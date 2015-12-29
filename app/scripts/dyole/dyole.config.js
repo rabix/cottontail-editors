@@ -12,12 +12,16 @@ angular.module('registryApp.dyole', ['registryApp.app', 'ui.bootstrap', 'ui.sort
         generalSeparator: '.'
 	})
 	.config([
-        '$locationProvider', function($locationProvider) {
+        '$locationProvider', '$uibModalProvider', function($locationProvider, $uibModalProvider) {
             if (history.pushState) {
                 $locationProvider.html5Mode({
                     enabled: true,
                     requireBase: false
                 });
             }
+
+            $uibModalProvider.options = {
+                backdrop: 'static'
+            };
         }
     ]);

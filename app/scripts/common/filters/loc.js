@@ -3,6 +3,8 @@ angular.module('registryApp.common')
         'use strict';
 
         return function (id, configObj) {
-            return document.l10n.getSync(id, configObj || {});
+            var string = document.l10n.getSync(id, configObj || {});
+
+            return string === id ? '' : string;
         };
     }]);
