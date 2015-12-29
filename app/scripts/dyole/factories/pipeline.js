@@ -1536,7 +1536,8 @@ angular.module('registryApp.dyole')
                 var tempSvgContainer = $('<div></div>'), // create temporary DIV element that will contain SVG
                     pipWrap = this.pipelineWrap,
                     scale = 1,
-                    pipBBox, canvas, canvasStyle, svgString;
+                    padding = 20,
+                    pipBBox, canvasPadding, canvas, canvasStyle, svgString;
 
                 // scale pipeline to 1 scale factor
                 pipWrap.scale(scale, scale);
@@ -1545,8 +1546,10 @@ angular.module('registryApp.dyole')
                 // NOTE: SVG element needs to be in DOM for this function to return proper result
                 pipBBox = pipWrap.getElementBBox();
 
+                canvasPadding =  padding * (scale + 1);
+
                 // create RaphaelJS SVG canvas, and put it into temporary DIV created above
-                canvas = new Raphael(tempSvgContainer[0], Math.ceil(pipBBox.width * scale), Math.ceil(pipBBox.height * scale) );
+                canvas = new Raphael(tempSvgContainer[0], Math.ceil(pipBBox.width + canvasPadding), Math.ceil(pipBBox.height  + canvasPadding) );
 
                 // remove default style properties
                 canvasStyle = canvas.canvas.style;
@@ -1557,7 +1560,7 @@ angular.module('registryApp.dyole')
                 pipWrap.node.setAttribute('id', 'pipeline-wrapper-node');
 
                 //  translate pipeline to (0, 0) coordinates
-                pipWrap.translate(0, 0);
+                pipWrap.translate(padding, padding);
 
                 // translate each node by negating pipeline's bounding box (x, y) values
                 _.each(this.nodes, function (node) {
