@@ -1,5 +1,6 @@
 'use strict';
 
+/* globals tv4 */
 angular
     .module('registryApp.common')
     .factory('SchemaValidator', ['toolSchemaDefs', 'scriptSchemaDefs', 'workflowSchemaDefs', '$q', 'lodash', function (ToolSchema, ScriptSchema, WorkflowSchemaDefs, $q, _) {

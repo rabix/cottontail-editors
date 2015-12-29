@@ -12,6 +12,8 @@ angular.module('registryApp.dyole')
 
             toRabixSchema: function (j, exposed, values) {
 
+                debugger;
+
                 exposed = exposed || false;
                 values = values || false;
 
@@ -100,18 +102,18 @@ angular.module('registryApp.dyole')
                 var _self = this;
 
                 _.forEach(relations, function (rel) {
-                    var step, node_schema;
+                    var step, nodeSchema;
 
-                    node_schema = schemas[rel.end_node];
+                    nodeSchema = schemas[rel.end_node];
 
-                    if (_self._checkSystem(node_schema)) {
-                        _self._createInOut('outputs', node_schema);
+                    if (_self._checkSystem(nodeSchema)) {
+                        _self._createInOut('outputs', nodeSchema);
                     } else {
                         step = _self._createOneAppStep(rel, nodes, schemas);
                     }
 
                     if (step) {
-                        step.app = _.clone(node_schema);
+                        step.app = _.clone(nodeSchema);
 
                         if (step.app.x) { delete step.app.x; }
                         if (step.app.y) { delete step.app.y; }
@@ -222,29 +224,29 @@ angular.module('registryApp.dyole')
 
                 _.forEach(relations, function (rel) {
 
-                    var node_schema = schemas[rel.end_node];
+                    var nodeSchema = schemas[rel.end_node];
 
-                    if (_self._checkSystem(node_schema)) {
+                    if (_self._checkSystem(nodeSchema)) {
 
                         _self._attachOutput(rel);
 
-                        _self._createInOut(node_schema.softwareDescription.type + 's', node_schema);
+                        _self._createInOut(nodeSchema.softwareDescription.type + 's', nodeSchema);
 
                     } else {
-                        node_schema = schemas[rel.start_node];
+                        nodeSchema = schemas[rel.start_node];
                     }
 
-                    if (_self._checkSystem(node_schema)) {
+                    if (_self._checkSystem(nodeSchema)) {
 
-                        _self._createInOut(node_schema.softwareDescription.type + 's', node_schema);
+                        _self._createInOut(nodeSchema.softwareDescription.type + 's', nodeSchema);
                     }
 
                 });
             },
 
-            _checkSystem: function (node_schema) {
+            _checkSystem: function (nodeSchema) {
 
-                return node_schema.softwareDescription && node_schema.softwareDescription.repo_name === 'system';
+                return nodeSchema.softwareDescription && nodeSchema.softwareDescription.repo_name === 'system';
             },
 
             _attachOutput: function (rel) {
@@ -274,7 +276,7 @@ angular.module('registryApp.dyole')
 
                 var from, exists, step = {};
 
-                var node_schema = schemas[rel.end_node];
+                var nodeSchema = schemas[rel.end_node];
 
                 step.id = rel.end_node;
 
@@ -288,7 +290,7 @@ angular.module('registryApp.dyole')
                 } else {
                     step = {
                         id: rel.end_node,
-                        app: node_schema,
+                        app: nodeSchema,
                         inputs: {},
                         outputs: {}
                     };

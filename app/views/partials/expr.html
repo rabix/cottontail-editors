@@ -9,28 +9,32 @@
                tooltip-trigger="focus"
                ng-blur="runHandler($event)"
                ng-keypress="runHandler($event)"
-               ng-if="view.mode === 'transform'"
+               ng-show="view.mode === 'transform'"
+               ng-disabled="view.disabled"
                type="text"
                class="form-control"
                ng-model="view.transform.script"
-               readonly>
+               ng-readonly="!view.disabled">
 
         <input id="{{ id }}"
                uib-tooltip="{{ view.tooltipMsg }}"
                tooltip-trigger="focus"
                ng-blur="runHandler($event)"
                ng-keypress="runHandler($event)"
-               ng-if="view.mode === 'literal'"
+               ng-show="view.mode === 'literal'"
+               ng-disabled="view.disabled"
                type="{{ view.type }}"
                min="{{ view.min }}"
                class="form-control"
                ng-model="view.literal"
                placeholder="{{ view.placeholder }}"
-               ng-readonly="onlyExpr">
+               ng-readonly="onlyExpr && !view.disabled">
 
         <span class="input-group-btn" ng-class="{'tooltip-code': view.transform && !view.exprError}">
+            <!--have to be a tags, otherwise the modal over which expression editor opens will be dismissed-->
             <a href
                ng-if="view.longLiteral"
+               ng-disabled="view.disabled"
                class="btn btn-expression"
                uib-tooltip="{{ !view.transform.script && view.transform ? view.transform : 'Click to add a literal'}}"
                ng-click="editLiteral()"
@@ -38,6 +42,7 @@
                 <i class="fa fa-font"></i>
             </a>
             <a href
+               ng-disabled="view.disabled"
                class="btn btn-expression"
                uib-tooltip="{{ view.transform.script || 'There is no expression defined. Click to add it' }}"
                ng-click="editExpression()"

@@ -13,14 +13,14 @@ angular.module('registryApp.cliche')
         /**
          * Tool json object
          *
-         * @type {object}
+         * @type CWLTool
          */
         var toolJSON = {};
 
         /**
          * Job json object
          *
-         * @type {object}
+         * @type SBGJob
          */
         var jobJSON = {};
 
@@ -41,7 +41,7 @@ angular.module('registryApp.cliche')
         /**
          * Get available types for inputs and outputs
          *
-         * @param {string} type - available 'input', 'output', 'inputItem' and 'outputItem'
+         * @param {string} type Available 'input', 'output', 'inputItem' and 'outputItem'
          * @returns {*}
          */
         var getTypes = function(type) {
@@ -64,8 +64,8 @@ angular.module('registryApp.cliche')
          *
          * Removes unnecessary/disallowed properties based on the tool type.
          *
-         * @param {String} type
-         * @param {Object} json
+         * @param {string} type Can be 'script' or 'tool'
+         * @param {CWLTool} json
          */
         var transformToolJson = function(type, json) {
 
@@ -112,14 +112,14 @@ angular.module('registryApp.cliche')
         /**
          * Set current tool
          *
-         * @param t
+         * @param {CWLTool} tool
          */
-        var setTool = function(t) {
+        var setTool = function(tool) {
 
             var deferred = $q.defer();
 
-            t = t || rawTool;
-            toolJSON = angular.copy(t);
+            tool = tool || rawTool;
+            toolJSON = angular.copy(tool);
 
             deferred.resolve();
 
@@ -129,15 +129,15 @@ angular.module('registryApp.cliche')
         /**
          * Set current job
          *
-         * @param j
+         * @param {SBGJob} job
          */
-        var setJob = function(j) {
+        var setJob = function(job) {
 
             var deferred = $q.defer();
 
-            j = j || rawJob;
+            job = job || rawJob;
 
-            jobJSON = angular.copy(j);
+            jobJSON = angular.copy(job);
 
             deferred.resolve();
 
@@ -148,7 +148,7 @@ angular.module('registryApp.cliche')
         /**
          * Get current tool
          *
-         * @returns {Object}
+         * @returns {CWLTool}
          */
         var getTool = function() {
 
@@ -159,7 +159,7 @@ angular.module('registryApp.cliche')
         /**
          * Get current job
          *
-         * @returns {Object}
+         * @returns {SBGJob}
          */
         var getJob = function() {
 
@@ -188,7 +188,7 @@ angular.module('registryApp.cliche')
         /**
          * Get schema for transformation
          *
-         * @returns {*}
+         * @returns {Expression}
          */
         var getTransformSchema = function() {
 
@@ -201,8 +201,8 @@ angular.module('registryApp.cliche')
          * - if "id" then both inputs and outputs need to be checked
          * - if "name" then only current level is checked
          *
-         * @param {object} prop
-         * @param {array} properties
+         * @param {Input|Output} prop
+         * @param {Input[]|Output[]} properties
          * @returns {*}
          */
         var checkIfIdExists = function(prop, properties) {
@@ -246,7 +246,7 @@ angular.module('registryApp.cliche')
         /**
          * Check if enum name already exists in entire tool object
          *
-         * @param {string} mode
+         * @param {string} mode Can be 'edit' or 'add'
          * @param {object} nameObj
          * @returns {*}
          */
@@ -256,17 +256,20 @@ angular.module('registryApp.cliche')
              * Recursive method which compares enum names
              *
              * @param {string} name
-             * @param {array} inputs
+             * @param {Input[]} inputs
              * @param {boolean} isFirstLevel
+             *
+             * @private
              * @returns {boolean}
              */
-            var checkInner = function(name, inputs, isFirstLevel) {
+            function _checkInner(name, inputs, isFirstLevel) {
 
                 var exists = false;
 
-                _.each(inputs, function(input) {
+                _.each(inputs, function(i) {
 
-                    input = isFirstLevel ? input.type : input;
+                    /** @type Input */
+                    var input = isFirstLevel ? i.type : i;
 
                     var type = parseType(input.type);
 
@@ -276,8 +279,8 @@ angular.module('registryApp.cliche')
                             exists = true;
                             return false;
                         }
-                    } else if (type === 'array' && input.items && input.items.type === 'record' || type === 'record') {
-                        exists = checkInner(name, input.items.fields, false);
+                    } else if (type === 'array' && input.type.items && input.type.items.type === 'record' || type === 'record') {
+                        exists = _checkInner(name, input.type.items.fields, false);
                         if (exists) {
                             return false;
                         }
@@ -286,18 +289,18 @@ angular.module('registryApp.cliche')
 
                 return exists;
 
-            };
+            }
 
             if (mode === 'edit') {
 
                 if (nameObj.name !== nameObj.newName) {
-                    return checkInner(nameObj.newName, toolJSON.inputs, true);
+                    return _checkInner(nameObj.newName, toolJSON.inputs, true);
                 } else {
                     return false;
                 }
 
             } else if (mode === 'add') {
-                return checkInner(nameObj.newName, toolJSON.inputs, true);
+                return _checkInner(nameObj.newName, toolJSON.inputs, true);
             }
 
         };
@@ -305,11 +308,11 @@ angular.module('registryApp.cliche')
         /**
          * Manage input or output property - add or edit mode
          *
-         * @param {string} mode
-         * @param {object} prop
-         * @param {array} properties
+         * @param {string} mode Can be 'edit' or 'add'
+         * @param {Input|Output|Argument} prop
+         * @param {Input[]|Output[]|Argument[]} properties
          * @param {object} idObj - contains new and old name of the property
-         * @returns {*}
+         * @returns {Promise}
          */
         var manageProperty = function(mode, prop, properties, idObj) {
 
@@ -350,9 +353,9 @@ angular.module('registryApp.cliche')
         /**
          * Manage argument property  - add or edit mode
          *
-         * @param {string} mode
-         * @param {object} arg
-         * @returns {*}
+         * @param {string} mode Can be 'edit' or 'add'
+         * @param {Argument} arg
+         * @returns {Promise}
          */
         var manageArg = function(mode, arg) {
 
@@ -371,6 +374,11 @@ angular.module('registryApp.cliche')
 
         };
 
+        /**
+         * Returns raw expression requirement
+         *
+         * @returns {Requirement}
+         */
 		var getExpressionRequirement = function() {
 			return _.find(rawTool.requirements, {'class': 'ExpressionEngineRequirement'});
 		};
@@ -380,7 +388,7 @@ angular.module('registryApp.cliche')
          *
          * @param {string} key
          * @param {string} index
-         * @param {array} properties
+         * @param {Input[]|Output[]} properties
          */
         var deleteProperty = function(key, index, properties) {
 
@@ -395,7 +403,7 @@ angular.module('registryApp.cliche')
         /**
          * Delete argument property from cliAdapter
          *
-         * @param {object} argument
+         * @param {Argument} argument
          */
         var deleteArg = function(argument) {
             _.remove(toolJSON['arguments'], argument);
@@ -404,7 +412,7 @@ angular.module('registryApp.cliche')
         /**
          * Extract type literal
          *
-         * @param {*} schema
+         * @param {Type} schema
          * @returns {string} type
          */
         var parseType = function(schema) {
@@ -424,8 +432,8 @@ angular.module('registryApp.cliche')
         /**
          * Extract type original object
          *
-         * @param {*} type
-         * @returns {*}
+         * @param {Type} type
+         * @returns {string|EnumType|RecordType|ArrayType|MapType}
          */
         var parseTypeObj = function(type) {
 
@@ -436,12 +444,12 @@ angular.module('registryApp.cliche')
         /**
          * Extract enum symbols and name if available
          *
-         * @param t
+         * @param {Type} enumType
          * @returns {*}
          */
-        var parseEnum = function(t) {
+        var parseEnum = function(enumType) {
 
-            var type = parseTypeObj(t);
+            var type = parseTypeObj(enumType);
 
             if (type.type === 'enum') {
 
@@ -456,7 +464,7 @@ angular.module('registryApp.cliche')
         /**
          * Parse property name
          *
-         * @param {Object} property
+         * @param {Input|Output} property
          * @returns {*}
          */
         var parseName = function(property) {
@@ -476,7 +484,7 @@ angular.module('registryApp.cliche')
         /**
          * Parse separation for the input value
          *
-         * @param {boolean} separate
+         * @param {Binding.separate|boolean} separate
          * @returns {string} output
          */
         var parseSeparation = function(separate) {
@@ -486,7 +494,7 @@ angular.module('registryApp.cliche')
         /**
          * Parse item separator for the input value
          *
-         * @param itemSeparator
+         * @param {Binding.itemSeparator|string|null} itemSeparator
          * @returns {string}
          */
         var parseItemSeparator = function(itemSeparator) {
@@ -506,8 +514,8 @@ angular.module('registryApp.cliche')
         /**
          * Recursive method for parsing object input values
          *
-         * @param {object} properties
-         * @param {object} inputs
+         * @param {Input[]} properties
+         * @param {SBGJob.inputs} inputs
          * @returns {string} output
          */
         var parseObjectInput = function(properties, inputs) {
@@ -537,9 +545,9 @@ angular.module('registryApp.cliche')
         /**
          * Apply the transformation function (this is just the mock)
          *
-         * @param {String|Object} transform
+         * @param {Expression|string} transform
          * @param {*} value
-         * @param {Boolean} self
+         * @param {boolean} self
          * @returns {*}
          */
         var applyTransform = function(transform, value, self) {
@@ -568,8 +576,8 @@ angular.module('registryApp.cliche')
         /**
          * Parse input value of the array type
          *
-         * @param {object} property
-         * @param {object} input
+         * @param {Input} property
+         * @param {object} input From JobJSON
          * @param {string} prefix
          * @param {string} itemSeparator
          * @returns {string}
@@ -578,6 +586,7 @@ angular.module('registryApp.cliche')
 
             var promises = [],
                 joiner = ' ',
+                /** @type Type */
                 schema = getSchema('input', property, 'tool', false),
                 type = parseType(schema),
                 items = getItemsRef(type, schema),
@@ -638,8 +647,8 @@ angular.module('registryApp.cliche')
         /**
          * Prepare properties for the command line generating
          *
-         * @param {Array} properties
-         * @param {object} inputs
+         * @param {Input[]} properties
+         * @param {SBGJob.inputs} inputs
          * @returns {Promise} props
          */
         var prepareProperties = function(properties, inputs) {
@@ -659,8 +668,10 @@ angular.module('registryApp.cliche')
                 });
 
             /* go through properties */
-            _.each(defined, function(property) {
-                var deferred = $q.defer(),
+            _.each(defined, function(definedProp) {
+                var /** @type Input */
+                    property = definedProp,
+                    deferred = $q.defer(),
                     key = parseName(property),
                     schema = getSchema('input', property, 'tool', false),
                     type = parseType(schema),
@@ -704,6 +715,7 @@ angular.module('registryApp.cliche')
                     break;
                 case 'record':
                     /* if input is RECORD  */
+                    // @todo why is type RecordType.fields not compatible with type Input[]?
                     parseObjectInput(fields, inputs[key])
                         .then(function (result) {
                             prop.val = result;
@@ -785,8 +797,8 @@ angular.module('registryApp.cliche')
             args = args || toolJSON.arguments;
 
             // in case baseCommand is not yet defined
-            if (!toolJSON.baseCommand) {
-                toolJSON.baseCommand = [''];
+            if (!toolJSON.baseCmd) {
+                toolJSON.baseCmd = [''];
             }
 
             return prepareProperties(toolInputs, jobInputs)
@@ -801,7 +813,7 @@ angular.module('registryApp.cliche')
                             prefix = arg.prefix || '',
                             prop = _.merge({key: 'arg' + key, position: arg.position || 0, prefix: prefix, val: ''}, arg);
 
-                        applyTransform(arg.valueFrom, arg.valueFrom)
+                        applyTransform(arg.valueFrom, arg.valueFrom, false)
                             .then(function (result) {
                                 prop.val = result;
                                 deferred.resolve(prop);
@@ -921,7 +933,7 @@ angular.module('registryApp.cliche')
         /**
          * Subscribe on command generating
          *
-         * @param func
+         * @param {Function} func
          */
         var subscribe = function(func) {
 
@@ -932,7 +944,7 @@ angular.module('registryApp.cliche')
         /**
          * Check if property is required
          *
-         * @param schema {array}
+         * @param {Type} schema
          * @returns {Boolean}
          */
         var isRequired = function(schema) {
@@ -945,7 +957,7 @@ angular.module('registryApp.cliche')
          * Format property according to avro schema
          *
          * @param {object} inner
-         * @param {object} property
+         * @param {Input|Output} property
          * @param {string} propertyType - 'input' || 'output'
          * @returns {object}
          */
@@ -980,6 +992,7 @@ angular.module('registryApp.cliche')
 
                 type = {
                     type: 'array',
+                    name: inner.name,
                     items: inner.items
                 };
 
@@ -1062,8 +1075,8 @@ angular.module('registryApp.cliche')
         /**
          * Copy property's params in order to preserve reference
          *
-         * @param src
-         * @param dest
+         * @param {object} src
+         * @param {object} dest
          */
         var copyPropertyParams = function(src, dest) {
 
@@ -1103,7 +1116,7 @@ angular.module('registryApp.cliche')
          * Get reference for items
          *
          * @param {string} type
-         * @param {Array} schema
+         * @param {Type} schema
          * @returns {*}
          */
         var getItemsRef = function(type, schema) {
@@ -1136,7 +1149,8 @@ angular.module('registryApp.cliche')
 		/**
 		 * Returns array of fields for records
 		 *
-		 * @param {object} schema
+		 * @param {Type} schema
+         * @returns {RecordType.fields}
 		 */
 		var getFieldsRef = function (schema) {
 			return schema[0] === 'null' ? schema[1].fields : schema[0].fields;
@@ -1145,11 +1159,11 @@ angular.module('registryApp.cliche')
         /**
          * Get property schema depending on the level
          *
-         * @param {object} type - input or output
-         * @param {object} property
+         * @param {string} type - input or output
+         * @param {Input|Output} property
          * @param {string} toolType - tool or script
          * @param {boolean} ref
-         * @returns {Array} type
+         * @returns {Type} type
          */
         var getSchema = function(type, property, toolType, ref) {
 
@@ -1177,6 +1191,14 @@ angular.module('registryApp.cliche')
             }
         };
 
+        /**
+         * Returns input or output binding for an input or output object
+         *
+         * @param {Input|Output} property
+         * @param {boolean} ref
+         * @param {string} type 'input' or 'output'
+         * @returns {Binding}
+         */
         var getAdapter = function (property, ref, type) {
             if (_.isEmpty(property)) {
                 return {};

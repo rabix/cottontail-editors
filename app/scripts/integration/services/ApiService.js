@@ -11,6 +11,7 @@
 
 angular.module('integration')
     .service('Api', ['$resource', '$http', 'Globals',function ($resource, $http, Globals) {
+        'use strict';
 
         var self = {};
         var sessionId = Globals.user.sessionId;

@@ -55,10 +55,23 @@
                 <i class="fa fa-save"></i> Save
             </button>
 
-            <button class="btn btn-default" ng-click="runApp()" ng-disabled="view.saving" ><i class="fa fa-play"></i> Run</button>
+            <!--{{ view.tool['sbg:validationErrors'] | json}}-->
+            <div class="inline-block" uib-tooltip="{{view.tool['sbg:validationErrors'].join('\n')}}"
+                  tooltip-placement="bottom"
+                  tooltip-trigger="mouseenter"
+                  tooltip-enabled="view.tool['sbg:validationErrors'].length > 0">
+                <button class="btn btn-default"
+                        ng-click="runApp()"
+                        ng-disabled="view.saving || view.tool['sbg:validationErrors'].length > 0">
+                    <i class="fa fa-play"></i> Run
+                </button>
+            </div>
 
-            <div class="btn-group right"  uib-dropdown is-open="status.isopen">
-                <button type="button"  class="btn btn-default dropdown-toggle" uib-dropdown-toggle id="main_dropdown_button">
+            <div class="btn-group right" uib-dropdown is-open="status.isopen">
+                <button type="button"
+                        class="btn btn-default dropdown-toggle"
+                        uib-dropdown-toggle
+                        id="main_dropdown_button">
                     <i class="fa fa-cog"></i>
                     <span class="caret"></span>
                 </button>

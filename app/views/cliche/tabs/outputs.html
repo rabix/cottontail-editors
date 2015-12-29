@@ -2,12 +2,12 @@
 
     <h3 class="legend-small">
         Output Ports
-        <help-message message="help.cliche.outputs.properties"></help-message>
+        <help-message message="{{ :: 'clicheOutputsProperties' | loc }}"></help-message>
     </h3>
 
     <div class="enum-list-wrap">
         <add-property
-                tooltip-msg="{{ ::help.cliche.outputs.addOutput }}"
+                tooltip-msg="{{ :: 'clicheOutputsAddOutput' | loc }}"
                 tooltip-placement="right"
                 ng-model="view.newOutput"
                 type="output"

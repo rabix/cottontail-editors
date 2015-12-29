@@ -10,30 +10,30 @@
 
 
 angular.module('registryApp.dyole')
-    .controller('WorkflowSettingsCtrl', ['$scope', '$uibModalInstance', 'data', 'HelpMessages', 'lodash', function ($scope, $modalInstance, data, HelpMessages, _) {
+    .controller('WorkflowSettingsCtrl', ['$scope', '$uibModalInstance', 'data', 'HelpMessages', 'lodash', '$q',
+        function ($scope, $modalInstance, data, HelpMessages, _, $q) {
+        'use strict';
+
         $scope.help = HelpMessages;
 
         $scope.view = {};
-        $scope.view.type = data.type || "Workflow";
-        $scope.view.requireSBGMetadata = data.requireSBGMetadata;
+        $scope.view.type = data.type || 'Workflow';
+        $scope.view.requireSBGMetadata = _.clone(data.requireSBGMetadata);
         $scope.view.instanceHint = {
-            class: 'sbg:sbg:AWSInstanceType',
+            class: 'sbg:AWSInstanceType',
             value: ''
         };
+        var instances = _.map(data.instances, function(instance) {
+            return {
+                text: instance.typeId
+            };
+        });
 
-        $scope.view.hints = data.hints || [];
+        /** @type Hint[] */
+        $scope.view.hints = _.clone(data.hints) || [];
 
-        //$scope.view.instances = data.instances;
-
-        //var hint = _.find(data.hints, function (hint) {
-        //    return hint.class === $scope.view.instanceHint.class;
-        //});
-        //
-        //if (hint && hint.value ) {
-        //    $scope.view.instanceHint.value = hint.value;
-        //}
-
-
+        // angular form
+        $scope.view.appSettings = {};
 
         $scope.addMetadata = function () {
             $scope.view.hints.push({
@@ -49,6 +49,42 @@ angular.module('registryApp.dyole')
          */
         $scope.removeMetadata = function (index) {
             $scope.view.hints.splice(index, 1);
+
+            $scope.view.appSettings.$setDirty();
+        };
+
+        /**
+         * Updates hint value when it is changed
+         * @param {string|Expression} value
+         * @param {number} index
+         */
+        $scope.updateHintValue = function (value, index) {
+            $scope.view.hints[index].value = value;
+        };
+
+
+
+        /**
+         * Calculates fuzzy finder score for each available instance
+         *
+         * @param {string} value
+         * @returns {*}
+         */
+        $scope.autoSuggestInstances = function (value) {
+            var deferred = $q.defer();
+
+            var regex = new RegExp(value.toLowerCase().split('').join('.*'));
+
+            deferred.resolve(_(instances).filter(function (instance) {
+                var score = instance.text.toLowerCase().search(regex);
+
+                if (score !== -1 ) {
+                    instance.score = score;
+                    return instance;
+                }
+            }).sortBy('score').value().slice(0, 6));
+
+            return deferred.promise;
         };
 
 

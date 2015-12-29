@@ -148,7 +148,19 @@ angular.module('registryApp.dyole')
 
                 });
 
-                this.Event.subscribe('node:destroy', function () {
+                this.Event.subscribe('node:destroy', function (model) {
+
+                    _self.nodes[model.id] = null;
+                    _self.model.schemas[model.id] = null;
+
+                    delete _self.model.schemas[model.id];
+                    delete _self.nodes[model.id];
+
+                    _.remove(_self.nodes, function (n) {
+                        return n.model.id === model.id;
+                    });
+
+                    _self.Event.trigger('pipeline:change');
                     _self.Event.trigger('controller:node:destroy');
                 });
 
@@ -1403,15 +1415,6 @@ angular.module('registryApp.dyole')
 
             },
 
-            _fixTrailingSlash: function (url) {
-
-                if (url.charAt(url.length-1) === '/') {
-                    url = url.slice(0, -1);
-                }
-
-                return url;
-            },
-
             /**
              * Adjust canvas dimensions to fit the parent
              */
@@ -1597,7 +1600,7 @@ angular.module('registryApp.dyole')
             /**
              * Get pipeline model
              *
-             * @returns {*}
+             * @returns {{}}
              */
             getJSON: function () {
                 var json = angular.copy(this.model),
@@ -1610,12 +1613,10 @@ angular.module('registryApp.dyole')
                 json.relations = this._getConnections();
                 json.nodes = this._getNodes();
 
-                json.display.nodes = {};
-
                 _.each(json.nodes, function (node) {
                     var nodeId = node.id;
 
-                    json.display.nodes[nodeId] = {
+                    json.schemas[nodeId].display = {
                         x: node.x,
                         y: node.y
                     };

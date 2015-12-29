@@ -2,12 +2,12 @@
 
     <h3 class="legend-small">
         Input Ports
-        <help-message message="help.cliche.inputs.properties"></help-message>
+        <help-message message="{{ :: 'clicheInputsProperties' | loc }}"></help-message>
     </h3>
 
     <div class="enum-list-wrap">
         <add-property
-                tooltip-msg="{{ ::help.cliche.inputs.addInput }}"
+                tooltip-msg="{{ :: 'clicheInputsAddInput' | loc }}"
                 tooltip-placement="right"
                 ng-model="view.newInput"
                 type="input"

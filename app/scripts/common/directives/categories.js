@@ -47,7 +47,7 @@ angular.module('registryApp.common')
                     return cat;
                 }
             }).sortBy('score').value().slice(0, 6);
-        }
+        };
     }])
     .directive('categories', ['$templateCache', function($templateCache) {
         return {

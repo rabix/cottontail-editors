@@ -167,9 +167,6 @@ var Schema = {
             type: 'string',
             enum: ['Workflow']
         },
-        '@context': {
-            type: 'string'
-        },
         label: {
             type: 'string'
         },
@@ -289,7 +286,7 @@ var Schema = {
             }
         }
     },
-    required: ['id', 'class', '@context', 'label', 'inputs', 'outputs']
+    required: ['id', 'class', 'label', 'inputs', 'outputs']
 };
 
 /**

@@ -18,9 +18,8 @@ angular.module('registryApp.app')
             onBeforeUnloadOff = BeforeUnload.register(function () {
                 return 'Please save your changes before leaving.';
             }, function () {
-                return prompt
-            }),
-            Instances = [];
+                return prompt;
+            });
 
         $scope.$on('pipeline:change', function () {
             prompt = true;
@@ -164,13 +163,18 @@ angular.module('registryApp.app')
          * @param {Object} result
          */
         var appsLoaded = function (result) {
+
+            var workflow = result[2].message;
+
             $scope.view.filtering = false;
             $scope.view.message = result[0].status;
 
             $scope.view.repoTypes.MyApps = result[0].message;
             $scope.view.repoTypes.PublicApps = result[1].message;
 
-            $scope.view.workflow = result[2].message;
+            workflow['sbg:name'] = workflow['sbg:id'].split('/')[2];
+
+            $scope.view.workflow = workflow;
 
             if ($scope.view.workflow['sbg:validationErrors'] && $scope.view.workflow['sbg:validationErrors'].length > 0) {
                 var rev = parseInt($scope.view.workflow['sbg:revision']);
@@ -185,7 +189,6 @@ angular.module('registryApp.app')
             else {
                 $scope.view.isValid = true;
             }
-
             Instances = result[3];
 
             $scope.view.loading = false;
@@ -236,6 +239,7 @@ angular.module('registryApp.app')
          * Callback when workflow is changed
          */
         $scope.onWorkflowChange = function (value) {
+
             $scope.view.isChanged = value.value;
 
             if (!value.value) {
@@ -621,44 +625,6 @@ angular.module('registryApp.app')
                     $scope.view.workflow = json;
                     $scope.view.isChanged = true;
                 }
-            });
-
-        };
-        
-        $scope.workflowSettings = function () {
-            var modalInstance = $modal.open({
-                template: $templateCache.get('views/dyole/workflow-settings.html'),
-                controller: 'WorkflowSettingsCtrl',
-                resolve: { data: function () {
-                    return {
-                        hints: PipelineInstance.getWorkflowHints(),
-                        instances: Instances,
-                        requireSBGMetadata: PipelineInstance.getRequireSBGMetadata()
-                    };
-                }}
-            });
-
-            modalInstance.result.then(function (result) {
-                PipelineInstance.updateWorkflowSettings(result.hints, result.requireSBGMetadata);
-            });
-
-        };
-
-        $scope.workflowSettings = function () {
-            var modalInstance = $modal.open({
-                template: $templateCache.get('views/dyole/workflow-settings.html'),
-                controller: 'WorkflowSettingsCtrl',
-                resolve: { data: function () {
-                    return {
-                        hints: PipelineInstance.getWorkflowHints(),
-                        instances: Instances,
-                        requireSBGMetadata: PipelineInstance.getRequireSBGMetadata()
-                    };
-                }}
-            });
-
-            modalInstance.result.then(function (result) {
-                PipelineInstance.updateWorkflowSettings(result.hints, result.requireSBGMetadata);
             });
 
         };

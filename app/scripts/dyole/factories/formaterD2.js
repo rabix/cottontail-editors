@@ -14,11 +14,10 @@ angular.module('registryApp.dyole')
         /**
          * Bare Rabix schema model
          *
-         * @type {{class: string, @context: string, steps: Array, dataLinks: Array, inputs: Array, outputs: Array}}
+         * @type {{class: string, steps: Array, dataLinks: Array, inputs: Array, outputs: Array}}
          */
         var RabixModel = {
             'class': 'Workflow',
-            '@context': 'https://raw.githubusercontent.com/common-workflow-language/common-workflow-language/draft2/specification/context.json',
             'steps': [],
             'requirements': [],
             'dataLinks': [],
@@ -158,8 +157,7 @@ angular.module('registryApp.dyole')
             /**
              * Create Rabix Steps from node schemas
              *
-             * @param schemas
-             * @param relations
+             * @param {Array} schemas
              * @returns {Array}
              */
             createSteps: function (schemas) {
@@ -169,7 +167,7 @@ angular.module('registryApp.dyole')
 
                 _.forEach(schemas, function (sc, appId) {
 
-                    var schema = sc,
+                    var schema = _.clone(sc),
                         id = appId,
                         step = {
                             'id': id,
@@ -177,6 +175,10 @@ angular.module('registryApp.dyole')
                             inputs: [],
                             outputs: []
                         };
+
+                    step['sbg:x'] = step.run.display.x;
+                    step['sbg:y'] = step.run.display.y;
+                    delete step.run.display;
 
                     if (typeof schema.scatter !== 'undefined' && typeof schema.scatter === 'string') {
                         step.scatter = id + Const.generalSeparator + schema.scatter.slice(1);
@@ -260,7 +262,8 @@ angular.module('registryApp.dyole')
             createWorkflowInOut: function (workflow, schemas) {
 
                 _.forEach(schemas, function (schema) {
-                    var type;
+
+                    var type, schemaFinal;
 
                     if (_common.checkSystem(schema)) {
                         var internalType;
@@ -304,7 +307,12 @@ angular.module('registryApp.dyole')
 
                         }
 
-                        workflow[type + 's'].push(schema[internalType][0]);
+                        schemaFinal = schema[internalType][0];
+
+                        schemaFinal['sbg:x'] = schema.display.x;
+                        schemaFinal['sbg:y'] = schema.display.y;
+
+                        workflow[type + 's'].push(schemaFinal);
                     }
                 });
 
@@ -472,6 +480,10 @@ angular.module('registryApp.dyole')
 
                     step.run.appId = step.run.id;
                     step.run.id = stepId;
+                    step.run.display = {
+                        x: step['sbg:x'],
+                        y: step['sbg:y']
+                    };
 
                     if (typeof step.scatter !== 'undefined' && typeof step.scatter=== 'string') {
                         step.run.scatter = '#' + step.scatter.split(Const.generalSeparator)[1];
@@ -536,6 +548,10 @@ angular.module('registryApp.dyole')
                     'id': id,
                     'suggestedValue': suggestedValue,
                     description: descriptions[type],
+                    display: {
+                        x: schema['sbg:x'],
+                        y: schema['sbg:y']
+                    },
                     'sbg:createdBy': 'SBG',
                     'label': schema.label || 'Rabix System app',
                     'softwareDescription': {
@@ -584,6 +600,98 @@ angular.module('registryApp.dyole')
                 });
 
                 return nodes;
+            },
+
+            createDataLinks: function (json) {
+                json.dataLinks = [];
+
+                var dataLinks = [];
+                var steps = json.steps;
+                var outputs = json.outputs;
+
+                _.forEach(steps, function (step) {
+                    _.forEach(step.inputs, function (input) {
+                        if (_.isArray(input.source)) {
+                            _.forEach(input.source, function (src, position) {
+
+                                var dataLink = {
+                                    source: src,
+                                    destination: input.id,
+                                    position: position+1
+                                };
+
+                                dataLinks.push(dataLink);
+                            });
+                        }
+                    });
+                });
+
+
+                _.forEach(outputs, function (output) {
+                    if (_.isArray(output.source)) {
+                        _.forEach(output.source, function (src, position) {
+
+                            var dataLink = {
+                                source: src,
+                                destination: output.id,
+                                position: position+1
+                            };
+
+                            dataLinks.push(dataLink);
+                        });
+                    }
+                });
+
+                return dataLinks;
+            },
+
+            dataLinksToSource: function (json) {
+                var dataLinks = json.dataLinks;
+
+                var grouped = _.groupBy(dataLinks, function (link) {
+                    return link.destination;
+                });
+
+                _.forEach(grouped, function (links, group) {
+
+                    var node;
+                    var split = group.split('.');
+
+                    if (split.length === 1) {
+
+                        node = _.find(json.outputs, function (output) {
+                            return output.id === group;
+                        });
+
+                    } else {
+                        var step = _.find(json.steps, function (step) {
+                            return step.id === split[0]
+                        });
+
+                        node = _.find(step.inputs, function (inp) {
+                            return inp.id === group;
+                        });
+
+                    }
+
+
+                    node.source = node.source || [];
+
+                    links.sort(function (a, b) {
+                        var posA = a.position || 9999;
+                        var posB= b.position || 9999;
+
+                        if (posA < posB) { return -1; }
+                        if (posB < posA) { return 1; }
+
+                        return 0;
+                    });
+
+                    _.forEach(links, function (link) {
+                        node.source.push(link.source);
+                    });
+                })
+
             }
 
         };
@@ -591,7 +699,7 @@ angular.module('registryApp.dyole')
         /**
          * Helper for creating missing display property when importing json thats not generated by registrys workflow editor
          *
-         * @type {{sysCoords: {x: number, y: number}, const: {gap: number}, _findMax: _findMax, _findMiddleY: _findMiddleY, _createDisplay: _createDisplay, _generateSystemNodeCoords: _generateSystemNodeCoords, _generateNodeCoords: _generateNodeCoords, generateNodesCoords: generateNodesCoords, _fixSystemNodesCoords: _fixSystemNodesCoords, fixDisplay: fixDisplay}}
+         * @type {{sysCoords: {x: number, y: number}, const: {gap: number}, _findMax: _findMax, _findMiddleY: _findMiddleY, _generateSystemNodeCoords: _generateSystemNodeCoords, _generateNodeCoords: _generateNodeCoords, generateNodesCoords: generateNodesCoords, _fixSystemNodesCoords: _fixSystemNodesCoords, setupDisplay: setupDisplay}}
          * @private
          */
         var _helper = {
@@ -636,19 +744,6 @@ angular.module('registryApp.dyole')
                 return (max - min) / 2;
             },
 
-            _createDisplay: function () {
-
-                return {
-                    nodes: {},
-                    canvas: {
-                        x: 0,
-                        y: 0,
-                        zoom: 1
-                    }
-                };
-
-            },
-
             _generateSystemNodeCoords: function (node, display) {
                 var x = 100,
                     y = 100,
@@ -675,6 +770,15 @@ angular.module('registryApp.dyole')
 
             },
 
+            /**
+             * Calculate node coordinates by putting it
+             * on the most right point in X axis and in the middle of Y axis.
+             *
+             * @param {Object} node
+             * @param {Object} display
+             * @returns {{x: number, y: number}}
+             * @private
+             */
             _generateNodeCoords: function (node, display) {
                 var coords = {
                     x: 0,
@@ -691,76 +795,59 @@ angular.module('registryApp.dyole')
                 return coords;
             },
 
+            /**
+             * If display for node exists, push it into display.nodes object.
+             * Otherwise, set default value.
+             *
+             * @param {Object} display
+             * @param {Object} nodes
+             * @private
+             */
             _generateNodesCoords: function (display, nodes) {
                 var _self = this;
 
                 _.forEach(nodes, function (node) {
-
                     var nodeId = node['id'],
-                        dis = display.nodes[nodeId],
+                        dis = node.display,
                         coords;
 
-                    if (!dis || (!dis.x || dis.y)) {
+                    if (!dis || (!dis.x && !dis.y)) {
 
                         coords = _self._generateNodeCoords(node, display);
                         if (coords) {
                             display.nodes[nodeId] = coords;
                         }
-
                     }
-
-                });
-
-            },
-
-            _fixSystemNodesCoords: function (display, nodes) {
-                var _self = this;
-
-                _.forEach(nodes, function (node) {
-                    var nodeId = node.id,
-                        dis = display.nodes[nodeId],
-                        coords;
-
-                    if (_common.checkSystem(node)) {
-                        if (!dis || (!dis.x || dis.y)) {
-
-                            coords = _self._generateSystemNodeCoords(node, display);
-                            display.nodes[nodeId] = coords;
-
-                        }
+                    else {
+                        display.nodes[nodeId] = dis;
                     }
-
                 });
             },
 
-            fixDisplay: function (display, nodes) {
-                var flag = false;
+            /**
+             * Set display object with canvas' and nodes' coordinates
+             *
+             * @param {Object} workflow
+             * @param {Object[]} nodes
+             * @returns {{canvas: {}, nodes: {x: number, y: number, zoom: number}}}
+             */
+            setupDisplay: function (workflow, nodes) {
+
+                var display = {
+                    nodes: {},
+                    canvas: {}
+                };
 
                 this.sysCoords.x = 0;
                 this.sysCoords.y = 0;
 
-                if (typeof display === 'undefined') {
-                    display = this._createDisplay();
-                    flag = true;
-                }
+                display.canvas = {
+                    x: workflow['sbg:canvas_x'] || 0,
+                    y: workflow['sbg:canvas_y'] || 0,
+                    zoom: workflow['sbg:canvas_zoom'] || 1
+                };
 
-                if (!display.nodes) {
-                    display.nodes = {};
-                    flag = true;
-                }
-
-                if (!display.canvas) {
-                    display.canvas = {
-                        x: 0,
-                        y: 0,
-                        zoom: 1
-                    };
-                }
-
-                if (flag) {
-                    this._generateNodesCoords(display, nodes);
-                    this._fixSystemNodesCoords(display, nodes);
-                }
+                this._generateNodesCoords(display, nodes);
 
                 return display;
             }
@@ -787,7 +874,6 @@ angular.module('registryApp.dyole')
                 var json = _.clone(p, true),
                     model = _.clone(RabixModel, true);
 
-                model.display = json.display;
                 model.dataLinks = _formatter.toRabixRelations(json.relations, exposed, model, suggestedValues, json.schemas);
                 model.steps = _formatter.createSteps(json.schemas);
 
@@ -800,6 +886,15 @@ angular.module('registryApp.dyole')
                 model.label = json.label || model.label;
                 model.description = json.description || '';
                 model.hints = json.hints;
+                model['sbg:canvas_x'] = json.display.canvas.x;
+                model['sbg:canvas_y'] = json.display.canvas.y;
+                model['sbg:canvas_zoom'] = json.display.canvas.zoom;
+
+                _formatter.dataLinksToSource(model);
+
+                delete model.display;
+                delete model.dataLinks;
+                delete model['sbg:name'];
 
                 if (json.requireSBGMetadata) {
                     model.requirements.push(_.clone(MetadataRequirement, true));
@@ -809,12 +904,15 @@ angular.module('registryApp.dyole')
             },
 
             toPipelineSchema: function (p) {
+
                 var json = _.clone(p, true),
                     relations, nodes, schemas, display,
                     exposed = {},
                     suggestedValues = {},
                     values = {},
                     idParts;
+
+                json.dataLinks = _formatter.createDataLinks(json);
 
                 schemas = _formatter.createSchemasFromSteps(json.steps, values);
 
@@ -824,7 +922,7 @@ angular.module('registryApp.dyole')
                 //clone schemas to create nodes to manipulate on them
                 nodes = _.toArray(_.clone(schemas, true));
 
-                display = _helper.fixDisplay(json.display, nodes);
+                display = _helper.setupDisplay(json, nodes);
 
                 relations = _formatter.toPipelineRelations(schemas, json.dataLinks, exposed, json, suggestedValues);
 

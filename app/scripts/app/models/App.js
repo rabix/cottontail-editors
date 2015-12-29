@@ -5,8 +5,6 @@ angular.module('registryApp.app')
         var self = {};
         var revision = parseInt(Globals.revision);
 
-        var appId = null;
-
         /**
          * Get tools
          *
