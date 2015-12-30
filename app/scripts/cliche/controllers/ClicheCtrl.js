@@ -665,6 +665,7 @@ angular.module('registryApp.cliche')
                 });
 
                 modalInstance.result.then(function () {
+                    $scope.form.tool.$dirty = false;
                     _createTask();
                 }, function () {
                     return false;
