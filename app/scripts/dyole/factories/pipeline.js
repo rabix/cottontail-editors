@@ -134,7 +134,7 @@ angular.module('registryApp.dyole')
 
                 });
 
-                this.Event.subscribe('node:deselect', function () {
+                this.Event.subscribe('node:deselect', function (stopPropagaion) {
 
                     _.forEach(_self.selectedNodes, function (node) {
                         if (node.selected) {
@@ -144,7 +144,9 @@ angular.module('registryApp.dyole')
 
                     _self.selectedNodes.splice(0, _self.selectedNodes.length);
 
-                    _self.Event.trigger('controller:node:deselect');
+                    if (!stopPropagaion) {
+                        _self.Event.trigger('controller:node:deselect');
+                    }
 
                 });
 
@@ -1540,8 +1542,8 @@ angular.module('registryApp.dyole')
                     pipBBox, canvasPadding, canvas, canvasStyle, svgString;
 
 
-                // So that Safari wouldn't render INFO, REMOVE, EDIT buttons of a node
-                this.Event.trigger('node:deselect');
+                //// So that Safari wouldn't render INFO, REMOVE, EDIT buttons of a node
+                this.Event.trigger('node:deselect', true);
 
                 // scale pipeline to 1 scale factor
                 pipWrap.scale(scale, scale);
