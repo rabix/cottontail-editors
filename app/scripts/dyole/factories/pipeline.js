@@ -1539,6 +1539,10 @@ angular.module('registryApp.dyole')
                     padding = 20,
                     pipBBox, canvasPadding, canvas, canvasStyle, svgString;
 
+
+                // So that Safari wouldn't render INFO, REMOVE, EDIT buttons of a node
+                this.Event.trigger('node:deselect');
+
                 // scale pipeline to 1 scale factor
                 pipWrap.scale(scale, scale);
 
@@ -1574,6 +1578,8 @@ angular.module('registryApp.dyole')
                 svgString = tempSvgContainer.html();
 
                 canvas.canvas.remove();
+
+                svgString.replace(/NS\d\:href/g, 'xlink:href');
 
                 // return SVG element as a string
                 return svgString;
