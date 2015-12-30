@@ -24,7 +24,7 @@ angular.module('registryApp.dyole')
                 this.model = Formater.toPipelineSchema(this.model);
             }
 
-            this.model.schemas = this.model.schemas || {};
+            //this.model.schemas = this.model.schemas || {};
             this.model.display = this.model.display || {};
 
             this.model.hints = this.model.hints || [];
@@ -153,9 +153,9 @@ angular.module('registryApp.dyole')
                 this.Event.subscribe('node:destroy', function (model) {
 
                     _self.nodes[model.id] = null;
-                    _self.model.schemas[model.id] = null;
+                    //_self.model.schemas[model.id] = null;
 
-                    delete _self.model.schemas[model.id];
+                    //delete _self.model.schemas[model.id];
                     delete _self.nodes[model.id];
 
                     _.remove(_self.nodes, function (n) {
@@ -1039,12 +1039,12 @@ angular.module('registryApp.dyole')
 
                 this.$parent.find('svg').remove();
 
-                _.each(this.nodes, function (node) {
-                    node.destroy();
-                });
-
                 _.each(this.connections, function (connection) {
                     connection.destroy();
+                });
+
+                _.each(this.nodes, function (node) {
+                    node.destroy();
                 });
 
                 this.nodes = null;
@@ -1352,6 +1352,10 @@ angular.module('registryApp.dyole')
 
                     model['sbg:id'] = model.id = _id;
 
+                    if (_.isEmpty(_self.model.schemas)) {
+                        _self.model.schemas = {};
+                    }
+
                     _self.model.schemas[ model.id ] = rawModel;
 
                     _self.Event.trigger('node:add', model);
@@ -1488,7 +1492,7 @@ angular.module('registryApp.dyole')
                 var n = this.getNodeById(id).model;
                 var nSchema = n.inputs[0] || n.outputs[0];
 
-                var node = this.model.schemas[id];
+                //var node = this.model.schemas[id];
                 var schema = node.inputs[0] || node.outputs[0];
 
                 schema.type = type;
@@ -1617,9 +1621,17 @@ angular.module('registryApp.dyole')
                 var json = angular.copy(this.model),
                     exposed = angular.copy(this.exposed),
                     values = angular.copy(this.values),
-                    suggestedValues = angular.copy(this.suggestedValues);
+                    suggestedValues = angular.copy(this.suggestedValues),
+                    schemas;
 
                 this._prepareExposedValues(exposed, values);
+
+                if (_.isEmpty(json.schemas)) {
+                    json.schemas = schemas = {};
+                }
+                else {
+                    schemas = json.schemas;
+                }
 
                 json.relations = this._getConnections();
                 json.nodes = this._getNodes();
@@ -1627,7 +1639,11 @@ angular.module('registryApp.dyole')
                 _.each(json.nodes, function (node) {
                     var nodeId = node.id;
 
-                    json.schemas[nodeId].display = {
+                    if (_.isEmpty(schemas[nodeId])) {
+                        schemas[nodeId] = {};
+                    }
+
+                    schemas[nodeId].display = {
                         x: node.x,
                         y: node.y
                     };
