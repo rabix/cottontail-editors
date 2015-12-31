@@ -12,7 +12,9 @@ angular.module('registryApp.cliche')
         var watchers = [];
 
         if ($scope.suggestedValues && !$scope.values) {
-            var suggested = $scope.suggestedValues[$scope.appName + Const.exposedSeparator + $scope.prop.id];
+            // $scope.appName == #appName;  Const.exposedSeparator == $;  $scope.prop.id == #property
+            // expected suggestedValue == #appName$property
+            var suggested = $scope.suggestedValues[$scope.appName + Const.exposedSeparator + $scope.prop.id.slice(1)];
             if (suggested) {
                 $scope.model = $scope.values = suggested;
             }
