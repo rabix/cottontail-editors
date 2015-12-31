@@ -1585,7 +1585,7 @@ angular.module('registryApp.dyole')
 
                 canvas.canvas.remove();
 
-                svgString = svgString.replace(/NS\d\:href/g, 'xlink:href');
+                svgString = svgString.replace(/NS\d*?\:href/g, 'xlink:href');
 
                 // return SVG element as a string
                 return svgString;
