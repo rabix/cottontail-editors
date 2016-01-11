@@ -108,6 +108,8 @@ angular.module('registryApp.common')
                             return _.isString(expr) || _.isNumber(expr);
                         case 'number':
                             return _.isNumber(expr);
+                        case 'object':
+                            return _.isObject(expr) || _.isString(expr) || _.isNumber(expr);
                         default:
                             return true;
                     }

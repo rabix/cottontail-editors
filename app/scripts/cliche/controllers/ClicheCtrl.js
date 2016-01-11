@@ -665,6 +665,7 @@ angular.module('registryApp.cliche')
                 });
 
                 modalInstance.result.then(function () {
+                    $scope.form.tool.$dirty = false;
                     _createTask();
                 }, function () {
                     return false;
@@ -1040,9 +1041,9 @@ angular.module('registryApp.cliche')
 
                         // check if reload can be skipped while changing the URL
                         if (history.pushState) {
-                            $location.search({ type: 'workflow', rev: newRevision });
+                            $location.search({ type: 'tool', rev: newRevision });
                         } else {
-                            redirectTo(newRevision);
+                            _redirectTo(newRevision);
                             $scope.view.loading = true;
                         }
 

@@ -12,12 +12,17 @@ angular.module('registryApp.cliche', ['ui.bootstrap', 'registryApp.common', 'reg
         generalSeparator: '.'
     })
     .config([
-        '$locationProvider', function($locationProvider) {
+        '$locationProvider', '$uibModalProvider', function($locationProvider, $uibModalProvider) {
             if (history.pushState) {
                 $locationProvider.html5Mode({
                     enabled: true,
                     requireBase: false
                 });
             }
+
+
+            $uibModalProvider.options = {
+                backdrop: 'static'
+            };
         }
     ]);
