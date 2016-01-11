@@ -260,6 +260,7 @@ angular.module('registryApp.common')
                             $scope.view.literal = lit;
                         }
 
+                        $scope.setDirty();
                     });
 
                 };
