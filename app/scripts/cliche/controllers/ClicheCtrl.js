@@ -392,8 +392,8 @@ angular.module('registryApp.cliche')
 
             var cachedName = $scope.view.tool.label;
 
-            if (angular.isDefined(newTool) && angular.isString(newTool.baseCmd)) {
-                newTool.baseCmd = [newTool.baseCmd];
+            if (angular.isDefined(newTool) && angular.isString(newTool.baseCommand)) {
+                newTool.baseCommand = [newTool.baseCommand];
             }
 
             if (Globals.appType === 'script') {
