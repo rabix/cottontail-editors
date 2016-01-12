@@ -296,7 +296,7 @@ angular.module('registryApp.dyole')
                                     });
                                 });
                             } else {
-                                console.log('Name %s, id %s',schema.suggestedValue[0].name, schema.suggestedValue[0].id);
+                                console.log('Name %s, id %s', schema.suggestedValue[0].name, schema.suggestedValue[0].id);
 
                                 schema[internalType][0]['sbg:suggestedValue'] = {
                                     class: 'File',
@@ -612,6 +612,7 @@ angular.module('registryApp.dyole')
                 _.forEach(steps, function (step) {
                     _.forEach(step.inputs, function (input) {
                         if (_.isArray(input.source)) {
+                            input.source = _.unique(input.source);
                             _.forEach(input.source, function (src, position) {
 
                                 var dataLink = {
@@ -622,6 +623,9 @@ angular.module('registryApp.dyole')
 
                                 dataLinks.push(dataLink);
                             });
+
+                            input.source = null;
+                            delete input.source;
                         }
                     });
                 });
@@ -629,6 +633,7 @@ angular.module('registryApp.dyole')
 
                 _.forEach(outputs, function (output) {
                     if (_.isArray(output.source)) {
+                        output.source = _.unique(output.source);
                         _.forEach(output.source, function (src, position) {
 
                             var dataLink = {
@@ -639,6 +644,9 @@ angular.module('registryApp.dyole')
 
                             dataLinks.push(dataLink);
                         });
+
+                        output.source = null;
+                        delete output.source;
                     }
                 });
 
@@ -664,8 +672,9 @@ angular.module('registryApp.dyole')
                         });
 
                     } else {
+
                         var step = _.find(json.steps, function (step) {
-                            return step.id === split[0]
+                            return step.id === split[0];
                         });
 
                         node = _.find(step.inputs, function (inp) {
@@ -871,6 +880,7 @@ angular.module('registryApp.dyole')
         var fd2 = {
 
             toRabixSchema: function (p, exposed, values, suggestedValues) {
+
                 var json = _.clone(p, true),
                     model = _.clone(RabixModel, true);
 

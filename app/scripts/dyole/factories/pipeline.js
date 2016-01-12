@@ -153,10 +153,11 @@ angular.module('registryApp.dyole')
                 this.Event.subscribe('node:destroy', function (model) {
 
                     _self.nodes[model.id] = null;
-                    //_self.model.schemas[model.id] = null;
 
-                    //delete _self.model.schemas[model.id];
                     delete _self.nodes[model.id];
+
+                    _self.model.schemas[model.id] = null;
+                    delete _self.model.schemas[model.id];
 
                     _.remove(_self.nodes, function (n) {
                         return n.model.id === model.id;
@@ -1618,6 +1619,7 @@ angular.module('registryApp.dyole')
              * @returns {{}}
              */
             getJSON: function () {
+
                 var json = angular.copy(this.model),
                     exposed = angular.copy(this.exposed),
                     values = angular.copy(this.values),
@@ -1628,8 +1630,7 @@ angular.module('registryApp.dyole')
 
                 if (_.isEmpty(json.schemas)) {
                     json.schemas = schemas = {};
-                }
-                else {
+                } else {
                     schemas = json.schemas;
                 }
 
