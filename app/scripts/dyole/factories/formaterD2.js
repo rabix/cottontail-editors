@@ -296,7 +296,7 @@ angular.module('registryApp.dyole')
                                     });
                                 });
                             } else {
-                                console.log('Name %s, id %s',schema.suggestedValue[0].name, schema.suggestedValue[0].id);
+                                console.log('Name %s, id %s', schema.suggestedValue[0].name, schema.suggestedValue[0].id);
 
                                 schema[internalType][0]['sbg:suggestedValue'] = {
                                     class: 'File',
@@ -880,6 +880,7 @@ angular.module('registryApp.dyole')
         var fd2 = {
 
             toRabixSchema: function (p, exposed, values, suggestedValues) {
+
                 var json = _.clone(p, true),
                     model = _.clone(RabixModel, true);
 
