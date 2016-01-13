@@ -396,9 +396,17 @@ angular.module('registryApp.cliche')
                 newTool.baseCommand = [newTool.baseCommand];
             }
 
+            if (!_.isUndefined(newTool.stdin) && _.isNull(newTool.stdin)) {
+                newTool.stdin = '';
+            }
+
+            if (!_.isUndefined(newTool.stdout) && _.isNull(newTool.stdout)) {
+                newTool.stdout = '';
+            }
+
             if (Globals.appType === 'script') {
                 newTool.engine = Cliche.getTransformSchema().engine;
-                delete newTool.baseCmd;
+                delete newTool.baseCommand;
                 delete newTool.stdin;
                 delete newTool.stdout;
                 delete newTool.arguments;
