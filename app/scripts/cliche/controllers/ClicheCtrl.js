@@ -1042,8 +1042,8 @@ angular.module('registryApp.cliche')
 
                         Notification.primary('Tool successfully updated');
 
-                        $scope.view.tool = result.message;
-                        Cliche.setTool($scope.view.tool);
+                        Cliche.setTool(result.message);
+                        $scope.view.tool = Cliche.getTool();
 
                         var newRevision = result.message['sbg:revision'];
 
