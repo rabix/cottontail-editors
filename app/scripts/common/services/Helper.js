@@ -170,12 +170,19 @@ angular.module('registryApp.common')
 
         };
 
-        function deepPropValue (obj, prop) {
+        /**
+         * recursively search object for Existence of property or property === value
+         * @param {Object} obj
+         * @param {string} prop string to be checked for occurrence in object
+         * @param {string} [val] optional value to compare property to
+         * @returns {*}
+         */
+        function deepPropValue (obj, prop, val) {
             var result = null;
 
             if (obj instanceof Array) {
                 for(var i = 0; i < obj.length; i ++) {
-                    result = deepPropertyExists(obj[i], prop);
+                    result = deepPropValue(obj[i], prop, val);
                     if (result) {
                         break;
                     }
@@ -186,10 +193,14 @@ angular.module('registryApp.common')
                         continue;
                     }
                     if (oProp === prop) {
-                        return obj;
+                        if (_.isUndefined(val)) {
+                            return obj;
+                        } else if (obj[oProp] === val) {
+                            return obj;
+                        }
                     }
                     if(obj[oProp] instanceof Object || obj[oProp] instanceof Array) {
-                        result = deepPropertyExists(obj[oProp], prop);
+                        result = deepPropValue(obj[oProp], prop, val);
                         if (result) {
                             break;
                         }
@@ -200,17 +211,13 @@ angular.module('registryApp.common')
             return result;
         }
 
-        /**
-         *
-         */
         var deepPropertyExists = function(obj, prop) {
             return !! deepPropValue(obj, prop);
         };
 
         var deepPropertyEquals = function(obj, prop, val) {
-            return deepPropValue(obj, prop) === val;
+            return !! deepPropValue(obj, prop, val);
         };
-
 
         return {
             isValidName: isValidName,

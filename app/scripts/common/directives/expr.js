@@ -71,6 +71,16 @@ angular.module('registryApp.common')
                  * Check if expression is valid
                  */
                 var checkExpression = function () {
+                    var tmpDisabledVal = $scope.view.disabled;
+
+                    // JsonPointer is only supported through import, this check ensures that errors don't show up in the UI
+                    // and that it cannot be edited
+                    if ($scope.ngModel && $scope.ngModel.engine === 'cwl:JsonPointer') {
+                        $scope.view.disabled = true;
+                        return;
+                    }
+
+                    $scope.view.disabled = tmpDisabledVal;
 
                     if ($scope.view.mode === 'transform') {
 

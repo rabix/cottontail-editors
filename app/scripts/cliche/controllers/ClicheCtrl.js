@@ -471,7 +471,7 @@ angular.module('registryApp.cliche')
          * @private
 		 */
 		var _checkExpressionRequirement = function () {
-			if (Helper.deepPropertyExists($scope.view.tool, 'script')) {
+			if (Helper.deepPropertyEquals($scope.view.tool, 'engine', '#cwl-js-engine')) {
 				$scope.view.expReq = true;
 				if (!_.find($scope.view.tool.requirements, {'class': 'ExpressionEngineRequirement'})) {
 					$scope.view.tool.requirements.push(Cliche.getExpressionRequirement());

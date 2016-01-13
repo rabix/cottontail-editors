@@ -41,14 +41,15 @@
                ng-class="{'btn-primary': (view.mode === 'literal' && view.literal && !view.exprError), 'btn-default': (view.mode === 'transform' || !view.literal && !view.exprError), 'btn-warning': (view.mode === 'literal' && view.literal && view.exprError)}">
                 <i class="fa fa-font"></i>
             </a>
-            <a href
-               ng-disabled="view.disabled"
-               class="btn btn-expression"
-               uib-tooltip="{{ view.transform.script || 'There is no expression defined. Click to add it' }}"
-               ng-click="editExpression()"
-               ng-class="{'btn-primary': (view.mode === 'transform' && !view.exprError), 'btn-default': (view.mode === 'literal' && !view.exprError), 'btn-warning': (view.mode === 'transform' && view.exprError)}">
-                <i class="fa fa-code"></i>
-            </a>
+            <div class="inline-block" uib-tooltip="{{ view.transform.engine !== 'cwl:JsonPointer' ? (view.transform.script || 'There is no expression defined. Click to add it') : 'Editing JsonPointer expressions is currently not supported'}}">
+                <a href
+                   ng-disabled="view.disabled"
+                   class="btn btn-expression"
+                   ng-click="editExpression()"
+                   ng-class="{'btn-primary': (view.mode === 'transform' && !view.exprError), 'btn-default': (view.mode === 'literal' && !view.exprError), 'btn-warning': (view.mode === 'transform' && view.exprError)}">
+                    <i class="fa fa-code"></i>
+                </a>
+            </div>
         </span>
     </div>
 
