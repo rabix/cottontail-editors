@@ -1493,7 +1493,7 @@ angular.module('registryApp.dyole')
                 var n = this.getNodeById(id).model;
                 var nSchema = n.inputs[0] || n.outputs[0];
 
-                //var node = this.model.schemas[id];
+                var node = this.model.schemas[id];
                 var schema = node.inputs[0] || node.outputs[0];
 
                 schema.type = type;
