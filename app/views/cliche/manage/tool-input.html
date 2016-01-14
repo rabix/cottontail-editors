@@ -182,6 +182,20 @@
 
         </div>
 
+
+        <h3 class="legend-small" ng-if="view.type === 'File'">
+            <label class="checkbox inline">
+                <input type="checkbox"
+                       class="form-control"
+                       ng-model="view.property.inputBinding.loadContents"
+                       name="loadContents">
+                Load Contents
+            </label>
+            <help-message message="{{ :: 'clicheBindingsLoadContents' | loc }}"></help-message>
+        </h3>
+        <!-- END LoadContents -->
+
+
         <div ng-if="view.type === 'File'">
             <h3 class="legend-small">
                 Secondary Files
@@ -213,7 +227,7 @@
                 </div>
             </div>
         </div>
-
+        <!--END Secondary Files-->
 
         <h3 class="legend-small">
             <label class="checkbox inline">
@@ -225,6 +239,7 @@
                 Include in command line
             </label>
         </h3>
+        <!--END Include In Command Line-->
 
         <div ng-if="!!(view.property.inputBinding['sbg:cmdInclude'])" class="row">
 
@@ -317,7 +332,9 @@
             This input will not be automatically included in the generated command line.
         </p>
 
-        <div class="form-group main-actions">
+    </div>
+
+    <div class="modal-footer">
             <a href class="btn btn-warning" ng-click="cancel()">Cancel</a>
             <button type="submit"
                     class="btn btn-primary"
@@ -325,9 +342,6 @@
                     ng-disabled="view.form.$pristine || view.form.$invalid">
                 Save
             </button>
-        </div>
-
-
     </div>
 </form>
 
