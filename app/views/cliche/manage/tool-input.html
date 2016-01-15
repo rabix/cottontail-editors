@@ -182,17 +182,34 @@
 
         </div>
 
+        <div ng-if="showStageInput">
+            <h3 class="legend-small">
+                <label for="input_modal_stage_input">Stage Input</label>
+            </h3>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <select name="stageInput"
+                            id="input_modal_stage_input"
+                            ng-options="key as value for (key, value) in {copy: 'Copy', link: 'Link'}"
+                            ng-model="view.stageInput">
+                        <option value>-- none --</option>
+                    </select>
+                </div>
+            </div>
+        </div>
 
-        <h3 class="legend-small" ng-if="view.type === 'File'">
-            <label class="checkbox inline">
-                <input type="checkbox"
-                       class="form-control"
-                       ng-model="view.property.inputBinding.loadContents"
-                       name="loadContents">
-                Load Contents
-            </label>
-            <help-message message="{{ :: 'clicheBindingsLoadContents' | loc }}"></help-message>
-        </h3>
+        <div ng-if="view.type === 'File'">
+            <h3 class="legend-small">
+                <label class="checkbox inline">
+                    <input type="checkbox"
+                           class="form-control"
+                           ng-model="view.property.inputBinding.loadContents"
+                           name="loadContents">
+                    Load Contents
+                </label>
+                <help-message message="{{ :: 'clicheBindingsLoadContents' | loc }}"></help-message>
+            </h3>
+        </div>
         <!-- END LoadContents -->
 
 
@@ -335,13 +352,13 @@
     </div>
 
     <div class="modal-footer">
-            <a href class="btn btn-warning" ng-click="cancel()">Cancel</a>
-            <button type="submit"
-                    class="btn btn-primary"
-                    id="input_modal_save_button"
-                    ng-disabled="view.form.$pristine || view.form.$invalid">
-                Save
-            </button>
+        <a href class="btn btn-warning" ng-click="cancel()">Cancel</a>
+        <button type="submit"
+                class="btn btn-primary"
+                id="input_modal_save_button"
+                ng-disabled="view.form.$pristine || view.form.$invalid">
+            Save
+        </button>
     </div>
 </form>
 
