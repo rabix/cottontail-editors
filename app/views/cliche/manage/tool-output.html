@@ -153,7 +153,6 @@
         </div>
         <!-- END Additional Information -->
 
-
         <div ng-show="view.isFileType">
             <h3 class="legend-small">
                 Metadata
@@ -240,6 +239,18 @@
             <help-message message="{{ :: 'clicheBindingsLoadContents' | loc }}"></help-message>
         </h3>
         <!-- END LoadContents -->
+
+        <div class="row">
+            <div ng-show="view.isFileType" class="col-md-5 form-group">
+                <expr ng-model="view.property.outputBinding.outputEval"
+                      index="{{ $index }}"
+                      type="string"
+                      only-expr="true"
+                      handle-item-update="updateOutputEval(value)"
+                      placeholder="Output Eval">
+                </expr>
+            </div>
+        </div>
 
         <div ng-show="view.isFileType">
             <h3 class="legend-small">
