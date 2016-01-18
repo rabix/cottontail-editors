@@ -392,13 +392,21 @@ angular.module('registryApp.cliche')
 
             var cachedName = $scope.view.tool.label;
 
-            if (angular.isDefined(newTool) && angular.isString(newTool.baseCmd)) {
-                newTool.baseCmd = [newTool.baseCmd];
+            if (angular.isDefined(newTool) && angular.isString(newTool.baseCommand)) {
+                newTool.baseCommand = [newTool.baseCommand];
+            }
+
+            if (!_.isUndefined(newTool.stdin) && _.isNull(newTool.stdin)) {
+                newTool.stdin = '';
+            }
+
+            if (!_.isUndefined(newTool.stdout) && _.isNull(newTool.stdout)) {
+                newTool.stdout = '';
             }
 
             if (Globals.appType === 'script') {
                 newTool.engine = Cliche.getTransformSchema().engine;
-                delete newTool.baseCmd;
+                delete newTool.baseCommand;
                 delete newTool.stdin;
                 delete newTool.stdout;
                 delete newTool.arguments;
@@ -463,7 +471,7 @@ angular.module('registryApp.cliche')
          * @private
 		 */
 		var _checkExpressionRequirement = function () {
-			if (Helper.deepPropertyExists($scope.view.tool, 'script')) {
+			if (Helper.deepPropertyEquals($scope.view.tool, 'engine', '#cwl-js-engine')) {
 				$scope.view.expReq = true;
 				if (!_.find($scope.view.tool.requirements, {'class': 'ExpressionEngineRequirement'})) {
 					$scope.view.tool.requirements.push(Cliche.getExpressionRequirement());
@@ -639,7 +647,7 @@ angular.module('registryApp.cliche')
 
             function _createTask() {
                 // create task and redirect to task page for that task
-                App.createAppTask().then(function (task) {
+                App.createAppTask($scope.view.tool['sbg:revision']).then(function (task) {
                     BeforeRedirect.setReload(true);
                     $scope.view.saving = true;
                     $scope.view.loading = true;
@@ -1023,6 +1031,7 @@ angular.module('registryApp.cliche')
 
             tool['sbg:job'] = Cliche.getJob();
 
+            debouncedGenerateCommand();
 
             Cliche.generatePreviewCommand().then(function(previewCommand) {
                 tool['sbg:cmdPreview'] = previewCommand;
@@ -1034,8 +1043,8 @@ angular.module('registryApp.cliche')
 
                         Notification.primary('Tool successfully updated');
 
-                        $scope.view.tool = result.message;
-                        Cliche.setTool($scope.view.tool);
+                        Cliche.setTool(result.message);
+                        $scope.view.tool = Cliche.getTool();
 
                         var newRevision = result.message['sbg:revision'];
 

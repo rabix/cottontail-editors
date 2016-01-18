@@ -593,7 +593,7 @@ angular.module('registryApp.app')
 
             function createTask() {
                 // create task and redirect to task page for that task
-                App.createAppTask().then(function (task) {
+                App.createAppTask($scope.view.workflow['sbg:revision']).then(function (task) {
                     BeforeRedirect.setReload(true);
                     $scope.view.saving = true;
                     $scope.view.loading = true;

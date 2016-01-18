@@ -112,7 +112,7 @@ angular.module('registryApp.app')
             return Api.getMineAppsByProject.get({}).$promise;
         };
 
-        self.createAppTask = function () {
+        self.createAppTask = function (rev) {
             /*
              {
              "type": "RABIX",
@@ -126,7 +126,7 @@ angular.module('registryApp.app')
                 type: 'RABIX',
                 'project_id': Globals.projectId,
                 'project_slug': Globals.projectOwner + '/' + Globals.projectSlug,
-                'app_id': Globals.projectOwner + '/' + Globals.projectSlug + '/' + Globals.appName + '/' + Globals.revision
+                'app_id': Globals.projectOwner + '/' + Globals.projectSlug + '/' + Globals.appName + '/' + rev
             };
 
             return Api.createAppTask.post({}, body).$promise;

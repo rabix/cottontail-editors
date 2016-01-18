@@ -797,8 +797,8 @@ angular.module('registryApp.cliche')
             args = args || toolJSON.arguments;
 
             // in case baseCommand is not yet defined
-            if (!toolJSON.baseCmd) {
-                toolJSON.baseCmd = [''];
+            if (!toolJSON.baseCommand) {
+                toolJSON.baseCommand = [''];
             }
 
             return prepareProperties(toolInputs, jobInputs)

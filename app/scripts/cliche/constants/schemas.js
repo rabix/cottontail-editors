@@ -40,7 +40,7 @@ angular.module('registryApp.cliche')
          * @property {Input[]} inputs
          * @property {Output[]} outputs
          * @property {Hint[]} hints
-         * @property {string[]} baseCmd
+         * @property {string[]|string} baseCommand
          * @property {string} stdin
          * @property {string} stdout
          * @property {int[]} successCodes
