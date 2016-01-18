@@ -1031,6 +1031,7 @@ angular.module('registryApp.cliche')
 
             tool['sbg:job'] = Cliche.getJob();
 
+            debouncedGenerateCommand();
 
             Cliche.generatePreviewCommand().then(function(previewCommand) {
                 tool['sbg:cmdPreview'] = previewCommand;
