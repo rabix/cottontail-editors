@@ -625,10 +625,10 @@ angular.module('registryApp.dyole')
 
                 terId = Common.generateNodeId({label: newId}, this.nodes);
 
-                model.label = terId;
+                model.label = terId.slice(1);
                 model.description = descriptions[type];
                 model['sbg:createdBy'] = 'SBG';
-                model.softwareDescription.label = terId;
+                model.softwareDescription.label = model.label;
                 model.softwareDescription.type = type;
                 model[internalType].push({
                     'label': terId.slice(1),
@@ -1493,7 +1493,7 @@ angular.module('registryApp.dyole')
                 var n = this.getNodeById(id).model;
                 var nSchema = n.inputs[0] || n.outputs[0];
 
-                //var node = this.model.schemas[id];
+                var node = this.model.schemas[id];
                 var schema = node.inputs[0] || node.outputs[0];
 
                 schema.type = type;

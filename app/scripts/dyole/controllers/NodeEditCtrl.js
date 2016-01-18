@@ -6,25 +6,14 @@ angular.module('registryApp.dyole')
         $scope.data = data;
         $scope.view = {
             error: null,
-            name: data.name
+            label: data.label
         };
         $timeout(function() {
             angular.element('.node-label-edit').trigger('focus');
         },1);
         $scope.ok = function () {
-            var test = data.onEdit($scope.name);
-
-            if ($scope.form.$invalid) {
-                return false;
-            }
-
-
-            if (test) {
-                data.onSave.call(data.scope, $scope.view.name);
-                $modalInstance.close();
-            } else {
-                $scope.view.error = 'Name must be uniqe.';
-            }
+            data.onSave.call(data.scope, $scope.view.label);
+            $modalInstance.close();
         };
 
         $scope.cancel = function () {

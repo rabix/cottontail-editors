@@ -1,13 +1,13 @@
 <form ng-submit="ok()"  name="form" class="form">
     <div class="modal-header">
         <button type="button" class="close" ng-click="cancel()"><span>&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title">{{ ::view.name }}</strong></h4>
+        <h4 class="modal-title">{{ ::view.label }}</strong></h4>
     </div>
     <div class="modal-body">
 
         <div class="form-group" ng-class="{'has-error': form.name.$invalid}">
-            <label class="control-label" for="{{::view.name}}_input_name">Name</label>
-            <input name="name" id="{{::view.name}}_input_name" is-valid-name="true" class="form-control node-label-edit" type="text" ng-model="view.name" autofocus/>
+            <label class="control-label" for="{{::view.label}}_input_name">Label</label>
+            <input name="name" id="{{::view.label}}_input_name" is-valid-name="true" class="form-control node-label-edit" type="text" ng-model="view.label" autofocus/>
             <span class="help-block">Allowed characters are alphanumerics and _</span>
         </div>
 

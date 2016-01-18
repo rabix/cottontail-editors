@@ -314,21 +314,25 @@ angular.module('registryApp.dyole')
 
         };
 
-        var onNodeLabelEdit = function(e, opts, onEdit, onSave, scope) {
+        /**
+         *
+         * @param {Event} e         click event object
+         * @param {Object} opts     options
+         * @param onSave
+         * @param scope
+         */
+        var onNodeLabelEdit = function(e, opts, onSave, scope) {
 
             var $modal = $injector.get('$uibModal');
             var $templateCache = $injector.get('$templateCache');
-            var name = opts.name;
-            var isSystem = opts.isSystem;
 
-            var template = isSystem ? 'views/dyole/input-label-edit.html' : 'views/dyole/node-label-edit.html';
+            var template = opts.isSystem ? 'views/dyole/input-label-edit.html' : 'views/dyole/node-label-edit.html';
             $modal.open({
                 template: $templateCache.get(template),
                 controller: 'NodeEditCtrl',
                 windowClass: 'modal-node',
                 resolve: {data: function () { return {
-                    name: name,
-                    onEdit: onEdit,
+                    label: opts.label,
                     onSave: onSave,
                     scope: scope
                 }; }}

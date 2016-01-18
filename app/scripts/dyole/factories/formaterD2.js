@@ -311,6 +311,7 @@ angular.module('registryApp.dyole')
 
                         schemaFinal['sbg:x'] = schema.display.x;
                         schemaFinal['sbg:y'] = schema.display.y;
+                        schemaFinal.label = schema.label;
 
                         workflow[type + 's'].push(schemaFinal);
                     }

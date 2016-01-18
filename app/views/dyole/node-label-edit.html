@@ -1,7 +1,7 @@
 <form ng-submit="ok()" name="form" class="form">
     <div class="modal-header">
         <h4 class="modal-title">
-            {{ ::view.name }}
+            {{ ::view.label }}
         </h4>
         <button type="button" class="close" ng-click="cancel()">
             <span>&times;</span>
@@ -11,8 +11,8 @@
     <div class="modal-body">
 
         <div class="form-group" ng-class="{'has-error': form.name.$invalid}">
-            <label class="control-label" for="{{::view.name}}_node_name">Name</label>
-            <input name="name" id="{{::view.name}}_node_name" class="form-control node-label-edit" type="text" ng-model="view.name" autofocus/>
+            <label class="control-label" for="{{::view.label}}_node_name">Step label</label>
+            <input name="name" id="{{::view.label}}_node_name" class="form-control node-label-edit" type="text" ng-model="view.label" autofocus/>
         </div>
         <br>
 
