@@ -139,8 +139,8 @@ angular.module('registryApp.common')
                 int: getRandomInt(0,11),
                 float: getRandomFloat(0, 11),
                 boolean: true,
-	            record: {},
-	            map: {},
+	            record: null,
+	            map: null,
                 array: {
                     file: [
                         {path: name + '-1.ext', 'class': 'File', size: 0, secondaryFiles: []},
@@ -151,10 +151,10 @@ angular.module('registryApp.common')
                         {path: name + '-2.ext', 'class': 'File', size: 0, secondaryFiles: []}
                     ],
                     string: [name+"-string-value-1", name+"-string-value-2"],
-                    int: [1,2],
+                    int: [getRandomInt(0,11), getRandomInt(0,11)],
                     float: [getRandomFloat(0, 11), getRandomFloat(0, 11)],
-                    record: [],
-	                map: [{}],
+                    record: null,
+	                map: null,
 	                'enum': [symbols ? symbols[0] : name]
                 }
             };
