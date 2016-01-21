@@ -60,13 +60,24 @@ angular.module('registryApp.common')
 
         };
 
-        // Returns a random integer between min (included) and max (excluded)
-        // Using Math.round() will give you a non-uniform distribution
+        /**
+         * Returns a random integer between min (included) and max (excluded)
+         *
+         * @param {integer} min
+         * @param {integer} max
+         * @returns boolean
+         */
         function getRandomInt(min, max) {
             return Math.floor(Math.random() * (max - min)) + min;
         }
 
-        // Returns a random floating number between min (inclusive) and max (exclusive)
+        /**
+         * Returns a random floating number between min (inclusive) and max (exclusive)
+         *
+         * @param {integer} min
+         * @param {integer} max
+         * @returns boolean
+         */
         function getRandomFloat(min, max) {
             return Math.random() * (max - min) + min;
         }
@@ -135,12 +146,12 @@ angular.module('registryApp.common')
                 file: {path: name + '.ext', 'class': 'File', size: 0, secondaryFiles: []},
                 File: {path: name + '.ext', 'class': 'File', size: 0, secondaryFiles: []},
                 'enum': symbols ? symbols[0] : name,
-                string: name + "-string-value",
+                string: name + '-string-value',
                 int: getRandomInt(0,11),
                 float: getRandomFloat(0, 11),
                 boolean: true,
-	            record: null,
-	            map: null,
+                record: {},
+                map: {},
                 array: {
                     file: [
                         {path: name + '-1.ext', 'class': 'File', size: 0, secondaryFiles: []},
@@ -150,11 +161,11 @@ angular.module('registryApp.common')
                         {path: name + '-1.ext', 'class': 'File', size: 0, secondaryFiles: []},
                         {path: name + '-2.ext', 'class': 'File', size: 0, secondaryFiles: []}
                     ],
-                    string: [name+"-string-value-1", name+"-string-value-2"],
+                    string: [name+'-string-value-1', name+'-string-value-2'],
                     int: [getRandomInt(0,11), getRandomInt(0,11)],
                     float: [getRandomFloat(0, 11), getRandomFloat(0, 11)],
-                    record: null,
-	                map: null,
+                    record: [],
+                    map: [{}],
 	                'enum': [symbols ? symbols[0] : name]
                 }
             };
