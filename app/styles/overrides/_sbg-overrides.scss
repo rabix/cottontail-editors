@@ -75,6 +75,10 @@ input[type="checkbox"], input[type="radio"] {
 
 label.checkbox {
   margin: 10px 10px 10px 20px;
+
+  + .help-message {
+    margin-left: -10px;
+  }
 }
 
 .modal-header .modal-title .checkbox {

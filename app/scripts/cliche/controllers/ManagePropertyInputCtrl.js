@@ -55,8 +55,14 @@ angular.module('registryApp.cliche')
         $scope.view.label = $scope.view.property.label || '';
 		$scope.view.fileTypes = $scope.view.property['sbg:fileTypes'] || '';
 		$scope.view.altPrefix = $scope.view.property['sbg:altPrefix'] || '';
+		$scope.view.stageInput = $scope.view.property['sbg:stageInput'] || null;
 		$scope.view.toolDefaultValue = $scope.view.property['sbg:toolDefaultValue'] || '';
 
+        $scope.isFileType = $scope.view.type === 'File' || $scope.view.itemsType === 'File';
+        $scope.isRecordType = $scope.view.type === 'record' || $scope.view.itemsType === 'record';
+        $scope.showStageInput = $scope.isFileType || $scope.isRecordType;
+
+        idObj.o = $scope.view.name;
 
 		/**
 		 * Array of additional information fields
@@ -86,7 +92,11 @@ angular.module('registryApp.cliche')
 			{
 				name: 'fileTypes',
 				custom: true
-			}
+			},
+            {
+                name: 'stageInput',
+                custom: true
+            }
 		];
 
 		_.forEach(additionalInformation, function (field) {
@@ -94,9 +104,6 @@ angular.module('registryApp.cliche')
 			$scope.view[field.name] = $scope.view.property[prefix + field.name] || '';
 		});
 
-		$scope.isFileType = $scope.view.type === 'File' || $scope.view.itemsType === 'File';
-
-        idObj.o = $scope.view.name;
 
         /**
          * Save property changes
@@ -104,7 +111,6 @@ angular.module('registryApp.cliche')
          * @returns {boolean}
          */
         $scope.save = function() {
-
             $scope.view.error = '';
             $scope.view.form.$setDirty();
 
@@ -149,6 +155,7 @@ angular.module('registryApp.cliche')
 		        var prefix = field.custom ? 'sbg:' : '';
 
 		        if ($scope.view[field.name] !== '') {
+                    $scope.view[field.name] = $scope.view[field.name] === 'null' ? null : $scope.view[field.name];
 			        formatted[prefix + field.name] = $scope.view[field.name];
 		        } else {
 					delete formatted[prefix + field.name];
@@ -174,6 +181,8 @@ angular.module('registryApp.cliche')
         /* watch for the type change in order to adjust the property structure */
         $scope.$watch('view.type', function(n, o) {
             if (n !== o) {
+                $scope.isRecordType = false;
+                $scope.isFileType = false;
 
 	            switch(n) {
 		            case 'array':
@@ -187,6 +196,7 @@ angular.module('registryApp.cliche')
 		            case 'record':
 			            $scope.isFileType = false;
 			            $scope.view.disabled = true;
+                        $scope.isRecordType = true;
 
 			            $scope.view.fields = [];
 
@@ -208,9 +218,12 @@ angular.module('registryApp.cliche')
 			            $scope.view.disabledAll = $scope.view.disabled = false;
 			            $scope.isFileType = n === 'File';
 
-			            delete $scope.view.items;
+                        delete $scope.view.items;
 			            break;
-	            }
+                }
+
+                $scope.showStageInput = $scope.isFileType || $scope.isRecordType;
+                $scope.view.stageInput = $scope.showStageInput ? $scope.view.stageInput : null;
             }
         });
 
@@ -218,6 +231,8 @@ angular.module('registryApp.cliche')
         $scope.$watch('view.itemsType', function(n, o) {
             if (n !== o) {
 	            $scope.view.symbols = enumObj.symbols;
+                $scope.isRecordType = false;
+                $scope.isFileType = false;
 
 	            switch (n) {
 		            case 'record':
@@ -225,6 +240,7 @@ angular.module('registryApp.cliche')
 			            // items: { type: 'record', fields: []}
 			            $scope.view.disabled = true;
 			            $scope.view.items = {};
+                        $scope.isRecordType = true;
 
 			            if (_.isUndefined($scope.view.items.fields)) {
 				            $scope.view.items.type = 'record';
@@ -271,6 +287,9 @@ angular.module('registryApp.cliche')
 			            $scope.isFileType = n === 'File';
 		                break;
 	            }
+
+                $scope.showStageInput = $scope.isFileType || $scope.isRecordType;
+                $scope.view.stageInput = $scope.showStageInput ? $scope.view.stageInput : null;
             }
         });
 
