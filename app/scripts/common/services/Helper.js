@@ -65,7 +65,7 @@ angular.module('registryApp.common')
          *
          * @param {integer} min
          * @param {integer} max
-         * @returns boolean
+         * @returns {integer}
          */
         function getRandomInt(min, max) {
             return Math.floor(Math.random() * (max - min)) + min;
@@ -76,7 +76,7 @@ angular.module('registryApp.common')
          *
          * @param {integer} min
          * @param {integer} max
-         * @returns boolean
+         * @returns {float}
          */
         function getRandomFloat(min, max) {
             return Math.random() * (max - min) + min;
