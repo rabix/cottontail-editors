@@ -1,0 +1,15 @@
+{
+  "preset": "google",
+  "maxErrors": 5000,
+  "validateIndentation": null,
+  "requireSpacesInAnonymousFunctionExpression": {
+    "beforeOpeningRoundBrace": true,
+    "beforeOpeningCurlyBrace": true
+  },
+  "disallowSpacesInAnonymousFunctionExpression": null,
+  "disallowSpacesInFunctionExpression": null,
+  "maximumLineLength": null,
+  "disallowMultipleVarDecl": null,
+  "requireDotNotation": null,
+  "disallowTrailingWhitespace": null,
+}
