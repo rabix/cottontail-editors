@@ -1,6 +1,6 @@
-#Reproducible Analyses for Bioinformatics (Rabix)
+# Reproducible Analyses for Bioinformatics (Rabix)
 
-##Editors
+## Editors
 The purpose of the Rabix editors is to implement a graphical user interface for describing tools in the [Common Workflow Language](http://common-workflow-language.github.io/). They were originally written as an open source project, now referred to as [rabix.org](https://www.rabix.org/), as a single application. They have since been decoupled from one another and integrated into the SevenBridges and the Cancer Genomics Cloud platforms.
 
 The CWL specification which these editors currently support is [draft-2](http://common-workflow-language.github.io/draft-2/). Future iterations should support CWL 1.0 when it is finalized. The two editors are the Command Line Tool Editor (**Cliche**) and the Workflow Editor (**Dyole**).
@@ -13,7 +13,7 @@ Cliche is used to edit Command Line Tools and could once edit Expression Tools, 
 
 
 
-##Installation
+## Installation
 
 Both editors are served by [camellia](https://gitlab.sbgenomics.com:9443/sbg/camellia) through a single html file called [app-edit.html](https://gitlab.sbgenomics.com:9443/sbg/camellia/blob/develop/apps/rabix/templates/rabix/project/app-edit.html). Go there for more information about how JavaScript and CSS files are loaded onto the page. Either is loaded depending on the url hash. `?type=tool` loads Cliche, and `?type=workflow` loads Dyole.
 
@@ -28,16 +28,16 @@ $ npm install # in case it wasn't done already
 $ grunt rabix-watch
 ```
 
-##Style and Linting
+## Style and Linting
 
-###JSHint
+### JSHint
 A `.jshintrc` file is included in the root of the repository. To enable jshinting in your JetBrains IDE, go to File > Default Settings > Languages & Frameworks > JavaScript > Code Quality Tools > JSHint
 
 ![jshint](http://i.imgur.com/3jrNSDj.png)
 
 Enable JSHint and the Use config files. The IDE will automatically find the right .jshintrc file depending on the path of the file being edited.
 
-###Code Style
+### Code Style
 
 To facillitate consistent coding styles, we'll try implementing [JavaScript Coding Style](http://jscs.info/). Install the jscs CLI by running
 
@@ -51,15 +51,15 @@ JetBrains IDEs have automatic support for JSCS. You can enable it by going to Fi
 
 Enable the configuration as so. The rules, found in `.jscsrc`, will be tweaked as we work out this project's personal coding style. Some files might be completely red with errors for the silliest reasons. Reformat as you go and reformat liberally. 
 
-###Reformatting
+### Reformatting
 JSCS can be set as the default reformatting guide for JavaScript files. To configure it, go to File > Default Settings > Editor > Code Style > JavaScript and click `Manage...` Select Import, and find the `.jscsrc` file located in the root of this project. There is also another file for formatting HTML, it can be imported into your JetBrains IDE by going to File > Default Settings > Import Settings and importing `jetbrains-html-code-style.xml`
 
 
-##Tests
+## Tests
 
 Coming soon, one hopes... If you have the time and motivation to implement a test suite, by all means do.
 
-##Committing
+## Committing
 
 It's a good idea to have descriptive commit messages. For commits that are directly related to JIRA tickets, you can format the commit like so
 
