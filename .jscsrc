@@ -1,15 +1,31 @@
 {
   "preset": "google",
-  "maxErrors": 5000,
-  "validateIndentation": null,
-  "requireSpacesInAnonymousFunctionExpression": {
-    "beforeOpeningRoundBrace": true,
-    "beforeOpeningCurlyBrace": true
+  "fileExtensions": [
+    ".js"
+  ],
+  "validateIndentation": {
+    "value": 4,
+    "allExcept": [
+      "comments"
+    ]
   },
-  "disallowSpacesInAnonymousFunctionExpression": null,
-  "disallowSpacesInFunctionExpression": null,
-  "maximumLineLength": null,
-  "disallowMultipleVarDecl": null,
-  "requireDotNotation": null,
-  "disallowTrailingWhitespace": null,
+  "maximumLineLength": 180,
+  "validateLineBreaks": "LF",
+  "maxErrors": 5000,
+  "safeContextKeyword": [
+    "_this",
+    "self"
+  ],
+  "excludeFiles": [
+    "test/**",
+    "node_modules/**",
+    "dist/**",
+    "js/editors/bower_components/**",
+    "js/editors/node_modules/**",
+    "js/sbg/angular/**",
+    "js/sbg/angular/*.js",
+    "js/sbg/angular-mock/**",
+    "js/sbg/angular-mock/*.js",
+    "js/editors/**/template.js"
+  ]
 }

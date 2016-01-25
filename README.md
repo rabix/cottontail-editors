@@ -31,6 +31,7 @@ $ grunt rabix-watch
 ## Style and Linting
 
 ### JSHint
+
 A `.jshintrc` file is included in the root of the repository. To enable jshinting in your JetBrains IDE, go to File > Default Settings > Languages & Frameworks > JavaScript > Code Quality Tools > JSHint
 
 ![jshint](http://i.imgur.com/3jrNSDj.png)
@@ -39,20 +40,31 @@ Enable JSHint and the Use config files. The IDE will automatically find the righ
 
 ### Code Style
 
-To facillitate consistent coding styles, we'll try implementing [JavaScript Coding Style](http://jscs.info/). Install the jscs CLI by running
+To facilitate consistent coding styles, we'll try implementing [JavaScript Coding Style](http://jscs.info/). Install the JSCS CLI by running:
 
 ```
 npm install jscs -g
 ```
 
-JetBrains IDEs have automatic support for JSCS. You can enable it by going to File > Default Settings > Languages & Frameworks > JavaScript > Code Quality Tools > JSCS
+JetBrains IDEs have automatic support for JSCS, but you still need to install the package. You can enable it by going to File > Default Settings > Languages & Frameworks > JavaScript > Code Quality Tools > JSCS
 
 ![jscs](http://i.imgur.com/AdtaouOh.png)
 
-Enable the configuration as so. The rules, found in `.jscsrc`, will be tweaked as we work out this project's personal coding style. Some files might be completely red with errors for the silliest reasons. Reformat as you go and reformat liberally. 
+Enable the configuration as so. The rules, found in `/.jscsrc`, will be tweaked as we work out this project's personal coding style. 
+
+> Note: keeping JSCS enabled in the editor may be fairly resource intensive. As the number of errors decreases, it should become quicker, however don't feel like you need to keep it turned on at all times. Enabling the detection once a week, and formatting accordingly should be sufficient.
+
+There is also a Grunt task that can be from the root of the frontend directory. To run this task on just Rabix files, run:
+
+```bash
+$ grunt jscs:rabix
+```
+
+Most errors currently fall in the category of indentation, due to improper method chaining. Try re-indenting angular method calls (like `.factory()`, `.controller()`), it should fix most indentation errors. Reformat as you go and reformat liberally. 
 
 ### Reformatting
-JSCS can be set as the default reformatting guide for JavaScript files. To configure it, go to File > Default Settings > Editor > Code Style > JavaScript and click `Manage...` Select Import, and find the `.jscsrc` file located in the root of this project. There is also another file for formatting HTML, it can be imported into your JetBrains IDE by going to File > Default Settings > Import Settings and importing `jetbrains-html-code-style.xml`
+
+JSCS can be set as the [default reformatting guide](https://www.jetbrains.com/phpstorm/help/reformatting-source-code.html) for JavaScript files. To configure it, go to File > Default Settings > Editor > Code Style > JavaScript and click `Manage...` Select Import, and find the `.jscsrc` file located in the root of this project. There is also another file for formatting HTML, it can be imported into your JetBrains IDE by going to File > Default Settings > Import Settings and importing `jetbrains-html-code-style.xml`
 
 
 ## Tests
