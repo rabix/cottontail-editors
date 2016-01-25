@@ -143,8 +143,8 @@ angular.module('registryApp.common')
 
             var output;
             var map = {
-                file: {path: name + '.ext', 'class': 'File', size: 0, secondaryFiles: []},
-                File: {path: name + '.ext', 'class': 'File', size: 0, secondaryFiles: []},
+                file: {path: '/path/to/' + name + '.ext', 'class': 'File', size: 0, secondaryFiles: []},
+                File: {path: '/path/to/' + name + '.ext', 'class': 'File', size: 0, secondaryFiles: []},
                 'enum': symbols ? symbols[0] : name,
                 string: name + '-string-value',
                 int: getRandomInt(0,11),
@@ -154,12 +154,12 @@ angular.module('registryApp.common')
                 map: {},
                 array: {
                     file: [
-                        {path: name + '-1.ext', 'class': 'File', size: 0, secondaryFiles: []},
-                        {path: name + '-2.ext', 'class': 'File', size: 0, secondaryFiles: []}
+                        {path: '/path/to/' + name + '-1.ext', 'class': 'File', size: 0, secondaryFiles: []},
+                        {path: '/path/to/' + name + '-2.ext', 'class': 'File', size: 0, secondaryFiles: []}
                     ],
                     File: [
-                        {path: name + '-1.ext', 'class': 'File', size: 0, secondaryFiles: []},
-                        {path: name + '-2.ext', 'class': 'File', size: 0, secondaryFiles: []}
+                        {path: '/path/to/' + name + '-1.ext', 'class': 'File', size: 0, secondaryFiles: []},
+                        {path: '/path/to/' + name + '-2.ext', 'class': 'File', size: 0, secondaryFiles: []}
                     ],
                     string: [name+'-string-value-1', name+'-string-value-2'],
                     int: [getRandomInt(0,11), getRandomInt(0,11)],
