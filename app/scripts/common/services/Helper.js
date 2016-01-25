@@ -61,6 +61,28 @@ angular.module('registryApp.common')
         };
 
         /**
+         * Returns a random integer between min (included) and max (excluded)
+         *
+         * @param {integer} min
+         * @param {integer} max
+         * @returns {integer}
+         */
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min)) + min;
+        }
+
+        /**
+         * Returns a random floating number between min (inclusive) and max (exclusive)
+         *
+         * @param {integer} min
+         * @param {integer} max
+         * @returns {float}
+         */
+        function getRandomFloat(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        /**
          * Test data for the $self context of the expression
          *
          * @param {string} type
@@ -124,20 +146,26 @@ angular.module('registryApp.common')
                 file: {path: '/path/to/' + name + '.ext', 'class': 'File', size: 0, secondaryFiles: []},
                 File: {path: '/path/to/' + name + '.ext', 'class': 'File', size: 0, secondaryFiles: []},
                 'enum': symbols ? symbols[0] : name,
-                string: name,
-                int: 0,
-                float: 0,
+                string: name + '-string-value',
+                int: getRandomInt(0,11),
+                float: getRandomFloat(0, 11),
                 boolean: true,
-	            record: {},
-	            map: {},
+                record: {},
+                map: {},
                 array: {
-                    file: [{path: '/path/to/' + name + '.ext', 'class': 'File', size: 0, secondaryFiles: []}],
-                    File: [{path: '/path/to/' + name + '.ext', 'class': 'File', size: 0, secondaryFiles: []}],
-                    string: [name],
-                    int: [0],
-                    float: [0],
+                    file: [
+                        {path: '/path/to/' + name + '-1.ext', 'class': 'File', size: 0, secondaryFiles: []},
+                        {path: '/path/to/' + name + '-2.ext', 'class': 'File', size: 0, secondaryFiles: []}
+                    ],
+                    File: [
+                        {path: '/path/to/' + name + '-1.ext', 'class': 'File', size: 0, secondaryFiles: []},
+                        {path: '/path/to/' + name + '-2.ext', 'class': 'File', size: 0, secondaryFiles: []}
+                    ],
+                    string: [name+'-string-value-1', name+'-string-value-2'],
+                    int: [getRandomInt(0,11), getRandomInt(0,11)],
+                    float: [getRandomFloat(0, 11), getRandomFloat(0, 11)],
                     record: [],
-	                map: [{}],
+                    map: [{}],
 	                'enum': [symbols ? symbols[0] : name]
                 }
             };
