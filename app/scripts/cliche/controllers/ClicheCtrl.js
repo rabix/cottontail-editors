@@ -390,8 +390,6 @@ angular.module('registryApp.cliche')
             /** @type CWLTool */
             var newTool = JSON.parse(json);
 
-            var cachedName = $scope.view.tool.label;
-
             if (angular.isDefined(newTool) && angular.isString(newTool.baseCommand)) {
                 newTool.baseCommand = [newTool.baseCommand];
             }
@@ -426,8 +424,6 @@ angular.module('registryApp.cliche')
             Cliche.setTool(newTool);
             $scope.view.tool = Cliche.getTool();
             $scope.form.tool.$setDirty();
-
-            if ($scope.view.mode === 'edit') { $scope.view.tool.label = cachedName; }
 
 	        if (!_.isUndefined(newTool['sbg:job'])) {
 		        Cliche.setJob(newTool['sbg:job']);
@@ -802,8 +798,9 @@ angular.module('registryApp.cliche')
 			if (_.isEmpty($scope.view.reqCreateFileRequirement.fileDef)) {
 				_.remove($scope.view.tool.requirements, {'class': 'CreateFileRequirement'});
 				delete $scope.view.reqCreateFileRequirement;
-
 			}
+
+            $scope.form.tool.$setDirty();
             _checkExpressionRequirement();
 		};
 
