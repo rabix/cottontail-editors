@@ -9,7 +9,7 @@
       "comments"
     ]
   },
-  "maximumLineLength": 180,
+  "maximumLineLength": 120,
   "validateLineBreaks": "LF",
   "maxErrors": 5000,
   "safeContextKeyword": [
