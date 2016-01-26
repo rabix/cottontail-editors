@@ -28,9 +28,9 @@ var Schema = {
                     {
                         $ref: '#/definitions/stringTypeDef'
                     },
-	                {
-		                $ref: '#/definitions/mapDef'
-	                },
+                    {
+                        $ref: '#/definitions/mapDef'
+                    },
                     {
                         type: 'object',
                         properties: {
@@ -104,12 +104,12 @@ var Schema = {
                         {
                             $ref: '#/definitions/recordDef'
                         },
-	                    {
-		                    $ref: '#/definitions/mapDef'
-	                    },
-	                    {
-		                    $ref: '#/definitions/enumDef'
-	                    }
+                        {
+                            $ref: '#/definitions/mapDef'
+                        },
+                        {
+                            $ref: '#/definitions/enumDef'
+                        }
                     ]
                 }
             },
@@ -140,20 +140,20 @@ var Schema = {
          * @property {string} type  always 'map'
          * @property {string} values  currently always 'string'
          */
-	    mapDef: {
-		    type: 'object',
-		    properties: {
-			    type: {
-				    type: 'string',
-				    enum: ['map']
-			    },
-			    values: {
-				    // currently only strings are supported as values type
-				    type: 'string',
-				    enum: ['string']
-			    }
-		    }
-	    },
+        mapDef: {
+            type: 'object',
+            properties: {
+                type: {
+                    type: 'string',
+                    enum: ['map']
+                },
+                values: {
+                    // currently only strings are supported as values type
+                    type: 'string',
+                    enum: ['string']
+                }
+            }
+        },
         fieldsDef: {
             type: 'array',
             items: {
