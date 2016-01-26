@@ -4,18 +4,21 @@
 'use strict';
 
 angular.module('registryApp.app')
-    .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$uibModal',
-        '$location', '$templateCache', '$filter',
-        'Loading', 'App', 'User', 'Repo', 'Const', 'BeforeRedirect',
-        'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload',
-        'Api', 'HotkeyRegistry', 'Notification', 'Cliche',
-
-        function ($scope, $rootScope, $q, $modal, $location, $templateCache, $filter, Loading, App, User, Repo, Const, BeforeRedirect, Helper, PipelineService, _, Globals, BeforeUnload, Api, HotkeyRegistry, Notification, Cliche) {
+.controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$uibModal',
+    '$location', '$templateCache', '$filter',
+    'Loading', 'App', 'User', 'Repo', 'Const', 'BeforeRedirect',
+    'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload',
+    'Api', 'HotkeyRegistry', 'Notification', 'Cliche',
+    function($scope, $rootScope, $q, $modal,
+             $location, $templateCache, $filter,
+             Loading, App, User, Repo, Const, BeforeRedirect,
+             Helper, PipelineService, _, Globals, BeforeUnload,
+             Api, HotkeyRegistry, Notification, Cliche) {
 
         var PipelineInstance = null,
             prompt = false,
             Instances = [],
-            onBeforeUnloadOff = BeforeUnload.register(function () {
+            onBeforeUnloadOff = BeforeUnload.register(function() {
                 return 'Please save your changes before leaving.';
             }, function () {
                 return prompt;
@@ -299,7 +302,7 @@ angular.module('registryApp.app')
                     // this will use latest revision of the workflow instead current one
                     Globals.revision = rev;
 
-                    Notification.primary('Workflow successfully updated.');
+                    Notification.success('Workflow successfully updated.');
 
                     // reinstantiate whole workflow after the save, in order to re-render SVG
                     PipelineService.register($scope.view.id, onInstanceRegister, onInstanceRegister);
@@ -560,7 +563,7 @@ angular.module('registryApp.app')
 
             modalInstance.result.then(function (result) {
                 PipelineInstance.updateMetadata(result);
-	            $scope.view.isChanged = !_.isEqual(result, json) || $scope.view.isChanged;
+                $scope.view.isChanged = !_.isEqual(result, json) || $scope.view.isChanged;
             });
 
         };

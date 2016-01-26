@@ -6,13 +6,25 @@
 
 'use strict';
 
-angular.module('registryApp.dyole', ['registryApp.app', 'ui.bootstrap', 'ui.sortable','registryApp.common', 'registryApp.util', 'registryApp.repo', 'ngPrettyJson', 'markdown', 'ngTagsInput'])
-	.constant('Const', {
-		exposedSeparator: '$',
+angular.module('registryApp.dyole', [
+    'registryApp.app',
+    'ui.bootstrap',
+    'ui.sortable',
+    'registryApp.common',
+    'registryApp.util',
+    'registryApp.repo',
+    'ngPrettyJson',
+    'markdown',
+    'ngTagsInput'])
+    .constant('Const', {
+        exposedSeparator: '$',
         generalSeparator: '.'
-	})
+    })
 	.config([
-        '$locationProvider', '$uibModalProvider', function($locationProvider, $uibModalProvider) {
+        '$locationProvider',
+        '$uibModalProvider',
+        'NotificationProvider',
+        function($locationProvider, $uibModalProvider, NotificationProvider) {
             if (history.pushState) {
                 $locationProvider.html5Mode({
                     enabled: true,
@@ -23,5 +35,9 @@ angular.module('registryApp.dyole', ['registryApp.app', 'ui.bootstrap', 'ui.sort
             $uibModalProvider.options = {
                 backdrop: 'static'
             };
+
+            NotificationProvider.setOptions({
+                delay: 6000
+            });
         }
     ]);

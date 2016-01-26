@@ -1081,7 +1081,7 @@ angular.module('registryApp.cliche')
                         $scope.form.tool.$setPristine();
                         $scope.view.loading = false;
 
-                        Notification.primary('Tool successfully updated');
+                        Notification.success('Tool successfully updated');
 
                         Cliche.setTool(result.message);
                         $scope.view.tool = Cliche.getTool();
