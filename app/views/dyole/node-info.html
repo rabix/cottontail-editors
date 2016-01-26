@@ -1,6 +1,6 @@
 <div class="modal-header">
     <h4 class="modal-title">
-        <a ng-href="/u/{{ ::data['sbg:project']}}/apps/#{{ ::data['sbg:name'] }}" target="_blank">
+        <a ng-href="/u/{{ ::data['sbg:project']}}/apps/#{{ ::data['sbg:id'].split('/')[2] }}/" target="_blank">
             {{ data.label || data.name || data.softwareDescription.name }}
         </a>
     </h4>
