@@ -16,13 +16,6 @@ angular.module('registryApp.common')
         };
 
         /**
-         * Close the modal and send selected value
-         */
-        $scope.selectAndClose = function(select) {
-            $modalInstance.close(select);
-        };
-
-        /**
          * Dismiss the modal
          */
         $scope.cancel = function () {

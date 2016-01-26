@@ -571,13 +571,32 @@ angular.module('registryApp.app')
                 var saveFlag = "save";
 
                 var modalInstance = $modal.open({
-                    controller: 'ModalCtrl',
-                    template: $templateCache.get('views/partials/confirm-workflow.html'),
+                    controller: 'ConfirmCustomCtrl',
+                    template: $templateCache.get('views/partials/confirm-custom.html'),
                     resolve: {
                         data: function() {
                             return {
                                 message: 'You have unsaved changes!',
-                                saveFlag: saveFlag
+                                buttons: [
+                                    {
+                                        class: 'btn btn-default',
+                                        modalAction: 'dismiss',
+                                        select: 'cancel',
+                                        text: 'Cancel'
+                                    },
+                                    {
+                                        class: 'btn btn-default',
+                                        modalAction: 'close',
+                                        select: '',
+                                        text: 'Run without saving changes'
+                                    },
+                                    {
+                                        class: 'btn btn-primary',
+                                        modalAction: 'close',
+                                        select: saveFlag,
+                                        text: 'Run and save changes'
+                                    }
+                                ]
                             };
                         }
                     }
