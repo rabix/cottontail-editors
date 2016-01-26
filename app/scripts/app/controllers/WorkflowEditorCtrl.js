@@ -568,21 +568,29 @@ angular.module('registryApp.app')
         $scope.runWorkflow = function () {
 
             if ($scope.view.isChanged) {
+                var saveFlag = "save";
 
                 var modalInstance = $modal.open({
                     controller: 'ModalCtrl',
-                    template: $templateCache.get('views/partials/confirm-delete.html'),
-                    resolve: { data: function () {
-                        return {
-                            message: 'Run will discard unsaved changes, are you sure you want to perform this action?'
-                        }; }
+                    template: $templateCache.get('views/partials/confirm-workflow.html'),
+                    resolve: {
+                        data: function() {
+                            return {
+                                message: 'You have unsaved changes!',
+                                saveFlag: saveFlag
+                            };
+                        }
                     }
                 });
 
-                modalInstance.result.then(function () {
+                modalInstance.result.then(function(selected) {
+                    if (selected && selected === saveFlag) {
+                        $scope.save();
+                    }
+
                     prompt = false;
                     createTask();
-                }, function () {
+                }, function() {
                     return false;
                 });
 
