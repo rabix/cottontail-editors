@@ -6,9 +6,8 @@
     <div class="modal-body">
 
         <div class="form-group" ng-class="{'has-error': form.name.$invalid}">
-            <label class="control-label" for="{{::view.label}}_input_name">Label</label>
+            <label class="control-label" for="{{::view.label}}_input_name">Name</label>
             <input name="name" id="{{::view.label}}_input_name" is-valid-name="true" class="form-control node-label-edit" type="text" ng-model="view.label" autofocus/>
-            <span class="help-block">Allowed characters are alphanumerics and _</span>
         </div>
 
 

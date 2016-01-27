@@ -1485,11 +1485,13 @@ angular.module('registryApp.dyole')
             /**
              * Update schema for input/output node
              *
-             * @param id
-             * @param type
-             * @param description
+             * @param {string} id
+             * @param {array} type
+             //* @param {string} [newId]
+             * @param {string} [description]
              */
-            updateIOSchema: function (id, type, description) {
+            updateIOSchema: function (id, type, /*newId,*/ description) {
+
                 var n = this.getNodeById(id).model;
                 var nSchema = n.inputs[0] || n.outputs[0];
 

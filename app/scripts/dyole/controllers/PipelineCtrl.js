@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.dyole')
-    .controller('PipelineCtrl', ['$scope', '$rootScope', '$element', '$window', '$timeout', '$injector', 'pipeline', 'App', 'rawPipeline', '$uibModal', '$templateCache', 'PipelineService', 'lodash', 'Notification', 'HotkeyRegistry', 'rawRabixWorkflow', function ($scope, $rootScope, $element, $window, $timeout, $injector, pipeline, App, rawPipeline, $modal, $templateCache, PipelineService, _, Notification, HotkeyRegistry, rawRabixWorkflow) {
+    .controller('PipelineCtrl', ['$scope', '$rootScope', '$element', '$window', '$timeout', '$injector', 'common', 'pipeline', 'App', 'rawPipeline', '$uibModal', '$templateCache', 'PipelineService', 'lodash', 'Notification', 'HotkeyRegistry', 'rawRabixWorkflow', function ($scope, $rootScope, $element, $window, $timeout, $injector, Common, pipeline, App, rawPipeline, $modal, $templateCache, PipelineService, _, Notification, HotkeyRegistry, rawRabixWorkflow) {
 
         var Pipeline;
         var selector = '.pipeline';
@@ -197,7 +197,7 @@ angular.module('registryApp.dyole')
             if (Pipeline) {
                 return Pipeline.Event
             } else {
-                return false
+                return false;
             }
         };
 
@@ -274,7 +274,7 @@ angular.module('registryApp.dyole')
                 var connections = Pipeline.getConnections();
 
                 return _.filter(connections, function(connection){
-                    return connection.end_node === model.id || connection.start_node === model.id
+                    return connection.end_node === model.id || connection.start_node === model.id;
                 });
             };
 
@@ -285,21 +285,82 @@ angular.module('registryApp.dyole')
                 template: $templateCache.get('views/dyole/'+ ( schema ? 'io-' : '') +'node-info.html'),
                 controller: 'ModalTabsCtrl',
                 windowClass: 'modal-node',
-                resolve: {data: function () { return {model: model, connections: _getConnections(), schema: schema};}}
+                resolve: {
+                    data: function () {
+                        return {
+                            model: model,
+                            connections: _getConnections(),
+                            schema: schema,
+                            getUniqueId: function (id) {
+                                return Common.generateNodeId({ name: id }, Pipeline.nodes);
+                            }
+                        };
+                    }
+                }
             });
 
             modalInstance.result.then(function (data) {
-                var scatter = data.scatter;
+
+                var scatter = data.scatter,
+                    connections = Pipeline.getConnections(),
+                    node;
 
 
                 if (!_.isEmpty(data.schema)) {
                     // get schema for i/o node ( copyes schema from *put )
-                    var schema = model.inputs[0] || model.outputs[0];
+                    var ioType =  model.inputs.length ? 'inputs' : 'outputs',
+                        schema;
+
+                    schema = model[ioType][0];
+                    schema.id = data.nodeId;
                     schema.type = data.schema.type;
 
                     Pipeline.updateIOSchema(model.id, schema.type, data.schema.description);
 
+                    node = Pipeline.model.schemas[model.id];
+
+                    if (typeof node !== 'undefined') {
+
+                        node.id = data.nodeId;
+                        node[ioType][0].id = data.nodeId;
+
+                        delete Pipeline.model.schemas[model.id];
+                        Pipeline.model.schemas[data.nodeId] = node;
+                    }
+
+                    _.each(connections, function (con) {
+
+                        if (con.start_node === model.id) {
+                            con.start_node = data.nodeId;
+                            con.output_name = data.nodeId;
+                        }
+                        else if (con.end_node === model.id) {
+                            con.end_node = data.nodeId;
+                            con.input_name = data.nodeId;
+                        }
+                    });
                 }
+                else {
+                    _.each(connections, function (con) {
+
+                        if (con.start_node === model.id) {
+                            con.start_node = data.nodeId;
+                        }
+                        else if (con.end_node === model.id) {
+                            con.end_node = data.nodeId;
+                        }
+                    });
+                }
+
+                node = Pipeline.getNodeById(model.id);
+
+                if (typeof node !== 'undefined' && _.isEqual(node.model, model)) {
+                    delete Pipeline.nodes[model.id];
+                    Pipeline.nodes[data.nodeId] = node;
+                    node.reRenderTerminals();
+                }
+
+                model.id = data.nodeId || model.id;
 
                 if (scatter) {
                     model.scatter = scatter;
@@ -356,7 +417,7 @@ angular.module('registryApp.dyole')
             return Pipeline.updateWorkflowSettings(hints,requireSBGMetadata);
         };
 
-        var onNodeInfoOff = $rootScope.$on('node:info', onNodeInfo);
+        var onNodeInfoOff = $rootScope.$on('node:info', onNodeInfo.bind(this));
         var onNodeLabelEditOff = $rootScope.$on('node:label:edit', onNodeLabelEdit);
 
         $scope.$on('$destroy', function() {

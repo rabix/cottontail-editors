@@ -471,6 +471,7 @@ angular.module('registryApp.dyole')
                 var schemas = {};
 
                 _.forEach(steps, function (step) {
+
                     var stepId = step['id'], ref;
 
                     if (typeof step.run === 'string') {
@@ -511,11 +512,20 @@ angular.module('registryApp.dyole')
                 return schemas;
             },
 
-            _generateIOSchema: function (type, schema, id) {
+            /**
+             * Generate schema for single input/output node
+             * @param {string} type
+             * @param {object} schema
+             * @param {string} id
+             * @param {string} [terminalId]
+             * @returns {{id: string, suggestedValue: Array, description: string, display: {x: number, y: number}, sbg:createdBy: string, label: (*|string), softwareDescription: {repo_owner: string, repo_name: string, type: *, name: *, label: *}, inputs: Array, outputs: Array}}
+             * @private
+             */
+            _generateIOSchema: function (type, schema, id, terminalId) {
 
                 var internalType = type === 'input' ? 'outputs' : 'inputs';
 
-                schema.id = id;
+                schema.id = terminalId || id; // ID of the socket/terminal
 
                 schema.label = schema.label || id;
 
@@ -546,7 +556,7 @@ angular.module('registryApp.dyole')
 
 
                 var model = {
-                    'id': id,
+                    'id': id, // ID of the node
                     'suggestedValue': suggestedValue,
                     description: descriptions[type],
                     display: {

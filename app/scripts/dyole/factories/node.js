@@ -326,7 +326,7 @@ angular.module('registryApp.dyole')
 
                 this._restoreConnections(connections);
             },
-            
+
             _checkNodeOutdated: function () {
 
                 if (Common.checkSystem(this.model)) {
