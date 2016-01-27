@@ -153,7 +153,6 @@
         </div>
         <!-- END Additional Information -->
 
-
         <div ng-show="view.isFileType">
             <h3 class="legend-small">
                 Metadata
@@ -229,6 +228,30 @@
         </div>
         <!-- END Metadata -->
 
+        <h3 class="legend-small" ng-if="view.type === 'File'">
+            <label class="checkbox inline">
+                <input type="checkbox"
+                       class="form-control"
+                       ng-model="view.property.outputBinding.loadContents"
+                       name="loadContents">
+                Load Contents
+            </label>
+            <help-message message="{{ :: 'clicheBindingsLoadContents' | loc }}"></help-message>
+        </h3>
+        <!-- END LoadContents -->
+
+        <div class="row">
+            <div ng-show="view.isFileType" class="col-md-5 form-group">
+                <expr ng-model="view.property.outputBinding.outputEval"
+                      index="{{ $index }}"
+                      type="string"
+                      only-expr="true"
+                      handle-item-update="updateOutputEval(value)"
+                      placeholder="Output Eval">
+                </expr>
+            </div>
+        </div>
+
         <div ng-show="view.isFileType">
             <h3 class="legend-small">
                 Secondary Files
@@ -259,17 +282,17 @@
         </div>
         <!-- END Secondary Files-->
 
+    </div>
 
-        <div class="form-group main-actions">
-            <a href class="btn btn-warning" ng-click="cancel()">Cancel</a>
-            <button type="submit"
-                    class="btn btn-primary"
-                    ng-disabled="view.form.$pristine || view.form.$invalid"
-                    id="output_modal_save_button">
-                Save
-            </button>
-        </div>
 
+    <div class="modal-footer">
+        <a href class="btn btn-warning" ng-click="cancel()">Cancel</a>
+        <button type="submit"
+                class="btn btn-primary"
+                ng-disabled="view.form.$pristine || view.form.$invalid"
+                id="output_modal_save_button">
+            Save
+        </button>
     </div>
 
 </form>

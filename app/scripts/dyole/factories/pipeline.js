@@ -156,8 +156,8 @@ angular.module('registryApp.dyole')
 
                     delete _self.nodes[model.id];
 
-                    //_self.model.schemas[model.id] = null;
-                    //delete _self.model.schemas[model.id];
+                    _self.model.schemas[model.id] = null;
+                    delete _self.model.schemas[model.id];
 
                     _.remove(_self.nodes, function (n) {
                         return n.model.id === model.id;

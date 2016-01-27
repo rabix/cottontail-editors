@@ -109,6 +109,20 @@ angular.module('registryApp.cliche')
         };
 
         /**
+         * Update outputEval value with expression
+         *
+         * @param {Expression} value
+         */
+        $scope.updateOutputEval = function (value) {
+            if (_.isObject(value)) {
+                $scope.view.property.outputBinding.outputEval = value;
+            } else {
+                delete $scope.view.property.outputBinding.outputEval;
+            }
+
+        };
+
+        /**
          * Save property changes
          *
          * @returns {boolean}
