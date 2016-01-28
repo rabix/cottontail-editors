@@ -653,22 +653,65 @@ angular.module('registryApp.cliche')
             if (!$scope.form.tool.$dirty) {
                 _createTask();
             } else {
+                var saveFlag = 'save';
+                var runFlag = 'run';
                 var modalInstance = $modal.open({
-                    controller: 'ModalCtrl',
-                    template: $templateCache.get('views/partials/confirm-delete.html'),
+                    controller: 'ConfirmCustomCtrl',
+                    template: $templateCache.get('views/partials/confirm-custom.html'),
                     resolve: {
                         data: function() {
                             return {
-                                message: 'There are unsaved changes, running the app will discard them.' +
-                                ' Are you sure you want to perform this action?'
+                                message: 'You have unsaved changes!',
+                                buttons: [
+                                    {
+                                        class: 'btn btn-default',
+                                        modalAction: 'dismiss',
+                                        select: 'cancel',
+                                        text: 'Cancel'
+                                    },
+                                    {
+                                        class: 'btn btn-default',
+                                        modalAction: 'close',
+                                        select: runFlag,
+                                        text: 'Run without saving changes'
+                                    },
+                                    {
+                                        class: 'btn btn-primary',
+                                        modalAction: 'close',
+                                        select: saveFlag,
+                                        text: 'Run and save changes'
+                                    }
+                                ]
                             };
-                        }
-                    }
+                        } /*data end*/
+                    } /*resolve end*/
                 });
 
-                modalInstance.result.then(function() {
-                    $scope.form.tool.$dirty = false;
-                    _createTask();
+                modalInstance.result.then(function(select) {
+                    /* Run and save */
+                    if (select === saveFlag) {
+                        $scope.updateTool().then(function(response) {
+                            /*
+                            Check if the response from the service has validation errors
+                            */
+                            if (response.message['sbg:validationErrors'].length > 0) {
+                                Notification.error('Tool update failed');
+                                console.log('Tool update failed ' + response.message['sbg:validationErrors']);
+                            } else {
+                                $scope.form.tool.$dirty = false;
+                                _createTask();
+                            }
+
+                        }, function(reason) {
+                            Notification.error('Tool update failed');
+                            console.log('Tool update failed ' + reason);
+                        });
+
+                    /* Run and don't save */
+                    } else if (select === runFlag) {
+                        $scope.form.tool.$dirty = false;
+                        _createTask();
+                    }
                 }, function() {
                     return false;
                 });
@@ -1096,12 +1139,12 @@ angular.module('registryApp.cliche')
                             $scope.view.loading = true;
                         }
 
-                        deferred.resolve();
+                        deferred.resolve(result);
 
                     }, function(error) {
                         $scope.view.loading = false;
                         $rootScope.$broadcast('httpError', {message: error});
-                        deferred.reject();
+                        deferred.reject(error);
                     });
             });
 

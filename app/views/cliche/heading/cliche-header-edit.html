@@ -62,7 +62,7 @@
                   tooltip-enabled="view.tool['sbg:validationErrors'].length > 0">
                 <button class="btn btn-default"
                         ng-click="runApp()"
-                        ng-disabled="view.saving || view.tool['sbg:validationErrors'].length > 0">
+                        ng-disabled="view.saving || (view.tool['sbg:validationErrors'].length > 0 && !form.tool.$dirty)">
                     <i class="fa fa-play"></i> Run
                 </button>
             </div>
