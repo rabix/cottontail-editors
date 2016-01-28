@@ -249,6 +249,7 @@
         <h3 class="legend-small">
             <label class="checkbox inline">
                 <input type="checkbox"
+                       name="includeInCmd"
                        ng-model="view.adapter"
                        ng-change="toggleAdapter()"
                        ng-disabled="view.disabledAll"
@@ -277,7 +278,7 @@
             <!-- END Position -->
 
             <div class="col-md-2">
-                <div class="form-group">
+                <div class="form-group" ng-class="{'has-error': (view.form.prefix.$invalid && view.form.$dirty)}">
                     <label class="control-label" for="input_modal_prefix">Prefix</label>
                     <input uib-tooltip="{{ :: 'clicheBindingsPrefix' | loc }}"
                            tooltip-trigger="focus"
@@ -286,7 +287,11 @@
                            id="input_modal_prefix"
                            name="prefix"
                            ng-model="view.property.inputBinding.prefix"
-                           ng-disabled="view.disabled">
+                           ng-disabled="view.disabled"
+                           ng-required="view.type === 'boolean'">
+                    <span class="help-block" ng-if="view.type === 'boolean'">
+                        Required if type is boolean
+                    </span>
                 </div>
             </div>
             <!-- END Prefix -->
