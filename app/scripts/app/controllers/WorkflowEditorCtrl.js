@@ -565,72 +565,70 @@ angular.module('registryApp.app')
 
         };
 
-        $scope.runWorkflow = function () {
+            $scope.runWorkflow = function() {
 
-            if ($scope.view.isChanged) {
-                var saveFlag = "save";
+                if ($scope.view.isChanged) {
+                    var saveFlag = 'save';
+                    var modalInstance = $modal.open({
+                        controller: 'ConfirmCustomCtrl',
+                        template: $templateCache.get('views/partials/confirm-custom.html'),
+                        resolve: {
+                            data: function() {
+                                return {
+                                    message: 'You have unsaved changes!',
+                                    buttons: [
+                                        {
+                                            class: 'btn btn-default',
+                                            modalAction: 'dismiss',
+                                            select: 'cancel',
+                                            text: 'Cancel'
+                                        },
+                                        {
+                                            class: 'btn btn-default',
+                                            modalAction: 'close',
+                                            select: '',
+                                            text: 'Run without saving changes'
+                                        },
+                                        {
+                                            class: 'btn btn-primary',
+                                            modalAction: 'close',
+                                            select: saveFlag,
+                                            text: 'Run and save changes'
+                                        }
+                                    ]
+                                };
+                            } /*data end*/
+                        } /*resolve end*/
+                    });
 
-                var modalInstance = $modal.open({
-                    controller: 'ConfirmCustomCtrl',
-                    template: $templateCache.get('views/partials/confirm-custom.html'),
-                    resolve: {
-                        data: function() {
-                            return {
-                                message: 'You have unsaved changes!',
-                                buttons: [
-                                    {
-                                        class: 'btn btn-default',
-                                        modalAction: 'dismiss',
-                                        select: 'cancel',
-                                        text: 'Cancel'
-                                    },
-                                    {
-                                        class: 'btn btn-default',
-                                        modalAction: 'close',
-                                        select: '',
-                                        text: 'Run without saving changes'
-                                    },
-                                    {
-                                        class: 'btn btn-primary',
-                                        modalAction: 'close',
-                                        select: saveFlag,
-                                        text: 'Run and save changes'
-                                    }
-                                ]
-                            };
+                    modalInstance.result.then(function(selected) {
+                        if (selected && selected === saveFlag) {
+                            $scope.save();
                         }
-                    }
-                });
 
-                modalInstance.result.then(function(selected) {
-                    if (selected && selected === saveFlag) {
-                        $scope.save();
-                    }
+                        prompt = false;
+                        createTask();
+                    }, function() {
+                        return false;
+                    });
 
-                    prompt = false;
+                } else {
                     createTask();
-                }, function() {
-                    return false;
-                });
+                }
 
+                function createTask() {
+                    // create task and redirect to task page for that task
+                    App.createAppTask($scope.view.workflow['sbg:revision']).then(function(task) {
+                        BeforeRedirect.setReload(true);
+                        $scope.view.saving = true;
+                        $scope.view.loading = true;
 
-            } else {
-                createTask();
-            }
+                        App.redirectToTaskPage(task);
+                    });
 
-            function createTask() {
-                // create task and redirect to task page for that task
-                App.createAppTask($scope.view.workflow['sbg:revision']).then(function (task) {
-                    BeforeRedirect.setReload(true);
-                    $scope.view.saving = true;
-                    $scope.view.loading = true;
+                }
 
-                    App.redirectToTaskPage(task);
-                });
-
-            }
-
-        };
+            };
 
         /**
          * Load json importer
