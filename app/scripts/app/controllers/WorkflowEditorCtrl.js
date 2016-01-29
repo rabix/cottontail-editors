@@ -180,7 +180,7 @@ angular.module('registryApp.app')
                 var rev = parseInt($scope.view.workflow['sbg:revision']);
                 if (rev > 0 && $scope.view.workflow.steps.length !== 0) {
                     _.forEach($scope.view.workflow['sbg:validationErrors'], function (err) {
-                        Notification.error('[Workflow Error] ' + err);
+                        Notification.error(err);
                     });
 
                     $scope.view.isValid = false;
@@ -262,7 +262,6 @@ angular.module('registryApp.app')
 
             var rev;
             var workflowJson;
-            var deferred = $q.defer();
 
             if (!$scope.view.isChanged) {
                 Notification.error('Pipeline not updated: Graph has no changes.');
@@ -320,15 +319,11 @@ angular.module('registryApp.app')
                         redirectTo(rev);
                     }
 
-                    deferred.resolve(data);
-
                     console.timeEnd('Workflow saving');
                 })
                 .catch(function (trace) {
                     Notification.error('[Workflow Error] Workflow cannot be saved: ' + trace);
                 });
-
-            return deferred.promise;
         };
 
         $scope.toggleSidebar = function () {
@@ -617,24 +612,17 @@ angular.module('registryApp.app')
 
                 modalInstance.result.then(function(selected) {
                     if (selected && selected === saveFlag) {
-                        $scope.save().then(function(response){
-                            /*
-                             Check if the response from the service has validation errors
-                             */
-                            if (response.message['sbg:validationErrors'].length > 0) {
-                                Notification.error('Tool updated, but has validation errors');
-                                _.forEach(response.message['sbg:validationErrors'], function(error) {
-                                    Notification.error(error);
-                                });
-                            } else {
-                                $scope.form.tool.$dirty = false;
-                                createTask();
-                            }
-                        });
+                        $scope.save();
+
+                        if ($scope.view.isValid) {
+                            prompt = false;
+                            createTask();
+                        }
+
+                    } else {
+                        createTask();
                     }
 
-                    prompt = false;
-                    createTask();
                 }, function() {
                     return false;
                 });

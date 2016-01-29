@@ -58,8 +58,8 @@
             <!--{{ view.tool['sbg:validationErrors'] | json}}-->
             <div class="inline-block" uib-tooltip="{{view.tool['sbg:validationErrors'].join('\n')}}"
                   tooltip-placement="bottom"
-                  tooltip-trigger="mouseenter"
-                  tooltip-enabled="view.tool['sbg:validationErrors'].length > 0">
+                  tooltip-trigger="mouseenter">
+
                 <button class="btn btn-default"
                         ng-click="runApp()"
                         ng-disabled="view.saving || (view.tool['sbg:validationErrors'].length > 0 && !form.tool.$dirty)">
