@@ -694,11 +694,14 @@ angular.module('registryApp.cliche')
                             /*
                             Check if the response from the service has validation errors
                             */
-                            if (response.message['sbg:validationErrors'].length > 0) {
+                            if (response.message['sbg:validationErrors'] &&
+                                response.message['sbg:validationErrors'].length > 0) {
                                 Notification.success('Tool updated, but has validation errors');
                                 _.forEach(response.message['sbg:validationErrors'], function(error) {
                                     Notification.error(error);
                                 });
+
+                                Notification.error('Could not create new task');
                             } else {
                                 $scope.form.tool.$dirty = false;
                                 _createTask();

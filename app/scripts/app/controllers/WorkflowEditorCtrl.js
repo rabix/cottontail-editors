@@ -262,6 +262,7 @@ angular.module('registryApp.app')
 
             var rev;
             var workflowJson;
+            var deferred = $q.defer();
 
             if (!$scope.view.isChanged) {
                 Notification.error('Pipeline not updated: Graph has no changes.');
@@ -320,10 +321,13 @@ angular.module('registryApp.app')
                     }
 
                     console.timeEnd('Workflow saving');
+                    deferred.resolve(data);
                 })
                 .catch(function (trace) {
                     Notification.error('[Workflow Error] Workflow cannot be saved: ' + trace);
                 });
+
+            return deferred.promise;
         };
 
         $scope.toggleSidebar = function () {
@@ -612,12 +616,14 @@ angular.module('registryApp.app')
 
                 modalInstance.result.then(function(selected) {
                     if (selected && selected === saveFlag) {
-                        $scope.save();
-
-                        if ($scope.view.isValid) {
-                            prompt = false;
-                            createTask();
-                        }
+                        $scope.save().then(function() {
+                            if ($scope.view.isValid) {
+                                prompt = false;
+                                createTask();
+                            } else {
+                                Notification.error('Could not create new task');
+                            }
+                        });
 
                     } else {
                         createTask();
