@@ -341,6 +341,8 @@
          */
         $scope.resetId = function () {
             $scope.view.stepId = currentNodeId = originalNodeId;
+
+            $scope.onIdChange(currentNodeId);
         };
     }
 

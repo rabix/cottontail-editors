@@ -292,7 +292,7 @@ angular.module('registryApp.dyole')
                             connections: _getConnections(),
                             schema: schema,
                             getUniqueId: function (id) {
-                                return Common.generateNodeId({ name: id }, Pipeline.nodes);
+                                return Common.generateNodeId({name: id}, Pipeline.nodes);
                             }
                         };
                     }

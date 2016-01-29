@@ -117,3 +117,8 @@ html {
   line-height: 1.57143em;
 }
 
+/* Overriding input that change's nodes's ID */
+#node-id-input {
+  width: 83%;
+  margin-left: 5px;
+}

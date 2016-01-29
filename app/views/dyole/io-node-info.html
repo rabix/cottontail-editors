@@ -86,13 +86,16 @@
 
                 <form class="form">
                     <label for="step-id-input">Step's ID:</label>
-                    #<input id="step-id-input" type="text" ng-model="view.stepId" ng-change="onIdChange(view.stepId)" />
-                    <button ng-disabled="!view.isIdChanged" ng-click="saveNewId(view.stepId)" class="btn btn-default" title="Save node ID">
-                        <i class="fa fa-save"></i>
-                    </button>
-                    <button ng-disabled="view.isIdOriginal" ng-click="resetId()" class="btn btn-default" title="Reset node ID to original value">
-                        <i class="fa fa-remove"></i>
-                    </button>
+                    <div>
+                        <span>#</span>
+                        <input id="node-id-input" type="text" ng-model="view.stepId" ng-change="onIdChange(view.stepId)" />
+                        <button ng-disabled="!view.isIdChanged" ng-click="saveNewId(view.stepId)" class="btn btn-default" title="Save node ID">
+                            <i class="fa fa-check"></i>
+                        </button>
+                        <button ng-disabled="view.isIdOriginal" ng-click="resetId()" class="btn btn-default" title="Reset node ID to original value">
+                            <i class="fa fa-remove"></i>
+                        </button>
+                    </div>
                 </form>
             </div>
 
