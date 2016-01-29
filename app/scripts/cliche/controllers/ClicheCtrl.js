@@ -695,8 +695,10 @@ angular.module('registryApp.cliche')
                             Check if the response from the service has validation errors
                             */
                             if (response.message['sbg:validationErrors'].length > 0) {
-                                Notification.error('Tool update failed');
-                                console.log('Tool update failed ' + response.message['sbg:validationErrors']);
+                                Notification.error('Tool updated, but has validation errors');
+                                _.forEach(response.message['sbg:validationErrors'], function(error) {
+                                    Notification.error(error);
+                                })
                             } else {
                                 $scope.form.tool.$dirty = false;
                                 _createTask();

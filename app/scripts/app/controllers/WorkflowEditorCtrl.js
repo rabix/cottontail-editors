@@ -10,7 +10,7 @@ angular.module('registryApp.app')
         'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload',
         'Api', 'HotkeyRegistry', 'Notification', 'Cliche',
 
-        function ($scope, $rootScope, $q, $modal, $location, $templateCache, $filter, Loading, App, User, Repo, Const, BeforeRedirect, Helper, PipelineService, _, Globals, BeforeUnload, Api, HotkeyRegistry, Notification, Cliche) {
+    function($scope, $rootScope, $q, $modal, $location, $templateCache, $filter, Loading, App, User, Repo, Const, BeforeRedirect, Helper, PipelineService, _, Globals, BeforeUnload, Api, HotkeyRegistry, Notification, Cliche) {
 
         var PipelineInstance = null,
             prompt = false,
@@ -260,7 +260,9 @@ angular.module('registryApp.app')
          */
         $scope.save = function () {
 
-            var rev, workflowJson;
+            var rev;
+            var workflowJson;
+            var deferred = $q.defer();
 
             if (!$scope.view.isChanged) {
                 Notification.error('Pipeline not updated: Graph has no changes.');
@@ -268,7 +270,6 @@ angular.module('registryApp.app')
             }
 
             BeforeRedirect.setReload(true);
-
 
             $scope.view.saving = true;
 
@@ -306,8 +307,6 @@ angular.module('registryApp.app')
 
                     $scope.view.workflow = workflowJson;
 
-
-
                     $scope.view.saving = false;
                     $scope.view.loading = false;
                     $scope.view.isChanged = false;
@@ -321,11 +320,15 @@ angular.module('registryApp.app')
                         redirectTo(rev);
                     }
 
+                    deferred.resolve(data);
+
                     console.timeEnd('Workflow saving');
                 })
                 .catch(function (trace) {
                     Notification.error('[Workflow Error] Workflow cannot be saved: ' + trace);
                 });
+
+            return deferred.promise;
         };
 
         $scope.toggleSidebar = function () {
@@ -560,75 +563,86 @@ angular.module('registryApp.app')
 
             modalInstance.result.then(function (result) {
                 PipelineInstance.updateMetadata(result);
-	            $scope.view.isChanged = !_.isEqual(result, json) || $scope.view.isChanged;
+                $scope.view.isChanged = !_.isEqual(result, json) || $scope.view.isChanged;
             });
 
         };
 
-            $scope.runWorkflow = function() {
+        $scope.runWorkflow = function() {
 
-                if ($scope.view.isChanged) {
-                    var saveFlag = 'save';
-                    var modalInstance = $modal.open({
-                        controller: 'ConfirmCustomCtrl',
-                        template: $templateCache.get('views/partials/confirm-custom.html'),
-                        resolve: {
-                            data: function() {
-                                return {
-                                    message: 'You have unsaved changes!',
-                                    buttons: [
-                                        {
-                                            class: 'btn btn-default',
-                                            modalAction: 'dismiss',
-                                            select: 'cancel',
-                                            text: 'Cancel'
-                                        },
-                                        {
-                                            class: 'btn btn-default',
-                                            modalAction: 'close',
-                                            select: '',
-                                            text: 'Run without saving changes'
-                                        },
-                                        {
-                                            class: 'btn btn-primary',
-                                            modalAction: 'close',
-                                            select: saveFlag,
-                                            text: 'Run and save changes'
-                                        }
-                                    ]
-                                };
-                            } /*data end*/
-                        } /*resolve end*/
-                    });
+            function createTask() {
+                // create task and redirect to task page for that task
+                App.createAppTask($scope.view.workflow['sbg:revision']).then(function(task) {
+                    BeforeRedirect.setReload(true);
+                    $scope.view.saving = true;
+                    $scope.view.loading = true;
 
-                    modalInstance.result.then(function(selected) {
-                        if (selected && selected === saveFlag) {
-                            $scope.save();
-                        }
+                    App.redirectToTaskPage(task);
+                });
+            }
 
-                        prompt = false;
-                        createTask();
-                    }, function() {
-                        return false;
-                    });
+            if ($scope.view.isChanged) {
+                var saveFlag = 'save';
+                var modalInstance = $modal.open({
+                    controller: 'ConfirmCustomCtrl',
+                    template: $templateCache.get('views/partials/confirm-custom.html'),
+                    resolve: {
+                        data: function() {
+                            return {
+                                message: 'You have unsaved changes!',
+                                buttons: [
+                                    {
+                                        class: 'btn btn-default',
+                                        modalAction: 'dismiss',
+                                        select: 'cancel',
+                                        text: 'Cancel'
+                                    },
+                                    {
+                                        class: 'btn btn-default',
+                                        modalAction: 'close',
+                                        select: '',
+                                        text: 'Run without saving changes'
+                                    },
+                                    {
+                                        class: 'btn btn-primary',
+                                        modalAction: 'close',
+                                        select: saveFlag,
+                                        text: 'Run and save changes'
+                                    }
+                                ]
+                            };
+                        } /*data end*/
+                    } /*resolve end*/
+                });
 
-                } else {
+                modalInstance.result.then(function(selected) {
+                    if (selected && selected === saveFlag) {
+                        $scope.save().then(function(response){
+                            /*
+                             Check if the response from the service has validation errors
+                             */
+                            if (response.message['sbg:validationErrors'].length > 0) {
+                                Notification.error('Tool updated, but has validation errors');
+                                _.forEach(response.message['sbg:validationErrors'], function(error) {
+                                    Notification.error(error);
+                                });
+                            } else {
+                                $scope.form.tool.$dirty = false;
+                                createTask();
+                            }
+                        });
+                    }
+
+                    prompt = false;
                     createTask();
-                }
+                }, function() {
+                    return false;
+                });
 
-                function createTask() {
-                    // create task and redirect to task page for that task
-                    App.createAppTask($scope.view.workflow['sbg:revision']).then(function(task) {
-                        BeforeRedirect.setReload(true);
-                        $scope.view.saving = true;
-                        $scope.view.loading = true;
-
-                        App.redirectToTaskPage(task);
-                    });
-
-                }
-
-            };
+            } else {
+                createTask();
+            }
+        };
 
         /**
          * Load json importer
