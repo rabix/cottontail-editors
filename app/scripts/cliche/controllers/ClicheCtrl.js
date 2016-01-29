@@ -696,14 +696,12 @@ angular.module('registryApp.cliche')
                             */
                             if (response.message['sbg:validationErrors'] &&
                                 response.message['sbg:validationErrors'].length > 0) {
-                                Notification.success('Tool updated, but has validation errors');
                                 _.forEach(response.message['sbg:validationErrors'], function(error) {
                                     Notification.error(error);
                                 });
 
                                 Notification.error('Could not create new task');
                             } else {
-                                $scope.form.tool.$dirty = false;
                                 _createTask();
                             }
 
@@ -1133,6 +1131,9 @@ angular.module('registryApp.cliche')
 
                         Cliche.setTool(result.message);
                         $scope.view.tool = Cliche.getTool();
+
+                        //reconnect requirements once the reference has been changed
+                        _readRequirementsAndResources();
 
                         var newRevision = result.message['sbg:revision'];
 
