@@ -679,7 +679,7 @@ angular.module('registryApp.cliche')
                                         class: 'btn btn-primary',
                                         modalAction: 'close',
                                         select: saveFlag,
-                                        text: 'Run and save changes'
+                                        text: 'Save changes and run'
                                     }
                                 ]
                             };

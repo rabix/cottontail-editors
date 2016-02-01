@@ -606,7 +606,7 @@ angular.module('registryApp.app')
                                         class: 'btn btn-primary',
                                         modalAction: 'close',
                                         select: saveFlag,
-                                        text: 'Run and save changes'
+                                        text: 'Save changes and run'
                                     }
                                 ]
                             };
