@@ -1,29 +1,83 @@
 'use strict';
 
-angular.module('registryApp.common')
-    .controller('ModalTabsCtrl', ['$scope', '$uibModalInstance', 'data', 'common', 'lodash', function ($scope, $modalInstance, data, Common, _) {
+(function() {
 
-        var schemas = {
-            array: {
-                type: 'array',
-                items: 'File'
+    var schemas = {
+        array: {
+            type: 'array',
+            items: 'File'
+        },
+        File: 'File',
+        boolean: 'boolean',
+        int: 'int',
+        float: 'float',
+        enum: {
+            type: 'enum',
+            symbols: [],
+            name: ''
+        },
+        string: 'string'
+    },
+        schemaTypes = [
+            {
+                name: 'Array',
+                value: 'array'
             },
-            File: 'File',
-            boolean: 'boolean',
-            int: 'int',
-            float: 'float',
-            enum: {
-                type: 'enum',
-                symbols: [],
-                name: ''
+            {
+                name: 'File',
+                value: 'File'
             },
-            string: 'string'
-        };
+            {
+                name: 'boolean',
+                value: 'boolean'
+            },
+            {
+                name: 'string',
+                value: 'string'
+            },
+            {
+                name: 'int',
+                value: 'int'
+            },
+            {
+                name: 'float',
+                value: 'float'
+            },
+            {
+                name: 'enum',
+                value: 'enum'
+            }
+        ],
+        itemTypes = [
+            {
+                name: 'File',
+                value: 'File'
+            },
+            {
+                name: 'boolean',
+                value: 'boolean'
+            },
+            {
+                name: 'string',
+                value: 'string'
+            },
+            {
+                name: 'int',
+                value: 'int'
+            },
+            {
+                name: 'float',
+                value: 'float'
+            }
+        ];
 
+    function initIONodeModal($scope, data, Common) {
 
-        $scope.data = data.model;
+        $scope.view.schemaTypes = schemaTypes;
+
+        $scope.view.itemTypes = itemTypes;
+
         $scope.schema = _.clone(data.schema, true) || {};
-
 
         if (typeof $scope.schema.id !== 'undefined') {
             $scope.schema.id = null;
@@ -39,7 +93,7 @@ angular.module('registryApp.common')
 
             return parsed;
         };
-        
+
         var _parseItemType = function () {
             var parsed = Common.parseType($scope.schema.type);
 
@@ -56,7 +110,7 @@ angular.module('registryApp.common')
             return parsed;
 
         };
-        
+
         var _getSymbols = function () {
             var parsed = Common.parseType($scope.schema.type);
 
@@ -95,7 +149,7 @@ angular.module('registryApp.common')
             if (value === 'enum') {
                 newType.name = $scope.view.enumName;
                 newType.symbols = $scope.view.enumSymbols;
-                
+
                 console.log('Logging enum type');
                 console.log(newType, $scope.view.enumName, $scope.view.enumSymbols);
             }
@@ -126,62 +180,6 @@ angular.module('registryApp.common')
             }
         };
 
-        $scope.view = {};
-
-        $scope.view.schemaTypes = [
-            {
-                name: 'Array',
-                value: 'array'
-            },
-            {
-                name: 'File',
-                value: 'File'
-            },
-            {
-                name: 'boolean',
-                value: 'boolean'
-            },
-            {
-                name: 'string',
-                value: 'string'
-            },
-            {
-                name: 'int',
-                value: 'int'
-            },
-            {
-                name: 'float',
-                value: 'float'
-            },
-            {
-                name: 'enum',
-                value: 'enum'
-            }
-        ];
-
-        $scope.view.itemTypes = [
-            {
-                name: 'File',
-                value: 'File'
-            },
-            {
-                name: 'boolean',
-                value: 'boolean'
-            },
-            {
-                name: 'string',
-                value: 'string'
-            },
-            {
-                name: 'int',
-                value: 'int'
-            },
-            {
-                name: 'float',
-                value: 'float'
-            }
-        ];
-
         $scope.view.type = _parseType();
         $scope.view.itemType = _parseItemType();
         $scope.view.enumSymbols = _getSymbols();
@@ -189,46 +187,40 @@ angular.module('registryApp.common')
 
         $scope.view.required = (_.isArray($scope.schema.type) && $scope.schema.type.length === 1) || typeof $scope.schema.type === 'string';
 
-        if (Common.checkSystem($scope.data)) {
+        $scope.$watch('view.type', function (n, o) {
+            if (n !== o) {
+                _updateType(n, o);
+            }
+        });
 
-            $scope.$watch('view.type', function (n, o) {
-                if (n !== o) {
-                    _updateType(n, o);
-                }
-            });
+        $scope.$watch('view.itemType', function (n, o) {
+            if (n !== o) {
+                _updateType($scope.view.type);
+            }
+        });
 
-            $scope.$watch('view.itemType', function (n, o) {
-                if (n !== o) {
-                    _updateType($scope.view.type);
-                }
-            });
+        $scope.$watch('view.enumName', function (n, o) {
+            if (n !== o) {
+                _updateType($scope.view.type);
+            }
+        });
 
-            $scope.$watch('view.enumName', function (n, o) {
-                if (n !== o) {
-                    _updateType($scope.view.type);
-                }
-            });
+        $scope.$watch('view.enumSymbols', function (n, o) {
+            if (n !== o) {
+                _updateType($scope.view.type);
+            }
+        });
 
-            $scope.$watch('view.enumSymbols', function (n, o) {
-                if (n !== o) {
-                    _updateType($scope.view.type);
-                }
-            });
+        $scope.$watch('view.required', function (n, o) {
+            if (n !== o) {
+                _updateType($scope.view.type);
+            }
+        });
 
-            $scope.$watch('view.required', function (n, o) {
-                if (n !== o) {
-                    _updateType($scope.view.type);
-                }
-            });
+        $scope.view.tab = 'schema';
+    }
 
-        }
-
-        $scope.view.tab = data.tabName || 'info';
-
-        if (Common.checkSystem($scope.data)) {
-            $scope.view.tab = 'schema';
-        }
-
+    function initStepInputs($scope, connections, inputs, outputs, Common) {
         $scope.inputConnections = {};
 
         $scope.sortableOptions = {
@@ -250,7 +242,8 @@ angular.module('registryApp.common')
             return 0;
         });
 
-        _.forEach(data.connections, function (connection) {
+        _.forEach(connections, function (connection) {
+
             if ( typeof $scope.inputConnections[connection.input_name] === 'undefined') {
                 $scope.inputConnections[connection.input_name] = [];
             }
@@ -280,7 +273,7 @@ angular.module('registryApp.common')
 
             });
 
-            return inputs.length === 0 ? data.inputs : inputs;
+            return inputs.length === 0 ? inputs : inputs;
         };
 
         $scope.view.inputs = _filterInputs();
@@ -302,6 +295,65 @@ angular.module('registryApp.common')
                 });
             }
         };
+    }
+
+    function initStepIdChangeTab($scope, data) {
+
+        var currentNodeId = data.model.id.slice(1),
+            originalNodeId;
+
+        $scope.view.stepId = originalNodeId = currentNodeId;
+        $scope.view.isIdOriginal = true;
+
+        /**
+         * Check if the current value is different from the one on change.
+         * If so set *isIdChanged* flag to true to enable buttons.
+         *
+         * @param {string} newId
+         */
+        $scope.onIdChange = function (newId) {
+            $scope.view.isIdChanged = ( newId !== currentNodeId );
+
+            $scope.view.isIdOriginal = (newId === originalNodeId);
+        };
+
+        /**
+         * Remember the changed value of the node ID.
+         * Value of *isIdChanged* is reset and buttons disabled.
+         * The value can be reversed to original value with reset button.
+         *
+         * @param {string} newId
+         */
+        $scope.saveNewId = function (newId) {
+
+            if (newId === currentNodeId) {
+                return;
+            }
+
+            var id = data.getUniqueId(newId);
+
+            $scope.view.stepId = currentNodeId = id.slice(1);
+            $scope.view.isIdChanged = false;
+        };
+
+        /**
+         * Reset node's ID with original value.
+         */
+        $scope.resetId = function () {
+            $scope.view.stepId = currentNodeId = originalNodeId;
+
+            $scope.onIdChange(currentNodeId);
+        };
+    }
+
+angular.module('registryApp.common')
+    .controller('ModalTabsCtrl', ['$scope', '$uibModalInstance', 'data', 'common', 'lodash', function ($scope, $modalInstance, data, Common, _) {
+
+        $scope.data = data.model;
+
+        $scope.view = {};
+
+        $scope.view.tab = data.tabName || 'info';
 
         /**
          * Switch tab on the right side
@@ -331,7 +383,8 @@ angular.module('registryApp.common')
 
             $modalInstance.close({
                 scatter: scatter,
-                schema: $scope.schema
+                schema: $scope.schema,
+                nodeId: '#' + $scope.view.stepId
             });
         };
 
@@ -341,4 +394,17 @@ angular.module('registryApp.common')
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
+
+        // Only in case this is I/O node, init it's properties
+        if (Common.checkSystem($scope.data)) {
+            initIONodeModal($scope, data, Common);
+        }
+        else {
+            // Initialize step's inputs and outputs
+            initStepInputs($scope, data.connections, data.inputs, data.outputs, Common);
+        }
+
+        // Both IO and step dialogs have tab to change node's ID
+        initStepIdChangeTab($scope, data);
     }]);
+})();

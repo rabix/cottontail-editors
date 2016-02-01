@@ -12,6 +12,7 @@
             <ul class="nav nav-tabs nav-tabs-steps nav-borders">
                 <li ng-class="{active: view.tab === 'info'}"><a href ng-click="switchTab('info')">Info</a></li>
                 <li ng-class="{active: view.tab === 'inputs'}"><a href ng-click="switchTab('inputs')">Inputs</a></li>
+                <li ng-class="{active: view.tab === 'change-id'}"><a href ng-click="switchTab('change-id')">Change ID</a></li>
                 <!--<li ng-class="{active: view.tab === 'tags'}"><a href ng-click="switchTab('tags')">Tags</a></li>-->
             </ul>
         </div>
@@ -75,8 +76,50 @@
                 </form>
 
             </div>
-            <div ng-switch-when="tags">
-                <p>Tags</p>
+
+            <div ng-switch-when="outputs">
+
+                <form class="form">
+
+                    <ul ng-repeat="output in view.outputs">
+                        <li class="row">
+                            <strong class="col-xs-8" ng-if="output.label && output.label !== ''">
+                                {{ output.label }} ({{ ::output["id"] }})
+                            </strong>
+                            <strong class="col-xs-8" ng-if="!output.label || output.label === ''">
+                                {{ ::output["id"] }}
+                            </strong>
+                            <div class="output-connections col-xs-12">
+                                <ul ui-sortable="sortableOptions" ng-model="outputConnections[output['id']]">
+
+                                    <li ng-repeat="connection in outputConnections[output['id']]" class="connection" data-output="{{ ::output['id'] }}">
+                                        <div><i class="fa fa-bars"></i> Connection - src: {{ ::connection.start_node}}</div>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+
+                </form>
+
+            </div>
+
+            <div ng-switch-when="change-id">
+
+                <form class="form">
+                    <label for="step-id-input">Step's ID:</label>
+                    <div>
+                        <span>#</span>
+                        <input id="node-id-input" type="text" ng-model="view.stepId" ng-change="onIdChange(view.stepId)" />
+                        <button ng-disabled="!view.isIdChanged" ng-click="saveNewId(view.stepId)" class="btn btn-default" title="Check validity">
+                            <i class="fa fa-check"></i>
+                        </button>
+                        <button ng-disabled="view.isIdOriginal" ng-click="resetId()" class="btn btn-default" title="Reset node ID to original value">
+                            <i class="fa fa-remove"></i>
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -84,5 +127,5 @@
 
 <div class="modal-footer">
     <button class="btn btn-default" ng-click="cancel()">Close</button>
-    <button class="btn btn-primary" ng-click="ok()">Save</button>
+    <button class="btn btn-primary" ng-disabled="view.isIdChanged" ng-click="ok()">Save</button>
 </div>

@@ -197,7 +197,7 @@ angular.module('registryApp.dyole')
                 var name = model.label ? model.label : model.id;
 
                 if (model.softwareDescription && model.softwareDescription.label) {
-                    name = model.softwareDescription.label.charAt(0) === '#' ? model.softwareDescription.label.slice(1) : model.softwareDescription.name;
+                    name = model.softwareDescription.label.charAt(0) === '#' ? model.softwareDescription.label.slice(1) : model.softwareDescription.label || model.softwareDescription.name;
                 }
 
                 label = canvas.text(0, radius + labelOffset, name);
@@ -326,7 +326,7 @@ angular.module('registryApp.dyole')
 
                 this._restoreConnections(connections);
             },
-            
+
             _checkNodeOutdated: function () {
 
                 if (Common.checkSystem(this.model)) {
@@ -892,35 +892,53 @@ angular.module('registryApp.dyole')
              * @private
              */
             _initNameChanging: function () {
-                var _self = this;
-                var nodeName = !Common.checkSystem(this.model) ? this.model.label : this.model.id;
+
+                var nodeName = this.model.label;
+
                 var opts = {
-                    name: nodeName,
+                    label: nodeName,
                     isSystem: Common.checkSystem(this.model)
                 };
 
-                $rootScope.$broadcast('node:label:edit', opts, function check(name) {
-
-                    var test = _.filter(_self.Pipeline.nodes, function (n) {
-                        return n.model.id === name;
-                    });
-
-                    return test.length === 0;
-                }, this._changeNodeName, this);
+                $rootScope.$broadcast('node:label:edit', opts, this._changeNodeLabel, this);
             },
 
-            _changeNodeName: function (name) {
+            _changeNodeLabel: function (label) {
+
+                var nodeType = this.inputs.length > 0 ? 'inputs' : 'outputs';
+
+                this.model.label = label;
+
+                try {
+                    this.model[nodeType][0].label = label;
+                }
+                catch (ex) {
+                    console.log('"node > ', nodeType, ' > first element" does not exist');
+                    console.log(ex.stacktrace);
+                }
+
+                this.label.attr('text', label);
+                this._destroyButtons();
+
+                if (this.selected) {
+                    this._showButtons();
+                }
+
+                this.Pipeline.Event.trigger('pipeline:change');
+            },
+
+            _changeNodeId: function (id) {
 
                 var ter, old, oldId,
                     isInput = this.inputs.length === 0;
 
-                this.model.label = name;
+                this.model.label = id;
 
-                if (this.model.softwareDescription && this.model.softwareDescription.repo_name === 'system') {
+                if (Common._checkSystem(this.model)) {
 
-                    // Genereta id first(Check for id conflict)
-                    name = Common.generateNodeId({name: name}, this.Pipeline.nodes);
-                    this.Pipeline.model.schemas[this.model.id].name = name;
+                    // Genereta id first (Check for id conflict)
+                    id = Common.generateNodeId({name: name}, this.Pipeline.nodes);
+                    this.Pipeline.model.schemas[this.model.id].name = id;
 
                     //TODO: Refactor this to use one function
                     if (isInput) {
@@ -932,8 +950,8 @@ angular.module('registryApp.dyole')
 
                         oldId = ter.model.id;
 
-                        old.label = old.name = name;
-                        old.id = name;
+                        old.label = old.name = id;
+                        old.id = id;
 
                         this.model.outputs.push(old);
 
@@ -941,18 +959,18 @@ angular.module('registryApp.dyole')
                             return inp.id === ter.model.id;
                         });
 
-                        this.Pipeline.model.schemas[name] = this.Pipeline.model.schemas[oldId];
+                        this.Pipeline.model.schemas[id] = this.Pipeline.model.schemas[oldId];
 
-                        this.Pipeline.model.schemas[name].outputs.pop();
-                        this.Pipeline.model.schemas[name].outputs.push(old);
+                        this.Pipeline.model.schemas[id].outputs.pop();
+                        this.Pipeline.model.schemas[id].outputs.push(old);
 
-                        _.remove(this.Pipeline.model.schemas[name].outputs, function (inp) {
+                        _.remove(this.Pipeline.model.schemas[id].outputs, function (inp) {
                             return inp.id === oldId;
                         });
 
-                        ter.model.label = ter.model.id = name;
+                        ter.model.label = ter.model.id = id;
 
-                        ter.changeTerminalName(name);
+                        ter.changeTerminalName(id);
 
                         this.model.outputs[0] = ter.model;
 
@@ -966,8 +984,8 @@ angular.module('registryApp.dyole')
 
                         oldId = ter.model.id;
 
-                        old.label = old.name = name;
-                        old.id = name;
+                        old.label = old.name = id;
+                        old.id = id;
 
                         this.model.inputs.push(old);
 
@@ -975,32 +993,32 @@ angular.module('registryApp.dyole')
                             return inp.id === ter.model.id;
                         });
 
-                        this.Pipeline.model.schemas[name] = this.Pipeline.model.schemas[oldId];
+                        this.Pipeline.model.schemas[id] = this.Pipeline.model.schemas[oldId];
 
-                        this.Pipeline.model.schemas[name].inputs.pop();
-                        this.Pipeline.model.schemas[name].inputs.push(old);
+                        this.Pipeline.model.schemas[id].inputs.pop();
+                        this.Pipeline.model.schemas[id].inputs.push(old);
 
-                        _.remove(this.Pipeline.model.schemas[name].inputs, function (inp) {
+                        _.remove(this.Pipeline.model.schemas[id].inputs, function (inp) {
                             return inp.id === oldId;
                         });
 
-                        ter.model.label = ter.model.id = name;
+                        ter.model.label = ter.model.id = id;
 
-                        ter.changeTerminalName(name);
+                        ter.changeTerminalName(id);
 
                         this.model.inputs[0] = ter.model;
 
                     }
 
-                    this.id = name;
-                    this.model.id = name;
-                    this.model.softwareDescription.name = name;
+                    this.id = id;
+                    this.model.id = id;
+                    this.model.softwareDescription.name = id;
 
-                    this.Pipeline.model.schemas[name].id = this.model.id;
+                    this.Pipeline.model.schemas[id].id = this.model.id;
 
                     delete this.Pipeline.model.schemas[oldId];
 
-                    this.Pipeline.nodes[name] = this.Pipeline.nodes[oldId];
+                    this.Pipeline.nodes[id] = this.Pipeline.nodes[oldId];
                     delete this.Pipeline.nodes[oldId];
 
                     if (this.Pipeline.model.display.nodes[oldId]) {
@@ -1021,21 +1039,21 @@ angular.module('registryApp.dyole')
 
                     _.each(this.connections, function (c) {
                         if (isInput) {
-                            c.model.output_name = name;
-                            c.model.start_node = name;
+                            c.model.output_name = id;
+                            c.model.start_node = id;
                         } else {
-                            c.model.input_name = name;
-                            c.model.end_node = name;
+                            c.model.input_name = id;
+                            c.model.end_node = id;
                         }
                     });
 
-                    if (name.charAt(0) === '#') {
-                        name = name.slice(1);
+                    if (id.charAt(0) === '#') {
+                        id = id.slice(1);
                     }
 
                 }
 
-                this.label.attr('text', name);
+                this.label.attr('text', id);
                 this._destroyButtons();
 
                 if (this.selected) {

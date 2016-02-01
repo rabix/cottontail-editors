@@ -625,10 +625,10 @@ angular.module('registryApp.dyole')
 
                 terId = Common.generateNodeId({label: newId}, this.nodes);
 
-                model.label = terId;
+                model.label = terId.slice(1);
                 model.description = descriptions[type];
                 model['sbg:createdBy'] = 'SBG';
-                model.softwareDescription.label = terId;
+                model.softwareDescription.label = model.label;
                 model.softwareDescription.type = type;
                 model[internalType].push({
                     'label': terId.slice(1),
@@ -1485,11 +1485,13 @@ angular.module('registryApp.dyole')
             /**
              * Update schema for input/output node
              *
-             * @param id
-             * @param type
-             * @param description
+             * @param {string} id
+             * @param {array} type
+             //* @param {string} [newId]
+             * @param {string} [description]
              */
-            updateIOSchema: function (id, type, description) {
+            updateIOSchema: function (id, type, /*newId,*/ description) {
+
                 var n = this.getNodeById(id).model;
                 var nSchema = n.inputs[0] || n.outputs[0];
 
