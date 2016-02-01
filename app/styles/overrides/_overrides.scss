@@ -56,6 +56,9 @@ pre {
 /* Center block override */
 .center-block {
   text-align: center;
+  .btn {
+    margin-right: 4px;
+  }
 }
 
 /* Ul list override */

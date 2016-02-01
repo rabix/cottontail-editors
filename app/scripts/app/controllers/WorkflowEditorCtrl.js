@@ -183,7 +183,7 @@ angular.module('registryApp.app')
                 var rev = parseInt($scope.view.workflow['sbg:revision']);
                 if (rev > 0 && $scope.view.workflow.steps.length !== 0) {
                     _.forEach($scope.view.workflow['sbg:validationErrors'], function (err) {
-                        Notification.error('[Workflow Error] ' + err);
+                        Notification.error(err);
                     });
 
                     $scope.view.isValid = false;
@@ -263,7 +263,9 @@ angular.module('registryApp.app')
          */
         $scope.save = function () {
 
-            var rev, workflowJson;
+            var rev;
+            var workflowJson;
+            var deferred = $q.defer();
 
             if (!$scope.view.isChanged) {
                 Notification.error('Pipeline not updated: Graph has no changes.');
@@ -271,7 +273,6 @@ angular.module('registryApp.app')
             }
 
             BeforeRedirect.setReload(true);
-
 
             $scope.view.saving = true;
 
@@ -309,8 +310,6 @@ angular.module('registryApp.app')
 
                     $scope.view.workflow = workflowJson;
 
-
-
                     $scope.view.saving = false;
                     $scope.view.loading = false;
                     $scope.view.isChanged = false;
@@ -325,10 +324,13 @@ angular.module('registryApp.app')
                     }
 
                     console.timeEnd('Workflow saving');
+                    deferred.resolve(data);
                 })
                 .catch(function (trace) {
                     Notification.error('[Workflow Error] Workflow cannot be saved: ' + trace);
                 });
+
+            return deferred.promise;
         };
 
         $scope.toggleSidebar = function () {
@@ -568,44 +570,75 @@ angular.module('registryApp.app')
 
         };
 
-        $scope.runWorkflow = function () {
-
-            if ($scope.view.isChanged) {
-
-                var modalInstance = $modal.open({
-                    controller: 'ModalCtrl',
-                    template: $templateCache.get('views/partials/confirm-delete.html'),
-                    resolve: { data: function () {
-                        return {
-                            message: 'Run will discard unsaved changes, are you sure you want to perform this action?'
-                        }; }
-                    }
-                });
-
-                modalInstance.result.then(function () {
-                    prompt = false;
-                    createTask();
-                }, function () {
-                    return false;
-                });
-
-
-            } else {
-                createTask();
-            }
+        $scope.runWorkflow = function() {
 
             function createTask() {
                 // create task and redirect to task page for that task
-                App.createAppTask($scope.view.workflow['sbg:revision']).then(function (task) {
+                App.createAppTask($scope.view.workflow['sbg:revision']).then(function(task) {
                     BeforeRedirect.setReload(true);
                     $scope.view.saving = true;
                     $scope.view.loading = true;
 
                     App.redirectToTaskPage(task);
                 });
-
             }
 
+            if ($scope.view.isChanged) {
+                var saveFlag = 'save';
+                var modalInstance = $modal.open({
+                    controller: 'ConfirmCustomCtrl',
+                    template: $templateCache.get('views/partials/confirm-custom.html'),
+                    resolve: {
+                        data: function() {
+                            return {
+                                message: 'You have unsaved changes!',
+                                buttons: [
+                                    {
+                                        class: 'btn btn-default',
+                                        modalAction: 'dismiss',
+                                        select: 'cancel',
+                                        text: 'Cancel'
+                                    },
+                                    {
+                                        class: 'btn btn-default',
+                                        modalAction: 'close',
+                                        select: '',
+                                        text: 'Run without saving changes'
+                                    },
+                                    {
+                                        class: 'btn btn-primary',
+                                        modalAction: 'close',
+                                        select: saveFlag,
+                                        text: 'Save changes and run'
+                                    }
+                                ]
+                            };
+                        } /*data end*/
+                    } /*resolve end*/
+                });
+
+                modalInstance.result.then(function(selected) {
+                    if (selected && selected === saveFlag) {
+                        $scope.save().then(function() {
+                            if ($scope.view.isValid) {
+                                prompt = false;
+                                createTask();
+                            } else {
+                                Notification.error('Could not create new task');
+                            }
+                        });
+
+                    } else {
+                        createTask();
+                    }
+
+                }, function() {
+                    return false;
+                });
+
+            } else {
+                createTask();
+            }
         };
 
         /**

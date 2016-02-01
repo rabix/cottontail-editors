@@ -72,7 +72,7 @@
             </div>
             <!-- END Item Type -->
 
-            <div class="col-md-3" ng-show="view.isFileType">
+            <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">
                         Glob
@@ -228,7 +228,7 @@
         </div>
         <!-- END Metadata -->
 
-        <h3 class="legend-small" ng-if="view.type === 'File'">
+        <h3 class="legend-small">
             <label class="checkbox inline">
                 <input type="checkbox"
                        class="form-control"
@@ -241,7 +241,10 @@
         <!-- END LoadContents -->
 
         <div class="row">
-            <div ng-show="view.isFileType" class="col-md-5 form-group">
+            <div class="col-md-5 form-group">
+                <label class="control-label">
+                    Output Eval
+                </label>
                 <expr ng-model="view.property.outputBinding.outputEval"
                       index="{{ $index }}"
                       type="string"
