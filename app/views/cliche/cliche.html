@@ -38,27 +38,26 @@
 
         <div class="content content-tbl flex-box-column">
 
-            <div ng-show="view.tab === 'general'" class="tab adapter flex-box-column flex-one">
+            <div ng-show="view.tab === 'general'" class="tab flex-box-column flex-one">
                 <ng-include class="include flex-box-column flex-one" src="'views/cliche/tabs/general.html'"></ng-include>
             </div>
 
-            <div ng-show="view.tab === 'inputs'" class="tab inputs flex-box-column flex-one">
+            <div ng-show="view.tab === 'inputs'" class="tab flex-box-column flex-one">
                 <ng-include class="include flex-box-column flex-one" src="'views/cliche/tabs/inputs.html'"></ng-include>
             </div>
 
-            <div ng-show="view.tab === 'outputs'" class="tab outputs flex-box-column flex-one">
+            <div ng-show="view.tab === 'outputs'" class="tab flex-box-column flex-one">
                 <ng-include class="include flex-box-column flex-one" src="'views/cliche/tabs/outputs.html'"></ng-include>
             </div>
 
-            <div ng-show="view.tab === 'metadata'" class="tab general flex-box-column flex-one">
+            <div ng-show="view.tab === 'metadata'" class="tab flex-box-column flex-one">
                 <ng-include class="include flex-box-column flex-one" src="'views/cliche/tabs/metadata.html'"></ng-include>
             </div>
 
-            <div ng-show="view.tab === 'test'" class="tab test flex-box-column flex-one">
+            <div ng-show="view.tab === 'test'" class="tab flex-box-column flex-one">
                 <ng-include class="include flex-box-column flex-one" src="'views/cliche/tabs/test.html'"></ng-include>
             </div>
-        </div>
-        <!-- # .content -->
+        </div>        <!-- # .content -->
 
         <div class="console flex-auto" ng-if="view.type === 'tool'" ng-class="{'console-hide': !view.isConsoleVisible}">
             <div ng-click="toggleConsole()" class="heading">

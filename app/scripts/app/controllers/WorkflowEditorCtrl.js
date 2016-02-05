@@ -6,12 +6,12 @@
 angular.module('registryApp.app')
 .controller('WorkflowEditorCtrl', ['$scope', '$rootScope', '$q', '$uibModal',
     '$location', '$templateCache', '$filter',
-    'Loading', 'App', 'User', 'Repo', 'Const', 'BeforeRedirect',
+    'Loading', 'App', 'Const', 'BeforeRedirect',
     'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload',
     'Api', 'HotkeyRegistry', 'Notification', 'Cliche',
     function($scope, $rootScope, $q, $modal,
              $location, $templateCache, $filter,
-             Loading, App, User, Repo, Const, BeforeRedirect,
+             Loading, App, Const, BeforeRedirect,
              Helper, PipelineService, _, Globals, BeforeUnload,
              Api, HotkeyRegistry, Notification, Cliche) {
 
@@ -111,15 +111,6 @@ angular.module('registryApp.app')
 
         PipelineService.register($scope.view.id, onInstanceRegister, onInstanceRegister);
 
-
-        $q.all([
-            User.getUser()
-//                Repo.getRepos(0, '', true)
-        ]).then(function (result) {
-            $scope.view.user = result[0].user;
-//                $scope.view.userRepos = result[1].list;
-        });
-
         var toggleState = true;
 
         var toggleAll = function () {
@@ -202,12 +193,15 @@ angular.module('registryApp.app')
 //        };
 
         /* load tools/workflows grouped by repositories */
-        $q.all([
-            App.getMineAppsByProject(),
-            App.getPublicAppsByProject(),
-            App.get(),
-            App.getValidInstances()
-        ]).then(appsLoaded);
+        //$q.all([
+        //    App.getMineAppsByProject(),
+        //    App.getPublicAppsByProject(),
+        //    App.get(),
+        //    App.getValidInstances()
+        //]).then(appsLoaded);
+
+        $scope.view.loading = false;
+
 
         /**
          * Switch tab on the right side

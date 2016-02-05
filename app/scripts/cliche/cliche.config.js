@@ -11,7 +11,6 @@ angular.module('registryApp.cliche', [
     'registryApp.common',
     'registryApp.app',
     'registryApp.util',
-    'registryApp.repo',
     'ngPrettyJson',
     'markdown',
     'ngTagsInput',
@@ -21,19 +20,19 @@ angular.module('registryApp.cliche', [
         generalSeparator: '.'
     })
     .config([
-        '$locationProvider',
         '$uibModalProvider',
         'NotificationProvider',
-        function($locationProvider, $uibModalProvider, NotificationProvider) {
-            if (history.pushState) {
-                $locationProvider.html5Mode({
-                    enabled: true,
-                    requireBase: false
-                });
-            }
+        '$uibTooltipProvider',
+        function($uibModalProvider, NotificationProvider, $uibTooltipProvider) {
+            $uibTooltipProvider.options({
+                popupDelay: 100,
+                animation: true,
+                appendToBody: true
+            });
 
             $uibModalProvider.options = {
-                backdrop: 'static'
+                backdrop: 'static',
+                animation: true
             };
 
             NotificationProvider.setOptions({

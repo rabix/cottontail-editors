@@ -8,11 +8,11 @@
 angular.module('registryApp.cliche')
 .controller('ClicheCtrl', ['$scope', '$q', '$uibModal', '$templateCache',
     '$rootScope', 'App', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload',
-    'BeforeRedirect', 'Api', 'User', 'lodash', 'HelpMessages', 'Globals',
+    'BeforeRedirect', 'Api', 'lodash', 'HelpMessages', 'Globals',
     'HotkeyRegistry', 'Notification', 'rawTool', 'Helper', 'ClicheEvents', '$location',
     function($scope, $q, $modal, $templateCache,
              $rootScope, App, Cliche, Loading, SandBox, BeforeUnload,
-             BeforeRedirect, Api, User, _, HelpMessages, Globals,
+             BeforeRedirect, Api, _, HelpMessages, Globals,
              HotkeyRegistry, Notification, rawTool, Helper, ClicheEvents, $location) {
 
         $scope.Loading = Loading;
@@ -138,10 +138,6 @@ angular.module('registryApp.cliche')
 
             $scope.view.tool = Cliche.getTool();
             $scope.view.job = Cliche.getJob();
-
-            if ($scope.view.user && $scope.view.mode === 'new') {
-                $scope.view.tool.owner = [$scope.view.user.email];
-            }
         };
 
         /**
@@ -428,16 +424,16 @@ angular.module('registryApp.cliche')
             }
         };
 
-        $q.all([
-                App.get(),
-                User.getUser(),
-                App.getValidInstances()
-            ])
-            .then(function(result) {
+        //$q.all([
+        //        App.get(),
+        //        App.getValidInstances()
+        //    ])
+        //    .then(function(result) {
 
                 $scope.view.loading = false;
 
-                if (result[0].message) {
+                //if (result[0].message) {
+        var result = [Globals.app];
 
                     var tool = _.assign(_.cloneDeep(rawTool), result[0].message);
 
@@ -461,11 +457,9 @@ angular.module('registryApp.cliche')
                     }
 
                     Cliche.setJob(job);
-                }
+                //}
 
-                $scope.view.user = result[1].user;
-
-                instances = result[2];
+                instances = result[1];
 
                 _setUpCliche();
                 _readRequirementsAndResources();
@@ -473,8 +467,7 @@ angular.module('registryApp.cliche')
                 _setUpCategories();
                 _groupByCategory();
 
-                $scope.toggleConsole();
-            });
+            //});
 
         /**
          * Show tool settings modal (same modal appears in the workflow editor)
@@ -580,7 +573,11 @@ angular.module('registryApp.cliche')
             var modalInstance = $modal.open({
                 template: $templateCache.get('views/cliche/partials/json-editor.html'),
                 controller: 'JsonEditorCtrl',
-                resolve: {options: function() { return {user: $scope.view.user, type: $scope.view.type}; }}
+                resolve: {
+                    options: function() {
+                        return {user: $scope.view.user, type: $scope.view.type};
+                    }
+                }
             });
 
             modalInstance.result.then(function(json) {
@@ -735,6 +732,8 @@ angular.module('registryApp.cliche')
             }
 
         };
+
+        $scope.toggleConsole();
 
         /**
          * Update tool resources and apply transformation on allocated resources if needed
@@ -898,9 +897,9 @@ angular.module('registryApp.cliche')
                     adapterBaseCmd.splice(parseInt(index, 10) + key, 0, cmd);
                 });
 
-                if (!$scope.$$phase) {
-                    $scope.$apply();
-                }
+                //if (!$scope.$$phase) {
+                //    $scope.$apply();
+                //}
             }
         };
 

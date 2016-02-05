@@ -395,11 +395,10 @@
     } else {
         // Browser globals (glob is window)
         // Raphael adds itself to window
-        factory(glob, glob.eve);
+        factory(glob, glob.eve || (typeof require == "function" && require('eve')) );
     }
 }(this, function (window, eve) {
-    /*\
-     * Raphael
+    /*\     * Raphael
      [ method ]
      **
      * Creates a canvas object on which to draw.

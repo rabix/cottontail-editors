@@ -59,7 +59,7 @@ module.exports = function(grunt) {
                     '<%= yeoman.app %>/views/repo/{,*/}*.html',
                     '<%= yeoman.app %>/views/task/{,*/}*.html'
                 ],
-                tasks: ['ngtemplates:app', 'ngtemplates:cliche', 'ngtemplates:dyole']
+                tasks: ['templates']
             }
         },
 
@@ -171,7 +171,6 @@ module.exports = function(grunt) {
                 ignorePath: /(\.\.\/){1,2}bower_components\//
             }
         },
-/*
 
         sass: {
             server: {
@@ -201,7 +200,6 @@ module.exports = function(grunt) {
                 }]
             }
         },
-*/
 
         // Renames files for browser caching purposes
         filerev: {
@@ -482,66 +480,66 @@ module.exports = function(grunt) {
                 configFile: 'karma.conf.js',
                 singleRun: true
             }
-        //},
-        //
-        //ngtemplates: {
-        //    app: {
-        //        cwd: '<%= yeoman.app %>',
-        //        src: [
-        //            'views/{,*/}*.html',
-        //            'views/cliche/{,*/}*.html',
-        //            'views/app/{,*/}*.html',
-        //            'views/repo/{,*/}*.html',
-        //            'views/task/{,*/}*.html'
-        //        ],
-        //        dest: '<%= yeoman.app %>/scripts/template.js',
-        //        options: {
-        //            module: 'registryApp',
-        //            htmlmin: {
-        //                collapseWhitespace: true,
-        //                collapseBooleanAttributes: true
-        //            }
-        //        }
-        //    },
-        //
-        //    cliche: {
-        //        cwd: '<%= yeoman.app %>',
-        //        src: [
-        //            'views/{,*/}*.html',
-        //            'views/cliche/{,*/}*.html',
-        //            'views/app/{,*/}*.html',
-        //            'views/repo/{,*/}*.html',
-        //            'views/task/{,*/}*.html'
-        //        ],
-        //        dest: '<%= yeoman.app %>/scripts/cliche-app/template.js',
-        //        options: {
-        //            module: 'clicheApp',
-        //            htmlmin: {
-        //                collapseWhitespace: true,
-        //                collapseBooleanAttributes: true
-        //            }
-        //        }
-        //    },
-        //
-        //    dyole: {
-        //        cwd: '<%= yeoman.app %>',
-        //        src: [
-        //            'views/{,*/}*.html',
-        //            'views/dyole/{,*/}*.html',
-        //            'views/cliche/{,*/}*.html',
-        //            'views/app/{,*/}*.html',
-        //            'views/repo/{,*/}*.html',
-        //            'views/task/{,*/}*.html'
-        //        ],
-        //        dest: '<%= yeoman.app %>/scripts/dyole-app/template.js',
-        //        options: {
-        //            module: 'dyoleApp',
-        //            htmlmin: {
-        //                collapseWhitespace: true,
-        //                collapseBooleanAttributes: true
-        //            }
-        //        }
-        //    }
+        },
+
+        ngtemplates: {
+            app: {
+                cwd: '<%= yeoman.app %>',
+                src: [
+                    'views/{,*/}*.html',
+                    'views/cliche/{,*/}*.html',
+                    'views/app/{,*/}*.html',
+                    'views/repo/{,*/}*.html',
+                    'views/task/{,*/}*.html'
+                ],
+                dest: '<%= yeoman.app %>/scripts/template.js',
+                options: {
+                    module: 'registryApp',
+                    htmlmin: {
+                        collapseWhitespace: true,
+                        collapseBooleanAttributes: true
+                    }
+                }
+            },
+
+            cliche: {
+                cwd: '<%= yeoman.app %>',
+                src: [
+                    'views/{,*/}*.html',
+                    'views/cliche/{,*/}*.html',
+                    'views/app/{,*/}*.html',
+                    'views/repo/{,*/}*.html',
+                    'views/task/{,*/}*.html'
+                ],
+                dest: '<%= yeoman.app %>/scripts/cliche/template.js',
+                options: {
+                    module: 'registryApp.cliche',
+                    htmlmin: {
+                        collapseWhitespace: true,
+                        collapseBooleanAttributes: true
+                    }
+                }
+            },
+
+            dyole: {
+                cwd: '<%= yeoman.app %>',
+                src: [
+                    'views/{,*/}*.html',
+                    'views/dyole/{,*/}*.html',
+                    'views/cliche/{,*/}*.html',
+                    'views/app/{,*/}*.html',
+                    'views/repo/{,*/}*.html',
+                    'views/task/{,*/}*.html'
+                ],
+                dest: '<%= yeoman.app %>/scripts/dyole/template.js',
+                options: {
+                    module: 'registryApp.dyole',
+                    htmlmin: {
+                        collapseWhitespace: true,
+                        collapseBooleanAttributes: true
+                    }
+                }
+            }
         }
 
 
@@ -662,4 +660,10 @@ module.exports = function(grunt) {
         //        'test',
         'build'
     ]);
+
+    grunt.registerTask('templates', [
+        'ngtemplates:cliche',
+        'ngtemplates:dyole'
+    ])
 };
+

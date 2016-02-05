@@ -12,7 +12,6 @@ angular.module('registryApp.dyole', [
     'ui.sortable',
     'registryApp.common',
     'registryApp.util',
-    'registryApp.repo',
     'ngPrettyJson',
     'markdown',
     'ngTagsInput'])
@@ -21,20 +20,22 @@ angular.module('registryApp.dyole', [
         generalSeparator: '.'
     })
 	.config([
-        '$locationProvider',
         '$uibModalProvider',
         'NotificationProvider',
-        function($locationProvider, $uibModalProvider, NotificationProvider) {
-            if (history.pushState) {
-                $locationProvider.html5Mode({
-                    enabled: true,
-                    requireBase: false
-                });
-            }
+        '$uibTooltipProvider',
+        function($uibModalProvider, NotificationProvider, $uibTooltipProvider) {
+            $uibTooltipProvider.options({
+                popupDelay: 100,
+                animation: true,
+                appendToBody: true
+            });
+
 
             $uibModalProvider.options = {
-                backdrop: 'static'
+                backdrop: 'static',
+                animation: true
             };
+
 
             NotificationProvider.setOptions({
                 delay: 6000

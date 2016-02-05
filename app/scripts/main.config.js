@@ -55,6 +55,6 @@ angular
 
         $urlRouterProvider.otherwise('/');
 
-        $httpProvider.interceptors.push('HTTPInterceptor');
+        //$httpProvider.interceptors.push('HTTPInterceptor');
 
     }]);

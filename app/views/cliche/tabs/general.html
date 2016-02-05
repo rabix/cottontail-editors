@@ -1,7 +1,9 @@
 <ng-form class="content content-ten" name="general">
-    <div class="row-margin">
+
+    <div class="row section">
+
         <div class="col-md-6">
-            <form class="section">
+            <form>
                 <h3 class="legend-small">Docker Container
                     <help-message message="{{ :: 'clicheGeneralEnvironment' | loc }}"></help-message>
                 </h3>
@@ -29,42 +31,43 @@
                 </div>
             </form>
 
-            <div ng-if="view.type === 'tool'" class="section">
+            <div class="section">
 
                 <h3 class="legend-small">Resources
                     <help-message message="{{ :: 'clicheGeneralResources' | loc }}"></help-message>
                 </h3>
 
-                <div class="row-margin">
+                <!--@todo the same css issue going on there as well-->
+                <!--<div class="row">-->
 
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="control-label">CPU</label>
-                            <expr tooltip-msg="{{ ::'clicheGeneralCpu' | loc }}"
-                                  ng-model="view.resCPURequirement.value"
-                                  min="0"
-                                  type="number"
-                                  id="cpu_resource"
-                                  handle-null="removeResourceHint('CPURequirement')"
-                                  handle-item-update="updateResource(value, 'CPURequirement')">
-                            </expr>
-                        </div>
-                    </div>
+                    <!--<div class="col-md-6">-->
+                        <!--<div class="form-group">-->
+                            <!--<label class="control-label">CPU</label>-->
+                            <!--<expr tooltip-msg="{{ ::'clicheGeneralCpu' | loc }}"-->
+                                  <!--ng-model="view.resCPURequirement.value"-->
+                                  <!--min="0"-->
+                                  <!--type="number"-->
+                                  <!--id="cpu_resource"-->
+                                  <!--handle-null="removeResourceHint('CPURequirement')"-->
+                                  <!--handle-item-update="updateResource(value, 'CPURequirement')">-->
+                            <!--</expr>-->
+                        <!--</div>-->
+                    <!--</div>-->
 
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="control-label">Memory (MB)</label>
-                            <expr tooltip-msg="{{ ::'clicheGeneralMemory' | loc }}"
-                                  ng-model="view.resMemRequirement.value"
-                                  type="number"
-                                  id="memory_resource"
-                                  handle-null="removeResourceHint('MemRequirement')"
-                                  handle-item-update="updateResource(value, 'MemRequirement')">
-                            </expr>
-                        </div>
-                    </div>
+                    <!--<div class="col-md-6">-->
+                        <!--<div class="form-group">-->
+                            <!--<label class="control-label">Memory (MB)</label>-->
+                            <!--<expr tooltip-msg="{{ ::'clicheGeneralMemory' | loc }}"-->
+                                  <!--ng-model="view.resMemRequirement.value"-->
+                                  <!--type="number"-->
+                                  <!--id="memory_resource"-->
+                                  <!--handle-null="removeResourceHint('MemRequirement')"-->
+                                  <!--handle-item-update="updateResource(value, 'MemRequirement')">-->
+                            <!--</expr>-->
+                        <!--</div>-->
+                    <!--</div>-->
 
-                </div>
+                <!--</div>-->
 
             </div>
 
@@ -159,7 +162,8 @@
                 </div>
                 <!-- # Base Cmd-->
 
-                <div class="row-margin">
+
+                <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label">Stdin</label>
@@ -182,9 +186,12 @@
                         </div>
                     </div>
                 </div>
+
                 <!-- # StdIn and StdOut-->
 
-                <div class="row-margin">
+
+
+                <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label">
@@ -273,6 +280,7 @@
 
                     </div>
                 </div>
+
             </div>
 
             <div class="section">
@@ -299,12 +307,14 @@
                                 index="{{ $index }}">
                         </property-arg>
 
-                        <p class="alert alert-info large" ng-if="view.tool.arguments | isEmpty">Click the plus button to add command line binding.</p>
+                        <p class="alert alert-info large" ng-if="view.tool.arguments | isEmpty">Click the plus
+                            button to add command line binding.</p>
 
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 
 </ng-form>
