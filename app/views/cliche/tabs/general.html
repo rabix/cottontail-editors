@@ -38,36 +38,36 @@
                 </h3>
 
                 <!--@todo the same css issue going on there as well-->
-                <!--<div class="row">-->
+                <div class="row">
 
-                    <!--<div class="col-md-6">-->
-                        <!--<div class="form-group">-->
-                            <!--<label class="control-label">CPU</label>-->
-                            <!--<expr tooltip-msg="{{ ::'clicheGeneralCpu' | loc }}"-->
-                                  <!--ng-model="view.resCPURequirement.value"-->
-                                  <!--min="0"-->
-                                  <!--type="number"-->
-                                  <!--id="cpu_resource"-->
-                                  <!--handle-null="removeResourceHint('CPURequirement')"-->
-                                  <!--handle-item-update="updateResource(value, 'CPURequirement')">-->
-                            <!--</expr>-->
-                        <!--</div>-->
-                    <!--</div>-->
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">CPU</label>
+                            <expr tooltip-msg="{{ ::'clicheGeneralCpu' | loc }}"
+                                  ng-model="view.resCPURequirement.value"
+                                  min="0"
+                                  type="number"
+                                  id="cpu_resource"
+                                  handle-null="removeResourceHint('CPURequirement')"
+                                  handle-item-update="updateResource(value, 'CPURequirement')">
+                            </expr>
+                        </div>
+                    </div>
 
-                    <!--<div class="col-md-6">-->
-                        <!--<div class="form-group">-->
-                            <!--<label class="control-label">Memory (MB)</label>-->
-                            <!--<expr tooltip-msg="{{ ::'clicheGeneralMemory' | loc }}"-->
-                                  <!--ng-model="view.resMemRequirement.value"-->
-                                  <!--type="number"-->
-                                  <!--id="memory_resource"-->
-                                  <!--handle-null="removeResourceHint('MemRequirement')"-->
-                                  <!--handle-item-update="updateResource(value, 'MemRequirement')">-->
-                            <!--</expr>-->
-                        <!--</div>-->
-                    <!--</div>-->
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Memory (MB)</label>
+                            <expr tooltip-msg="{{ ::'clicheGeneralMemory' | loc }}"
+                                  ng-model="view.resMemRequirement.value"
+                                  type="number"
+                                  id="memory_resource"
+                                  handle-null="removeResourceHint('MemRequirement')"
+                                  handle-item-update="updateResource(value, 'MemRequirement')">
+                            </expr>
+                        </div>
+                    </div>
 
-                <!--</div>-->
+                </div>
 
             </div>
 

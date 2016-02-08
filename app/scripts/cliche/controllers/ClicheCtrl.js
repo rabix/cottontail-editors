@@ -435,7 +435,8 @@ angular.module('registryApp.cliche')
                 //if (result[0].message) {
         var result = [Globals.app];
 
-                    var tool = _.assign(_.cloneDeep(rawTool), result[0].message);
+        var tool = _.assign(_.cloneDeep(rawTool), JSON.parse($scope.app));
+                    //var tool = _.assign(_.cloneDeep(rawTool), result[0].message);
 
                     /** @type CWLTool */
                     $scope.view.app = tool;
