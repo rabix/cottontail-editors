@@ -84,10 +84,10 @@
                             <a href ng-click="loadJsonImport()"><i class="fa fa-cloud-download"></i> <span>Import</span></a>
                         </li>
 
-                        <li ng-if="view.user && view.mode === 'edit'">
+                        <li>
                             <a href='' ng-click="validateWorkflowJSON()" ng-disabled="view.saving" ><i class="fa fa-check"></i> Validate</a>
                         </li>
-                        <li ng-if="view.user && view.mode === 'edit'">
+                        <li>
                             <a a href='' ng-click="workflowToJSON()" ng-disabled="view.saving" ><i class="fa fa-code"></i> JSON</a>
                         </li>
                     </ul>

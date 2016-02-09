@@ -186,7 +186,7 @@ angular.module('registryApp.common')
                 },
                 "loginWithRedirect": "/login/?next=<redirectionUrl>"
             },
-            "base": "/static/",
+            "base": "/editors/app/",
             "apiUrls": {
                 "pilososHost": "https://staging-pilosos.sbgenomics.com:28044",
                 "moriartyLogUrl": "https://staging-moriarty.sbgenomics.com:4242/js/",

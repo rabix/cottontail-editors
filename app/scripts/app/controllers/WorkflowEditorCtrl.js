@@ -8,23 +8,23 @@ angular.module('registryApp.app')
     '$location', '$templateCache', '$filter',
     'Loading', 'App', 'Const', 'BeforeRedirect',
     'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload',
-    'Api', 'HotkeyRegistry', 'Notification', 'Cliche',
+    'Api', 'HotkeyRegistry', 'Notification', 'Cliche', '$timeout',
     function($scope, $rootScope, $q, $modal,
              $location, $templateCache, $filter,
              Loading, App, Const, BeforeRedirect,
              Helper, PipelineService, _, Globals, BeforeUnload,
-             Api, HotkeyRegistry, Notification, Cliche) {
+             Api, HotkeyRegistry, Notification, Cliche, $timeout) {
 
-        var PipelineInstance = null,
-            prompt = false,
-            Instances = [],
-            onBeforeUnloadOff = BeforeUnload.register(function() {
-                return 'Please save your changes before leaving.';
-            }, function () {
-                return prompt;
-            });
+        var PipelineInstance = null;
+        var prompt = false;
+        var Instances = [];
+        var onBeforeUnloadOff = BeforeUnload.register(function() {
+            return 'Please save your changes before leaving.';
+        }, function() {
+            return prompt;
+        });
 
-        $scope.$on('pipeline:change', function () {
+        $scope.$on('pipeline:change', function() {
             prompt = true;
         });
 
@@ -83,8 +83,6 @@ angular.module('registryApp.app')
         $scope.Loading = Loading;
 
         $scope.view.searchTerm = '';
-
-//        $scope.view.appRevisions = {};
 
         /**
          * Set controller id for pipeline Service to use it
@@ -155,16 +153,18 @@ angular.module('registryApp.app')
          * Callback when apps are loaded
          *
          * @param {Object} result
+         * @private
          */
-        var appsLoaded = function (result) {
+        function _appsLoaded (result) {
 
-            var workflow = result[2].message;
+            var workflow = JSON.parse(result);
 
             $scope.view.filtering = false;
-            $scope.view.message = result[0].status;
+            //$scope.view.message = result[0].status;
 
-            $scope.view.repoTypes.MyApps = result[0].message;
-            $scope.view.repoTypes.PublicApps = result[1].message;
+            //@todo workflow editor toolkit logic should replace this
+            //$scope.view.repoTypes.MyApps = result[0].message;
+            //$scope.view.repoTypes.PublicApps = result[1].message;
 
             workflow['sbg:name'] = workflow['sbg:id'].split('/')[2];
 
@@ -183,10 +183,10 @@ angular.module('registryApp.app')
             else {
                 $scope.view.isValid = true;
             }
-            Instances = result[3];
 
             $scope.view.loading = false;
-        };
+        }
+
 
 //        $scope.toggleAppRevisions = function (rev) {
 //            $scope.view.appRevisions[rev].toggled = !$scope.view.appRevisions[rev].toggled;
@@ -778,4 +778,11 @@ angular.module('registryApp.app')
 
         });
 
+        //@todo: fix hack for loading workflow
+        // this is inside a timeout only because otherwise the .pipeline dom element
+        // is not initialized at the moment that the canvas should be drawn. canvas init
+        // should either wait for domContentLoaded event or setting the app should be delayed
+        $timeout(function() {
+            _appsLoaded($scope.app);
+        });
     }]);

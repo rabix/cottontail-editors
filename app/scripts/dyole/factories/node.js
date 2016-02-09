@@ -99,12 +99,12 @@ angular.module('registryApp.dyole')
             },
 
             icons: {
-                input: Globals.base + 'img/rabix/icon-input-1.png',
-                output: Globals.base + 'img/rabix/icon-output-2.png',
-                workflow: Globals.base + 'img/rabix/icon-workflow.png',
-                script: Globals.base + 'img/rabix/script.png',
-                cmd: Globals.base + 'img/rabix/cmd.png',
-                default: Globals.base + 'img/rabix/logo.png'
+                input: Globals.base + 'images/icon-input-1.png',
+                output: Globals.base + 'images/icon-output-2.png',
+                workflow: Globals.base + 'images/icon-workflow.png',
+                script: Globals.base + 'images/script.png',
+                cmd: Globals.base + 'images/cmd.png',
+                default: Globals.base + 'images/logo.png'
             },
 
             buttons: {
@@ -760,7 +760,7 @@ angular.module('registryApp.dyole')
                         radius: this.buttons.radius,
                         border: this.buttons.border,
                         image: {
-                            url: Globals.base + 'img/rabix/' + this.buttons.info.image.name,
+                            url: Globals.base + 'images/' + this.buttons.info.image.name,
                             width: 14,
                             height: 14
                         }
@@ -776,7 +776,7 @@ angular.module('registryApp.dyole')
                         radius: this.buttons.radius,
                         border: this.buttons.border,
                         image: {
-                            url: Globals.base + 'img/rabix/' + this.buttons.delete.image.name,
+                            url: Globals.base + 'images/' + this.buttons.delete.image.name,
                             width: 14,
                             height: 14
                         }
@@ -794,7 +794,7 @@ angular.module('registryApp.dyole')
                             radius: this.buttons.radius,
                             border: this.buttons.border,
                             image: {
-                                url: Globals.base + 'img/rabix/' + this.buttons.update.image.name,
+                                url: Globals.base + 'images/' + this.buttons.update.image.name,
                                 width: 14,
                                 height: 14
                             }
@@ -815,7 +815,7 @@ angular.module('registryApp.dyole')
                         radius: 10,
                         border: this.buttons.border,
                         image: {
-                            url: Globals.base + 'img/rabix/' + this.buttons.rename.image.name,
+                            url: Globals.base + 'images/' + this.buttons.rename.image.name,
                             width: 13,
                             height: 13
                         },

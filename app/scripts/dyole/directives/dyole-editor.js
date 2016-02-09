@@ -5,15 +5,12 @@ angular.module('registryApp.dyole')
             restrict: 'E',
             replace: true,
             scope: {
-                app: '='
+                app: '=',
+                callbacks: '='
             },
-            template: '<div class="dyole-editor">' +
-                '<ng-include class="main" src="\'views/app/workflow-editor.html\'" ng-controller="WorkflowEditorCtrl"></ng-include>' +
-            '</div>',
-            link: function(scope) {
-                console.log('opening workflow editor');
-            }
+            controller: 'WorkflowEditorCtrl',
+            template:   '<div class="dyole-editor">' +
+                            '<ng-include class="main" src="\'views/app/workflow-editor.html\'"></ng-include>' +
+                        '</div>'
         }
     }]);
-
-console.log('opening file');

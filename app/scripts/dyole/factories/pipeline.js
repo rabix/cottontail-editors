@@ -80,7 +80,7 @@ angular.module('registryApp.dyole')
 
             this._drawScrollbars();
 
-            this._checkOutdated();
+            //this._checkOutdated();
         };
 
         Pipeline.prototype = {

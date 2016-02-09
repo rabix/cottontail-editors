@@ -98,7 +98,7 @@ angular.module('registryApp.dyole')
                 if (!this.Pipeline.tempConnectionActive) {
 
                     var self = this,
-                        src = Globals.base + 'img/rabix/wire-cut.png',
+                        src = Globals.base + 'images/wire-cut.png',
                         canvasOffset = this._getOffset(this.element[0]);
 
                     this.removeWire();
