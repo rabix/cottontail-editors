@@ -10,8 +10,6 @@ angular.module('registryApp.cliche')
     .controller('JsonEditorCtrl', ['$scope', '$rootScope', '$uibModalInstance', '$timeout', '$document', 'options', 'SchemaValidator', '$http', 'Globals', function ($scope, $rootScope, $modalInstance, $timeout, $document, options, SchemaValidator, $http, Globals) {
 
         $scope.view = {};
-        $scope.view.user = options.user;
-
         $scope.view.urlImport = false;
 
         //$scope.mirror = null;

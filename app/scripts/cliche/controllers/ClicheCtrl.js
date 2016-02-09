@@ -8,12 +8,12 @@
 angular.module('registryApp.cliche')
 .controller('ClicheCtrl', ['$scope', '$q', '$uibModal', '$templateCache',
     '$rootScope', 'App', 'Cliche', 'Loading', 'SandBox', 'BeforeUnload',
-    'BeforeRedirect', 'Api', 'lodash', 'HelpMessages', 'Globals',
-    'HotkeyRegistry', 'Notification', 'rawTool', 'Helper', 'ClicheEvents', '$location',
+    'BeforeRedirect', 'Api', 'lodash',
+    'Notification', 'rawTool', 'Helper', 'ClicheEvents', '$location',
     function($scope, $q, $modal, $templateCache,
              $rootScope, App, Cliche, Loading, SandBox, BeforeUnload,
-             BeforeRedirect, Api, _, HelpMessages, Globals,
-             HotkeyRegistry, Notification, rawTool, Helper, ClicheEvents, $location) {
+             BeforeRedirect, Api, _,
+             Notification, rawTool, Helper, ClicheEvents, $location) {
 
         $scope.Loading = Loading;
 
@@ -41,9 +41,6 @@ angular.module('registryApp.cliche')
         /* temporary hack because base command cannot have expressions */
         $scope.disableCmdExpressions = true;
 
-        /* variables gotten from camellia */
-        $scope.view.globals = Globals;
-
         /* form holders, for validation only */
         $scope.form.tool = {};
         $scope.form.job = {};
@@ -53,11 +50,6 @@ angular.module('registryApp.cliche')
         $scope.view.tool = {};
         /** @type SBGJob */
         $scope.view.job = {};
-
-        /* actual tool app from db */
-        $scope.view.app = {
-            'is_script': Globals.appType === 'script'
-        };
 
         /* actual tool app revision from db */
         $scope.view.revision = {};
@@ -75,7 +67,8 @@ angular.module('registryApp.cliche')
         $scope.view.isConsoleVisible = false;
 
         /* tool type: tool or script */
-        $scope.view.type = Globals.appType;
+        //@todo: remove this if necessary
+        $scope.view.type = 'tool';
 
         /* current tab - available: general, inputs, outputs, metadata, test */
         $scope.view.tab = 'general';
@@ -88,12 +81,6 @@ angular.module('registryApp.cliche')
 
         /* generating command flag */
         $scope.view.generatingCommand = false;
-
-        /* list of user repos */
-        $scope.view.repos = [];
-
-        /* current user */
-        $scope.view.user = null;
 
         /* categories */
         $scope.view.categories = [];
@@ -172,29 +159,26 @@ angular.module('registryApp.cliche')
          */
         var _turnOnCliAdapterDeepWatch = function() {
 
-            if (Globals.appType === 'tool') {
+            $scope.view.generatingCommand = true;
+            debouncedGenerateCommand();
 
-                $scope.view.generatingCommand = true;
-                debouncedGenerateCommand();
+            var watch = [
+                'view.tool.baseCommand',
+                'view.tool.stdout',
+                'view.tool.stdin',
+                'view.reqMemRequirement.value',
+                'view.reqCPURequirement.value'
+            ];
 
-                var watch = [
-                    'view.tool.baseCommand',
-                    'view.tool.stdout',
-                    'view.tool.stdin',
-                    'view.reqMemRequirement.value',
-                    'view.reqCPURequirement.value'
-                ];
-
-                _.each(watch, function(arg) {
-                    var watcher = $scope.$watch(arg, function(n, o) {
-                        if (n !== o) {
-                            $scope.view.generatingCommand = true;
-                            debouncedGenerateCommand();
-                        }
-                    }, true);
-                    cliAdapterWatchers.push(watcher);
-                });
-            }
+            _.each(watch, function(arg) {
+                var watcher = $scope.$watch(arg, function(n, o) {
+                    if (n !== o) {
+                        $scope.view.generatingCommand = true;
+                        debouncedGenerateCommand();
+                    }
+                }, true);
+                cliAdapterWatchers.push(watcher);
+            });
 
         };
 
@@ -352,24 +336,6 @@ angular.module('registryApp.cliche')
 
         };
 
-        /**
-         * Redirect to the other page
-         *
-         * @param {number} revisionId
-         * @private
-         */
-        var _redirectTo = function(revisionId) {
-            window.location = '/u/' +
-                            Globals.projectOwner +
-                            '/' +
-                            Globals.projectSlug +
-                            '/apps/' +
-                            Globals.appName +
-                            '/edit?type=' +
-                            Globals.appType +
-                            '&rev=' +
-                            revisionId;
-        };
 
         /**
          * Prepares categories for tagsInput directive
@@ -424,51 +390,35 @@ angular.module('registryApp.cliche')
             }
         };
 
-        //$q.all([
-        //        App.get(),
-        //        App.getValidInstances()
-        //    ])
-        //    .then(function(result) {
 
-                $scope.view.loading = false;
-
-                //if (result[0].message) {
-        var result = [Globals.app];
-
+        //@todo refactor this, put it in a better place
         var tool = _.assign(_.cloneDeep(rawTool), JSON.parse($scope.app));
-                    //var tool = _.assign(_.cloneDeep(rawTool), result[0].message);
 
-                    /** @type CWLTool */
-                    $scope.view.app = tool;
-                    /** @type CWLTool */
-                    $scope.view.tool = tool;
+        /** @type CWLTool */
+        $scope.view.app = tool;
+        /** @type CWLTool */
+        $scope.view.tool = tool;
 
-                    if (tool.class === 'ExpressionTool') {
-                        tool.engine = Cliche.getTransformSchema().engine;
-                        tool.script = tool.script || '';
-                    }
+        tool.hints = tool.hints || [];
 
-                    tool.hints = tool.hints || [];
+        Cliche.setTool(tool);
+        var job = $scope.view.revision.job ? JSON.parse($scope.view.revision.job) : null;
 
-                    Cliche.setTool(tool);
-                    var job = $scope.view.revision.job ? JSON.parse($scope.view.revision.job) : null;
+        if (!job && typeof tool['sbg:job'] === 'object') {
+            job = tool['sbg:job'];
+        }
 
-                    if (!job && typeof tool['sbg:job'] === 'object') {
-                        job = tool['sbg:job'];
-                    }
+        Cliche.setJob(job);
 
-                    Cliche.setJob(job);
-                //}
+        _setUpCliche();
+        _readRequirementsAndResources();
+        _prepareStatusCodes();
+        _setUpCategories();
+        _groupByCategory();
+        $scope.view.loading = false;
+        //@todo end refactor
 
-                instances = result[1];
 
-                _setUpCliche();
-                _readRequirementsAndResources();
-                _prepareStatusCodes();
-                _setUpCategories();
-                _groupByCategory();
-
-            //});
 
         /**
          * Show tool settings modal (same modal appears in the workflow editor)
@@ -576,35 +526,13 @@ angular.module('registryApp.cliche')
                 controller: 'JsonEditorCtrl',
                 resolve: {
                     options: function() {
-                        return {user: $scope.view.user, type: $scope.view.type};
+                        return {type: $scope.view.type};
                     }
                 }
             });
 
             modalInstance.result.then(function(json) {
                 _importTool(json);
-            });
-
-            return modalInstance;
-
-        };
-
-        /**
-         * Load markdown modal for description edit
-         */
-        $scope.loadMarkdown = function() {
-
-            var modalInstance = $modal.open({
-                template: $templateCache.get('views/partials/markdown.html'),
-                controller: 'MarkdownCtrl',
-                windowClass: 'modal-markdown',
-                size: 'lg',
-                backdrop: 'static',
-                resolve: {data: function() {return {markdown: $scope.view.tool.description};}}
-            });
-
-            modalInstance.result.then(function(result) {
-                $scope.view.tool.description = result;
             });
 
             return modalInstance;
@@ -935,49 +863,6 @@ angular.module('registryApp.cliche')
             $scope.form.tool.$setDirty();
         };
 
-        /**
-         * Create new tool and default revision
-         *
-         * @returns {boolean}
-         */
-        $scope.createTool = function() {
-
-            var modalInstance;
-
-            if ($scope.form.tool.label.$invalid) {
-                modalInstance = $modal.open({
-                    template: $templateCache.get('views/partials/validation.html'),
-                    size: 'sm',
-                    controller: 'ModalCtrl',
-                    windowClass: 'modal-validation',
-                    resolve: {
-                        data: function() {
-                            return {messages: ['You must enter valid name (avoid characters \'$\' and \'.\')']};
-                        }
-                    }
-                });
-
-                return modalInstance;
-            }
-
-            modalInstance = $modal.open({
-                controller: 'PickRepoModalCtrl',
-                template: $templateCache.get('views/repo/pick-repo-name.html'),
-                windowClass: 'modal-confirm',
-                resolve: {
-                    data: function() {
-                        return {repos: $scope.view.repos, type: 'save'};
-                    }
-                }
-
-            });
-
-            modalInstance.result.then(function() {
-                $scope.view.loading = true;
-            });
-
-        };
-
 		/**
 		 * Removes the memory or cpu hints when value is set to null or is an empty string
 		 *
@@ -1062,25 +947,6 @@ angular.module('registryApp.cliche')
                 newTool.stdout = '';
             }
 
-            if (Globals.appType === 'script') {
-                newTool.engine = Cliche.getTransformSchema().engine;
-                delete newTool.baseCommand;
-                delete newTool.stdin;
-                delete newTool.stdout;
-                delete newTool.arguments;
-
-                newTool.requirements.forEach(function(req, index) {
-                    if (req.class !== 'ExpressionEngineRequirement') {
-                        newTool.requirements.splice(index, 1);
-                    }
-                });
-
-            } else {
-                if (angular.isDefined(newTool.transform)) { delete newTool.transform; }
-                if (angular.isDefined(newTool.engine)) { delete newTool.engine; }
-                if (angular.isDefined(newTool.script)) { delete newTool.script; }
-            }
-
             Cliche.setTool(newTool);
             $scope.view.tool = Cliche.getTool();
             $scope.form.tool.$setDirty();
@@ -1101,7 +967,7 @@ angular.module('registryApp.cliche')
         /**
          * Update current tool
          *
-         * @returns {boolean}
+         * @returns {object|boolean}
          */
         $scope.updateTool = function() {
             var tool = Cliche.getTool();
@@ -1141,7 +1007,6 @@ angular.module('registryApp.cliche')
                         if (history.pushState) {
                             $location.search({type: 'tool', rev: newRevision});
                         } else {
-                            _redirectTo(newRevision);
                             $scope.view.loading = true;
                         }
 
@@ -1158,69 +1023,25 @@ angular.module('registryApp.cliche')
 
         };
 
-        /**
-         * Switch to another revision of the app
-         */
-        $scope.changeRevision = function() {
+        var _saveCallback = $scope.callbacks.onSave;
+        var _getJsonCallback = $scope.callbacks.getJson;
+        var _runCallback = $scope.callbacks.onRun;
 
-            var deferred = $q.defer();
-
-            Api.getLatest.get().$promise.then(function(result) {
-                var latestRevision = result.message['sbg:revision'];
-                var revisionsList = _.range(latestRevision + 1);
-
-                var modalInstance = $modal.open({
-                    template: $templateCache.get('views/cliche/partials/revisions.html'),
-                    controller: ['$scope', '$uibModalInstance', 'data', function($scope, $modalInstance, data) {
-
-                        $scope.view = data;
-
-                        $scope.cancel = function() {
-                            $modalInstance.dismiss('cancel');
-                        };
-
-                        $scope.choose = function(id) {
-                            $modalInstance.close(id);
-                        };
-
-                    }],
-
-                    size: 'sm',
-                    windowClass: 'modal-revisions',
-                    resolve: {
-                        data: function() {
-                            return {
-                                revisions: revisionsList,
-                                app: $scope.view.app,
-                                current: $scope.view.tool['sbg:revision']
-                            };
-                        }
-                    }
-                });
-
-                modalInstance.result.then(function(revisionId) {
-                    _redirectTo(revisionId);
-
-                    // to indicate that something is happening while the page redirects
-                    $scope.view.loading = true;
-                });
-
-                deferred.resolve(modalInstance);
-            });
-
-            return deferred.promise;
-
+        $scope.callbacks.onSave = function() {
+            _saveCallback(Cliche.getTool());
         };
 
-        var unloadHotkeys = HotkeyRegistry.loadHotkeys([
-            {name: 'save', callback: $scope.updateTool, preventDefault: true},
-            {name: 'run', callback: $scope.runApp, preventDefault: true}
-        ]);
+        $scope.callbacks.getJson = function () {
+            _getJsonCallback( Cliche.getTool());
+        };
+
+        $scope.callbacks.onRun = function () {
+            _runCallback = $scope.callbacks.onRun;
+        };
 
         $scope.$on('$destroy', function() {
             onBeforeUnloadOff();
             onBeforeUnloadOff = undefined;
-            unloadHotkeys();
         });
 
     }]);
