@@ -924,115 +924,16 @@ angular.module('registryApp.cliche')
             return tool;
         }
 
-        /**
-         * Import external tool
-         *
-         * @param {string} json
-         * @private
-         */
-        var _importTool = function(json) {
-
-            /** @type CWLTool */
-            var newTool = JSON.parse(json);
-
-            if (angular.isDefined(newTool) && angular.isString(newTool.baseCommand)) {
-                newTool.baseCommand = [newTool.baseCommand];
-            }
-
-            if (!_.isUndefined(newTool.stdin) && _.isNull(newTool.stdin)) {
-                newTool.stdin = '';
-            }
-
-            if (!_.isUndefined(newTool.stdout) && _.isNull(newTool.stdout)) {
-                newTool.stdout = '';
-            }
-
-            Cliche.setTool(newTool);
-            $scope.view.tool = Cliche.getTool();
-            $scope.form.tool.$setDirty();
-
-            if (!_.isUndefined(newTool['sbg:job'])) {
-                Cliche.setJob(newTool['sbg:job']);
-            } else {
-                Cliche.setJob(null);
-            }
-
-            $scope.view.job = Cliche.getJob();
-
-            _readRequirementsAndResources();
-            _setUpCategories();
-
-        };
-
-        /**
-         * Update current tool
-         *
-         * @returns {object|boolean}
-         */
-        $scope.updateTool = function() {
-            var tool = Cliche.getTool();
-            var deferred = $q.defer();
-
-            if ($scope.view.loading) {
-                return false;
-            }
-
-            $scope.view.loading = true;
-
-            tool = _removeEmptyFields(tool);
-
-            tool['sbg:job'] = Cliche.getJob();
-
-            debouncedGenerateCommand();
-
-            Cliche.generatePreviewCommand().then(function(previewCommand) {
-                tool['sbg:cmdPreview'] = previewCommand;
-
-                App.update(tool, $scope.view.type)
-                    .then(function(result) {
-                        $scope.form.tool.$setPristine();
-                        $scope.view.loading = false;
-
-                        Notification.success('Tool successfully updated');
-
-                        Cliche.setTool(result.message);
-                        $scope.view.tool = Cliche.getTool();
-
-                        //reconnect requirements once the reference has been changed
-                        _readRequirementsAndResources();
-
-                        var newRevision = result.message['sbg:revision'];
-
-                        // check if reload can be skipped while changing the URL
-                        if (history.pushState) {
-                            $location.search({type: 'tool', rev: newRevision});
-                        } else {
-                            $scope.view.loading = true;
-                        }
-
-                        deferred.resolve(result);
-
-                    }, function(error) {
-                        $scope.view.loading = false;
-                        $rootScope.$broadcast('httpError', {message: error});
-                        deferred.reject(error);
-                    });
-            });
-
-            return deferred.promise;
-
-        };
-
         var _saveCallback = $scope.callbacks.onSave;
         var _getJsonCallback = $scope.callbacks.getJson;
         var _runCallback = $scope.callbacks.onRun;
 
         $scope.callbacks.onSave = function() {
-            _saveCallback(Cliche.getTool());
+            _saveCallback(_removeEmptyFields(Cliche.getTool()));
         };
 
         $scope.callbacks.getJson = function () {
-            _getJsonCallback( Cliche.getTool());
+            _getJsonCallback(_removeEmptyFields(Cliche.getTool()));
         };
 
         $scope.callbacks.onRun = function () {
