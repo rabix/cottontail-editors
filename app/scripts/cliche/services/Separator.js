@@ -29,7 +29,7 @@ angular.module('registryApp.cliche')
          *
          * @returns {Object}
          */
-        var getMap = function () {
+        var getMap = function() {
 
             return map;
 

@@ -22,23 +22,31 @@ angular.module('registryApp.common')
          */
         var onRouteChange = function(e, toState, toParams) {
 
-            if(reload) { return; }
+            if (reload) {
+                return;
+            }
 
             var modalInstance = $modal.open({
                 template: $templateCache.get('views/partials/confirm-leave.html'),
                 controller: 'ModalCtrl',
                 windowClass: 'modal-confirm',
-                resolve: {data: function () {return {};}}
+                resolve: {
+                    data: function() {
+                        return {};
+                    }
+                }
             });
 
-            modalInstance.result.then(function () {
+            modalInstance.result.then(function() {
 
-                if (typeof onRouteChangeOff === 'function') { onRouteChangeOff(); }
+                if (typeof onRouteChangeOff === 'function') {
+                    onRouteChangeOff();
+                }
 
                 reload = true;
 
                 if (typeof callback === 'function') {
-                    callback().then(function () {
+                    callback().then(function() {
                         $state.go(toState.name, toParams);
                     });
                 } else {
@@ -56,7 +64,7 @@ angular.module('registryApp.common')
          *
          * @param c
          */
-        var register = function (c) {
+        var register = function(c) {
 
             reload = false;
             callback = c;
@@ -71,7 +79,7 @@ angular.module('registryApp.common')
          *
          * @param {Boolean} value
          */
-        var setReload = function (value) {
+        var setReload = function(value) {
 
             reload = value;
 

@@ -7,13 +7,13 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('ManagePropertyOutputCtrl', ['$scope', '$uibModalInstance', 'Cliche', 'options', 'lodash', function ($scope, $modalInstance, Cliche, options, _) {
+    .controller('ManagePropertyOutputCtrl', ['$scope', '$uibModalInstance', 'Cliche', 'options', 'lodash', function($scope, $modalInstance, Cliche, options, _) {
 
         var key = options.key || 'name';
         var idObj = {n: '', o: ''};
 
         $scope.view = {};
-		$scope.view.uniqueId = _.uniqueId();
+        $scope.view.uniqueId = _.uniqueId();
         $scope.view.key = key;
         $scope.view.mode = options.mode;
         /** @type Output */
@@ -34,9 +34,9 @@ angular.module('registryApp.cliche')
         $scope.view.types = Cliche.getTypes('output');
         $scope.view.itemTypes = Cliche.getTypes('outputItem');
 
-		$scope.view.label = $scope.view.property.label;
-		$scope.view.description = $scope.view.property.description;
-		$scope.view.fileTypes = $scope.view.property['sbg:fileTypes'];
+        $scope.view.label = $scope.view.property.label;
+        $scope.view.description = $scope.view.property.description;
+        $scope.view.fileTypes = $scope.view.property['sbg:fileTypes'];
 
         $scope.view.fields = Cliche.getFieldsRef($scope.view.property.type);
 
@@ -47,12 +47,12 @@ angular.module('registryApp.cliche')
 
 
         $scope.view.metadata = [];
-		if ($scope.view.property.outputBinding && $scope.view.property.outputBinding['sbg:metadata']) {
-			_.forOwn($scope.view.property.outputBinding['sbg:metadata'], function (value, key) {
-				$scope.view.metadata.push({value: value, key: key});
-			});
-		}
-		$scope.view.isFileType = $scope.view.type === 'File' || $scope.view.itemsType === 'File';
+        if ($scope.view.property.outputBinding && $scope.view.property.outputBinding['sbg:metadata']) {
+            _.forOwn($scope.view.property.outputBinding['sbg:metadata'], function(value, key) {
+                $scope.view.metadata.push({value: value, key: key});
+            });
+        }
+        $scope.view.isFileType = $scope.view.type === 'File' || $scope.view.itemsType === 'File';
 
         idObj.o = $scope.view.name;
 
@@ -68,33 +68,33 @@ angular.module('registryApp.cliche')
             return type === 'File' || type === 'record' || (typeObj.items && typeObj.items === 'File') || (typeObj.items && typeObj.items.type === 'record');
         }), 'id');
 
-		if (!_.isEmpty($scope.view.inputs)) {
-			$scope.$watch('view.property.outputBinding["sbg:inheritMetadataFrom"]', function(n) {
-				if (_.isNull(n)) {
-					delete  $scope.view.property.outputBinding['sbg:inheritMetadataFrom'];
-					if (_.isEmpty($scope.view.property.outputBinding)) {
-						delete $scope.view.property.outputBinding;
-					}
-				}
-			});
-		}
+        if (!_.isEmpty($scope.view.inputs)) {
+            $scope.$watch('view.property.outputBinding["sbg:inheritMetadataFrom"]', function(n) {
+                if (_.isNull(n)) {
+                    delete  $scope.view.property.outputBinding['sbg:inheritMetadataFrom'];
+                    if (_.isEmpty($scope.view.property.outputBinding)) {
+                        delete $scope.view.property.outputBinding;
+                    }
+                }
+            });
+        }
 
         /**
          * Add a blank metadata object to the array
          */
-		$scope.addMetadata = function () {
-			$scope.view.metadata.push({
-				key: '',
-				value: ''
-			});
-		};
+        $scope.addMetadata = function() {
+            $scope.view.metadata.push({
+                key: '',
+                value: ''
+            });
+        };
 
         /**
          * Remove meta data from the output
          *
          * @param {integer} index
          */
-        $scope.removeMetadata = function (index) {
+        $scope.removeMetadata = function(index) {
             $scope.view.metadata.splice(index, 1);
         };
 
@@ -104,7 +104,7 @@ angular.module('registryApp.cliche')
          * @param index
          * @param value
          */
-        $scope.updateMetaValue = function (index, value) {
+        $scope.updateMetaValue = function(index, value) {
             $scope.view.metadata[index].value = value;
         };
 
@@ -113,7 +113,7 @@ angular.module('registryApp.cliche')
          *
          * @param {Expression} value
          */
-        $scope.updateOutputEval = function (value) {
+        $scope.updateOutputEval = function(value) {
             if (_.isObject(value)) {
                 $scope.view.property.outputBinding.outputEval = value;
             } else {
@@ -132,24 +132,26 @@ angular.module('registryApp.cliche')
             $scope.view.error = '';
             $scope.view.form.$setDirty();
 
-            if ($scope.view.form.$invalid) { return false; }
+            if ($scope.view.form.$invalid) {
+                return false;
+            }
 
-	        if ($scope.view.isFileType) {
-		        if (!$scope.view.property.outputBinding) {
-			        $scope.view.property.outputBinding = {};
-		        }
+            if ($scope.view.isFileType) {
+                if (!$scope.view.property.outputBinding) {
+                    $scope.view.property.outputBinding = {};
+                }
 
-		        $scope.view.property.outputBinding['sbg:metadata'] = {};
+                $scope.view.property.outputBinding['sbg:metadata'] = {};
 
 
-		        if (!_.isEmpty($scope.view.metadata)) {
-			        _.forEach($scope.view.metadata, function(meta) {
-				        if (!meta.error && meta.key !== '') {
-					        $scope.view.property.outputBinding['sbg:metadata'][meta.key] = meta.value;
-				        }
-			        });
-		        }
-	        } else {
+                if (!_.isEmpty($scope.view.metadata)) {
+                    _.forEach($scope.view.metadata, function(meta) {
+                        if (!meta.error && meta.key !== '') {
+                            $scope.view.property.outputBinding['sbg:metadata'][meta.key] = meta.value;
+                        }
+                    });
+                }
+            } else {
                 if ($scope.view.property.outputBinding && $scope.view.property.outputBinding['sbg:metadata']) {
                     delete $scope.view.property.outputBinding['sbg:metadata'];
                 }
@@ -204,7 +206,7 @@ angular.module('registryApp.cliche')
                 delete formatted['sbg:fileTypes'];
             }
 
-	        idObj.n = $scope.view.name;
+            idObj.n = $scope.view.name;
 
             Cliche.manageProperty(options.mode, formatted, options.properties, idObj)
                 .then(function() {
@@ -220,7 +222,7 @@ angular.module('registryApp.cliche')
             if (n !== o) {
                 $scope.view.isFileType = false;
 
-                switch(n) {
+                switch (n) {
                     case 'array':
                         $scope.view.itemsType = 'File';
                         $scope.view.items = $scope.view.itemsType;
@@ -245,8 +247,8 @@ angular.module('registryApp.cliche')
             }
         });
 
-		$scope.$watch('view.itemsType', function(n, o) {
-			if (n !== o) {
+        $scope.$watch('view.itemsType', function(n, o) {
+            if (n !== o) {
                 $scope.view.symbols = enumObj.symbols;
                 $scope.view.isFileType = false;
 
@@ -283,15 +285,15 @@ angular.module('registryApp.cliche')
                         $scope.view.items = $scope.view.itemsType;
                         break;
                 }
-			}
-		});
+            }
+        });
 
         /**
          * Update existing glob value with expression or literal
          *
          * @param value
          */
-        $scope.updateGlobValue = function (value) {
+        $scope.updateGlobValue = function(value) {
 
             if (_.isUndefined($scope.view.property.outputBinding)) {
                 $scope.view.property.outputBinding = {};
@@ -302,7 +304,7 @@ angular.module('registryApp.cliche')
         /**
          * Dismiss modal
          */
-        $scope.cancel = function () {
+        $scope.cancel = function() {
             $modalInstance.dismiss('cancel');
         };
 

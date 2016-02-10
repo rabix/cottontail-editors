@@ -11,28 +11,28 @@ angular.module('registryApp.dyole')
 
             fileFilter: ['file', 'File', 'directory', 'Directory'],
 
-            _fileTypeCheck: function (schema, type) {
+            _fileTypeCheck: function(schema, type) {
 
                 var filter = this.fileFilter;
 
                 if (type === 'array') {
                     return typeof schema.items === 'string' ?
-                        filter.indexOf(schema.items) !== -1 :
-                        filter.indexOf(schema.items.type) !== -1;
+                    filter.indexOf(schema.items) !== -1 :
+                    filter.indexOf(schema.items.type) !== -1;
                 }
 
                 return filter.indexOf(type) !== -1;
             },
 
-            checkTypeFile: function (schema, type) {
-				
-				type = type || {};
-				
+            checkTypeFile: function(schema, type) {
+
+                type = type || {};
+
                 if (typeof schema === 'string') {
                     return this._fileTypeCheck(type, schema);
                 }
 
-                if ( typeof schema.type === 'object' && !_.isArray(schema.type)) {
+                if (typeof schema.type === 'object' && !_.isArray(schema.type)) {
 
                     if (!_.isArray(schema.type)) {
                         return this.checkTypeFile(schema, schema.type);
@@ -43,9 +43,9 @@ angular.module('registryApp.dyole')
                     }
                 }
 
-				if (typeof schema.type === 'string') {
-					return this._fileTypeCheck(schema, schema.type);
-				}
+                if (typeof schema.type === 'string') {
+                    return this._fileTypeCheck(schema, schema.type);
+                }
 
                 return false;
             },
@@ -55,7 +55,7 @@ angular.module('registryApp.dyole')
              * @param {object} nodeSchema
              * @returns {boolean}
              */
-            checkSystem: function (nodeSchema) {
+            checkSystem: function(nodeSchema) {
 
                 return nodeSchema.softwareDescription && nodeSchema.softwareDescription.repo_name === 'system';
             },
@@ -69,7 +69,7 @@ angular.module('registryApp.dyole')
              * @returns {string}
              * @private
              */
-            generateNodeId: function (model, used) {
+            generateNodeId: function(model, used) {
                 var _id, check = true,
                     name = (model.softwareDescription && model.softwareDescription.label) ? model.softwareDescription.label : model.label || model.name,
                     n = 0;
@@ -79,7 +79,7 @@ angular.module('registryApp.dyole')
                     name = name.slice(1);
                 }
 
-                var _fixName = function (n) {
+                var _fixName = function(n) {
 
                     var regex = /[^A-Za-z0-9]/g;
 
@@ -90,7 +90,7 @@ angular.module('registryApp.dyole')
 
                 used = used || {};
 
-                var _checkIdAvailable = function (id) {
+                var _checkIdAvailable = function(id) {
                     return !!used[id];
                 };
 
@@ -118,12 +118,12 @@ angular.module('registryApp.dyole')
                 return _id;
             },
 
-            parseType: function (type) {
+            parseType: function(type) {
                 if (type === 'string') {
                     return type;
                 }
 
-                if (_.isArray(type)){
+                if (_.isArray(type)) {
                     return type[1] || type[0];
                 }
 
@@ -132,13 +132,13 @@ angular.module('registryApp.dyole')
                 }
             },
 
-            fullParseType: function (type) {
+            fullParseType: function(type) {
 
                 if (typeof type === 'string') {
                     return type;
                 }
 
-                if (_.isArray(type)){
+                if (_.isArray(type)) {
                     return this.fullParseType(type[1] || type[0]);
                 }
 

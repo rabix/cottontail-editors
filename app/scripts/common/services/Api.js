@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('registryApp.common')
-    .service('Api', ['$resource', '$http', function ($resource, $http) {
+    .service('Api', ['$resource', '$http', function($resource, $http) {
 
         var self = {};
         var apiUrl = '/api';
@@ -58,7 +58,7 @@ angular.module('registryApp.common')
                     method: 'GET',
                     headers: {'range': 'bytes=' + range + '-'},
                     transformResponse: [function(data) {
-                        return { content: JSON.parse(data)};
+                        return {content: JSON.parse(data)};
                     }].concat($http.defaults.transformResponse)
                 }
             });

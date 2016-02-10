@@ -17,12 +17,12 @@ angular.module('registryApp.dyole')
 
         var mirror;
 
-        var timeoutId = $timeout(function () {
+        var timeoutId = $timeout(function() {
 
             mirror = CodeMirror(document.querySelector('.codemirror-editor'), {
                 lineNumbers: true,
                 value: '',
-                mode:  {name: "javascript", json: true},
+                mode: {name: "javascript", json: true},
                 theme: 'mbo'
             });
 
@@ -33,7 +33,7 @@ angular.module('registryApp.dyole')
          * @param str
          * @returns {boolean}
          */
-        var isJsonString = function (str) {
+        var isJsonString = function(str) {
 
             try {
                 JSON.parse(str);
@@ -60,13 +60,13 @@ angular.module('registryApp.dyole')
             $scope.view.validating = true;
 
             Workflow.validateJson(json)
-                .then(function (data) {
+                .then(function(data) {
 
                     $scope.view.validating = false;
 
                     $modalInstance.close(data);
 
-                }, function () {
+                }, function() {
                     $scope.view.validating = false;
                 });
 
@@ -76,11 +76,11 @@ angular.module('registryApp.dyole')
         /**
          * Close the modal window
          */
-        $scope.cancel = function () {
+        $scope.cancel = function() {
             $modalInstance.dismiss('cancel');
         };
 
-        $scope.$on('$destroy', function () {
+        $scope.$on('$destroy', function() {
             if (angular.isDefined(timeoutId)) {
                 $timeout.cancel(timeoutId);
                 timeoutId = undefined;

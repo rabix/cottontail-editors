@@ -16,7 +16,7 @@ angular.module('registryApp.dyole').factory('PipelineService', [function() {
 
     service = {
 
-        refresh: function () {
+        refresh: function() {
             _.forEach(refresh, function(callback) {
                 if (callback && _.isFunction(callback)) {
                     callback();
@@ -30,7 +30,7 @@ angular.module('registryApp.dyole').factory('PipelineService', [function() {
          * @param id
          * @param onRegister
          */
-        register: function (id, onRegister, onRefresh) {
+        register: function(id, onRegister, onRefresh) {
 
             pipelines[id] = null;
 
@@ -52,7 +52,7 @@ angular.module('registryApp.dyole').factory('PipelineService', [function() {
          * @param id
          * @param instance
          */
-        setInstance: function (id, instance) {
+        setInstance: function(id, instance) {
             if (id && instance) {
                 pipelines[id] = instance;
 
@@ -74,7 +74,7 @@ angular.module('registryApp.dyole').factory('PipelineService', [function() {
          * @param id
          * @returns {*}
          */
-        getInstance: function (id) {
+        getInstance: function(id) {
 
             if (pipelines[id]) {
                 return pipelines[id];
@@ -89,7 +89,7 @@ angular.module('registryApp.dyole').factory('PipelineService', [function() {
          *
          * @param id
          */
-        removeInstance: function (id) {
+        removeInstance: function(id) {
             if (pipelines[id]) {
                 pipelines[id] = null;
                 delete pipelines[id];

@@ -5,15 +5,15 @@
 'use strict';
 
 angular.module('registryApp.app')
-    .factory('File', ['$q', 'Api', 'lodash', 'Globals', function ($q, Api, _, Globals) {
+    .factory('File', ['$q', 'Api', 'lodash', 'Globals', function($q, Api, _, Globals) {
 
         var self = {};
 
-        self.getFiles = function () {
+        self.getFiles = function() {
             return Api.files.get({}).$promise;
         };
 
-        self.getFilesInProject = function (config) {
+        self.getFilesInProject = function(config) {
             var path = Globals.projectId;
             config = config || {};
             config.limit = config.limit || 0;
@@ -37,7 +37,7 @@ angular.module('registryApp.app')
          * @param file
          * @returns {$promise|*}
          */
-        self.getStat = function (file) {
+        self.getStat = function(file) {
             return Api.fileStats.get({file: file}).$promise;
         };
 

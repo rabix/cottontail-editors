@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.common')
-    .controller('MarkdownCtrl', ['$scope', '$uibModalInstance', 'data', function ($scope, $modalInstance, data) {
+    .controller('MarkdownCtrl', ['$scope', '$uibModalInstance', 'data', function($scope, $modalInstance, data) {
 
         $scope.view = {};
         $scope.view.description = data.markdown;
@@ -16,14 +16,14 @@ angular.module('registryApp.common')
         /**
          * Close the modal
          */
-        $scope.ok = function () {
+        $scope.ok = function() {
             $modalInstance.close();
         };
 
         /**
          * Dismiss the modal
          */
-        $scope.cancel = function () {
+        $scope.cancel = function() {
             $modalInstance.dismiss('cancel');
         };
 

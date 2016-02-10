@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.common')
-    .directive('paginator', ['$templateCache', function ($templateCache) {
+    .directive('paginator', ['$templateCache', function($templateCache) {
         return {
             restrict: 'E',
             template: $templateCache.get('views/partials/paginator.html'),
@@ -16,7 +16,7 @@ angular.module('registryApp.common')
                 total: '=',
                 handler: '&'
             },
-            controller: ['$scope', function ($scope) {
+            controller: ['$scope', function($scope) {
 
                 $scope.paginator = {};
                 $scope.paginator.prev = false;
@@ -63,14 +63,19 @@ angular.module('registryApp.common')
                 resultLoaded();
 
                 $scope.$watch('total', function(n, o) {
-                    if (n !== o) { resultLoaded(); }
+                    if (n !== o) {
+                        resultLoaded();
+                    }
                 });
 
                 $scope.$watch('page', function(n, o) {
-                    if (n !== o) { resultLoaded(); }
+                    if (n !== o) {
+                        resultLoaded();
+                    }
                 });
 
             }],
-            link: function() {}
+            link: function() {
+            }
         };
     }]);

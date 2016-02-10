@@ -4,13 +4,13 @@
 
 'use strict';
 angular.module('registryApp.dyole')
-    .factory('Formater', ['Const', 'lodash', function (Const, _) {
+    .factory('Formater', ['Const', 'lodash', function(Const, _) {
 
         var formater = {
 
             packedSchema: null,
 
-            toRabixSchema: function (j, exposed, values) {
+            toRabixSchema: function(j, exposed, values) {
 
                 debugger;
 
@@ -72,7 +72,7 @@ angular.module('registryApp.dyole')
                 return json;
             },
 
-            toPipelineSchema: function (j) {
+            toPipelineSchema: function(j) {
 
                 var json = _.clone(j);
 
@@ -97,11 +97,11 @@ angular.module('registryApp.dyole')
 
             },
 
-            _transformRelationsToSteps: function (relations, nodes, schemas, exposed, values) {
+            _transformRelationsToSteps: function(relations, nodes, schemas, exposed, values) {
 
                 var _self = this;
 
-                _.forEach(relations, function (rel) {
+                _.forEach(relations, function(rel) {
                     var step, nodeSchema;
 
                     nodeSchema = schemas[rel.end_node];
@@ -115,10 +115,14 @@ angular.module('registryApp.dyole')
                     if (step) {
                         step.app = _.clone(nodeSchema);
 
-                        if (step.app.x) { delete step.app.x; }
-                        if (step.app.y) { delete step.app.y; }
+                        if (step.app.x) {
+                            delete step.app.x;
+                        }
+                        if (step.app.y) {
+                            delete step.app.y;
+                        }
 
-                        _.remove(_self.packedSchema.steps, function (s) {
+                        _.remove(_self.packedSchema.steps, function(s) {
 
                             return s.id === step.id;
                         });
@@ -139,10 +143,10 @@ angular.module('registryApp.dyole')
 
             },
 
-            _addExposedParams: function (exposed) {
+            _addExposedParams: function(exposed) {
                 var packedSchema = this.packedSchema;
 
-                _.forEach(exposed, function (schema, ids) {
+                _.forEach(exposed, function(schema, ids) {
 
                     if (ids.indexOf(Const.exposedSeparator) === -1) {
                         return false;
@@ -152,7 +156,7 @@ angular.module('registryApp.dyole')
                         node_id = h[0],
                         param_id;
 
-                    if (h.length > 2 ) {
+                    if (h.length > 2) {
                         h.shift();
                         param_id = h.join(Const.exposedSeparator);
                     } else {
@@ -161,7 +165,7 @@ angular.module('registryApp.dyole')
 
                     packedSchema.inputs.properties[ids] = schema;
 
-                    var step = _.find(packedSchema.steps, function (s) {
+                    var step = _.find(packedSchema.steps, function(s) {
                         return s.id === node_id;
                     });
 
@@ -179,18 +183,18 @@ angular.module('registryApp.dyole')
 
             },
 
-            _addValuesToSteps: function (values) {
+            _addValuesToSteps: function(values) {
                 var steps = this.packedSchema.steps;
 
-                _.forEach(values, function (values, node_id) {
+                _.forEach(values, function(values, node_id) {
 
-                    var app = _.find(steps, function (step) {
+                    var app = _.find(steps, function(step) {
                         return step.id === node_id;
                     });
 
                     if (app) {
 
-                        _.forEach(values, function (param, param_id) {
+                        _.forEach(values, function(param, param_id) {
                             app.inputs[param_id] = param;
                         });
 
@@ -200,7 +204,7 @@ angular.module('registryApp.dyole')
                 });
             },
 
-            _createParamValue: function (params, input_id, node_id) {
+            _createParamValue: function(params, input_id, node_id) {
                 var values = this.packedSchema.values[node_id] = this.packedSchema.values[node_id] || {};
 //
 //                if (typeof params === 'object') {
@@ -208,21 +212,21 @@ angular.module('registryApp.dyole')
 //                        values[param_id] = param;
 //                    });
 //                } else {
-                    values[input_id] = params;
+                values[input_id] = params;
 //                }
 
             },
 
-            _createExposedParam: function (from, node_id, paramSchema) {
+            _createExposedParam: function(from, node_id, paramSchema) {
                 var exposed = this.packedSchema.exposed = this.packedSchema.exposed || {};
 
                 exposed[from.$from] = paramSchema;
             },
 
-            _generateSystemNodes: function (relations, nodes, schemas) {
+            _generateSystemNodes: function(relations, nodes, schemas) {
                 var _self = this;
 
-                _.forEach(relations, function (rel) {
+                _.forEach(relations, function(rel) {
 
                     var nodeSchema = schemas[rel.end_node];
 
@@ -244,13 +248,13 @@ angular.module('registryApp.dyole')
                 });
             },
 
-            _checkSystem: function (nodeSchema) {
+            _checkSystem: function(nodeSchema) {
 
                 return nodeSchema.softwareDescription && nodeSchema.softwareDescription.repo_name === 'system';
             },
 
-            _attachOutput: function (rel) {
-                var filter = _.filter(this.packedSchema.steps, function (step) {
+            _attachOutput: function(rel) {
+                var filter = _.filter(this.packedSchema.steps, function(step) {
                     return step.id === rel.start_node;
                 });
 
@@ -261,7 +265,7 @@ angular.module('registryApp.dyole')
                 }
             },
 
-            _createInOut: function (type, node) {
+            _createInOut: function(type, node) {
                 var obj = this.packedSchema[type].properties;
 
                 type = type === 'inputs' ? 'outputs' : 'inputs';
@@ -272,7 +276,7 @@ angular.module('registryApp.dyole')
 
             },
 
-            _createOneAppStep: function (rel, nodes, schemas) {
+            _createOneAppStep: function(rel, nodes, schemas) {
 
                 var from, exists, step = {};
 
@@ -280,7 +284,7 @@ angular.module('registryApp.dyole')
 
                 step.id = rel.end_node;
 
-                exists = _.filter(this.packedSchema.steps, function (s) {
+                exists = _.filter(this.packedSchema.steps, function(s) {
 
                     return s.id === step.id;
                 });
@@ -332,7 +336,7 @@ angular.module('registryApp.dyole')
              * @param json
              * @private
              */
-            _transformStepsToRelations: function (json) {
+            _transformStepsToRelations: function(json) {
 
                 var _self = this,
                     steps = json.steps,
@@ -340,7 +344,7 @@ angular.module('registryApp.dyole')
                     nodes = this.packedSchema.nodes,
                     schemas = this.packedSchema.schemas;
 
-                _.forEach(steps, function (step) {
+                _.forEach(steps, function(step) {
                     var end_node = step.id;
 
                     if (!schemas[step.id]) {
@@ -349,7 +353,7 @@ angular.module('registryApp.dyole')
 
                     step.app.id = step.id;
 
-                    var ex = _.filter(nodes, function (n) {
+                    var ex = _.filter(nodes, function(n) {
                         return n.id === step.app.id;
                     });
 
@@ -361,19 +365,19 @@ angular.module('registryApp.dyole')
                     _self._generateOutputsFromStep(json, relations, schemas, nodes, step, end_node);
                 });
 
-                _.forEach(nodes, function (model) {
+                _.forEach(nodes, function(model) {
 
                     // skip system nodes (inputs, outputs)
                     if (model.softwareDescription && model.softwareDescription.repo_name === 'system') {
                         return;
                     }
 
-                    _.forEach(model.inputs.properties, function (input, name) {
+                    _.forEach(model.inputs.properties, function(input, name) {
                         input.name = name;
                         input.id = input.id || name;
                     });
 
-                    _.forEach(model.outputs.properties, function (output, name) {
+                    _.forEach(model.outputs.properties, function(output, name) {
                         output.name = name;
                         output.id = output.id || name;
                     });
@@ -382,11 +386,11 @@ angular.module('registryApp.dyole')
 
             },
 
-            _generateInputsFromStep: function (json, relations, schemas, nodes, step, end_node) {
+            _generateInputsFromStep: function(json, relations, schemas, nodes, step, end_node) {
                 var _self = this,
                     start_node, output_name, input_name, count = 0;
 
-                _.forEach(step.inputs, function (from, input) {
+                _.forEach(step.inputs, function(from, input) {
 
                     if (typeof from.$from === 'undefined') {
 
@@ -398,7 +402,7 @@ angular.module('registryApp.dyole')
                         var h = from.$from.split(Const.exposedSeparator),
                             param_id;
 
-                        if (h.length > 2 ) {
+                        if (h.length > 2) {
                             h.shift();
                             param_id = h.join(Const.exposedSeparator);
                         } else {
@@ -416,7 +420,7 @@ angular.module('registryApp.dyole')
                             from.$from = [from.$from];
                         }
 
-                        _.forEach(from.$from, function (fr) {
+                        _.forEach(from.$from, function(fr) {
 
                             var relation, s, filter;
 
@@ -428,7 +432,7 @@ angular.module('registryApp.dyole')
                             } else {
                                 var input_id;
 
-                                filter = _.filter(json.inputs.properties, function (input, id) {
+                                filter = _.filter(json.inputs.properties, function(input, id) {
                                     if (input.id === s[0]) {
                                         input_id = id;
                                     }
@@ -472,19 +476,19 @@ angular.module('registryApp.dyole')
                 });
             },
 
-            _generateOutputsFromStep: function (json, relations, schemas, nodes, step, end_node) {
+            _generateOutputsFromStep: function(json, relations, schemas, nodes, step, end_node) {
                 var _self = this,
                     start_node, output_name, input_name,
                     cached_end_node = end_node;
 
-                _.forEach(step.outputs, function (to, output) {
+                _.forEach(step.outputs, function(to, output) {
                     var relation, filter, output_id;
 
                     start_node = cached_end_node;
                     output_name = output;
 
                     input_name = to.$to;
-                    filter = _.filter(json.outputs.properties, function (out, id) {
+                    filter = _.filter(json.outputs.properties, function(out, id) {
                         if (out.id === input_name) {
                             output_id = id;
                         }
@@ -500,7 +504,7 @@ angular.module('registryApp.dyole')
                             schemas[output_id] = m;
                         }
 
-                        var ex = _.filter(nodes, function (n) {
+                        var ex = _.filter(nodes, function(n) {
                             return n.id === output_id;
                         });
 
@@ -530,7 +534,7 @@ angular.module('registryApp.dyole')
 
             },
 
-            _generateIOSchema: function (type, schema, id) {
+            _generateIOSchema: function(type, schema, id) {
 
                 var internalType = type === 'input' ? 'outputs' : 'inputs';
 

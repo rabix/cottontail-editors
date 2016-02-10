@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.common', ['ngSanitize', 'cfp.hotkeys', 'Chronicle', 'ui-notification', 'markdown'])
-	.config(['markdownConfig', function(markdownConfig) {
-		markdownConfig.escapeHtml = true;
-	}]);
+    .config(['markdownConfig', function(markdownConfig) {
+        markdownConfig.escapeHtml = true;
+    }]);
 

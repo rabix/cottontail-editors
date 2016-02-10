@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('registryApp.app')
-    .factory('App', ['$q', 'Api', 'SchemaValidator', 'lodash', 'Globals', function ($q, Api, SchemaValidator, _, Globals) {
+    .factory('App', ['$q', 'Api', 'SchemaValidator', 'lodash', 'Globals', function($q, Api, SchemaValidator, _, Globals) {
         var self = {};
         var revision = parseInt(Globals.revision);
 
@@ -72,7 +72,7 @@ angular.module('registryApp.app')
 
             return SchemaValidator.validate(type, app)
                 .then(function() {
-                    return Api.apps.get().$promise.then(function (latest) {
+                    return Api.apps.get().$promise.then(function(latest) {
                         var rev = latest.message['sbg:revision'] + 1;
                         return Api.apps.update({revision: rev}, app).$promise;
                     });
@@ -88,31 +88,31 @@ angular.module('registryApp.app')
          * @param {number} revision
          * @param {string} svgString
          */
-        self.updateSvg = function (revision, svgString) {
-            return Api.apps.update({revision: revision, svg: 'svg'}, { svg: svgString }).$promise;
+        self.updateSvg = function(revision, svgString) {
+            return Api.apps.update({revision: revision, svg: 'svg'}, {svg: svgString}).$promise;
         };
 
-        self.validateJson = function (json) {
+        self.validateJson = function(json) {
             return Api.validateApp.validate({}, json).$promise;
         };
 
-        self.getAppUrl = function (json) {
+        self.getAppUrl = function(json) {
             return Globals.apiUrls.brood + 'apps/' + Globals.appUrl;
         };
 
-        self.flush = function (type) {
+        self.flush = function(type) {
 //            return $localForage.removeItem(type);
         };
 
-        self.getPublicAppsByProject = function () {
+        self.getPublicAppsByProject = function() {
             return Api.getPublicAppsByProject.get({}).$promise;
         };
 
-        self.getMineAppsByProject = function () {
+        self.getMineAppsByProject = function() {
             return Api.getMineAppsByProject.get({}).$promise;
         };
 
-        self.createAppTask = function (rev) {
+        self.createAppTask = function(rev) {
             /*
              {
              "type": "RABIX",
@@ -132,17 +132,17 @@ angular.module('registryApp.app')
             return Api.createAppTask.post({}, body).$promise;
         };
 
-        self.redirectToTaskPage = function (task) {
+        self.redirectToTaskPage = function(task) {
             var url = '/u/' + Globals.projectOwner + '/' + Globals.projectSlug + '/tasks/' + task.message.platform_id;
 
             window.location = url;
         };
-        
-        self.checkOutdatedInWf = function (list) {
+
+        self.checkOutdatedInWf = function(list) {
             return Api.checkOutdatedInWf.post({}, list).$promise;
         };
-        
-        self.getValidInstances = function () {
+
+        self.getValidInstances = function() {
             return Api.getValidInstances.get().$promise;
         };
 

@@ -7,7 +7,7 @@
 /* globals angular */
 
 angular.module('registryApp.common')
-    .controller('ExpressionCtrl', ['$scope', '$uibModalInstance', 'options', 'Cliche', function ($scope, $modalInstance, options, Cliche) {
+    .controller('ExpressionCtrl', ['$scope', '$uibModalInstance', 'options', 'Cliche', function($scope, $modalInstance, options, Cliche) {
         'use strict';
 
         $scope.view = {};
@@ -26,7 +26,7 @@ angular.module('registryApp.common')
          *
          * @param expr
          */
-        $scope.ok = function (expr) {
+        $scope.ok = function(expr) {
 
             $modalInstance.close(expr);
         };
@@ -34,14 +34,14 @@ angular.module('registryApp.common')
         /**
          * On cancel close the modal
          */
-        $scope.cancel = function () {
+        $scope.cancel = function() {
             $modalInstance.dismiss('cancel');
         };
 
         /**
          * On cancel close the modal and clear expression
          */
-        $scope.clear = function () {
+        $scope.clear = function() {
             $modalInstance.close('');
         };
 

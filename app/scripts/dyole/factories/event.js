@@ -83,16 +83,15 @@ angular.module('registryApp.dyole')
 
                 // Considered throwing an exception here as well, but might be too
                 // restrictive - so instead method will just exit.
-                if (typeof this.subscriptions[name] === 'undefined' ||
-                    !(this.subscriptions[name] instanceof Array)) {
+                if (typeof this.subscriptions[name] === 'undefined' || !(this.subscriptions[name] instanceof Array)) {
 
-                    throw 'Error: Subscription "' + name  + '" does\'t exist';
+                    throw 'Error: Subscription "' + name + '" does\'t exist';
                 }
 
                 if (typeof handler === 'undefined') {
                     delete this.subscriptions[name];
                 } else {
-                    for (var i = 0, l = this.subscriptions[name].length; i< l; i++) {
+                    for (var i = 0, l = this.subscriptions[name].length; i < l; i++) {
 
                         if (this.subscriptions[name][i].handler === handler) {
 

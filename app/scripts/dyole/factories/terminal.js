@@ -4,9 +4,9 @@
 'use strict';
 
 angular.module('registryApp.dyole')
-    .factory('terminal', ['lodash', function (_) {
+    .factory('terminal', ['lodash', function(_) {
 
-        var Terminal = function (options) {
+        var Terminal = function(options) {
 
             this.parent = options.parent;
             this.model = options.model;
@@ -55,14 +55,14 @@ angular.module('registryApp.dyole')
                 color: '#dddddd'
             },
 
-            initHandlers: function () {
+            initHandlers: function() {
                 var _self = this;
 
                 this.mousedown = false;
 
                 if (this.Pipeline.editMode) {
 
-                    this.terminal.mousedown(function (e) {
+                    this.terminal.mousedown(function(e) {
                         var translation;
 
                         translation = _self._getElTranslation();
@@ -79,7 +79,7 @@ angular.module('registryApp.dyole')
 
                 }
 
-                this.terminal.mouseup(function () {
+                this.terminal.mouseup(function() {
                     _self.Pipeline.Event.trigger('terminal:deselectAvailable');
 
                     _self._removeTempConnection(_self.onMouseUpCallback);
@@ -87,23 +87,23 @@ angular.module('registryApp.dyole')
                     _self.mousedown = false;
                 });
 
-                var terMouseOver = function (terminal) {
+                var terMouseOver = function(terminal) {
 
                     if (_self.mousedown && _self.tempConnection) {
                         _self.mouseoverTerminal = terminal;
                         _self.Pipeline.mouseoverTerminal = terminal;
                     }
 
-                }, terMouseOut = function () {
+                }, terMouseOut = function() {
 
                     _self.mouseoverTerminal = null;
                     _self.Pipeline.mouseoverTerminal = null;
 
-                }, terSelectAvail = function (terminal, nodeId) {
+                }, terSelectAvail = function(terminal, nodeId) {
 
                     _self.checkAvailibility(terminal, nodeId);
 
-                }, terDeselectAvail = function () {
+                }, terDeselectAvail = function() {
 
                     _self.setDefaultState();
 
@@ -143,7 +143,7 @@ angular.module('registryApp.dyole')
 
             },
 
-            onMouseUpCallback: function () {
+            onMouseUpCallback: function() {
                 var _self = this,
                     available;
 
@@ -162,7 +162,7 @@ angular.module('registryApp.dyole')
 
             },
 
-            checkAvailibility: function (terminal, nodeId) {
+            checkAvailibility: function(terminal, nodeId) {
                 var available = false;
 
                 var start_node = this.parent.model,
@@ -173,7 +173,7 @@ angular.module('registryApp.dyole')
                 if (terminal.input !== this.model.input && nodeId !== this.parent.model.id) {
 
                     console.log('Input name: %s, Output name: %s, start_node: %s, end_node: %s', input_name, output_name, start_node.name, end_node.name);
-                    var check = _.filter(this.Pipeline.connections, function (connection) {
+                    var check = _.filter(this.Pipeline.connections, function(connection) {
                         var rel = connection.model;
 
                         var check = rel.start_node === start_node.id && rel.end_node === end_node.id,
@@ -201,7 +201,7 @@ angular.module('registryApp.dyole')
                 };
             },
 
-            render: function () {
+            render: function() {
 
                 var _self = this,
                     model = this.model,
@@ -245,7 +245,7 @@ angular.module('registryApp.dyole')
 
                 borders.push(terminalBorder).push(terminalInner);
 
-                borders.hover(function () {
+                borders.hover(function() {
                     _self.mouseover = true;
 
                     if (!_self.Pipeline.tempConnectionActive) {
@@ -253,7 +253,7 @@ angular.module('registryApp.dyole')
                     }
 
                     _self.Pipeline.Event.trigger('terminal:mouseover', _self);
-                }, function () {
+                }, function() {
                     _self.mouseover = false;
                     _self.hideTerminalName();
                     _self.Pipeline.Event.trigger('terminal:mouseout');
@@ -274,12 +274,12 @@ angular.module('registryApp.dyole')
                 return this;
             },
 
-            showTerminalName: function () {
+            showTerminalName: function() {
 
                 this.label.attr('fill', '#666');
             },
 
-            hideTerminalName: function () {
+            hideTerminalName: function() {
 
                 if (!this.mouseover) {
                     this.label.attr('fill', 'none');
@@ -287,7 +287,7 @@ angular.module('registryApp.dyole')
 
             },
 
-            setConnectedState: function () {
+            setConnectedState: function() {
                 this.terminalConnected = true;
                 this.terminalInner.attr({
                     gradient: this.constraints.connected.gradiant,
@@ -304,7 +304,7 @@ angular.module('registryApp.dyole')
 
             },
 
-            showAvailableState: function () {
+            showAvailableState: function() {
                 this.terminalInner.attr({
                     gradient: 'none',
                     fill: this.constraints.available.fill,
@@ -312,7 +312,7 @@ angular.module('registryApp.dyole')
                 });
             },
 
-            setDefaultState: function () {
+            setDefaultState: function() {
 
                 this.terminalInner.attr({
                     gradient: this.constraints.gradient,
@@ -336,11 +336,11 @@ angular.module('registryApp.dyole')
 
             },
 
-            addConnection: function (connectionId) {
+            addConnection: function(connectionId) {
                 this.connections.push(connectionId);
             },
 
-            _getElTranslation: function () {
+            _getElTranslation: function() {
                 var scale, translation, parent, pipeline;
 
                 scale = this.Pipeline.getEl().getScale();
@@ -360,7 +360,7 @@ angular.module('registryApp.dyole')
                 return translation;
             },
 
-            _getConnectionCoordsDiff: function (e) {
+            _getConnectionCoordsDiff: function(e) {
                 var diff = {},
                     ctm = this.terminal.node.getScreenCTM(),
                     translation;
@@ -373,7 +373,7 @@ angular.module('registryApp.dyole')
                 return diff;
             },
 
-            drawConnection: function (e) {
+            drawConnection: function(e) {
 
                 var attr, coords,
                     diff = this._getConnectionCoordsDiff(e),
@@ -401,7 +401,7 @@ angular.module('registryApp.dyole')
 
             },
 
-            redrawConnection: function (e) {
+            redrawConnection: function(e) {
                 var coords,
                     scale = this.pipelineWrap.getScale().x,
                     diff = this._getConnectionCoordsDiff(e);
@@ -416,10 +416,10 @@ angular.module('registryApp.dyole')
                 this.tempConnection.redraw(coords, 8 * scale);
             },
 
-            removeConnection: function (connectionId) {
+            removeConnection: function(connectionId) {
                 var index;
 
-                _.each(this.connections, function (id, ind) {
+                _.each(this.connections, function(id, ind) {
                     if (id === connectionId) {
                         index = ind;
                     }
@@ -432,7 +432,7 @@ angular.module('registryApp.dyole')
                 return this.connections.length !== 0;
             },
 
-            _removeTempConnection: function (callback) {
+            _removeTempConnection: function(callback) {
 
                 if (this.tempConnection) {
 
@@ -450,15 +450,15 @@ angular.module('registryApp.dyole')
 
             },
 
-            changeTerminalName: function (name) {
+            changeTerminalName: function(name) {
                 this.model.name = name;
                 this.label.attr('text', this.model.name);
             },
 
-            destroy: function () {
+            destroy: function() {
                 var _self = this;
 
-                _.each(this.events, function (ev) {
+                _.each(this.events, function(ev) {
                     _self.Pipeline.Event.unsubscribe(ev.event, ev.handler);
                 });
 
@@ -475,7 +475,7 @@ angular.module('registryApp.dyole')
         };
 
         return {
-            getInstance: function (options) {
+            getInstance: function(options) {
                 return new Terminal(options);
             }
         };

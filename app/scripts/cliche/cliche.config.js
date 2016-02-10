@@ -7,14 +7,14 @@
 'use strict';
 
 angular.module('registryApp.cliche', [
-    'ui.bootstrap',
-    'registryApp.common',
-    'registryApp.app',
-    'registryApp.util',
-    'ngPrettyJson',
-    'markdown',
-    'ngTagsInput',
-    'ngAnimate'])
+        'ui.bootstrap',
+        'registryApp.common',
+        'registryApp.app',
+        'registryApp.util',
+        'ngPrettyJson',
+        'markdown',
+        'ngTagsInput',
+        'ngAnimate'])
     .constant('Const', {
         exposedSeparator: '$',
         generalSeparator: '.'

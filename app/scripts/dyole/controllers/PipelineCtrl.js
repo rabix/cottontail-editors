@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.dyole')
-    .controller('PipelineCtrl', ['$scope', '$rootScope', '$element', '$window', '$timeout', '$injector', 'common', 'pipeline', 'App', 'rawPipeline', '$uibModal', '$templateCache', 'PipelineService', 'lodash', 'Notification', 'HotkeyRegistry', 'rawRabixWorkflow', function ($scope, $rootScope, $element, $window, $timeout, $injector, Common, pipeline, App, rawPipeline, $modal, $templateCache, PipelineService, _, Notification, HotkeyRegistry, rawRabixWorkflow) {
+    .controller('PipelineCtrl', ['$scope', '$rootScope', '$element', '$window', '$timeout', '$injector', 'common', 'pipeline', 'App', 'rawPipeline', '$uibModal', '$templateCache', 'PipelineService', 'lodash', 'Notification', 'HotkeyRegistry', 'rawRabixWorkflow', function($scope, $rootScope, $element, $window, $timeout, $injector, Common, pipeline, App, rawPipeline, $modal, $templateCache, PipelineService, _, Notification, HotkeyRegistry, rawRabixWorkflow) {
 
         var Pipeline;
         var selector = '.pipeline';
@@ -25,7 +25,7 @@ angular.module('registryApp.dyole')
         /**
          * Initialize pipeline
          */
-        var initPipeline = function (obj) {
+        var initPipeline = function(obj) {
 
             $scope.view.explanation = !obj || (obj.steps && obj.steps.length === 0); // || (obj.dataLinks && obj.dataLinks.length === 0);
 
@@ -40,7 +40,7 @@ angular.module('registryApp.dyole')
 
         };
 
-        if ($scope.pipeline){
+        if ($scope.pipeline) {
             initPipeline($scope.pipeline);
         } else {
             initPipeline({});
@@ -73,7 +73,7 @@ angular.module('registryApp.dyole')
             }
         });
 
-        var fork = function (repoId, name) {
+        var fork = function(repoId, name) {
             $scope.pipeline.json = Pipeline.getJSON();
 
             $scope.pipeline.repo = repoId;
@@ -87,18 +87,18 @@ angular.module('registryApp.dyole')
         /**
          * Save pipeline locally
          */
-        $scope.$on('save-local', function (e, value) {
+        $scope.$on('save-local', function(e, value) {
             if (value) {
                 //Workflow.saveLocal(Pipeline.getJSON());
             }
         });
 
-        var format = function () {
+        var format = function() {
 
             return Pipeline.getJSON();
         };
 
-        var getUrl = function (url) {
+        var getUrl = function(url) {
 
             $modal.open({
                 template: $templateCache.get('views/partials/job-url-response.html'),
@@ -110,12 +110,16 @@ angular.module('registryApp.dyole')
                     /**
                      * Close the modal window
                      */
-                    $scope.ok = function () {
+                    $scope.ok = function() {
                         $modalInstance.close();
                     };
 
                 }],
-                resolve: { data: function () { return {trace: {message: 'Workflow link:', url:  url.url}}; }}
+                resolve: {
+                    data: function() {
+                        return {trace: {message: 'Workflow link:', url: url.url}};
+                    }
+                }
             });
 
 
@@ -127,7 +131,7 @@ angular.module('registryApp.dyole')
          * @param {MouseEvent} e
          * @param {String} app object
          */
-         var dropNode = function(e, app) {
+        var dropNode = function(e, app) {
 
             $scope.view.loading = true;
             $scope.view.explanation = false;
@@ -147,20 +151,20 @@ angular.module('registryApp.dyole')
                     Pipeline.addNode(result.message, e.clientX, e.clientY);
                 } else {
                     console.error('App does not exist: Message: %s, Status: %s', result.message, result.status);
-                    Notification.error('App does not exist: Message: '+ result.message +', Status: ' + result.status);
+                    Notification.error('App does not exist: Message: ' + result.message + ', Status: ' + result.status);
                 }
 
             });
         };
 
-        var onNodeDroppedOff = $rootScope.$on('node:dropped', function (e, data) {
+        var onNodeDroppedOff = $rootScope.$on('node:dropped', function(e, data) {
             dropNode(data.e, data.app);
         });
 
         /**
          * Cancel timeout
          */
-        var cancelTimeout = function () {
+        var cancelTimeout = function() {
             if (angular.isDefined(timeoutId)) {
                 $timeout.cancel(timeoutId);
                 timeoutId = undefined;
@@ -170,7 +174,7 @@ angular.module('registryApp.dyole')
         /**
          * Adjust size of the canvas when window size changes
          */
-        var changeWidth = function () {
+        var changeWidth = function() {
             if (Pipeline) {
                 Pipeline.adjustSize();
             }
@@ -183,17 +187,17 @@ angular.module('registryApp.dyole')
         /**
          * Track sidebar toggle in order to adjust canvas size
          */
-        var adjustSize = function (showSidebar) {
+        var adjustSize = function(showSidebar) {
 
             cancelTimeout();
 
-            timeoutId = $timeout(function () {
+            timeoutId = $timeout(function() {
                 Pipeline.adjustSize(showSidebar);
             }, 300);
 
         };
 
-        var getEventObj = function () {
+        var getEventObj = function() {
             if (Pipeline) {
                 return Pipeline.Event
             } else {
@@ -201,13 +205,13 @@ angular.module('registryApp.dyole')
             }
         };
 
-        var updateMetadata = function (metadata) {
+        var updateMetadata = function(metadata) {
             if (Pipeline) {
                 Pipeline.updateMetadata(metadata);
             }
         };
 
-        var getSvgString = function () {
+        var getSvgString = function() {
             if (Pipeline) {
                 return Pipeline.getSvgString();
             }
@@ -216,7 +220,7 @@ angular.module('registryApp.dyole')
         /**
          * Track pipeline change
          */
-        var onPipelineChangeOff = $rootScope.$on('pipeline:change', function (isDisplay) {
+        var onPipelineChangeOff = $rootScope.$on('pipeline:change', function(isDisplay) {
             $scope.pipelineChangeFn({value: {value: true, isDisplay: isDisplay}});
         });
 
@@ -224,22 +228,26 @@ angular.module('registryApp.dyole')
          * Set fresh canvas
          */
         $scope.flush = function() {
-            if (!$scope.view.canFlush) { return false; }
+            if (!$scope.view.canFlush) {
+                return false;
+            }
 
             var modalInstance = $modal.open({
                 controller: 'ModalCtrl',
                 template: $templateCache.get('views/partials/confirm-delete.html'),
-                resolve: { data: function () {
-                    return {
-                        message: 'Are you sure you want to delete this workflow?'
-                    }; }}
+                resolve: {
+                    data: function() {
+                        return {
+                            message: 'Are you sure you want to delete this workflow?'
+                        };
+                    }
+                }
             });
 
-            modalInstance.result.then(function () {
+            modalInstance.result.then(function() {
                 App.flush();
 
                 var p = Pipeline.getJSON();
-
 
 
                 if (angular.isDefined(Pipeline)) {
@@ -255,7 +263,7 @@ angular.module('registryApp.dyole')
                     PipelineService.refresh();
 
                 }
-            }, function () {
+            }, function() {
                 return false;
             });
 
@@ -270,10 +278,10 @@ angular.module('registryApp.dyole')
          */
         var onNodeInfo = function(e, model, schema) {
 
-            var _getConnections = function () {
+            var _getConnections = function() {
                 var connections = Pipeline.getConnections();
 
-                return _.filter(connections, function(connection){
+                return _.filter(connections, function(connection) {
                     return connection.end_node === model.id || connection.start_node === model.id;
                 });
             };
@@ -282,16 +290,16 @@ angular.module('registryApp.dyole')
             var $templateCache = $injector.get('$templateCache');
 
             var modalInstance = $modal.open({
-                template: $templateCache.get('views/dyole/'+ ( schema ? 'io-' : '') +'node-info.html'),
+                template: $templateCache.get('views/dyole/' + ( schema ? 'io-' : '') + 'node-info.html'),
                 controller: 'ModalTabsCtrl',
                 windowClass: 'modal-node',
                 resolve: {
-                    data: function () {
+                    data: function() {
                         return {
                             model: model,
                             connections: _getConnections(),
                             schema: schema,
-                            getUniqueId: function (id) {
+                            getUniqueId: function(id) {
                                 return Common.generateNodeId({name: id}, Pipeline.nodes);
                             }
                         };
@@ -299,7 +307,7 @@ angular.module('registryApp.dyole')
                 }
             });
 
-            modalInstance.result.then(function (data) {
+            modalInstance.result.then(function(data) {
 
                 var scatter = data.scatter,
                     connections = Pipeline.getConnections(),
@@ -308,7 +316,7 @@ angular.module('registryApp.dyole')
 
                 if (!_.isEmpty(data.schema)) {
                     // get schema for i/o node ( copyes schema from *put )
-                    var ioType =  model.inputs.length ? 'inputs' : 'outputs',
+                    var ioType = model.inputs.length ? 'inputs' : 'outputs',
                         schema;
 
                     schema = model[ioType][0];
@@ -328,7 +336,7 @@ angular.module('registryApp.dyole')
                         Pipeline.model.schemas[data.nodeId] = node;
                     }
 
-                    _.each(connections, function (con) {
+                    _.each(connections, function(con) {
 
                         if (con.start_node === model.id) {
                             con.start_node = data.nodeId;
@@ -341,7 +349,7 @@ angular.module('registryApp.dyole')
                     });
                 }
                 else {
-                    _.each(connections, function (con) {
+                    _.each(connections, function(con) {
 
                         if (con.start_node === model.id) {
                             con.start_node = data.nodeId;
@@ -392,29 +400,33 @@ angular.module('registryApp.dyole')
                 template: $templateCache.get(template),
                 controller: 'NodeEditCtrl',
                 windowClass: 'modal-node',
-                resolve: {data: function () { return {
-                    label: opts.label,
-                    onSave: onSave,
-                    scope: scope
-                }; }}
+                resolve: {
+                    data: function() {
+                        return {
+                            label: opts.label,
+                            onSave: onSave,
+                            scope: scope
+                        };
+                    }
+                }
             });
 
         };
 
-        var onIncludeInPorts = function (nodeId, inputId, value) {
+        var onIncludeInPorts = function(nodeId, inputId, value) {
             Pipeline.updateNodePorts(nodeId, inputId, value);
         };
 
-        var getWorkflowHints = function () {
+        var getWorkflowHints = function() {
             return Pipeline.getHints();
         };
 
-        var getRequireSBGMetadata = function () {
+        var getRequireSBGMetadata = function() {
             return Pipeline.getRequireSBGMetadata();
         };
 
-        var updateWorkflowSettings = function (hints, requireSBGMetadata) {
-            return Pipeline.updateWorkflowSettings(hints,requireSBGMetadata);
+        var updateWorkflowSettings = function(hints, requireSBGMetadata) {
+            return Pipeline.updateWorkflowSettings(hints, requireSBGMetadata);
         };
 
         var onNodeInfoOff = $rootScope.$on('node:info', onNodeInfo.bind(this));
@@ -438,7 +450,7 @@ angular.module('registryApp.dyole')
 
         });
 
-        var validate = function () {
+        var validate = function() {
             return App.validateJson(Pipeline.getJSON());
         };
 
@@ -449,13 +461,13 @@ angular.module('registryApp.dyole')
 
         $scope.pipelineActions = {
 
-            zoomIn: function () {
+            zoomIn: function() {
 
                 if (Pipeline) {
                     Pipeline.zoomIn();
                 }
             },
-            zoomOut: function () {
+            zoomOut: function() {
 
                 if (Pipeline) {
                     Pipeline.zoomOut();

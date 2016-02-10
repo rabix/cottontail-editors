@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('registryApp.app')
-    .service('Workflow', ['Api', 'lodash', function (Api, _) {
+    .service('Workflow', ['Api', 'lodash', function(Api, _) {
 
         var self = {};
 
@@ -61,7 +61,7 @@ angular.module('registryApp.app')
          * @param id
          * @returns {*}
          */
-        self.deleteWorkflow = function (id) {
+        self.deleteWorkflow = function(id) {
 
             return Api.pipelines.delete({id: id}).$promise;
 
@@ -73,7 +73,7 @@ angular.module('registryApp.app')
          * @param workflow
          * @returns {$promise|*}
          */
-        self.format = function (workflow) {
+        self.format = function(workflow) {
 
             return Api.formatPipeline.format({action: ''}, {pipeline: workflow}).$promise;
 
@@ -85,7 +85,7 @@ angular.module('registryApp.app')
          * @param workflow
          * @returns {$promise|*}
          */
-        self.getURL = function (workflow) {
+        self.getURL = function(workflow) {
             return Api.formatPipeline.format({action: 'upload'}, {pipeline: workflow}).$promise;
         };
 
@@ -95,8 +95,8 @@ angular.module('registryApp.app')
          * @param workflow
          * @returns {$promise|*}
          */
-        self.fork = function (workflow) {
-            return Api.forkPipeline.fork({}, { pipeline: workflow }).$promise;
+        self.fork = function(workflow) {
+            return Api.forkPipeline.fork({}, {pipeline: workflow}).$promise;
         };
 
         /**
@@ -105,7 +105,7 @@ angular.module('registryApp.app')
          * @param id
          * @returns {$promise|*}
          */
-        self.getRevision = function (id) {
+        self.getRevision = function(id) {
             return Api.pipelineRevs.get({id: id}).$promise;
         };
 
@@ -140,7 +140,7 @@ angular.module('registryApp.app')
          * @param data
          * @returns {$promise|*}
          */
-        self.publishRevision = function (id, data) {
+        self.publishRevision = function(id, data) {
             return Api.pipelineRevs.update({id: id}, data || {}).$promise;
         };
 
@@ -150,7 +150,7 @@ angular.module('registryApp.app')
          * @param id
          * @returns {$promise|*}
          */
-        self.deleteRevision = function (id) {
+        self.deleteRevision = function(id) {
             return Api.pipelineRevs.delete({id: id}).$promise;
         };
 
@@ -160,7 +160,7 @@ angular.module('registryApp.app')
          * @param type
          * @returns {$promise|*|A.$promise}
          */
-        self.groupedWorkflows = function (type) {
+        self.groupedWorkflows = function(type) {
             return Api.groupedWorkflows.get({type: type}).$promise;
         };
 
@@ -170,7 +170,7 @@ angular.module('registryApp.app')
          * @param json
          * @returns {*}
          */
-        self.validateJson = function (json) {
+        self.validateJson = function(json) {
             return Api.validatePipeline.validate({}, {json: json}).$promise;
         };
 

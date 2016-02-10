@@ -82,8 +82,8 @@ angular.module('registryApp.cliche')
                 delete transformed.stdout;
                 delete transformed['arguments'];
                 // requirements
-	            // scripts by default should only have the ExpressionEngineRequirement
-	            transformed.requirements = _.filter(transformed.requirements, {class: 'ExpressionEngineRequirement'});
+                // scripts by default should only have the ExpressionEngineRequirement
+                transformed.requirements = _.filter(transformed.requirements, {class: 'ExpressionEngineRequirement'});
             } else {
 
                 transformed['class'] = 'CommandLineTool';
@@ -221,7 +221,9 @@ angular.module('registryApp.cliche')
                     _.pluck(toolJSON.outputs, 'id')
                 ];
 
-                ids = _.reduce(ids, function(fl, a) { return fl.concat(a); }, []);
+                ids = _.reduce(ids, function(fl, a) {
+                    return fl.concat(a);
+                }, []);
 
 
                 idName = 'id';
@@ -379,9 +381,9 @@ angular.module('registryApp.cliche')
          *
          * @returns {Requirement}
          */
-		var getExpressionRequirement = function() {
-			return _.find(rawTool.requirements, {'class': 'ExpressionEngineRequirement'});
-		};
+        var getExpressionRequirement = function() {
+            return _.find(rawTool.requirements, {'class': 'ExpressionEngineRequirement'});
+        };
 
         /**
          * Delete property (input or output) from the object
@@ -420,7 +422,7 @@ angular.module('registryApp.cliche')
             if (_.isString(schema)) {
                 return schema;
 
-            } else if ( _.isArray(schema)) {
+            } else if (_.isArray(schema)) {
                 var tmp = schema[1] || schema[0];
                 return _.isObject(tmp) ? tmp.type : tmp;
 
@@ -523,7 +525,7 @@ angular.module('registryApp.cliche')
             var command = [];
 
             return prepareProperties(properties, inputs)
-                .then(function (props) {
+                .then(function(props) {
 
                     props = _.sortBy(props, 'position');
 
@@ -538,7 +540,9 @@ angular.module('registryApp.cliche')
 
                     return command.join(' ');
 
-                }, function (error) { return $q.reject(error); });
+                }, function(error) {
+                    return $q.reject(error);
+                });
 
         };
 
@@ -560,9 +564,9 @@ angular.module('registryApp.cliche')
             if (expr) {
 
                 SandBox.evaluate(expr, selfInput)
-                    .then(function (result) {
+                    .then(function(result) {
                         deferred.resolve(result);
-                    }, function (error) {
+                    }, function(error) {
                         deferred.reject(error);
                     });
 
@@ -596,22 +600,22 @@ angular.module('registryApp.cliche')
                 joiner = _.isNull(itemSeparator) ? (' ' + prefix + separator) : itemSeparator;
             }
 
-            var evaluate = function (val) {
+            var evaluate = function(val) {
 
                 var deferred = $q.defer();
 
                 if (items && items.type === 'record') {
                     parseObjectInput(items.fields, val)
-                        .then(function (result) {
+                        .then(function(result) {
                             deferred.resolve(result);
-                        }, function (error) {
+                        }, function(error) {
                             deferred.reject(error);
                         });
                 } else {
                     applyTransform(property.inputBinding.valueFrom, (_.isObject(val) && !_.isArray(val) ? val.path : val), true)
-                        .then(function (result) {
+                        .then(function(result) {
                             deferred.resolve(result);
-                        }, function (error) {
+                        }, function(error) {
                             deferred.reject(error);
                         });
                 }
@@ -623,7 +627,7 @@ angular.module('registryApp.cliche')
             if (_.isArray(input) || _.isNull(input)) {
 
                 if (_.isUndefined(property.inputBinding.valueFrom)) {
-                    _.each(input, function (val) {
+                    _.each(input, function(val) {
                         promises.push(_.isObject(val) ? val.path : val);
                     });
                 } else {
@@ -636,9 +640,9 @@ angular.module('registryApp.cliche')
 
 
             return $q.all(promises)
-                .then(function (result) {
+                .then(function(result) {
                     return result.join(joiner);
-                }, function (error) {
+                }, function(error) {
                     return $q.reject(error);
                 });
 
@@ -675,7 +679,7 @@ angular.module('registryApp.cliche')
                     key = parseName(property),
                     schema = getSchema('input', property, 'tool', false),
                     type = parseType(schema),
-	                fields = getFieldsRef(schema),
+                    fields = getFieldsRef(schema),
                     prefix = property.inputBinding.prefix || '',
                     itemSeparator = parseItemSeparator(property.inputBinding.itemSeparator),
 
@@ -689,72 +693,74 @@ angular.module('registryApp.cliche')
                     }, property.inputBinding);
 
                 // check that a value has been set inside the job, if not return
-                if (typeof inputs[key] === 'undefined') { return; }
+                if (typeof inputs[key] === 'undefined') {
+                    return;
+                }
 
                 switch (type) {
-                case 'array':
-                    /* if input is ARRAY */
-                    parseArrayInput(property, inputs[key], prefix, itemSeparator)
-                        .then(function (result) {
-                            prop.val = result;
-                            deferred.resolve(prop);
-                        }, function (error) {
-                            deferred.reject(error);
-                        });
-                    break;
-                case ('File' || 'file'):
-                    /* if input is FILE */
-                    var value = property.inputBinding.valueFrom ? inputs[key] : inputs[key].path;
-                    applyTransform(property.inputBinding.valueFrom, value, true)
-                        .then(function (result) {
-                            prop.val = result;
-                            deferred.resolve(prop);
-                        }, function (error) {
-                            deferred.reject(error);
-                        });
-                    break;
-                case 'record':
-                    /* if input is RECORD  */
-                    // @todo why is type RecordType.fields not compatible with type Input[]?
-                    parseObjectInput(fields, inputs[key])
-                        .then(function (result) {
-                            prop.val = result;
-                            deferred.resolve(prop);
-                        }, function (error) {
-                            deferred.reject(error);
-                        });
-                    break;
-                case 'boolean':
-                    /* if input is BOOLEAN */
-                    if (property.inputBinding.valueFrom) {
-                        //TODO: this is hack, if bool type has expression defined then it works in the same way as (for example) string input type
-                        prop.type = 'string';
-                        applyTransform(property.inputBinding.valueFrom, inputs[key], true)
-                            .then(function (result) {
+                    case 'array':
+                        /* if input is ARRAY */
+                        parseArrayInput(property, inputs[key], prefix, itemSeparator)
+                            .then(function(result) {
                                 prop.val = result;
                                 deferred.resolve(prop);
-                            }, function (error) {
+                            }, function(error) {
                                 deferred.reject(error);
                             });
-                    } else {
-                        prop.val = '';
-                        deferred.resolve(prop);
-                        if (inputs[key]) {
-                            promises.push(deferred.promise);
-                        }
-                    }
-                    break;
-                default:
-                    /* if input is anything else (STRING, ENUM, INT, FLOAT) */
-                    applyTransform(property.inputBinding.valueFrom, inputs[key], true)
-                        .then(function (result) {
-                            prop.val = result;
+                        break;
+                    case ('File' || 'file'):
+                        /* if input is FILE */
+                        var value = property.inputBinding.valueFrom ? inputs[key] : inputs[key].path;
+                        applyTransform(property.inputBinding.valueFrom, value, true)
+                            .then(function(result) {
+                                prop.val = result;
+                                deferred.resolve(prop);
+                            }, function(error) {
+                                deferred.reject(error);
+                            });
+                        break;
+                    case 'record':
+                        /* if input is RECORD  */
+                        // @todo why is type RecordType.fields not compatible with type Input[]?
+                        parseObjectInput(fields, inputs[key])
+                            .then(function(result) {
+                                prop.val = result;
+                                deferred.resolve(prop);
+                            }, function(error) {
+                                deferred.reject(error);
+                            });
+                        break;
+                    case 'boolean':
+                        /* if input is BOOLEAN */
+                        if (property.inputBinding.valueFrom) {
+                            //TODO: this is hack, if bool type has expression defined then it works in the same way as (for example) string input type
+                            prop.type = 'string';
+                            applyTransform(property.inputBinding.valueFrom, inputs[key], true)
+                                .then(function(result) {
+                                    prop.val = result;
+                                    deferred.resolve(prop);
+                                }, function(error) {
+                                    deferred.reject(error);
+                                });
+                        } else {
+                            prop.val = '';
                             deferred.resolve(prop);
-                        }, function (error) {
-                            deferred.reject(error);
-                        });
+                            if (inputs[key]) {
+                                promises.push(deferred.promise);
+                            }
+                        }
+                        break;
+                    default:
+                        /* if input is anything else (STRING, ENUM, INT, FLOAT) */
+                        applyTransform(property.inputBinding.valueFrom, inputs[key], true)
+                            .then(function(result) {
+                                prop.val = result;
+                                deferred.resolve(prop);
+                            }, function(error) {
+                                deferred.reject(error);
+                            });
 
-                    break;
+                        break;
                 }
 
                 if (prop.type !== 'boolean') {
@@ -775,7 +781,7 @@ angular.module('registryApp.cliche')
         var generatePreviewCommand = function() {
             var requiredInputs;
 
-            requiredInputs = _.filter(toolJSON.inputs, function (input) {
+            requiredInputs = _.filter(toolJSON.inputs, function(input) {
                 var inputSchema = getSchema('input', input, 'tool', false);
                 return isRequired(inputSchema);
             });
@@ -802,8 +808,8 @@ angular.module('registryApp.cliche')
             }
 
             return prepareProperties(toolInputs, jobInputs)
-                /* go through arguments and concat then with inputs */
-                .then(function (inputs) {
+            /* go through arguments and concat then with inputs */
+                .then(function(inputs) {
 
                     var argsPromises = [];
 
@@ -811,13 +817,18 @@ angular.module('registryApp.cliche')
 
                         var deferred = $q.defer(),
                             prefix = arg.prefix || '',
-                            prop = _.merge({key: 'arg' + key, position: arg.position || 0, prefix: prefix, val: ''}, arg);
+                            prop = _.merge({
+                                key: 'arg' + key,
+                                position: arg.position || 0,
+                                prefix: prefix,
+                                val: ''
+                            }, arg);
 
                         applyTransform(arg.valueFrom, arg.valueFrom, false)
-                            .then(function (result) {
+                            .then(function(result) {
                                 prop.val = result;
                                 deferred.resolve(prop);
-                            }, function (error) {
+                            }, function(error) {
                                 deferred.reject(error);
                             });
 
@@ -825,17 +836,19 @@ angular.module('registryApp.cliche')
                     });
 
                     return $q.all(argsPromises)
-                        .then(function (args) {
+                        .then(function(args) {
                             return _.sortBy(inputs.concat(args), 'position');
-                        }, function (error) { return $q.reject(error); });
+                        }, function(error) {
+                            return $q.reject(error);
+                        });
 
                 })
                 /* generate command from arguments and inputs and apply transforms on baseCmd */
-                .then(function (inputsAndArgs) {
+                .then(function(inputsAndArgs) {
 
-		            function isBlank(val) {
-			            return val === '' || _.isNull(val);
-		            }
+                    function isBlank(val) {
+                        return val === '' || _.isNull(val);
+                    }
 
                     var command = [],
                         baseCmdPromises = [];
@@ -847,17 +860,17 @@ angular.module('registryApp.cliche')
                             cmd = '';
 
                         if (!arg.type || arg.type === 'boolean' || !isBlank(value)) {
-	                        if (_.isArray(value)) {
-		                        // set default value for itemSeparator for arguments that haven't been saved with new interface
-		                        arg.itemSeparator = _.isUndefined(arg.itemSeparator) ? null : arg.itemSeparator;
+                            if (_.isArray(value)) {
+                                // set default value for itemSeparator for arguments that haven't been saved with new interface
+                                arg.itemSeparator = _.isUndefined(arg.itemSeparator) ? null : arg.itemSeparator;
 
-		                        var itemSeparator = parseItemSeparator(arg.itemSeparator),
-		                            joiner = _.isNull(itemSeparator) ? (' ' + arg.prefix + separate) : itemSeparator;
+                                var itemSeparator = parseItemSeparator(arg.itemSeparator),
+                                    joiner = _.isNull(itemSeparator) ? (' ' + arg.prefix + separate) : itemSeparator;
 
-		                        cmd = arg.prefix + separate + value.join(joiner);
-	                        } else {
+                                cmd = arg.prefix + separate + value.join(joiner);
+                            } else {
                                 cmd = arg.prefix + separate + value;
-	                        }
+                            }
 
                             if (!_.isEmpty(cmd)) {
                                 command.push(cmd);
@@ -865,14 +878,14 @@ angular.module('registryApp.cliche')
                         }
                     });
 
-                    _.each(toolJSON.baseCommand, function (baseCmd) {
+                    _.each(toolJSON.baseCommand, function(baseCmd) {
 
                         var deferred = $q.defer();
 
                         applyTransform(baseCmd, baseCmd, false)
-                            .then(function (result) {
+                            .then(function(result) {
                                 deferred.resolve(result);
-                            }, function (error) {
+                            }, function(error) {
                                 deferred.reject(error);
                             });
 
@@ -880,22 +893,31 @@ angular.module('registryApp.cliche')
                     });
 
                     return $q.all(baseCmdPromises)
-                        .then(function (commands) {
+                        .then(function(commands) {
                             return {command: command, baseCommand: commands.join(' ')};
-                        }, function (error) { return $q.reject(error); });
+                        }, function(error) {
+                            return $q.reject(error);
+                        });
 
                 })
                 /* apply transforms on stdin/stdout */
-                .then(function (res) {
+                .then(function(res) {
                     return $q.all([
-                            applyTransform(toolJSON.stdin, toolJSON.stdin),
-                            applyTransform(toolJSON.stdout, toolJSON.stdout)
-                        ]).then(function(result) {
-                            return {command: res.command, baseCommand: res.baseCommand, stdin: result[0], stdout: result[1]};
-                        }, function (error) { return $q.reject(error); });
+                        applyTransform(toolJSON.stdin, toolJSON.stdin),
+                        applyTransform(toolJSON.stdout, toolJSON.stdout)
+                    ]).then(function(result) {
+                        return {
+                            command: res.command,
+                            baseCommand: res.baseCommand,
+                            stdin: result[0],
+                            stdout: result[1]
+                        };
+                    }, function(error) {
+                        return $q.reject(error);
+                    });
                 })
                 /* generate final command */
-                .then(function (result) {
+                .then(function(result) {
 
                     consoleCMD = result.baseCommand + ' ' + result.command.join(' ');
 
@@ -914,7 +936,7 @@ angular.module('registryApp.cliche')
                     return consoleCMD.trim();
 
                 })
-                .catch(function (error) {
+                .catch(function(error) {
                     return $q.reject(error);
                 });
         };
@@ -1002,27 +1024,27 @@ angular.module('registryApp.cliche')
                 /* if any level and enum */
             } else if (inner.type === 'enum') {
 
-	            type = {
-		            type: 'enum',
-		            name: inner.enumName,
-		            symbols: inner.symbols
-	            };
+                type = {
+                    type: 'enum',
+                    name: inner.enumName,
+                    symbols: inner.symbols
+                };
 
             } else if (inner.type === 'map') {
 
-	            type = {
-		            type: 'map',
-		            name: inner.mapName,
-		            values: inner.values
-	            };
+                type = {
+                    type: 'map',
+                    name: inner.mapName,
+                    values: inner.values
+                };
 
-            /* every other case */
+                /* every other case */
             } else if (inner.type === 'record') {
-	            type = {
-		            type: 'record',
-		            name: inner.recordName,
-		            fields: inner.fields
-	            };
+                type = {
+                    type: 'record',
+                    name: inner.recordName,
+                    fields: inner.fields
+                };
 
             } else {
                 type = inner.type;
@@ -1034,14 +1056,14 @@ angular.module('registryApp.cliche')
             var adapter = propertyType === 'input' ? 'inputBinding' : 'outputBinding';
 
             if (tmp[adapter]) {
-                _(tmp[adapter]).keys().forEach(function (key) {
+                _(tmp[adapter]).keys().forEach(function(key) {
 
                     // _.isEmpty returns true for number values, which we don't want
                     // if there is a number value, then the prop is not empty
                     if (_.isEmpty(tmp[adapter][key]) && !_.isNumber(tmp[adapter][key]) && !_.isBoolean(tmp[adapter][key]) && !_.isNull(tmp[adapter][key])) {
-	                    if (key !== 'metadata') {
-	                        delete tmp[adapter][key];
-	                    }
+                        if (key !== 'metadata') {
+                            delete tmp[adapter][key];
+                        }
                     }
                 });
 
@@ -1057,10 +1079,10 @@ angular.module('registryApp.cliche')
                 formatted = tmp;
                 formatted.id = '#' + inner.name;
 
-            /*
-            *  schema for every other level
-            *  under the key "type"
-            */
+                /*
+                 *  schema for every other level
+                 *  under the key "type"
+                 */
             } else {
                 /* format structure for required property */
                 tmp.type = inner.required ? [type] : ['null', type];
@@ -1146,15 +1168,15 @@ angular.module('registryApp.cliche')
             }
         };
 
-		/**
-		 * Returns array of fields for records
-		 *
-		 * @param {Type} schema
+        /**
+         * Returns array of fields for records
+         *
+         * @param {Type} schema
          * @returns {RecordType.fields}
-		 */
-		var getFieldsRef = function (schema) {
-			return schema[0] === 'null' ? schema[1].fields : schema[0].fields;
-		};
+         */
+        var getFieldsRef = function(schema) {
+            return schema[0] === 'null' ? schema[1].fields : schema[0].fields;
+        };
 
         /**
          * Get property schema depending on the level
@@ -1178,12 +1200,12 @@ angular.module('registryApp.cliche')
 
             if (_.isUndefined(property.type) && _.isUndefined(property.type)) {
                 /*
-                in case of second level inputs where structure is
-                {
-                    type: {*},
-                    name: {string}
-                    adapters: {object}
-                }
+                 in case of second level inputs where structure is
+                 {
+                 type: {*},
+                 name: {string}
+                 adapters: {object}
+                 }
                  */
                 return ref ? property : angular.copy(property);
             } else {
@@ -1199,7 +1221,7 @@ angular.module('registryApp.cliche')
          * @param {string} type 'input' or 'output'
          * @returns {Binding}
          */
-        var getAdapter = function (property, ref, type) {
+        var getAdapter = function(property, ref, type) {
             if (_.isEmpty(property)) {
                 return {};
             }
@@ -1229,12 +1251,12 @@ angular.module('registryApp.cliche')
             getTplType: getTplType,
             getItemsRef: getItemsRef,
             getItemsType: getItemsType,
-	        getFieldsRef: getFieldsRef,
+            getFieldsRef: getFieldsRef,
             getTypes: getTypes,
             getSchema: getSchema,
             getAdapter: getAdapter,
             checkIfEnumNameExists: checkIfEnumNameExists,
-	        getExpressionRequirement: getExpressionRequirement,
+            getExpressionRequirement: getExpressionRequirement,
             manageProperty: manageProperty,
             deleteProperty: deleteProperty,
             manageArg: manageArg,

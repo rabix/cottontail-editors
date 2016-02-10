@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('registryApp.common')
-    .directive('error', ['$templateCache', 'lodash', function ($templateCache, _) {
+    .directive('error', ['$templateCache', 'lodash', function($templateCache, _) {
         return {
             restrict: 'E',
             template: $templateCache.get('views/partials/error.html'),
@@ -9,8 +9,10 @@ angular.module('registryApp.common')
 
                 scope.errors = [];
 
-                scope.$on('httpError', function (obj, message) {
-                    if(typeof message.message !== 'string') { return; }
+                scope.$on('httpError', function(obj, message) {
+                    if (typeof message.message !== 'string') {
+                        return;
+                    }
 
                     var messages = _.pluck(scope.errors, 'message');
 
@@ -22,7 +24,7 @@ angular.module('registryApp.common')
                 /**
                  * Close the error alert
                  */
-                scope.closeErrors = function () {
+                scope.closeErrors = function() {
                     scope.errors = [];
                 };
 

@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.common')
-    .controller('CodeMirrorCtrl', ['$scope', '$element', '$timeout', 'SandBox', function ($scope, $element, $timeout, SandBox) {
+    .controller('CodeMirrorCtrl', ['$scope', '$element', '$timeout', 'SandBox', function($scope, $element, $timeout, SandBox) {
 
         var mirror;
 
@@ -17,12 +17,12 @@ angular.module('registryApp.common')
 
         $scope.view.defaultResult = true;
 
-        var timeoutId = $timeout(function () {
+        var timeoutId = $timeout(function() {
 
             mirror = CodeMirror($element[0].querySelector('.codemirror-editor'), {
                 lineNumbers: true,
                 value: $scope.code,
-                mode:  'javascript',
+                mode: 'javascript',
                 theme: 'mbo'
             });
 
@@ -31,7 +31,7 @@ angular.module('registryApp.common')
         /**
          * Execute the code and show the result
          */
-        $scope.execute = function () {
+        $scope.execute = function() {
 
             $scope.view.defaultResult = false;
 
@@ -41,12 +41,12 @@ angular.module('registryApp.common')
                 var self = $scope.arg ? {$self: JSON.parse($scope.arg)} : (!_.isUndefined($scope.defaultSelf) ? {$self: $scope.defaultSelf} : {});
 
                 SandBox.evaluate(code, self)
-                    .then(function (result) {
+                    .then(function(result) {
 
                         $scope.view.result = result;
                         $scope.view.error = '';
 
-                    }, function (error) {
+                    }, function(error) {
 
                         $scope.view.result = '';
                         $scope.view.error = error;
@@ -61,7 +61,7 @@ angular.module('registryApp.common')
         /**
          * Load expression to the particular input/output/argument/whatever
          */
-        $scope.load = function () {
+        $scope.load = function() {
 
             var code = mirror.getValue();
 
@@ -69,11 +69,11 @@ angular.module('registryApp.common')
                 var self = $scope.arg ? {$self: JSON.parse($scope.arg)} : (!_.isUndefined($scope.defaultSelf) ? {$self: $scope.defaultSelf} : {});
 
                 SandBox.evaluate(code, self)
-                    .then(function () {
+                    .then(function() {
 
                         $scope.handleLoad({expr: code});
 
-                    }, function (error) {
+                    }, function(error) {
 
                         if (!$scope.view.firstTry) {
 
@@ -96,18 +96,18 @@ angular.module('registryApp.common')
         /**
          * Cancel expression edit
          */
-        $scope.cancel = function () {
+        $scope.cancel = function() {
             $scope.handleCancel();
         };
 
         /**
          * Cancel expression edit and clear it
          */
-        $scope.clear = function () {
+        $scope.clear = function() {
             $scope.handleClear();
         };
 
-        $scope.$on('$destroy', function () {
+        $scope.$on('$destroy', function() {
             SandBox.terminate();
             if (angular.isDefined(timeoutId)) {
                 $timeout.cancel(timeoutId);
@@ -116,7 +116,7 @@ angular.module('registryApp.common')
         });
 
     }])
-    .directive('codemirror', ['$templateCache', function ($templateCache) {
+    .directive('codemirror', ['$templateCache', function($templateCache) {
         return {
             restrict: 'E',
             template: $templateCache.get('views/partials/codemirror.html'),
@@ -129,6 +129,7 @@ angular.module('registryApp.common')
                 handleClear: '&'
             },
             controller: 'CodeMirrorCtrl',
-            link: function() {}
+            link: function() {
+            }
         };
     }]);

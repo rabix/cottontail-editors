@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('registryApp.app')
-    .factory('Tool', ['$q', 'Api', 'SchemaValidator', 'lodash', function ($q, Api, SchemaValidator, _) {
+    .factory('Tool', ['$q', 'Api', 'SchemaValidator', 'lodash', function($q, Api, SchemaValidator, _) {
 
         /**
          * Get list of tools
@@ -164,7 +164,7 @@ angular.module('registryApp.app')
          *
          * @returns {*}
          */
-        var getGroupedTools = function (type, searchTerm) {
+        var getGroupedTools = function(type, searchTerm) {
 
             return Api.groupedTools.get({type: type, q: searchTerm}).$promise;
 
@@ -176,7 +176,7 @@ angular.module('registryApp.app')
          * @param id
          * @returns {*}
          */
-        var deleteTool = function (id) {
+        var deleteTool = function(id) {
 
             return Api.apps.delete({id: id}).$promise;
 
@@ -188,7 +188,7 @@ angular.module('registryApp.app')
          * @param id
          * @returns {*}
          */
-        var deleteRevision = function (id) {
+        var deleteRevision = function(id) {
 
             return Api.revisions.delete({id: id}).$promise;
 

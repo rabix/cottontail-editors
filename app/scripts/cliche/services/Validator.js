@@ -35,9 +35,9 @@ angular.module('registryApp.cliche')
          * @param {*} types
          * @returns {boolean}
          */
-        var isValidType = function (value, types) {
+        var isValidType = function(value, types) {
 
-            var isValid = function (value, type) {
+            var isValid = function(value, type) {
                 if (type === 'array') {
                     return _.isArray(value);
                 }
@@ -46,7 +46,7 @@ angular.module('registryApp.cliche')
 
             if (_.isArray(types)) {
 
-                var valid = _.find(types, function (type) {
+                var valid = _.find(types, function(type) {
                     return isValid(value, type);
                 });
 
@@ -65,7 +65,7 @@ angular.module('registryApp.cliche')
          * @param value
          * @param def
          */
-        var setObsolete = function (prefix, value, def) {
+        var setObsolete = function(prefix, value, def) {
 
             var diff = _.difference(_.keys(value), _.keys(def));
 
@@ -82,7 +82,7 @@ angular.module('registryApp.cliche')
          * @param value
          * @param options
          */
-        var setRequiredAndInvalid = function (prefix, value, options) {
+        var setRequiredAndInvalid = function(prefix, value, options) {
 
             if (options.rec && value) {
                 var type;
@@ -102,7 +102,7 @@ angular.module('registryApp.cliche')
                 }
             }
 
-            _.each(options.def, function (attr, key) {
+            _.each(options.def, function(attr, key) {
 
                 var val = !_.isNull(value) && !_.isUndefined(value) && !_.isUndefined(value[key]) ? value[key] : undefined;
 
@@ -166,10 +166,10 @@ angular.module('registryApp.cliche')
             if (_.isArray(options.json)) {
                 _.each(options.json, function(j, index) {
 
-                    setRequiredAndInvalid(options.parent + '['+ getNodeName(j, index) +']', j, options);
+                    setRequiredAndInvalid(options.parent + '[' + getNodeName(j, index) + ']', j, options);
 
                     if (options.strict) {
-                        setObsolete(options.parent + '['+ getNodeName(j, index) +']', j, options.def);
+                        setObsolete(options.parent + '[' + getNodeName(j, index) + ']', j, options.def);
                     }
                 });
             } else {
@@ -188,7 +188,7 @@ angular.module('registryApp.cliche')
                         _.each(options.json, function(j, index) {
                             validate({
                                 json: getNextNode(j, key),
-                                parent: options.parent + ':' + key + '['+ getNodeName(j, index) +']',
+                                parent: options.parent + ':' + key + '[' + getNodeName(j, index) + ']',
                                 def: def.def,
                                 strict: def.strict,
                                 rec: def.rec
@@ -230,7 +230,7 @@ angular.module('registryApp.cliche')
             });
 
 //            if (_.isEmpty(trace.required) && _.isEmpty(trace.invalid)) {
-                deferred.resolve();
+            deferred.resolve();
 //            } else {
 //                deferred.reject(trace);
 //            }

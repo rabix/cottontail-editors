@@ -32,24 +32,24 @@ angular.module('registryApp.dyole')
 //            strokeColor: '#dddddd',
             strokeColor: '#FBFCFC',
 
-            getEl: function () {
+            getEl: function() {
                 return this.connection;
             },
 
-            _attachEvents: function () {
+            _attachEvents: function() {
 
                 var _self = this,
                     events = [], calcStroke, rmWire, conState;
 
-                calcStroke = function () {
+                calcStroke = function() {
                     _self.draw();
                 };
 
-                rmWire = function () {
+                rmWire = function() {
                     _self.removeWire();
                 };
 
-                conState = function (state) {
+                conState = function(state) {
                     _self.tempConnectionActive = state;
                 };
 
@@ -87,13 +87,13 @@ angular.module('registryApp.dyole')
 
                 var bodyRect = document.body.getBoundingClientRect();
                 var elemRect = element.getBoundingClientRect();
-                var top   = elemRect.top - bodyRect.top;
-                var left   = elemRect.left - bodyRect.left;
+                var top = elemRect.top - bodyRect.top;
+                var left = elemRect.left - bodyRect.left;
 
                 return {top: top, left: left};
             },
 
-            onMouseOver: function (e, x, y) {
+            onMouseOver: function(e, x, y) {
 
                 if (!this.Pipeline.tempConnectionActive) {
 
@@ -105,7 +105,7 @@ angular.module('registryApp.dyole')
 
                     this.wire = this.canvas.image(src, x - canvasOffset.left - 15, y - canvasOffset.top - 15, 25, 25);
 
-                    this.wire.click(function () {
+                    this.wire.click(function() {
                         self.removeWire();
                         self.destroyConnection();
                     });
@@ -118,7 +118,7 @@ angular.module('registryApp.dyole')
 
             },
 
-            onMouseOut: function () {
+            onMouseOut: function() {
                 var diff = this.startTime - Date.now();
 
                 if (this.wire && diff > 1000) {
@@ -128,14 +128,14 @@ angular.module('registryApp.dyole')
                 }
             },
 
-            removeWire: function () {
+            removeWire: function() {
                 if (this.wire) {
                     this.wire.unclick();
                     this.wire.remove();
                 }
             },
 
-            draw: function () {
+            draw: function() {
 
                 var coords, strokeWidth,
                     scale = this.parent.getScale().x;
@@ -149,7 +149,7 @@ angular.module('registryApp.dyole')
                 this.removeWire();
             },
 
-            _getCoords: function (input, output) {
+            _getCoords: function(input, output) {
 
                 var inputCoords = input.el.node.getCTM(),
                     outputCoords = output.el.node.getCTM(),
@@ -174,7 +174,7 @@ angular.module('registryApp.dyole')
                 };
             },
 
-            _createConnection: function (input, output) {
+            _createConnection: function(input, output) {
 
                 var attr, coords,
                     scale = this.parent.getScale().x;
@@ -207,17 +207,17 @@ angular.module('registryApp.dyole')
                 output.terminals[input.model.id] = this.model.id;
             },
 
-            destroyConnection: function (pipelineDestroy) {
+            destroyConnection: function(pipelineDestroy) {
 
-				var inputCheck, outputCheck;
-				var startNode = this.Pipeline.getNodeById(this.model.start_node),
-					endNode = this.Pipeline.getNodeById(this.model.end_node);
+                var inputCheck, outputCheck;
+                var startNode = this.Pipeline.getNodeById(this.model.start_node),
+                    endNode = this.Pipeline.getNodeById(this.model.end_node);
 
                 this.connection.remove();
 
-				startNode.removeConnection(this.model);
+                startNode.removeConnection(this.model);
                 endNode.removeConnection(this.model);
-				
+
                 inputCheck = this.input.removeConnection(this.model.id);
                 outputCheck = this.output.removeConnection(this.model.id);
 
@@ -244,14 +244,14 @@ angular.module('registryApp.dyole')
                 }
             },
 
-            destroy: function (pipelineDestroy) {
+            destroy: function(pipelineDestroy) {
                 var _self = this;
 
                 pipelineDestroy = pipelineDestroy || true;
 
                 this.destroyConnection(pipelineDestroy);
 
-                _.each(this.events, function (ev) {
+                _.each(this.events, function(ev) {
                     _self.Pipeline.Event.unsubscribe(ev.event, ev.handler);
                 });
             }

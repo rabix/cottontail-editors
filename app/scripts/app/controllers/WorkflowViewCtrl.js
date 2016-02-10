@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('registryApp.app')
-    .controller('WorkflowViewCtrl', ['$scope', '$q', '$state', '$stateParams', 'Sidebar', 'Loading', 'Workflow', 'User', 'Job', '$uibModal', '$templateCache', 'Helper', 'lodash', function ($scope, $q, $state, $stateParams, Sidebar, Loading, Workflow, User, Job, $modal, $templateCache, Helper, _) {
+    .controller('WorkflowViewCtrl', ['$scope', '$q', '$state', '$stateParams', 'Sidebar', 'Loading', 'Workflow', 'User', 'Job', '$uibModal', '$templateCache', 'Helper', 'lodash', function($scope, $q, $state, $stateParams, Sidebar, Loading, Workflow, User, Job, $modal, $templateCache, Helper, _) {
 
         Sidebar.setActive('apps');
 
@@ -37,21 +37,23 @@ angular.module('registryApp.app')
 
         $scope.Loading = Loading;
         $scope.$watch('Loading.classes', function(n, o) {
-            if (n !== o) { $scope.view.classes = n; }
+            if (n !== o) {
+                $scope.view.classes = n;
+            }
         });
 
-        Workflow.getRevision($stateParams.id).then(function (result) {
+        Workflow.getRevision($stateParams.id).then(function(result) {
             $scope.view.workflow = result.data;
 
             $q.all([
-                    Workflow.getRevisions(0, '', $scope.view.workflow.pipeline._id),
-                    Job.getJobs(0, '', 'Workflow', $scope.view.workflow.pipeline._id),
-                    User.getUser()
-                ]).then(function(result) {
-                    revisionsLoaded(result[0]);
-                    jobsLoaded(result[1]);
-                    $scope.view.user = result[2].user;
-                });
+                Workflow.getRevisions(0, '', $scope.view.workflow.pipeline._id),
+                Job.getJobs(0, '', 'Workflow', $scope.view.workflow.pipeline._id),
+                User.getUser()
+            ]).then(function(result) {
+                revisionsLoaded(result[0]);
+                jobsLoaded(result[1]);
+                $scope.view.user = result[2].user;
+            });
 
         });
 
@@ -67,7 +69,7 @@ angular.module('registryApp.app')
 
             $scope.view.total.revisions = result.total;
 
-            var publicRevs = _.filter($scope.view.revisions, function (rev) {
+            var publicRevs = _.filter($scope.view.revisions, function(rev) {
                 return rev.is_public;
             });
 
@@ -81,7 +83,7 @@ angular.module('registryApp.app')
          *
          * @param tab
          */
-        $scope.switchTab = function (tab) {
+        $scope.switchTab = function(tab) {
             $scope.view.tab = tab;
         };
 
@@ -103,7 +105,7 @@ angular.module('registryApp.app')
          *
          * @param result
          */
-        var jobsLoaded = function (result) {
+        var jobsLoaded = function(result) {
 
             $scope.view.jobs = result.list;
             $scope.view.loading = false;
@@ -129,19 +131,23 @@ angular.module('registryApp.app')
          *
          * @param id
          */
-        $scope.deleteRevision = function (id) {
+        $scope.deleteRevision = function(id) {
 
             var modalInstance = $modal.open({
                 template: $templateCache.get('views/partials/confirm-delete.html'),
                 controller: 'ModalCtrl',
                 windowClass: 'modal-confirm',
-                resolve: {data: function () { return {message: 'Are you sure you want to delete this revision?'}; }}
+                resolve: {
+                    data: function() {
+                        return {message: 'Are you sure you want to delete this revision?'};
+                    }
+                }
             });
 
-            modalInstance.result.then(function () {
-                Workflow.deleteRevision(id).then(function (data) {
+            modalInstance.result.then(function() {
+                Workflow.deleteRevision(id).then(function(data) {
 
-                    _.remove($scope.view.revisions, function (rev) {
+                    _.remove($scope.view.revisions, function(rev) {
                         return rev._id === id;
                     });
 
@@ -156,7 +162,7 @@ angular.module('registryApp.app')
         /**
          * Delete current workflow
          */
-        $scope.deleteWorkflow = function () {
+        $scope.deleteWorkflow = function() {
 
             var id = $scope.view.workflow.pipeline._id;
 
@@ -164,11 +170,15 @@ angular.module('registryApp.app')
                 template: $templateCache.get('views/partials/confirm-delete.html'),
                 controller: 'ModalCtrl',
                 windowClass: 'modal-confirm',
-                resolve: {data: function () { return {message: 'Are you sure you want to delete this workflow?'}; }}
+                resolve: {
+                    data: function() {
+                        return {message: 'Are you sure you want to delete this workflow?'};
+                    }
+                }
             });
 
-            modalInstance.result.then(function () {
-                Workflow.deleteWorkflow(id).then(function () {
+            modalInstance.result.then(function() {
+                Workflow.deleteWorkflow(id).then(function() {
                     $state.go('apps');
                 });
             });

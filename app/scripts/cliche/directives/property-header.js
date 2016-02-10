@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .directive('propertyHeader', ['$templateCache', function ($templateCache) {
+    .directive('propertyHeader', ['$templateCache', function($templateCache) {
         return {
             template: $templateCache.get('views/cliche/property/property-header.html'),
             scope: {
@@ -24,7 +24,7 @@ angular.module('registryApp.cliche')
                 symbols: '=',
                 handle: '&'
             },
-            controller: ['$scope', 'Helper', function ($scope, Helper) {
+            controller: ['$scope', 'Helper', function($scope, Helper) {
 
                 $scope.view = {};
 
@@ -34,7 +34,9 @@ angular.module('registryApp.cliche')
 
                     /* watch for position to change */
                     $scope.$watch('position', function(n, o) {
-                        if (n !== o) { $scope.view.position = n || 0; }
+                        if (n !== o) {
+                            $scope.view.position = n || 0;
+                        }
                     });
                 }
 
@@ -46,7 +48,9 @@ angular.module('registryApp.cliche')
                  */
                 $scope.triggerAction = function(action, e) {
 
-                    if ($scope.toolType === 'script' && action === 'toggle') { return false; }
+                    if ($scope.toolType === 'script' && action === 'toggle') {
+                        return false;
+                    }
 
                     Helper.stopPropagation(e);
 
@@ -56,6 +60,7 @@ angular.module('registryApp.cliche')
 
 
             }],
-            link: function() {}
+            link: function() {
+            }
         };
     }]);

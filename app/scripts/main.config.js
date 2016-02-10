@@ -30,7 +30,7 @@ angular
         exposedSeparator: '$',
         generalSeparator: '.'
     })
-    .config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function ($stateProvider, $urlRouterProvider, $httpProvider) {
+    .config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function($stateProvider, $urlRouterProvider, $httpProvider) {
         $stateProvider
             .state('home', {
                 url: '/',

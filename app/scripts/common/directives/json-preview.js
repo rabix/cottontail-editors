@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.common')
-    .directive('jsonPreview', ['$templateCache', '$uibModal', function ($templateCache, $modal) {
+    .directive('jsonPreview', ['$templateCache', '$uibModal', function($templateCache, $modal) {
         return {
             restrict: 'E',
             replace: true,
@@ -26,12 +26,14 @@ angular.module('registryApp.common')
                     $modal.open({
                         template: $templateCache.get('views/partials/json-preview.html'),
                         controller: 'ModalCtrl',
-                        resolve: {data: function () {
-                            return {
-                                jsonString: scope.json,
-                                json: JSON.parse(scope.json)
-                            };
-                        }}
+                        resolve: {
+                            data: function() {
+                                return {
+                                    jsonString: scope.json,
+                                    json: JSON.parse(scope.json)
+                                };
+                            }
+                        }
                     });
                 };
             }

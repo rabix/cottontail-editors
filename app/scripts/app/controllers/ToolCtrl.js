@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('registryApp.app')
-    .controller('ToolCtrl', ['$scope', '$stateParams', '$q', '$injector', '$state', 'Tool', 'User', 'Job', 'Sidebar', 'Loading', 'Helper', 'lodash', function ($scope, $stateParams, $q, $injector, $state, Tool, User, Job, Sidebar, Loading, Helper, _) {
+    .controller('ToolCtrl', ['$scope', '$stateParams', '$q', '$injector', '$state', 'Tool', 'User', 'Job', 'Sidebar', 'Loading', 'Helper', 'lodash', function($scope, $stateParams, $q, $injector, $state, Tool, User, Job, Sidebar, Loading, Helper, _) {
 
         Sidebar.setActive('apps');
 
@@ -33,32 +33,34 @@ angular.module('registryApp.app')
 
         $scope.Loading = Loading;
         $scope.$watch('Loading.classes', function(n, o) {
-            if (n !== o) { $scope.view.classes = n; }
+            if (n !== o) {
+                $scope.view.classes = n;
+            }
         });
 
         $q.all([
-                User.getUser(),
-                Tool.getTool($stateParams.id, 'latest'),
-                Tool.getRevisions(0, '', $stateParams.id)
-            ]).then(function(result) {
+            User.getUser(),
+            Tool.getTool($stateParams.id, 'latest'),
+            Tool.getRevisions(0, '', $stateParams.id)
+        ]).then(function(result) {
 
-                $scope.view.user = result[0].user;
-                $scope.view.tool = result[1].data;
-                $scope.view.revision = result[1].revision;
+            $scope.view.user = result[0].user;
+            $scope.view.tool = result[1].data;
+            $scope.view.revision = result[1].revision;
 
-                $scope.view.revisions = result[2].list;
-                $scope.view.total.revisions = result[2].total;
+            $scope.view.revisions = result[2].list;
+            $scope.view.total.revisions = result[2].total;
 
-                $scope.view.type = $scope.view.tool.is_script ? 'script' : 'tool';
+            $scope.view.type = $scope.view.tool.is_script ? 'script' : 'tool';
 
-                $scope.view.atType = $scope.view.tool.is_script ? 'ExpressionTool' : 'CommandLineTool';
+            $scope.view.atType = $scope.view.tool.is_script ? 'ExpressionTool' : 'CommandLineTool';
 
-                Job.getJobs(0, '', $scope.view.atType, $stateParams.id).then(jobsLoaded);
+            Job.getJobs(0, '', $scope.view.atType, $stateParams.id).then(jobsLoaded);
 
-                $scope.view.previewNode = $scope.view.tool;
+            $scope.view.previewNode = $scope.view.tool;
 
-                $scope.view.docker = _.find($scope.view.tool.json.requirements, {'class': 'DockerRequirement'});
-            });
+            $scope.view.docker = _.find($scope.view.tool.json.requirements, {'class': 'DockerRequirement'});
+        });
 
         /**
          * Callback when revisions are loaded
@@ -91,7 +93,7 @@ angular.module('registryApp.app')
          *
          * @param result
          */
-        var jobsLoaded = function (result) {
+        var jobsLoaded = function(result) {
 
             $scope.view.jobs = result.list;
             $scope.view.loading = false;
@@ -124,12 +126,16 @@ angular.module('registryApp.app')
                 template: $templateCache.get('views/partials/confirm-delete.html'),
                 controller: 'ModalCtrl',
                 windowClass: 'modal-confirm',
-                resolve: {data: function () { return {}; }}
+                resolve: {
+                    data: function() {
+                        return {};
+                    }
+                }
             });
 
-            modalInstance.result.then(function () {
+            modalInstance.result.then(function() {
                 Tool.deleteTool($scope.view.tool._id)
-                    .then(function () {
+                    .then(function() {
                         $state.go('apps');
                     });
             });

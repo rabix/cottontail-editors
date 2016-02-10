@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('registryApp.app')
-    .controller('AppsCtrl', ['$scope', '$q', 'Tool', 'Workflow', 'Sidebar', 'Api', 'Loading', 'User', 'lodash',function ($scope, $q, Tool, Workflow, Sidebar, Api, Loading, User, _) {
+    .controller('AppsCtrl', ['$scope', '$q', 'Tool', 'Workflow', 'Sidebar', 'Api', 'Loading', 'User', 'lodash', function($scope, $q, Tool, Workflow, Sidebar, Api, Loading, User, _) {
 
         Sidebar.setActive('apps');
 
@@ -20,7 +20,9 @@ angular.module('registryApp.app')
 
         $scope.Loading = Loading;
         $scope.$watch('Loading.classes', function(n, o) {
-            if (n !== o) { $scope.view.classes = n; }
+            if (n !== o) {
+                $scope.view.classes = n;
+            }
         });
 
         /**
@@ -67,18 +69,18 @@ angular.module('registryApp.app')
             var deferred = $q.defer();
 
             $q.all([
-                    Tool.getTools(offset, $scope.view.searchTerm, $scope.view.mine),
-                    Tool.getScripts(offset, $scope.view.searchTerm, $scope.view.mine),
-                    Workflow.getWorkflows(offset, $scope.view.searchTerm, $scope.view.mine)
-                ]).then(function(result) {
+                Tool.getTools(offset, $scope.view.searchTerm, $scope.view.mine),
+                Tool.getScripts(offset, $scope.view.searchTerm, $scope.view.mine),
+                Workflow.getWorkflows(offset, $scope.view.searchTerm, $scope.view.mine)
+            ]).then(function(result) {
 
-                    appsLoaded(result[0], 'tools');
-                    appsLoaded(result[1], 'scripts');
-                    appsLoaded(result[2], 'workflows');
+                appsLoaded(result[0], 'tools');
+                appsLoaded(result[1], 'scripts');
+                appsLoaded(result[2], 'workflows');
 
-                    deferred.resolve('loaded');
+                deferred.resolve('loaded');
 
-                });
+            });
 
             return deferred.promise;
         };
@@ -87,14 +89,14 @@ angular.module('registryApp.app')
         prepareConfig();
 
         $q.all([
-                loadApps(),
-                User.getUser()
-            ]).then(function(result) {
+            loadApps(),
+            User.getUser()
+        ]).then(function(result) {
 
-                $scope.view.user = result[1].user;
+            $scope.view.user = result[1].user;
 
-                $scope.view.loading = false;
-            });
+            $scope.view.loading = false;
+        });
 
         /**
          * Switch tab
@@ -192,7 +194,7 @@ angular.module('registryApp.app')
         /**
          * Toggle query for myApps filter
          */
-        $scope.toggleMyApps = function () {
+        $scope.toggleMyApps = function() {
 
             prepareConfig();
 

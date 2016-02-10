@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.common')
-    .directive('expr', ['$templateCache', 'lodash', '$rootScope', 'ClicheEvents', function ($templateCache, _, $rootScope, ClicheEvents) {
+    .directive('expr', ['$templateCache', 'lodash', '$rootScope', 'ClicheEvents', function($templateCache, _, $rootScope, ClicheEvents) {
 
         return {
             restrict: 'E',
@@ -32,7 +32,7 @@ angular.module('registryApp.common')
                 min: '@',
                 propId: '@'
             },
-            controller: ['$scope', '$uibModal', 'SandBox', 'Helper', 'rawTransform', function ($scope, $modal, SandBox, Helper, rawTransform) {
+            controller: ['$scope', '$uibModal', 'SandBox', 'Helper', 'rawTransform', function($scope, $modal, SandBox, Helper, rawTransform) {
 
                 $scope.view = {};
 
@@ -50,7 +50,7 @@ angular.module('registryApp.common')
                 /**
                  * Determine if model is object with defined transformation or literal
                  */
-                var determineStructure = function () {
+                var determineStructure = function() {
 
                     if ($scope.ngModel && $scope.ngModel.script) {
                         $scope.view.mode = 'transform';
@@ -70,7 +70,7 @@ angular.module('registryApp.common')
                 /**
                  * Check if expression is valid
                  */
-                var checkExpression = function () {
+                var checkExpression = function() {
                     var tmpDisabledVal = $scope.view.disabled;
 
                     // JsonPointer is only supported through import, this check ensures that errors don't show up in the UI
@@ -87,14 +87,14 @@ angular.module('registryApp.common')
                         var self = $scope.self ? {$self: Helper.getTestData($scope.selfType, $scope.selfItemType)} : {};
 
                         SandBox.evaluate($scope.view.transform.script, self)
-                            .then(function (result) {
+                            .then(function(result) {
                                 // check if typeof result is the same as $scope.type (parses number strings, etc.)
                                 if (!checkFormat(result)) {
                                     $scope.view.exprError = 'Format is invalid, expected type ' + $scope.view.type;
                                 } else {
                                     $scope.view.exprError = '';
                                 }
-                            }, function (error) {
+                            }, function(error) {
                                 $scope.view.exprError = error.name + ':' + error.message;
                             });
                     } else {
@@ -128,7 +128,7 @@ angular.module('registryApp.common')
                 /* init check of the expression if defined */
                 checkExpression();
 
-                $scope.$watch('ngModel', function (n, o) {
+                $scope.$watch('ngModel', function(n, o) {
                     if (n !== o) {
                         determineStructure();
                         checkExpression();
@@ -143,7 +143,7 @@ angular.module('registryApp.common')
                  * @param {String} o
                  * @param {String} mode - 'literal' | 'transform'
                  */
-                var triggerUpdate = function (n, o, mode) {
+                var triggerUpdate = function(n, o, mode) {
                     if (_.isNull(n) || n === '') {
                         $scope.handleNull({index: $scope.index, value: $scope.view[mode]});
                     }
@@ -162,21 +162,21 @@ angular.module('registryApp.common')
 
                 $scope.$on(ClicheEvents.JOB.CHANGED, checkExpression);
 
-                $scope.$watch('view.transform.script', function (n, o) {
+                $scope.$watch('view.transform.script', function(n, o) {
                     triggerUpdate(n, o, 'transform');
                 });
 
-                $scope.$watch('view.literal', function (n, o) {
+                $scope.$watch('view.literal', function(n, o) {
                     triggerUpdate(n, o, 'literal');
                 });
 
-                $scope.$watch('selfType', function (n, o) {
+                $scope.$watch('selfType', function(n, o) {
                     if (n !== o) {
                         checkExpression();
                     }
                 });
 
-                $scope.$watch('selfItemType', function (n, o) {
+                $scope.$watch('selfItemType', function(n, o) {
                     if (n !== o) {
                         checkExpression();
                     }
@@ -185,7 +185,7 @@ angular.module('registryApp.common')
                 /**
                  * Edit custom expression for input value evaluation
                  */
-                $scope.editExpression = function () {
+                $scope.editExpression = function() {
 
                     var expr = $scope.view.mode === 'transform' ? $scope.view.transform.script : '';
 
@@ -197,7 +197,7 @@ angular.module('registryApp.common')
                         size: 'lg',
                         animation: true,
                         resolve: {
-                            options: function () {
+                            options: function() {
                                 return {
                                     expr: expr,
                                     self: $scope.self ? true : false,
@@ -207,7 +207,7 @@ angular.module('registryApp.common')
                         }
                     });
 
-                    modalInstance.result.then(function (expr) {
+                    modalInstance.result.then(function(expr) {
 
                         if (_.isEmpty(expr)) {
 
@@ -236,7 +236,7 @@ angular.module('registryApp.common')
                 /**
                  * Edit long literals
                  */
-                $scope.editLiteral = function () {
+                $scope.editLiteral = function() {
                     var expr = $scope.view.mode === 'transform' ? $scope.view.transform.script : '';
 
                     var modalInstance = $modal.open({
@@ -246,7 +246,7 @@ angular.module('registryApp.common')
                         backdrop: 'static',
                         size: 'lg',
                         resolve: {
-                            options: function () {
+                            options: function() {
                                 return {
                                     literal: $scope.view.literal
                                 };
@@ -254,7 +254,7 @@ angular.module('registryApp.common')
                         }
                     });
 
-                    modalInstance.result.then(function (lit) {
+                    modalInstance.result.then(function(lit) {
                         $scope.view.mode = 'literal';
 
                         if (_.isEmpty(lit) && expr) {
@@ -276,8 +276,8 @@ angular.module('registryApp.common')
                 };
 
             }],
-            link: function (scope, element, attr, ngModelCtrl) {
-                scope.setDirty = function () {
+            link: function(scope, element, attr, ngModelCtrl) {
+                scope.setDirty = function() {
                     if (ngModelCtrl) {
                         ngModelCtrl.$setDirty();
                     }

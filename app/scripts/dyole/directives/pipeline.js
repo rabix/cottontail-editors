@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.dyole')
-    .directive('pipeline', ['$templateCache', function ($templateCache) {
+    .directive('pipeline', ['$templateCache', function($templateCache) {
         return {
             template: $templateCache.get('views/dyole/pipeline.html'),
             controller: 'PipelineCtrl',

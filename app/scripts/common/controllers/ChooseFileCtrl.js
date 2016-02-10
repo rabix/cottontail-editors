@@ -3,12 +3,12 @@
  */
 
 angular.module('registryApp.common')
-    .controller('ChooseFileCtrl', ['$scope', '$uibModalInstance', 'data', 'lodash', function ($scope, $modalInstance, data, _) {
+    .controller('ChooseFileCtrl', ['$scope', '$uibModalInstance', 'data', 'lodash', function($scope, $modalInstance, data, _) {
 
         $scope.selectedFiles = data.selectedFiles || [];
         $scope.selectOne = data.selectOne || false;
 
-        $scope.cancel = function () {
+        $scope.cancel = function() {
             $modalInstance.dismiss('cancel');
         };
 

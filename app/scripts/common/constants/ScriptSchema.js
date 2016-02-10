@@ -155,15 +155,15 @@ var Schema = {
         expressionDef: {
             type: 'object',
             properties: {
-	            'class': {
-	                type: 'string'
-	            },
-	            engine: {
-	                type: 'string'
-	            },
-	            script: {
-	                type: 'string'
-	            }
+                'class': {
+                    type: 'string'
+                },
+                engine: {
+                    type: 'string'
+                },
+                script: {
+                    type: 'string'
+                }
             },
             required: ['class', 'engine', 'script']
         }

@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.common')
-    .directive('isValidName', ['Helper', function (Helper) {
+    .directive('isValidName', ['Helper', function(Helper) {
         return {
             require: 'ngModel',
             scope: {

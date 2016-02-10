@@ -12,7 +12,7 @@
  * @license MIT
  */
 angular.module('registryApp.cliche')
-    .factory('RecursionHelper', ['$compile', function($compile){
+    .factory('RecursionHelper', ['$compile', function($compile) {
         return {
             /**
              * Manually compiles the element, fixing the recursion loop.
@@ -20,10 +20,10 @@ angular.module('registryApp.cliche')
              * @param [link] A post-link function, or an object with function(s) registered via pre and post properties.
              * @returns {object} An object containing the linking functions.
              */
-            compile: function(element, link){
+            compile: function(element, link) {
                 // Normalize the link parameter
-                if(angular.isFunction(link)){
-                    link = { post: link };
+                if (angular.isFunction(link)) {
+                    link = {post: link};
                 }
 
                 // Break the recursion loop by removing the contents
@@ -31,18 +31,18 @@ angular.module('registryApp.cliche')
                 var compiledContents;
                 return {
                     pre: (link && link.pre) ? link.pre : null,
-                    post: function(scope, element){
+                    post: function(scope, element) {
                         // Compile the contents
-                        if(!compiledContents){
+                        if (!compiledContents) {
                             compiledContents = $compile(contents);
                         }
                         // Re-add the compiled contents to the element
-                        compiledContents(scope, function(clone){
+                        compiledContents(scope, function(clone) {
                             element.append(clone);
                         });
 
                         // Call the post-linking function, if any
-                        if(link && link.post){
+                        if (link && link.post) {
                             link.post.apply(null, arguments);
                         }
                     }

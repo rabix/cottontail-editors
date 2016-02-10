@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('registryApp.common')
-    .controller('ConfirmCustomCtrl', ['$scope', '$uibModalInstance', 'data', 'HotkeyRegistry', function ($scope, $modalInstance, data, HotkeyRegistry) {
+    .controller('ConfirmCustomCtrl', ['$scope', '$uibModalInstance', 'data', 'HotkeyRegistry', function($scope, $modalInstance, data, HotkeyRegistry) {
 
         $scope.data = data;
         $scope.view = {};
@@ -16,7 +16,7 @@ angular.module('registryApp.common')
 
         var unloadHotkeys = HotkeyRegistry.loadHotkeys({name: 'confirm', callback: $scope.ok, preventDefault: true});
 
-        $scope.$on('$destroy', function () {
+        $scope.$on('$destroy', function() {
             unloadHotkeys();
         });
     }]);

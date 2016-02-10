@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('registryApp.app')
-    .controller('ToolRevisionCtrl', ['$scope', '$stateParams', '$q', 'Tool', 'Sidebar', 'Loading', 'Helper', 'lodash', function ($scope, $stateParams, $q, Tool, Sidebar, Loading, Helper, _) {
+    .controller('ToolRevisionCtrl', ['$scope', '$stateParams', '$q', 'Tool', 'Sidebar', 'Loading', 'Helper', 'lodash', function($scope, $stateParams, $q, Tool, Sidebar, Loading, Helper, _) {
 
         Sidebar.setActive('apps');
 
@@ -21,7 +21,9 @@ angular.module('registryApp.app')
 
         $scope.Loading = Loading;
         $scope.$watch('Loading.classes', function(n, o) {
-            if (n !== o) { $scope.view.classes = n; }
+            if (n !== o) {
+                $scope.view.classes = n;
+            }
         });
 
         Tool.getRevision($stateParams.id)

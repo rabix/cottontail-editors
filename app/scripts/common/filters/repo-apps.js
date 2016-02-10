@@ -27,7 +27,7 @@ angular.module('registryApp.util')
                 return apps;
             }
 
-            return _.filter(apps, function (app) {
+            return _.filter(apps, function(app) {
                 // ID, label, toolkit, categories and possibly description fields.
                 return filter(app.app_name) || filter(app.label) || filter(app.toolkit) || //filter(description) ||
                     _.filter(app.categories, filter).length > 0;

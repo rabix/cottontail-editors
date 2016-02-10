@@ -8,9 +8,9 @@ angular.module('registryApp.cliche')
                 callbacks: '='
             },
             controller: 'ClicheCtrl',
-            template:   '<div class="cliche-editor">' +
-                            '<ng-include class="main" src="\'views/cliche/cliche.html\'"></ng-include>' +
-                        '</div>',
+            template: '<div class="cliche-editor">' +
+            '<ng-include class="main" src="\'views/cliche/cliche.html\'"></ng-include>' +
+            '</div>',
         }
     }]);
 

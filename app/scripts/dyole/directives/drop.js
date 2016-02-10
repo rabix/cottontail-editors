@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.dyole')
-    .directive('drop', function () {
+    .directive('drop', function() {
         return {
             scope: {
                 drop: '&'
@@ -27,7 +27,9 @@ angular.module('registryApp.dyole')
                     e.dataTransfer.dropEffect = 'move';
 
                     // allows us to drop
-                    if (e.preventDefault) { e.preventDefault(); }
+                    if (e.preventDefault) {
+                        e.preventDefault();
+                    }
 
                     this.classList.add('drag-over');
 
@@ -66,8 +68,12 @@ angular.module('registryApp.dyole')
                 var handleDrop = function(e) {
 
                     // stops some browsers from redirecting.
-                    if (e.preventDefault) { e.preventDefault(); }
-                    if (e.stopPropagation) { e.stopPropagation(); }
+                    if (e.preventDefault) {
+                        e.preventDefault();
+                    }
+                    if (e.stopPropagation) {
+                        e.stopPropagation();
+                    }
 
                     this.classList.remove('drag-over');
 

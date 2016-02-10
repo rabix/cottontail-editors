@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .directive('separator', ['$templateCache', 'lodash', function ($templateCache, _) {
+    .directive('separator', ['$templateCache', 'lodash', function($templateCache, _) {
         return {
             restrict: 'E',
             template: $templateCache.get('views/cliche/partials/separator.html'),
@@ -16,14 +16,14 @@ angular.module('registryApp.cliche')
                 model: '=',
                 isDisabled: '='
             },
-            controller: ['$scope', 'Separator', function ($scope, Separator) {
+            controller: ['$scope', 'Separator', function($scope, Separator) {
 
                 var option;
 
                 $scope.view = {};
 
                 $scope.view.map = Separator.getMap();
-                
+
                 option = _.find($scope.view.map[$scope.type], {value: $scope.model});
 
                 $scope.view.separator = option ? option.name : 'space';
@@ -43,6 +43,7 @@ angular.module('registryApp.cliche')
                 });
 
             }],
-            link: function() {}
+            link: function() {
+            }
         };
     }]);

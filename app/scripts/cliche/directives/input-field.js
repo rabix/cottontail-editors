@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('InputFieldCtrl', ['$scope', '$uibModal', '$templateCache', 'Cliche', 'Const', 'lodash', 'ClicheEvents', '$rootScope', function ($scope, $modal, $templateCache, Cliche, Const, _, ClicheEvents, $rootScope) {
+    .controller('InputFieldCtrl', ['$scope', '$uibModal', '$templateCache', 'Cliche', 'Const', 'lodash', 'ClicheEvents', '$rootScope', function($scope, $modal, $templateCache, Cliche, Const, _, ClicheEvents, $rootScope) {
 
         var watchers = [];
 
@@ -30,10 +30,10 @@ angular.module('registryApp.cliche')
         $scope.view.type = Cliche.parseType($scope.view.property.type);
         $scope.view.required = Cliche.isRequired($scope.view.property.type);
         $scope.view.items = Cliche.getItemsRef($scope.view.type, $scope.view.property.type);
-		$scope.view.fields = Cliche.getFieldsRef($scope.view.property.type);
+        $scope.view.fields = Cliche.getFieldsRef($scope.view.property.type);
         $scope.view.itemsType = Cliche.getItemsType($scope.view.items);
 
-        $scope.view.tpl = 'views/cliche/inputs/input-' + $scope.view.type.toLowerCase()  + '.html';
+        $scope.view.tpl = 'views/cliche/inputs/input-' + $scope.view.type.toLowerCase() + '.html';
 
         $scope.view.includeInPorts = $scope.view.property['sbg:includeInPorts'] || false;
 
@@ -44,7 +44,9 @@ angular.module('registryApp.cliche')
         $scope.view.symbols = enumObj.symbols;
 
         $scope.view.expose = $scope.exposed ? !_.isUndefined($scope.exposed[keyName]) : false;
-        if ($scope.view.expose || $scope.view.includeInPorts) { $scope.isDisabled = true; }
+        if ($scope.view.expose || $scope.view.includeInPorts) {
+            $scope.isDisabled = true;
+        }
 
         $scope.view.exposible = !_.isUndefined($scope.exposed);
 
@@ -63,7 +65,7 @@ angular.module('registryApp.cliche')
          * @param {*} value
          * @returns {*}
          */
-        var getDefaultScheme = function (value) {
+        var getDefaultScheme = function(value) {
 
             if (_.isObject(value)) {
                 return '';
@@ -79,7 +81,7 @@ angular.module('registryApp.cliche')
          * @param {*} value
          * @returns {*}
          */
-        var getFileScheme = function (value) {
+        var getFileScheme = function(value) {
 
             var validFileKeys = ['path', 'size', 'secondaryFiles', 'metadata'];
 
@@ -99,7 +101,7 @@ angular.module('registryApp.cliche')
          * @param {*} value
          * @returns {*}
          */
-        var getObjectScheme = function (value) {
+        var getObjectScheme = function(value) {
 
             if (_.isObject(value)) {
                 return value;
@@ -114,7 +116,7 @@ angular.module('registryApp.cliche')
          * @param {Array} fields
          * @returns {Array}
          */
-        function createList (fields) {
+        function createList(fields) {
             var list = [];
             _.forEach(fields, (function(field) {
                 var item = {};
@@ -122,7 +124,7 @@ angular.module('registryApp.cliche')
                 item.prop = field;
 
                 if (Cliche.parseType(Cliche.getSchema('input', field, 'tool', false)) === 'File') {
-                    item.value =  {path: ''};
+                    item.value = {path: ''};
                     list.push(item);
                 } else {
                     item.value = '';
@@ -151,7 +153,7 @@ angular.module('registryApp.cliche')
 
         var inputScheme;
 
-        var setModelDefaultValue = function () {
+        var setModelDefaultValue = function() {
 
             /* type FILE */
             if ($scope.view.type === 'File') {
@@ -159,7 +161,7 @@ angular.module('registryApp.cliche')
                 inputScheme = getFileScheme($scope.model);
 
                 /* type RECORD */
-            } else if($scope.view.type === 'record') {
+            } else if ($scope.view.type === 'record') {
 
                 $scope.view.list = createList($scope.view.fields);
                 populateValues($scope.model, $scope.view.list);
@@ -190,31 +192,31 @@ angular.module('registryApp.cliche')
 
                 switch ($scope.view.itemsType) {
                     case 'record':
-                        _.each($scope.model, function (value) {
+                        _.each($scope.model, function(value) {
                             var innerScheme = getObjectScheme(value);
                             delete innerScheme.path;
                             inputScheme.push(innerScheme);
                         });
                         break;
                     case 'File' || 'file':
-                        _.each($scope.model, function (value) {
+                        _.each($scope.model, function(value) {
                             inputScheme.push(getFileScheme(value));
                         });
                         break;
                     case 'map':
-                        _.each($scope.model, function (value) {
+                        _.each($scope.model, function(value) {
                             inputScheme.push(getObjectScheme(value));
                         });
                         break;
                     case 'enum':
-                        _.each($scope.model, function (value) {
+                        _.each($scope.model, function(value) {
                             inputScheme.push(getDefaultScheme(value));
                         });
                         break;
                     default:
                         //Type checking to avoid an array of characters
                         if (_.isArray($scope.model)) {
-                            _.each($scope.model, function (value) {
+                            _.each($scope.model, function(value) {
                                 inputScheme.push(getDefaultScheme(value));
                             });
                         } else if (_.isString($scope.model)) {
@@ -238,8 +240,8 @@ angular.module('registryApp.cliche')
         // TODO: Figure this out for complex props, try to avoid this deep watch
         var deepWatcher = $scope.$watch('view.model', function(n, o) {
             if (n !== o) {
-                 //Executor treats empty arrays as null, so Cliche should to. This will cause scripts
-                 //relying on [].forEach() or [].sort() to throw an error.
+                //Executor treats empty arrays as null, so Cliche should to. This will cause scripts
+                //relying on [].forEach() or [].sort() to throw an error.
                 if (_.isArray(n) && _.isEmpty(n)) {
                     $scope.model = null;
                 } else {
@@ -273,10 +275,14 @@ angular.module('registryApp.cliche')
                 template: $templateCache.get('views/cliche/partials/input-file-more.html'),
                 controller: 'InputFileMoreCtrl',
                 windowClass: 'modal-prop',
-                resolve: {data: function () {return {schema: $scope.view.model, key: $scope.view.name};}}
+                resolve: {
+                    data: function() {
+                        return {schema: $scope.view.model, key: $scope.view.name};
+                    }
+                }
             });
 
-            modalInstance.result.then(function (schema) {
+            modalInstance.result.then(function(schema) {
                 $scope.view.model = angular.copy(schema);
             });
 
@@ -285,7 +291,7 @@ angular.module('registryApp.cliche')
         /**
          * Expose current parameter
          */
-        $scope.exposeParams = function () {
+        $scope.exposeParams = function() {
 
             if ($scope.view.expose) {
                 $scope.exposed[keyName] = $scope.prop;
@@ -296,9 +302,9 @@ angular.module('registryApp.cliche')
 
                 if (typeof $scope.onUnExpose === 'function') {
                     $scope.onUnExpose({appName: $scope.appName, key: $scope.view.name, value: $scope.view.model});
-	                if ($scope.suggestedValues[$scope.appName + Const.exposedSeparator + $scope.prop.id]) {
-		                $scope.values =  $scope.suggestedValues[$scope.appName + Const.exposedSeparator + $scope.prop.id];
-	                }
+                    if ($scope.suggestedValues[$scope.appName + Const.exposedSeparator + $scope.prop.id]) {
+                        $scope.values = $scope.suggestedValues[$scope.appName + Const.exposedSeparator + $scope.prop.id];
+                    }
                 }
 
                 $scope.isDisabled = false;
@@ -306,7 +312,7 @@ angular.module('registryApp.cliche')
 
         };
 
-        $scope.includeInPorts = function () {
+        $scope.includeInPorts = function() {
 
             if ($scope.view.includeInPorts) {
                 $scope.view.expose = false;
@@ -314,10 +320,14 @@ angular.module('registryApp.cliche')
             }
 
             $scope.isDisabled = $scope.view.includeInPorts;
-            $scope.handleIncludeInPorts({appName: $scope.appName, key: $scope.view.name, value: $scope.view.includeInPorts});
+            $scope.handleIncludeInPorts({
+                appName: $scope.appName,
+                key: $scope.view.name,
+                value: $scope.view.includeInPorts
+            });
         };
 
-        $scope.$on('$destroy', function () {
+        $scope.$on('$destroy', function() {
             _.forEach(watchers, function(watcher) {
                 if (_.isFunction(watcher)) {
                     watcher.call();
@@ -329,7 +339,7 @@ angular.module('registryApp.cliche')
         setModelDefaultValue();
 
     }])
-    .directive('inputField', ['RecursionHelper', function (RecursionHelper) {
+    .directive('inputField', ['RecursionHelper', function(RecursionHelper) {
         return {
             restrict: 'E',
             template: '<ng-form name="inputForm" class="input-property" ng-if="!view.ignore"><ng-include class="include" src="view.tpl"></ng-include></ng-form>',
@@ -345,12 +355,13 @@ angular.module('registryApp.cliche')
                 handleExpose: '&',
                 onUnExpose: '&',
                 handleIncludeInPorts: '&',
-	            suggestedValues: '=',
-	            values: '='
+                suggestedValues: '=',
+                values: '='
             },
             controller: 'InputFieldCtrl',
             compile: function(element) {
-                return RecursionHelper.compile(element, function() {});
+                return RecursionHelper.compile(element, function() {
+                });
             }
         };
     }]);

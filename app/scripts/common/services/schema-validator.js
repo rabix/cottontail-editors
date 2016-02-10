@@ -3,7 +3,7 @@
 /* globals tv4 */
 angular
     .module('registryApp.common')
-    .factory('SchemaValidator', ['toolSchemaDefs', 'scriptSchemaDefs', 'workflowSchemaDefs', '$q', 'lodash', function (ToolSchema, ScriptSchema, WorkflowSchemaDefs, $q, _) {
+    .factory('SchemaValidator', ['toolSchemaDefs', 'scriptSchemaDefs', 'workflowSchemaDefs', '$q', 'lodash', function(ToolSchema, ScriptSchema, WorkflowSchemaDefs, $q, _) {
         var validator = tv4;
 
         validator.addSchema('tool', ToolSchema);
@@ -21,7 +21,7 @@ angular
             if (!_.isEmpty(error.subErrors)) {
                 level++;
 
-                _.each(error.subErrors, function (error) {
+                _.each(error.subErrors, function(error) {
                     retrieveSubErrors(error, messageArray, level);
                 });
 
@@ -41,7 +41,7 @@ angular
          * @param {ValidationError} error
          * @returns {string} message;
          */
-        function formatMessage (error) {
+        function formatMessage(error) {
             var messageArray = [];
 
             retrieveSubErrors(error, messageArray, 0);
@@ -54,15 +54,15 @@ angular
         }
 
         return {
-            validateTool: function (json) {
+            validateTool: function(json) {
                 return validator.validate('tool', json);
             },
 
-            validateScript: function (json) {
+            validateScript: function(json) {
                 return validator.validate('script', json);
             },
 
-            validateWorkflow: function (json) {
+            validateWorkflow: function(json) {
                 return validator.validate('workflow', json);
             },
 
@@ -73,7 +73,7 @@ angular
              * @param json
              * @returns {*}
              */
-            validate: function (type, json) {
+            validate: function(type, json) {
                 if (!type) {
                     throw Error('No type to validate');
                 }

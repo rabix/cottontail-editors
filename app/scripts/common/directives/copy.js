@@ -7,7 +7,7 @@
 /* globals Clipboard */
 
 angular.module('registryApp.common')
-    .directive('copy', ['$templateCache', '$timeout', function ($templateCache, $timeout) {
+    .directive('copy', ['$templateCache', '$timeout', function($templateCache, $timeout) {
         'use strict';
 
         return {
@@ -48,7 +48,7 @@ angular.module('registryApp.common')
                     timeoutId = _resetText(5000);
                 });
 
-                function _resetText (time) {
+                function _resetText(time) {
                     return $timeout(function() {
                         scope.view.text = 'Copy';
                         scope.view.copying = false;
@@ -61,7 +61,7 @@ angular.module('registryApp.common')
                     var actionMsg = '';
                     var actionKey = (action === 'cut' ? 'X' : 'C');
 
-                    if(/iPhone|iPad/i.test(navigator.userAgent)) {
+                    if (/iPhone|iPad/i.test(navigator.userAgent)) {
                         actionMsg = 'Not supported';
                     } else if (/Mac/i.test(navigator.userAgent)) {
                         actionMsg = 'Press ⌘-' + actionKey + ' to ' + action;

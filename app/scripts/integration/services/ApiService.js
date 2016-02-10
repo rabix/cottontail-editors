@@ -10,7 +10,7 @@
 
 
 angular.module('integration')
-    .service('Api', ['$resource', '$http', 'Globals',function ($resource, $http, Globals) {
+    .service('Api', ['$resource', '$http', 'Globals', function($resource, $http, Globals) {
         'use strict';
 
         var self = {};
@@ -26,7 +26,7 @@ angular.module('integration')
         var checkOutdatedUrl = 'updates';
         var getMineAppsByProject = 'aggregate?group_by=project&func=array&visibility=mine';
         var getPublicAppsByProject = 'aggregate?group_by=project&func=array&visibility=public';
-        var validateAppUrl =  brood + 'validate/app';
+        var validateAppUrl = brood + 'validate/app';
         var headers = {
             'Content-Type': 'application/json',
             'session-id': sessionId
@@ -41,7 +41,11 @@ angular.module('integration')
             'delete': {method: 'DELETE', headers: headers}
         });
 
-        self.getApp = $resource(broodAppUrl + '/:projectOwner/:projectSlug/:appName', {projectOwner: '@projectOwner', appName: '@appName',projectSlug: '@projectSlug' }, {
+        self.getApp = $resource(broodAppUrl + '/:projectOwner/:projectSlug/:appName', {
+            projectOwner: '@projectOwner',
+            appName: '@appName',
+            projectSlug: '@projectSlug'
+        }, {
             'get': {method: 'GET', headers: headers, params: {'_role': 'default'}}
         });
 
@@ -65,14 +69,13 @@ angular.module('integration')
             'validate': {method: 'POST', headers: headers}
         });
 
-        self.getLatest = $resource(broodAppUrl  + '/' + projectOwner + '/' + projectSlug + '/' + appName, {}, {
+        self.getLatest = $resource(broodAppUrl + '/' + projectOwner + '/' + projectSlug + '/' + appName, {}, {
             'get': {method: 'GET', headers: headers}
         });
 
         var vs_query_url = vaporUrl + '/v2/query?session_id=' + sessionId + '&direct_descendants_only=:folders';
 
-        self.files = $resource(vaporUrl + '/fs/ls?session_id=' + sessionId + '&path=/Projects/' + Globals.projectId + '&depth=1', {}, {
-        });
+        self.files = $resource(vaporUrl + '/fs/ls?session_id=' + sessionId + '&path=/Projects/' + Globals.projectId + '&depth=1', {}, {});
 
         self.filesInProject = $resource(vs_query_url, {folders: '@folders'}, {
             'post': {
@@ -81,8 +84,7 @@ angular.module('integration')
             }
         });
 
-        self.fileStats = $resource(vaporUrl + '/fs/stat?session_id=' + sessionId + '&path=/Projects/' + Globals.projectId + '/:file&depth=1', {file: '@file'}, {
-        });
+        self.fileStats = $resource(vaporUrl + '/fs/stat?session_id=' + sessionId + '&path=/Projects/' + Globals.projectId + '/:file&depth=1', {file: '@file'}, {});
 
         self.createAppTask = $resource(peon, {}, {
             'post': {method: 'POST', headers: headers}

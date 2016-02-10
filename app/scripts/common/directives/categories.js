@@ -5,7 +5,7 @@
 'use strict';
 
 angular.module('registryApp.common')
-    .controller('CategoriesCtrl', ['$scope', 'lodash', function ($scope, _) {
+    .controller('CategoriesCtrl', ['$scope', 'lodash', function($scope, _) {
         var categories = [
             'DNA',
             'WGS',
@@ -32,17 +32,17 @@ angular.module('registryApp.common')
             'Quantification'
         ];
 
-        categories = _.map(categories, function (cat) {
+        categories = _.map(categories, function(cat) {
             return {text: cat};
         });
 
-        $scope.loadCategories = function ($query) {
+        $scope.loadCategories = function($query) {
             var regex = new RegExp($query.toLowerCase().split('').join('.*'));
 
-            return _(categories).filter(function (cat) {
+            return _(categories).filter(function(cat) {
                 var score = cat.text.toLowerCase().search(regex);
 
-                if (score !== -1 ) {
+                if (score !== -1) {
                     cat.score = score;
                     return cat;
                 }

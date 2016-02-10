@@ -1,21 +1,21 @@
 angular.module('registryApp.common')
-    .directive('selectAll', ['$document', 'lodash', '$timeout', function ($document, _, $timeout) {
+    .directive('selectAll', ['$document', 'lodash', '$timeout', function($document, _, $timeout) {
         'use strict';
         return {
             restrict: 'A',
-            link: function (scope, element, attr) {
+            link: function(scope, element, attr) {
                 var keyMap = {
                     17: false,
                     91: false
                 };
                 var selected = false;
 
-                element.on('click.selectAll', function (e) {
+                element.on('click.selectAll', function(e) {
                     // element was 'selected'
                     if (!selected) {
                         selected = true;
 
-                        $document.on('keydown.selectAll', function (e) {
+                        $document.on('keydown.selectAll', function(e) {
                             // set access keys to true
                             keyMap[e.keyCode] = true;
 
@@ -37,7 +37,7 @@ angular.module('registryApp.common')
                         });
 
                         // set all access keys to false
-                        $document.on('keyup.selectAll', function (e) {
+                        $document.on('keyup.selectAll', function(e) {
                             _.forIn(keyMap, function(value, key) {
                                 keyMap[key] = false
                             });
@@ -62,7 +62,7 @@ angular.module('registryApp.common')
                     }
                 });
 
-                element.on('remove', function (e) {
+                element.on('remove', function(e) {
                     element.off('click.selectAll');
                 });
 

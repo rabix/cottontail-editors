@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('PropertyInputCtrl', ['$scope', '$uibModal', '$templateCache', 'Cliche', 'Helper', 'SandBox', 'lodash', function ($scope, $modal, $templateCache, Cliche, Helper, SandBox, _) {
+    .controller('PropertyInputCtrl', ['$scope', '$uibModal', '$templateCache', 'Cliche', 'Helper', 'SandBox', 'lodash', function($scope, $modal, $templateCache, Cliche, Helper, SandBox, _) {
 
         $scope.key = $scope.key || 'name';
 
@@ -31,7 +31,7 @@ angular.module('registryApp.cliche')
             $scope.view.type = Cliche.parseType($scope.view.schema);
             $scope.view.items = Cliche.getItemsRef($scope.view.type, $scope.view.schema);
             $scope.view.itemsType = Cliche.getItemsType($scope.view.items);
-	        $scope.view.fields = Cliche.getFieldsRef($scope.view.schema);
+            $scope.view.fields = Cliche.getFieldsRef($scope.view.schema);
             $scope.view.adapter = Cliche.getAdapter($scope.prop, 'input');
 
             enumObj = Cliche.parseEnum($scope.view.schema);
@@ -40,7 +40,7 @@ angular.module('registryApp.cliche')
 
             tplType = Cliche.getTplType($scope.view.type);
 
-            $scope.view.tpl = 'views/cliche/property/property-input-tool-' + tplType  + '.html';
+            $scope.view.tpl = 'views/cliche/property/property-input-tool-' + tplType + '.html';
 
         };
 
@@ -54,7 +54,7 @@ angular.module('registryApp.cliche')
         /**
          * Check if expression is valid
          */
-        var checkExpression = function () {
+        var checkExpression = function() {
 
             if ($scope.view.property.inputBinding &&
                 $scope.view.property.inputBinding.valueFrom &&
@@ -64,9 +64,9 @@ angular.module('registryApp.cliche')
                 var self = {$self: Helper.getTestData($scope.view.type, itemType)};
 
                 SandBox.evaluate($scope.view.property.inputBinding.valueFrom.script, self)
-                    .then(function () {
+                    .then(function() {
                         $scope.view.exprError = '';
-                    }, function (error) {
+                    }, function(error) {
                         $scope.view.exprError = error.name + ':' + error.message;
                     });
             } else {
@@ -88,7 +88,9 @@ angular.module('registryApp.cliche')
          */
         var adjustInputs = function(mode, oldName, newName) {
 
-            if (oldName === newName) { return false; }
+            if (oldName === newName) {
+                return false;
+            }
 
             if ($scope.inputs && !_.isUndefined($scope.inputs[oldName])) {
                 if (mode === 'change') {
@@ -109,23 +111,23 @@ angular.module('registryApp.cliche')
             }
         };
 
-		var updateDefaultValue = function (result, oldType) {
-			var schema = Cliche.getSchema('input', result.prop, 'tool', false);
-			var type = Cliche.parseType(schema);
-			var items = Cliche.getItemsRef(type, schema);
-			var itemsType = Cliche.getItemsType(items);
+        var updateDefaultValue = function(result, oldType) {
+            var schema = Cliche.getSchema('input', result.prop, 'tool', false);
+            var type = Cliche.parseType(schema);
+            var items = Cliche.getItemsRef(type, schema);
+            var itemsType = Cliche.getItemsType(items);
 
-			if (oldType !== type) {
-				
-				var name = Cliche.parseName(result.prop);
-				var enumObj = Cliche.parseEnum(schema);
-				if (items && itemsType === 'enum') {
-					enumObj = Cliche.parseEnum(items);
-				}
+            if (oldType !== type) {
 
-				$scope.inputs[name] = Helper.getDefaultInputValue(name, enumObj.symbols, type, itemsType);
-			}
-		};
+                var name = Cliche.parseName(result.prop);
+                var enumObj = Cliche.parseEnum(schema);
+                if (items && itemsType === 'enum') {
+                    enumObj = Cliche.parseEnum(items);
+                }
+
+                $scope.inputs[name] = Helper.getDefaultInputValue(name, enumObj.symbols, type, itemsType);
+            }
+        };
 
         /**
          * Toggle property box visibility
@@ -146,7 +148,7 @@ angular.module('registryApp.cliche')
                 windowClass: 'modal-prop',
                 size: 'lg',
                 resolve: {
-                    options: function () {
+                    options: function() {
                         return {
                             mode: 'edit',
                             key: $scope.key,
@@ -158,10 +160,10 @@ angular.module('registryApp.cliche')
                 }
             });
 
-            modalInstance.result.then(function (result) {
+            modalInstance.result.then(function(result) {
 
                 var oldName = $scope.view.name;
-	            var oldType = $scope.view.type;
+                var oldType = $scope.view.type;
 
                 // checking if they are equal rather than the $dirty/$validity of the form
                 // because not all form elements inside the modal will change the form correctly
@@ -180,7 +182,7 @@ angular.module('registryApp.cliche')
                 } else {
                     $scope.setPristine();
                 }
-            }, function () {
+            }, function() {
                 $scope.setPristine();
             });
         };
@@ -194,10 +196,14 @@ angular.module('registryApp.cliche')
                 template: $templateCache.get('views/partials/confirm-delete.html'),
                 controller: 'ModalCtrl',
                 windowClass: 'modal-confirm',
-                resolve: {data: function () { return {}; }}
+                resolve: {
+                    data: function() {
+                        return {};
+                    }
+                }
             });
 
-            modalInstance.result.then(function () {
+            modalInstance.result.then(function() {
 
                 Cliche.deleteProperty($scope.key, $scope.view.name, $scope.properties);
 
@@ -217,24 +223,26 @@ angular.module('registryApp.cliche')
          */
         $scope.handleAction = function(action) {
 
-            if (typeof $scope[action] === 'function') { $scope[action](); }
+            if (typeof $scope[action] === 'function') {
+                $scope[action]();
+            }
         };
 
-		/**
-		 * Sorts inputs/args by position
-		 * @param item
-		 * @returns {*}
-		 */
-		$scope.sortByPosition = function(item) {
+        /**
+         * Sorts inputs/args by position
+         * @param item
+         * @returns {*}
+         */
+        $scope.sortByPosition = function(item) {
 
-			var position = item.inputBinding && item.inputBinding.position ? item.inputBinding.position : 0; //input
-			position = item.position ? item.position : position; //args
+            var position = item.inputBinding && item.inputBinding.position ? item.inputBinding.position : 0; //input
+            position = item.position ? item.position : position; //args
 
-			return position;
-		};
+            return position;
+        };
 
-	}])
-    .directive('propertyInput', ['$templateCache', 'RecursionHelper', function ($templateCache, RecursionHelper) {
+    }])
+    .directive('propertyInput', ['$templateCache', 'RecursionHelper', function($templateCache, RecursionHelper) {
 
         return {
             restrict: 'E',
@@ -253,10 +261,10 @@ angular.module('registryApp.cliche')
             controller: 'PropertyInputCtrl',
             compile: function(element) {
                 // RecursionHelper.compile() takes the element and a link function
-                return RecursionHelper.compile(element, function (scope, element, attr, ngModelCtrl) {
+                return RecursionHelper.compile(element, function(scope, element, attr, ngModelCtrl) {
                     var originalPristineStatus;
 
-                    scope.setDirty = function () {
+                    scope.setDirty = function() {
 
                         if (ngModelCtrl) {
                             if (typeof originalPristineStatus === 'undefined') {
@@ -267,7 +275,7 @@ angular.module('registryApp.cliche')
                         }
                     };
 
-                    scope.setPristine = function () {
+                    scope.setPristine = function() {
                         // will not set form to pristine if it was not so originally
                         if (ngModelCtrl && originalPristineStatus) {
                             // ngModel -> inputs form -> tool form

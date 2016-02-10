@@ -7,11 +7,11 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('EnumCtrl', ['$scope', '$uibModal', '$templateCache', 'lodash', function ($scope, $modal, $templateCache, _) {
+    .controller('EnumCtrl', ['$scope', '$uibModal', '$templateCache', 'lodash', function($scope, $modal, $templateCache, _) {
 
         $scope.view = {};
-        $scope.view.tplPath = 'views/cliche/enum/enum-' + $scope.type.toLowerCase()  + '.html';
-		$scope.view.symbols = $scope.symbols;
+        $scope.view.tplPath = 'views/cliche/enum/enum-' + $scope.type.toLowerCase() + '.html';
+        $scope.view.symbols = $scope.symbols;
 
         /**
          * Get schema for the appropriate enum type
@@ -40,7 +40,7 @@ angular.module('registryApp.cliche')
          *
          * @param list
          */
-        $scope.transformList = function (list) {
+        $scope.transformList = function(list) {
 
             if ($scope.isDisabled) {
                 delete $scope.view.list;
@@ -68,9 +68,13 @@ angular.module('registryApp.cliche')
          */
         $scope.addItem = function() {
 
-            if ($scope.isDisabled) { return false; }
+            if ($scope.isDisabled) {
+                return false;
+            }
 
-            if (_.isUndefined($scope.view.list)) { $scope.transformList($scope.model); }
+            if (_.isUndefined($scope.view.list)) {
+                $scope.transformList($scope.model);
+            }
 
             if ($scope.max && $scope.view.list.length >= $scope.max) {
                 return false;
@@ -98,10 +102,14 @@ angular.module('registryApp.cliche')
                 template: $templateCache.get('views/cliche/partials/input-file-more.html'),
                 controller: 'InputFileMoreCtrl',
                 windowClass: 'modal-prop',
-                resolve: {data: function () {return {schema: $scope.view.list[index].value, key: 'item ' + index};}}
+                resolve: {
+                    data: function() {
+                        return {schema: $scope.view.list[index].value, key: 'item ' + index};
+                    }
+                }
             });
 
-            modalInstance.result.then(function (schema) {
+            modalInstance.result.then(function(schema) {
                 $scope.view.list[index].value = angular.copy(schema);
             });
 
@@ -131,7 +139,7 @@ angular.module('registryApp.cliche')
         });
 
     }])
-    .directive('enum', ['$templateCache', function ($templateCache) {
+    .directive('enum', ['$templateCache', function($templateCache) {
         return {
             restrict: 'E',
             template: $templateCache.get('views/cliche/partials/enum.html'),
@@ -147,11 +155,11 @@ angular.module('registryApp.cliche')
                 form: '=',
                 exposible: '@',
                 isDisabled: '=?',
-	            symbols: '=?'
+                symbols: '=?'
             },
             controller: 'EnumCtrl',
-            link: function (scope, element, attr, ngModelCtrl) {
-                scope.setDirty = function () {
+            link: function(scope, element, attr, ngModelCtrl) {
+                scope.setDirty = function() {
                     if (ngModelCtrl) {
                         ngModelCtrl.$setDirty();
                     }

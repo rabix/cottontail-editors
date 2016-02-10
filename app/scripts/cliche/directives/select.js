@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .directive('selectValue', ['$templateCache', 'lodash', function ($templateCache, _) {
+    .directive('selectValue', ['$templateCache', 'lodash', function($templateCache, _) {
         return {
             restrict: 'E',
             template: $templateCache.get('views/cliche/partials/select.html'),
@@ -15,7 +15,7 @@ angular.module('registryApp.cliche')
                 model: '=',
                 isDisabled: '='
             },
-            controller: ['$scope', function ($scope) {
+            controller: ['$scope', function($scope) {
 
                 var option;
 
@@ -27,12 +27,12 @@ angular.module('registryApp.cliche')
                         {name: 'Multi threaded', value: '0'}
                     ]
                 };
-                
+
                 option = _.find($scope.view.map[$scope.type], {value: $scope.model});
 
                 $scope.view.value = option ? option.name : 'Single threaded';
 
-                $scope.$watch('view.value', function (n, o) {
+                $scope.$watch('view.value', function(n, o) {
                     if (n !== o) {
                         var option = _.find($scope.view.map[$scope.type], {name: n});
                         $scope.model = option.value;
@@ -40,7 +40,7 @@ angular.module('registryApp.cliche')
                     }
                 });
 
-                $scope.$watch('model', function (n, o) {
+                $scope.$watch('model', function(n, o) {
                     if (n !== o) {
                         option = _.find($scope.view.map[$scope.type], {value: n});
                         $scope.view.value = option ? option.name : 'Single threaded';
@@ -48,7 +48,7 @@ angular.module('registryApp.cliche')
                 });
 
             }],
-            link: function () {
+            link: function() {
             }
         };
     }]);

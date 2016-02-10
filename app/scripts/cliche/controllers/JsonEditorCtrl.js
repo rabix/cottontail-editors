@@ -7,21 +7,21 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('JsonEditorCtrl', ['$scope', '$rootScope', '$uibModalInstance', '$timeout', '$document', 'options', 'SchemaValidator', '$http', 'Globals', function ($scope, $rootScope, $modalInstance, $timeout, $document, options, SchemaValidator, $http, Globals) {
+    .controller('JsonEditorCtrl', ['$scope', '$rootScope', '$uibModalInstance', '$timeout', '$document', 'options', 'SchemaValidator', '$http', 'Globals', function($scope, $rootScope, $modalInstance, $timeout, $document, options, SchemaValidator, $http, Globals) {
 
         $scope.view = {};
         $scope.view.urlImport = false;
 
         //$scope.mirror = null;
 
-        $scope.$watch('view.urlImport', function (n, o) {
+        $scope.$watch('view.urlImport', function(n, o) {
             if (o !== n) {
                 $scope.view.error = '';
             }
         });
 
         // TODO: make this pretty, use directive which will serve as general purpose codemirror container
-        var timeoutId = $timeout(function () {
+        var timeoutId = $timeout(function() {
 
             $scope.mirror = CodeMirror($document[0].querySelector('.codemirror-editor'), {
                 lineNumbers: true,
@@ -39,7 +39,7 @@ angular.module('registryApp.cliche')
          * @param str
          * @returns {boolean}
          */
-        var isJsonString = function (str) {
+        var isJsonString = function(str) {
 
             try {
                 JSON.parse(str);
@@ -53,14 +53,14 @@ angular.module('registryApp.cliche')
         /**
          * Do the app import
          */
-        $scope.import = function () {
+        $scope.import = function() {
 
             if ($scope.view.urlImport) {
                 if (!$scope.urlImport.url.$invalid) {
 
                     $scope.view.error = '';
 
-                    $http.post(Globals.apiUrls.brood + 'import', {url: $scope.view.url}).then(function (response) {
+                    $http.post(Globals.apiUrls.brood + 'import', {url: $scope.view.url}).then(function(response) {
 
                         if (!response.data) {
                             $rootScope.$broadcast('httpError', {message: 'Something has gone wrong, summon the avengers.'});
@@ -81,7 +81,7 @@ angular.module('registryApp.cliche')
                             }
                         }
 
-                    }, function (trace) {
+                    }, function(trace) {
                         $scope.view.validating = false;
                     });
                 } else {
@@ -106,13 +106,13 @@ angular.module('registryApp.cliche')
             $scope.view.validating = true;
 
             SchemaValidator.validate(options.type, JSON.parse(json))
-                .then(function () {
+                .then(function() {
 
                     $scope.view.validating = false;
 
                     $modalInstance.close(json);
 
-                }, function (trace) {
+                }, function(trace) {
                     $scope.view.validating = false;
                     $rootScope.$broadcast('httpError', {message: trace});
                 });
@@ -122,11 +122,11 @@ angular.module('registryApp.cliche')
         /**
          * Close the modal window
          */
-        $scope.cancel = function () {
+        $scope.cancel = function() {
             $modalInstance.dismiss('cancel');
         };
 
-        $scope.$on('$destroy', function () {
+        $scope.$on('$destroy', function() {
             if (angular.isDefined(timeoutId)) {
                 $timeout.cancel(timeoutId);
                 timeoutId = undefined;

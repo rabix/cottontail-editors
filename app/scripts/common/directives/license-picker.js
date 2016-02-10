@@ -5,7 +5,7 @@
 'use strict';
 
 angular.module('registryApp.common')
-    .controller('LicensePickerCtrl', ['$scope', 'lodash', 'Licenses', '$q', function ($scope, _, Licenses, $q) {
+    .controller('LicensePickerCtrl', ['$scope', 'lodash', 'Licenses', '$q', function($scope, _, Licenses, $q) {
         $scope.licenses = Licenses.getLicenses();
         var list = [];
         for (var key in $scope.licenses) {
@@ -19,20 +19,20 @@ angular.module('registryApp.common')
         function filterFunction(list, input) {
             var regex = new RegExp(input.toLowerCase().split('').join('.*'));
 
-            return _(list).filter(function (license) {
+            return _(list).filter(function(license) {
                 var nameScore = license.name.toLowerCase().search(regex);
 
                 if (nameScore !== -1) {
                     license.score = nameScore;
                     return license;
                 }
-            }).sortBy(function (license) {
+            }).sortBy(function(license) {
                 // popular licenses should always be on top
                 return license.isPopular ? '0_' + license.score + license.name.length : '1_' + license.score + license.name.length;
             }).value().slice(0, 8);
         }
 
-        $scope.filterResults = function (input) {
+        $scope.filterResults = function(input) {
             var deferred = $q.defer();
 
             deferred.resolve(filterFunction(list, input));
@@ -41,7 +41,7 @@ angular.module('registryApp.common')
         };
     }])
 
-    .directive('licensePicker', ['$templateCache', function ($templateCache) {
+    .directive('licensePicker', ['$templateCache', function($templateCache) {
         return {
             restrict: 'E',
             scope: {

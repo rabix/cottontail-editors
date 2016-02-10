@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .controller('PropertyArgCtrl', ['$scope', '$templateCache', '$uibModal', 'SandBox', 'Cliche', 'lodash', function ($scope, $templateCache, $modal, SandBox, Cliche, _) {
+    .controller('PropertyArgCtrl', ['$scope', '$templateCache', '$uibModal', 'SandBox', 'Cliche', 'lodash', function($scope, $templateCache, $modal, SandBox, Cliche, _) {
 
         $scope.view = {};
         $scope.view.exprError = '';
@@ -16,14 +16,14 @@ angular.module('registryApp.cliche')
         /**
          * Check if expression is valid
          */
-        var checkExpression = function () {
+        var checkExpression = function() {
 
             if ($scope.prop.valueFrom && $scope.prop.valueFrom.value) {
 
                 SandBox.evaluate($scope.prop.valueFrom.script, {})
-                    .then(function () {
+                    .then(function() {
                         $scope.view.exprError = '';
-                    }, function (error) {
+                    }, function(error) {
                         $scope.view.exprError = error.name + ':' + error.message;
                     });
             } else {
@@ -51,10 +51,14 @@ angular.module('registryApp.cliche')
                 template: $templateCache.get('views/partials/confirm-delete.html'),
                 controller: 'ModalCtrl',
                 windowClass: 'modal-confirm',
-                resolve: {data: function () { return {}; }}
+                resolve: {
+                    data: function() {
+                        return {};
+                    }
+                }
             });
 
-            modalInstance.result.then(function () {
+            modalInstance.result.then(function() {
                 Cliche.deleteArg($scope.prop);
                 Cliche.generateCommand();
                 $scope.setDirty();
@@ -72,7 +76,7 @@ angular.module('registryApp.cliche')
                 windowClass: 'modal-prop',
                 size: 'lg',
                 resolve: {
-                    options: function () {
+                    options: function() {
                         return {
                             type: 'arg',
                             mode: 'edit',
@@ -95,7 +99,7 @@ angular.module('registryApp.cliche')
                     $scope.setPristine();
                 }
 
-            }, function () {
+            }, function() {
                 $scope.setPristine();
             });
 
@@ -110,11 +114,13 @@ angular.module('registryApp.cliche')
          */
         $scope.handleAction = function(action) {
 
-            if (typeof $scope[action] === 'function') { $scope[action](); }
+            if (typeof $scope[action] === 'function') {
+                $scope[action]();
+            }
         };
 
     }])
-    .directive('propertyArg', [function () {
+    .directive('propertyArg', [function() {
 
         return {
             restrict: 'E',
@@ -125,10 +131,10 @@ angular.module('registryApp.cliche')
             },
             require: '?ngModel',
             controller: 'PropertyArgCtrl',
-            link: function (scope, element, attr, ngModelCtrl) {
+            link: function(scope, element, attr, ngModelCtrl) {
                 var originalPristineStatus;
 
-                scope.setDirty = function () {
+                scope.setDirty = function() {
 
                     if (ngModelCtrl) {
                         if (typeof originalPristineStatus === 'undefined') {
@@ -139,7 +145,7 @@ angular.module('registryApp.cliche')
                     }
                 };
 
-                scope.setPristine = function () {
+                scope.setPristine = function() {
                     // will not set form to pristine if it was not so originally
                     if (ngModelCtrl && originalPristineStatus) {
                         // ngModel -> general form -> tool form

@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('registryApp.dyole')
-    .directive('drag', ['Globals', '$rootScope', 'Notification', function (Globals, $rootScope, Notification) {
+    .directive('drag', ['Globals', '$rootScope', 'Notification', function(Globals, $rootScope, Notification) {
         return {
             scope: {
                 drag: '='
@@ -26,7 +26,7 @@ angular.module('registryApp.dyole')
                  * @returns {NodeImage}
                  * @constructor
                  */
-                function NodeImage(src){
+                function NodeImage(src) {
                     this.img = new Image();
                     this.img.src = src;
                     return this;
@@ -41,11 +41,11 @@ angular.module('registryApp.dyole')
                  * Creates image element and starts "drag" operation
                  * @param e
                  */
-                function handleMouseDown (e) {
+                function handleMouseDown(e) {
                     e.preventDefault();
                     e.stopPropagation();
 
-                    if (e.which === 1 ) {
+                    if (e.which === 1) {
 
                         image = images[scope.drag.type.toLowerCase()].img;
                         $img = $('<img/>').attr('src', image.src).width(96).height(96);
@@ -68,7 +68,7 @@ angular.module('registryApp.dyole')
                  * Moves image element with cursor move
                  * @param e
                  */
-                function handleMouseMove (e) {
+                function handleMouseMove(e) {
                     if (mousedown && $img) {
                         $img.css({
                             top: e.clientY - $img.height() / 2 + $(window).scrollTop(),
@@ -81,7 +81,7 @@ angular.module('registryApp.dyole')
                  * Handles "drop" operation, verifies condition for adding node to workflow
                  * @param e
                  */
-                function handleMouseUp (e) {
+                function handleMouseUp(e) {
 
                     if (mousedown) {
                         mousedown = false;

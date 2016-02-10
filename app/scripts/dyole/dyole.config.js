@@ -7,19 +7,19 @@
 'use strict';
 
 angular.module('registryApp.dyole', [
-    'registryApp.app',
-    'ui.bootstrap',
-    'ui.sortable',
-    'registryApp.common',
-    'registryApp.util',
-    'ngPrettyJson',
-    'markdown',
-    'ngTagsInput'])
+        'registryApp.app',
+        'ui.bootstrap',
+        'ui.sortable',
+        'registryApp.common',
+        'registryApp.util',
+        'ngPrettyJson',
+        'markdown',
+        'ngTagsInput'])
     .constant('Const', {
         exposedSeparator: '$',
         generalSeparator: '.'
     })
-	.config([
+    .config([
         '$uibModalProvider',
         'NotificationProvider',
         '$uibTooltipProvider',

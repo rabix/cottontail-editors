@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('registryApp.common')
-    .controller('ModalJSONCtrl', ['$scope', '$uibModalInstance', 'data', function ($scope, $modalInstance, data) {
+    .controller('ModalJSONCtrl', ['$scope', '$uibModalInstance', 'data', function($scope, $modalInstance, data) {
 
         $scope.data = data;
         $scope.view = {};
@@ -13,11 +13,11 @@ angular.module('registryApp.common')
 
         $scope.view.stringJson = JSON.stringify(data.json);
 
-        $scope.cancel = function () {
+        $scope.cancel = function() {
             $modalInstance.dismiss('cancel');
         };
 
-        $scope.getUrl = function () {
+        $scope.getUrl = function() {
             $modalInstance.close($scope.view.json);
         };
 

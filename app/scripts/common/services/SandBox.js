@@ -5,7 +5,7 @@
 'use strict';
 
 angular.module('registryApp.common')
-    .factory('SandBox', ['$q', 'Cliche', 'lodash', function ($q, Cliche, _) {
+    .factory('SandBox', ['$q', 'Cliche', 'lodash', function($q, Cliche, _) {
 
         var Sandbox;
 
@@ -22,7 +22,7 @@ angular.module('registryApp.common')
              *  - triggered when execution fails, first parameter is err object
              *  - when err is triggered success isn't
              */
-            evaluate: function (code, input) {
+            evaluate: function(code, input) {
 
                 Sandbox = new JSandbox();
 
@@ -38,7 +38,7 @@ angular.module('registryApp.common')
 
                 // check if code starts with { to wrap it in closure
                 if (code.charAt(0) === '{') {
-                    code = '(function()' + code +')()';
+                    code = '(function()' + code + ')()';
                 }
 
                 Sandbox.eval(
@@ -56,7 +56,7 @@ angular.module('registryApp.common')
                 return deferred.promise;
             },
 
-            evaluateByArg: function (code, arg) {
+            evaluateByArg: function(code, arg) {
 
                 var self = this;
 
@@ -64,10 +64,10 @@ angular.module('registryApp.common')
 
                     var promises = [];
 
-                    _.each(arg, function (o) {
+                    _.each(arg, function(o) {
                         promises.push(
                             self.evaluate(code, {$self: o})
-                                .then(function (result) {
+                                .then(function(result) {
                                     return !result && isNaN(result) ? null : result;
                                 })
                         );
@@ -77,14 +77,14 @@ angular.module('registryApp.common')
 
                 } else {
                     return self.evaluate(code, {$self: arg})
-                        .then(function (result) {
+                        .then(function(result) {
                             return !result && isNaN(result) ? null : result;
                         });
                 }
 
             },
 
-            terminate: function () {
+            terminate: function() {
                 if (angular.isDefined(Sandbox)) {
                     Sandbox.terminate();
                     Sandbox = undefined;

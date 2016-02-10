@@ -7,7 +7,7 @@
 'use strict';
 
 angular.module('registryApp.cliche')
-    .directive('separatorInfo', ['lodash', function (_) {
+    .directive('separatorInfo', ['lodash', function(_) {
         return {
             restrict: 'E',
             template: '<span>{{ view.separator }}</span>',
@@ -15,7 +15,7 @@ angular.module('registryApp.cliche')
                 type: '@',
                 model: '='
             },
-            controller: ['$scope', 'Separator', function ($scope, Separator) {
+            controller: ['$scope', 'Separator', function($scope, Separator) {
 
                 var option;
                 var map = Separator.getMap();
@@ -34,6 +34,7 @@ angular.module('registryApp.cliche')
                 });
 
             }],
-            link: function() {}
+            link: function() {
+            }
         };
     }]);

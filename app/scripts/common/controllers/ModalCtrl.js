@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('registryApp.common')
-    .controller('ModalCtrl', ['$scope', '$uibModalInstance', 'data', 'HotkeyRegistry', function ($scope, $modalInstance, data, HotkeyRegistry) {
+    .controller('ModalCtrl', ['$scope', '$uibModalInstance', 'data', 'HotkeyRegistry', function($scope, $modalInstance, data, HotkeyRegistry) {
 
         $scope.data = data;
         $scope.view = {};
@@ -11,20 +11,20 @@ angular.module('registryApp.common')
         /**
          * Close the modal
          */
-        $scope.ok = function () {
+        $scope.ok = function() {
             $modalInstance.close();
         };
 
         /**
          * Dismiss the modal
          */
-        $scope.cancel = function () {
+        $scope.cancel = function() {
             $modalInstance.dismiss('cancel');
         };
 
         var unloadHotkeys = HotkeyRegistry.loadHotkeys({name: 'confirm', callback: $scope.ok, preventDefault: true});
 
-        $scope.$on('$destroy', function () {
+        $scope.$on('$destroy', function() {
             unloadHotkeys();
         });
     }]);

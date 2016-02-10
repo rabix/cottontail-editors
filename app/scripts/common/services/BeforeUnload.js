@@ -95,7 +95,9 @@ angular.module('registryApp.common')
 
                 detachEvent('beforeunload', onBeforeUnloadHandler);
 
-                if (typeof messageCallback === 'function') { messageCallback.call(); }
+                if (typeof messageCallback === 'function') {
+                    messageCallback.call();
+                }
             };
         };
 

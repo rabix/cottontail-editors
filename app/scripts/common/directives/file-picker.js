@@ -5,7 +5,7 @@
 'use strict';
 
 angular.module('registryApp.common')
-    .controller('FilePickerCtrl', ['$scope', 'lodash', 'File', function ($scope, _, File) {
+    .controller('FilePickerCtrl', ['$scope', 'lodash', 'File', function($scope, _, File) {
 
         $scope.view = {};
 
@@ -29,8 +29,8 @@ angular.module('registryApp.common')
         });
 
         $scope.breadcrumbs = [];
-        
-        var getFiles = function (config) {
+
+        var getFiles = function(config) {
             $scope.view.loading = true;
 
             config = config || {};
@@ -48,12 +48,12 @@ angular.module('registryApp.common')
             $scope.view.total = files.matching;
             $scope.view.files = files.resultSet;
             $scope.view.loading = false;
-        
+
 
             console.log('Updating view', $scope.selectedFiles);
-            _.forEach(files.resultSet, function (file) {
+            _.forEach(files.resultSet, function(file) {
 
-                var exists = _.find($scope.selectedFiles, function (f) {
+                var exists = _.find($scope.selectedFiles, function(f) {
                     return f.id === file.id;
                 });
 
@@ -63,9 +63,9 @@ angular.module('registryApp.common')
             });
         };
 
-        $scope.goToBreadcrumb = function ($index) {
+        $scope.goToBreadcrumb = function($index) {
             var path = '';
-            for(var i = 0; i <= $index; i++) {
+            for (var i = 0; i <= $index; i++) {
                 path += '/';
                 path += $scope.breadcrumbs[i];
             }
@@ -75,24 +75,24 @@ angular.module('registryApp.common')
             getFiles({limit: $scope.view.limit, offset: $scope.view.perPage, path: path});
         };
 
-        $scope.goToRoot = function () {
+        $scope.goToRoot = function() {
 
             getFiles({offset: $scope.view.perPage});
             $scope.breadcrumbs = [];
         };
 
-        $scope.getMoreFiles = function (limit) {
+        $scope.getMoreFiles = function(limit) {
             console.log(limit);
             getFiles({limit: limit, offset: $scope.view.perPage});
         };
 
-        $scope.goToFolder = function (folderName) {
+        $scope.goToFolder = function(folderName) {
             $scope.breadcrumbs.push(folderName);
             $scope.goToBreadcrumb($scope.breadcrumbs.length - 1);
         };
 
 
-        $scope.onFileSelect = function (file) {
+        $scope.onFileSelect = function(file) {
             var id = file.id;
             var selected = file.selected;
 
@@ -105,8 +105,8 @@ angular.module('registryApp.common')
             }
         };
 
-        var onSelect = function (file) {
-            var exists = _.find($scope.selectedFiles, function (f) {
+        var onSelect = function(file) {
+            var exists = _.find($scope.selectedFiles, function(f) {
                 return f.id === file.id;
             });
 
@@ -123,17 +123,17 @@ angular.module('registryApp.common')
             }
         };
 
-        var onDeSelect = function (file) {
-            var selected = _.remove($scope.selectedFiles, function (f) {
+        var onDeSelect = function(file) {
+            var selected = _.remove($scope.selectedFiles, function(f) {
                 return f.id === file.id;
             });
 
-            _.forEach(selected, function (f) {
+            _.forEach(selected, function(f) {
                 f.selected = false;
             })
         };
 
-        $scope.toggleSelect = function (file) {
+        $scope.toggleSelect = function(file) {
 
             if (file.type === 'DIRECTORY') {
                 $scope.goToFolder(file.name);
@@ -146,7 +146,7 @@ angular.module('registryApp.common')
             $scope.onFileSelect(file);
         };
 
-        $scope.onKeyDown = function ($event) {
+        $scope.onKeyDown = function($event) {
             if ($event.which === 27) {
                 $event.preventDefault();
                 $event.stopPropagation();
@@ -156,7 +156,7 @@ angular.module('registryApp.common')
 
         $scope.goToRoot();
     }])
-    .directive('filePicker', ['$templateCache', function ($templateCache) {
+    .directive('filePicker', ['$templateCache', function($templateCache) {
         return {
             restrict: 'E',
             template: $templateCache.get('views/partials/file-picker.html'),
@@ -167,7 +167,7 @@ angular.module('registryApp.common')
                 selectOne: '='
             },
             controller: 'FilePickerCtrl',
-            link: function (scope, element, attrs) {
+            link: function(scope, element, attrs) {
             }
         };
     }]);

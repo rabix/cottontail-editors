@@ -16,9 +16,11 @@ angular.module('registryApp.common')
          * @param {boolean} whiteSpace
          * @returns {boolean}
          */
-        var isValidName = function (name, whiteSpace) {
+        var isValidName = function(name, whiteSpace) {
 
-            if (_.isEmpty(name)) { return false; }
+            if (_.isEmpty(name)) {
+                return false;
+            }
 
             // because of inputs starting with # by default
             var pattern = /[\w#]*/g;
@@ -50,7 +52,7 @@ angular.module('registryApp.common')
          *
          * @returns {string}
          */
-        var getDomain = function () {
+        var getDomain = function() {
 
             var $location = $injector.get('$location');
 
@@ -89,7 +91,7 @@ angular.module('registryApp.common')
          * @param {string} itemType
          * @returns {*}
          */
-        var getTestData = function (type, itemType) {
+        var getTestData = function(type, itemType) {
 
             var output;
             var map = {
@@ -124,7 +126,9 @@ angular.module('registryApp.common')
 
             output = map[type];
 
-            if (itemType) { output = output[itemType]; }
+            if (itemType) {
+                output = output[itemType];
+            }
 
             return output;
 
@@ -139,7 +143,7 @@ angular.module('registryApp.common')
          * @param {string} itemType
          * @returns {*}
          */
-        var getDefaultInputValue = function (name, symbols, type, itemType) {
+        var getDefaultInputValue = function(name, symbols, type, itemType) {
 
             var output;
             var map = {
@@ -147,7 +151,7 @@ angular.module('registryApp.common')
                 File: {path: '/path/to/' + name + '.ext', 'class': 'File', size: 0, secondaryFiles: []},
                 'enum': symbols ? symbols[0] : name,
                 string: name + '-string-value',
-                int: getRandomInt(0,11),
+                int: getRandomInt(0, 11),
                 float: getRandomFloat(0, 11),
                 boolean: true,
                 record: {},
@@ -161,18 +165,20 @@ angular.module('registryApp.common')
                         {path: '/path/to/' + name + '-1.ext', 'class': 'File', size: 0, secondaryFiles: []},
                         {path: '/path/to/' + name + '-2.ext', 'class': 'File', size: 0, secondaryFiles: []}
                     ],
-                    string: [name+'-string-value-1', name+'-string-value-2'],
-                    int: [getRandomInt(0,11), getRandomInt(0,11)],
+                    string: [name + '-string-value-1', name + '-string-value-2'],
+                    int: [getRandomInt(0, 11), getRandomInt(0, 11)],
                     float: [getRandomFloat(0, 11), getRandomFloat(0, 11)],
                     record: [],
                     map: [{}],
-	                'enum': [symbols ? symbols[0] : name]
+                    'enum': [symbols ? symbols[0] : name]
                 }
             };
 
             output = map[type];
 
-            if (itemType) { output = output[itemType]; }
+            if (itemType) {
+                output = output[itemType];
+            }
 
             return output;
 
@@ -205,11 +211,11 @@ angular.module('registryApp.common')
          * @param {string} [val] optional value to compare property to
          * @returns {*}
          */
-        function deepPropValue (obj, prop, val) {
+        function deepPropValue(obj, prop, val) {
             var result = null;
 
             if (obj instanceof Array) {
-                for(var i = 0; i < obj.length; i ++) {
+                for (var i = 0; i < obj.length; i++) {
                     result = deepPropValue(obj[i], prop, val);
                     if (result) {
                         break;
@@ -227,7 +233,7 @@ angular.module('registryApp.common')
                             return obj;
                         }
                     }
-                    if(obj[oProp] instanceof Object || obj[oProp] instanceof Array) {
+                    if (obj[oProp] instanceof Object || obj[oProp] instanceof Array) {
                         result = deepPropValue(obj[oProp], prop, val);
                         if (result) {
                             break;
@@ -240,11 +246,11 @@ angular.module('registryApp.common')
         }
 
         var deepPropertyExists = function(obj, prop) {
-            return !! deepPropValue(obj, prop);
+            return !!deepPropValue(obj, prop);
         };
 
         var deepPropertyEquals = function(obj, prop, val) {
-            return !! deepPropValue(obj, prop, val);
+            return !!deepPropValue(obj, prop, val);
         };
 
         return {

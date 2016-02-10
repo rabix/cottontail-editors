@@ -2,9 +2,9 @@
  * Created by branko7171 on 29.7.15..
  */
 angular.module('registryApp.cliche')
-    .directive('checkArgumentPrefix', [ '$timeout', function ($timeout) {
+    .directive('checkArgumentPrefix', ['$timeout', function($timeout) {
         return {
-            scope : {
+            scope: {
                 other: '=',
                 own: '=',
                 valName: '@'
@@ -19,7 +19,7 @@ angular.module('registryApp.cliche')
                 });
 
                 // observe the other value and re-validate on change
-                scope.$watch('other', function (val) {
+                scope.$watch('other', function(val) {
                     validate();
                 });
 
@@ -29,7 +29,7 @@ angular.module('registryApp.cliche')
                         var val1 = scope.own;
                         var val2 = scope.other;
                         var value = true;
-                        if (val2 !== ''){
+                        if (val2 !== '') {
                             value = !_.isUndefined(val1) && !_.isNull(val1) && val1 !== "";
                         }
                         // set validity
@@ -37,7 +37,7 @@ angular.module('registryApp.cliche')
                         //formCtrl.$setValidity(value);
                         formCtrl[scope.valName].$setValidity(scope.valName, value);
 
-                    },0);
+                    }, 0);
 
                 };
 

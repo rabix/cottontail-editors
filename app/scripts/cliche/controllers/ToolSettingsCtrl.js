@@ -10,7 +10,7 @@
 
 
 angular.module('registryApp.cliche')
-    .controller('ToolSettingsCtrl', ['$scope', '$uibModalInstance', 'data', 'HelpMessages', 'lodash','$q', function ($scope, $modalInstance, data, HelpMessages, _, $q) {
+    .controller('ToolSettingsCtrl', ['$scope', '$uibModalInstance', 'data', 'HelpMessages', 'lodash', '$q', function($scope, $modalInstance, data, HelpMessages, _, $q) {
         'use strict';
 
         $scope.help = HelpMessages;
@@ -29,7 +29,7 @@ angular.module('registryApp.cliche')
 
         // angular form
         $scope.view.appSettings = {};
-        $scope.addMetadata = function () {
+        $scope.addMetadata = function() {
             $scope.view.hints.push({
                 class: '',
                 value: ''
@@ -41,8 +41,8 @@ angular.module('registryApp.cliche')
          * @param {string|Expression} value
          * @param {number} index
          */
-        $scope.updateHintValue = function (value, index) {
-          $scope.view.hints[index].value = value;
+        $scope.updateHintValue = function(value, index) {
+            $scope.view.hints[index].value = value;
         };
 
         /**
@@ -50,7 +50,7 @@ angular.module('registryApp.cliche')
          *
          * @param {number} index
          */
-        $scope.removeMetadata = function (index) {
+        $scope.removeMetadata = function(index) {
             $scope.view.hints.splice(index, 1);
 
             $scope.view.appSettings.$setDirty();
@@ -61,7 +61,7 @@ angular.module('registryApp.cliche')
          * @private
          */
         function _stripEmptyHints() {
-            _.remove($scope.view.hints, function (meta) {
+            _.remove($scope.view.hints, function(meta) {
                 return meta.class === '';
             });
         }
@@ -73,15 +73,15 @@ angular.module('registryApp.cliche')
          * @param {string} value
          * @returns {*}
          */
-        $scope.autoSuggestInstances = function (value) {
+        $scope.autoSuggestInstances = function(value) {
             var deferred = $q.defer();
 
             var regex = new RegExp(value.toLowerCase().split('').join('.*'));
 
-            deferred.resolve(_(instances).filter(function (instance) {
+            deferred.resolve(_(instances).filter(function(instance) {
                 var score = instance.text.toLowerCase().search(regex);
 
-                if (score !== -1 ) {
+                if (score !== -1) {
                     instance.score = score;
                     return instance;
                 }
@@ -94,7 +94,7 @@ angular.module('registryApp.cliche')
         /**
          * Close modal and apply changes
          */
-        $scope.ok = function () {
+        $scope.ok = function() {
 
             _stripEmptyHints();
 
@@ -109,7 +109,7 @@ angular.module('registryApp.cliche')
         /**
          * Close the modal window
          */
-        $scope.cancel = function () {
+        $scope.cancel = function() {
             $modalInstance.dismiss('cancel');
         };
     }]);
