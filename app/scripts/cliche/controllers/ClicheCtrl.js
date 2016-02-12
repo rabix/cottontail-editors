@@ -525,28 +525,6 @@ angular.module('registryApp.cliche')
             };
 
             /**
-             * Load json editor
-             */
-            $scope.loadJsonEditor = function() {
-
-                var modalInstance = $modal.open({
-                    template: $templateCache.get('views/cliche/partials/json-editor.html'),
-                    controller: 'JsonEditorCtrl',
-                    resolve: {
-                        options: function() {
-                            return {type: $scope.view.type};
-                        }
-                    }
-                });
-
-                modalInstance.result.then(function(json) {
-                    _importTool(json);
-                });
-
-                return modalInstance;
-            };
-
-            /**
              * Sorts inputs/args by position
              *
              * @param {Input|Argument} item
@@ -565,94 +543,6 @@ angular.module('registryApp.cliche')
              */
             $scope.updateCategories = function() {
                 $scope.view.tool['sbg:categories'] = _.pluck($scope.view.categories, 'text');
-            };
-
-            /**
-             * Run app
-             * Will prompt for permission first if form is dirty
-             */
-            $scope.runApp = function() {
-
-                function _createTask() {
-                    // create task and redirect to task page for that task
-                    App.createAppTask($scope.view.tool['sbg:revision']).then(function(task) {
-                        BeforeRedirect.setReload(true);
-                        $scope.view.saving = true;
-                        $scope.view.loading = true;
-
-                        App.redirectToTaskPage(task);
-                    });
-                }
-
-                if (!$scope.form.tool.$dirty) {
-                    _createTask();
-                } else {
-                    var saveFlag = 'save';
-                    var runFlag = 'run';
-                    var modalInstance = $modal.open({
-                        controller: 'ConfirmCustomCtrl',
-                        template: $templateCache.get('views/partials/confirm-custom.html'),
-                        resolve: {
-                            data: function() {
-                                return {
-                                    message: 'You have unsaved changes!',
-                                    buttons: [
-                                        {
-                                            class: 'btn btn-default',
-                                            modalAction: 'dismiss',
-                                            select: 'cancel',
-                                            text: 'Cancel'
-                                        },
-                                        {
-                                            class: 'btn btn-default',
-                                            modalAction: 'close',
-                                            select: runFlag,
-                                            text: 'Run without saving changes'
-                                        },
-                                        {
-                                            class: 'btn btn-primary',
-                                            modalAction: 'close',
-                                            select: saveFlag,
-                                            text: 'Save changes and run'
-                                        }
-                                    ]
-                                };
-                            } /*data end*/
-                        } /*resolve end*/
-                    });
-
-                    modalInstance.result.then(function(select) {
-                        /* Run and save */
-                        if (select === saveFlag) {
-                            $scope.updateTool().then(function(response) {
-                                /*
-                                 Check if the response from the service has validation errors
-                                 */
-                                if (response.message['sbg:validationErrors'] &&
-                                    response.message['sbg:validationErrors'].length > 0) {
-                                    _.forEach(response.message['sbg:validationErrors'], function(error) {
-                                        Notification.error(error);
-                                    });
-
-                                    Notification.error('Could not create new task');
-                                } else {
-                                    _createTask();
-                                }
-
-                            }, function(reason) {
-                                Notification.error('Tool update failed');
-                                console.log('Tool update failed ' + reason);
-                            });
-
-                            /* Run and don't save */
-                        } else if (select === runFlag) {
-                            $scope.form.tool.$dirty = false;
-                            _createTask();
-                        }
-                    }, function() {
-                        return false;
-                    });
-                }
             };
 
             /**
@@ -934,20 +824,48 @@ angular.module('registryApp.cliche')
                 return tool;
             }
 
+            /**
+             * Checks if the callback returned a promise,
+             * then runs the correct onSuccess and onError function after the callback finishes
+             *
+             * @param promise
+             * @param onSuccess
+             * @param onError
+             */
+            function _runPostCallback(promise, onSuccess, onError) {
+                onSuccess = onSuccess || _.noop;
+                onError = onError || _.noop;
+
+                if (!_.isUndefined(promise.then) && _.isFunction(promise.then)) {
+                    promise.then(onSuccess).then(onError);
+                } else {
+                    onSuccess(promise);
+                }
+            }
+
             var _saveCallback = $scope.callbacks.onSave;
             var _getJsonCallback = $scope.callbacks.getJson;
             var _runCallback = $scope.callbacks.onRun;
 
             $scope.callbacks.onSave = function() {
-                _saveCallback(_removeEmptyFields(Cliche.getTool()));
+                var promise = _saveCallback(_removeEmptyFields(Cliche.getTool()));
+
+                $scope.view.loading = true;
+                _runPostCallback(promise, function (result) {
+                    $scope.view.loading = false;
+                    Notification.success('Tool saved successfully');
+                });
             };
 
             $scope.callbacks.getJson = function() {
-                _getJsonCallback(_removeEmptyFields(Cliche.getTool()));
+                var result = _getJsonCallback(_removeEmptyFields(Cliche.getTool()));
+                _runPostCallback(result, function (result) {
+                    console.log('got this result from get json', result);
+                });
             };
 
             $scope.callbacks.onRun = function() {
-                _runCallback = $scope.callbacks.onRun;
+                _runCallback(_removeEmptyFields(Cliche.getTool()));
             };
 
             $scope.$on('$destroy', function() {

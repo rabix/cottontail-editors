@@ -188,10 +188,6 @@ angular.module('registryApp.app')
             }
 
 
-//        $scope.toggleAppRevisions = function (rev) {
-//            $scope.view.appRevisions[rev].toggled = !$scope.view.appRevisions[rev].toggled;
-//        };
-
             /* load tools/workflows grouped by repositories */
             //$q.all([
             //    App.getMineAppsByProject(),
@@ -795,6 +791,52 @@ angular.module('registryApp.app')
                 PipelineService.removeInstance($scope.view.id);
 
             });
+
+
+            /**
+             * Checks if the callback returned a promise,
+             * then runs the correct onSuccess and onError function after the callback finishes
+             *
+             * @param promise
+             * @param onSuccess
+             * @param onError
+             */
+            function _runPostCallback(promise, onSuccess, onError) {
+                onSuccess = onSuccess || _.noop;
+                onError = onError || _.noop;
+
+                if (!_.isUndefined(promise.then) && _.isFunction(promise.then)) {
+                    promise.then(onSuccess).then(onError);
+                } else {
+                    onSuccess(promise);
+                }
+            }
+
+            var _saveCallback = $scope.callbacks.onSave;
+            var _getJsonCallback = $scope.callbacks.getJson;
+            var _runCallback = $scope.callbacks.onRun;
+
+            $scope.callbacks.onSave = function() {
+                var workflow = PipelineInstance.format();
+                var result = _saveCallback(workflow);
+
+
+                $scope.view.loading = true;
+                _runPostCallback(result, function (result) {
+                    $scope.view.loading = false;
+                    Notification.success('Workflow saved successfully');
+                });
+            };
+
+            $scope.callbacks.getJson = function() {
+                var workflow = PipelineInstance.format();
+                _getJsonCallback(workflow);
+            };
+
+            $scope.callbacks.onRun = function() {
+                _runCallback = $scope.callbacks.onRun;
+            };
+
 
             //@todo: fix hack for loading workflow
             // this is inside a timeout only because otherwise the .pipeline dom element

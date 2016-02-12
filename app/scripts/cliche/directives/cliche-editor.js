@@ -1,5 +1,5 @@
 angular.module('registryApp.cliche')
-    .directive('clicheEditor', ['Cliche', '$timeout', '$templateCache', function(Cliche, $timeout, $templateCache) {
+    .directive('clicheEditor', [function() {
         return {
             restrict: 'E',
             replace: true,
