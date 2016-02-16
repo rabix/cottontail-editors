@@ -395,34 +395,6 @@ angular.module('registryApp.cliche')
             };
 
 
-            //@todo refactor this, put it in a better place
-            var tool = _.assign(_.cloneDeep(rawTool), JSON.parse($scope.app));
-
-            /** @type CWLTool */
-            $scope.view.app = tool;
-            /** @type CWLTool */
-            $scope.view.tool = tool;
-
-            tool.hints = tool.hints || [];
-
-            Cliche.setTool(tool);
-            var job = $scope.view.revision.job ? JSON.parse($scope.view.revision.job) : null;
-
-            if (!job && typeof tool['sbg:job'] === 'object') {
-                job = tool['sbg:job'];
-            }
-
-            Cliche.setJob(job);
-
-            _setUpCliche();
-            _readRequirementsAndResources();
-            _prepareStatusCodes();
-            _setUpCategories();
-            _groupByCategory();
-            $scope.view.loading = false;
-            //@todo end refactor
-
-
             /**
              * Show tool settings modal (same modal appears in the workflow editor)
              */
@@ -824,6 +796,45 @@ angular.module('registryApp.cliche')
                 return tool;
             }
 
+
+            function _setTool(app) {
+                var tool;
+
+                // blank app is created
+                if (app === '') {
+                    tool = _.assign(_.cloneDeep(rawTool), {});
+                    // save it immediately
+                    _saveCallback(tool);
+                } else {
+                    var toolJSON =  JSON.parse(app);
+                    tool = _.assign(_.cloneDeep(rawTool), toolJSON);
+                }
+
+                /** @type CWLTool */
+                $scope.view.app = tool;
+                /** @type CWLTool */
+                $scope.view.tool = tool;
+
+                tool.hints = tool.hints || [];
+
+                Cliche.setTool(tool);
+                var job = $scope.view.revision.job ? JSON.parse($scope.view.revision.job) : null;
+
+                if (!job && typeof tool['sbg:job'] === 'object') {
+                    job = tool['sbg:job'];
+                }
+
+                Cliche.setJob(job);
+
+                _setUpCliche();
+                _readRequirementsAndResources();
+                _prepareStatusCodes();
+                _setUpCategories();
+                _groupByCategory();
+                $scope.view.loading = false;
+            }
+
+
             /**
              * Checks if the callback returned a promise,
              * then runs the correct onSuccess and onError function after the callback finishes
@@ -836,7 +847,7 @@ angular.module('registryApp.cliche')
                 onSuccess = onSuccess || _.noop;
                 onError = onError || _.noop;
 
-                if (!_.isUndefined(promise.then) && _.isFunction(promise.then)) {
+                if (!_.isUndefined(promise) && !_.isUndefined(promise.then) && _.isFunction(promise.then)) {
                     promise.then(onSuccess).then(onError);
                 } else {
                     onSuccess(promise);
@@ -867,6 +878,15 @@ angular.module('registryApp.cliche')
             $scope.callbacks.onRun = function() {
                 _runCallback(_removeEmptyFields(Cliche.getTool()));
             };
+
+            $scope.view.loading = true;
+            _setTool($scope.app);
+
+            $scope.$watch('app', function (n, o) {
+                if (n !== o) {
+                    _setTool(n);
+                }
+            });
 
             $scope.$on('$destroy', function() {
                 onBeforeUnloadOff();

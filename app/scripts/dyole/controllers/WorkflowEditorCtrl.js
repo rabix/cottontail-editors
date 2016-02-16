@@ -152,12 +152,11 @@ angular.module('registryApp.app')
             /**
              * Callback when apps are loaded
              *
-             * @param {Object} result
+             * @param {Object} app
              * @private
              */
-            function _appsLoaded(result) {
-
-                var workflow = JSON.parse(result);
+            function _appsLoaded(app) {
+                var workflow = JSON.parse(app);
 
                 $scope.view.filtering = false;
                 //$scope.view.message = result[0].status;
@@ -232,20 +231,18 @@ angular.module('registryApp.app')
              * Callback when workflow is changed
              */
             $scope.onWorkflowChange = function(value) {
+                $timeout(function() {
+                    $scope.view.isChanged = value.value;
 
-                $scope.view.isChanged = value.value;
+                    if (!value.value) {
+                        $scope.view.saving = false;
+                        $scope.view.loading = false;
 
-                if (!value.value) {
-                    $scope.view.saving = false;
-                    $scope.view.loading = false;
+                        $scope.view.currentAppId = null;
+                        $scope.view.json = {};
+                    }
 
-                    $scope.view.currentAppId = null;
-                    $scope.view.json = {};
-                }
-
-                if (!$scope.$$phase) {
-                    $scope.$digest();
-                }
+                });
             };
 
             /**
@@ -326,7 +323,6 @@ angular.module('registryApp.app')
             $scope.toggleSidebar = function() {
 
                 $scope.view.showSidebar = !$scope.view.showSidebar;
-//            $rootScope.$broadcast('sidebar:toggle', $scope.view.showSidebar);
                 PipelineInstance.adjustSize($scope.view.showSidebar);
 
             };
@@ -431,7 +427,9 @@ angular.module('registryApp.app')
                 }).value();
 
                 $scope.switchTab('params');
-                $scope.$digest();
+                if (!$scope.$$phase) {
+                    $scope.$apply();
+                }
             };
 
             function filterInputs(input) {
@@ -467,15 +465,15 @@ angular.module('registryApp.app')
                 }
 
                 $scope.switchTab('apps');
-                $scope.$digest();
+                if (!$scope.$$phase) {
+                    $scope.$apply();
+                }
             };
 
             var onNodeDestroy = function() {
-                $scope.switchTab('apps');
-
-                if (!$scope.$$phase) {
-                    $scope.$digest();
-                }
+                $timeout(function() {
+                    $scope.switchTab('apps');
+                });
             };
 
             /**
@@ -777,9 +775,6 @@ angular.module('registryApp.app')
             ]);
 
             $scope.$on('$destroy', function() {
-//            onNodeSelectOff();
-//            onNodeDeselectOff();
-
                 onBeforeRedirectOff();
                 onBeforeRedirectOff = undefined;
 
@@ -789,7 +784,6 @@ angular.module('registryApp.app')
                 unloadHotkeys();
 
                 PipelineService.removeInstance($scope.view.id);
-
             });
 
 
@@ -820,10 +814,10 @@ angular.module('registryApp.app')
                 var workflow = PipelineInstance.format();
                 var result = _saveCallback(workflow);
 
-
                 $scope.view.loading = true;
                 _runPostCallback(result, function (result) {
                     $scope.view.loading = false;
+                    _appsLoaded(result);
                     Notification.success('Workflow saved successfully');
                 });
             };
@@ -842,7 +836,16 @@ angular.module('registryApp.app')
             // this is inside a timeout only because otherwise the .pipeline dom element
             // is not initialized at the moment that the canvas should be drawn. canvas init
             // should either wait for domContentLoaded event or setting the app should be delayed
-            $timeout(function() {
-                _appsLoaded($scope.app);
-            });
+            //$scope.callbacks.setWorkflow = function(app) {
+
+                $timeout(function() {
+                    _appsLoaded($scope.app);
+
+                    $scope.$watch('app', function(n, o) {
+                        if (n !== o) {
+                            _appsLoaded(n);
+                        }
+                    });
+                });
+            //};
         }]);
