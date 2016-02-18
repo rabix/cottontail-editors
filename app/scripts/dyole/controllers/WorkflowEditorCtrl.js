@@ -799,7 +799,7 @@ angular.module('registryApp.app')
                 onSuccess = onSuccess || _.noop;
                 onError = onError || _.noop;
 
-                if (!_.isUndefined(promise.then) && _.isFunction(promise.then)) {
+                if (!_.isUndefined(promise) && !_.isUndefined(promise.then) && _.isFunction(promise.then)) {
                     promise.then(onSuccess).then(onError);
                 } else {
                     onSuccess(promise);
@@ -818,7 +818,7 @@ angular.module('registryApp.app')
                 _runPostCallback(result, function (result) {
                     $scope.view.loading = false;
                     _appsLoaded(result);
-                    Notification.success('Workflow saved successfully');
+                    //Notification.success('Workflow saved successfully');
                 });
             };
 

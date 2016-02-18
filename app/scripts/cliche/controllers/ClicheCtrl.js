@@ -864,7 +864,7 @@ angular.module('registryApp.cliche')
                 $scope.view.loading = true;
                 _runPostCallback(promise, function (result) {
                     $scope.view.loading = false;
-                    Notification.success('Tool saved successfully');
+                    //Notification.success('Tool saved successfully');
                 });
             };
 
