@@ -8,12 +8,12 @@ angular.module('registryApp.app')
         '$location', '$templateCache', '$filter',
         'Loading', 'App', 'Const', 'BeforeRedirect',
         'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload',
-        'Api', 'HotkeyRegistry', 'Notification', 'Cliche', '$timeout',
+        'Api', 'Notification', 'Cliche', '$timeout',
         function($scope, $rootScope, $q, $modal,
                  $location, $templateCache, $filter,
                  Loading, App, Const, BeforeRedirect,
                  Helper, PipelineService, _, Globals, BeforeUnload,
-                 Api, HotkeyRegistry, Notification, Cliche, $timeout) {
+                 Api, Notification, Cliche, $timeout) {
 
             var PipelineInstance = null;
             var prompt = false;
@@ -769,19 +769,12 @@ angular.module('registryApp.app')
                 });
             };
 
-            var unloadHotkeys = HotkeyRegistry.loadHotkeys([
-                {name: 'save', callback: $scope.save, preventDefault: true},
-                {name: 'run', callback: $scope.runWorkflow, preventDefault: true}
-            ]);
-
             $scope.$on('$destroy', function() {
                 onBeforeRedirectOff();
                 onBeforeRedirectOff = undefined;
 
                 onBeforeUnloadOff();
                 onBeforeUnloadOff = undefined;
-
-                unloadHotkeys();
 
                 PipelineService.removeInstance($scope.view.id);
             });
