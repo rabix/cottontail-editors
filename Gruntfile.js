@@ -29,27 +29,9 @@ module.exports = function(grunt) {
 
         // Watches files for changes and runs tasks based on the changed files
         watch: {
-            //            bower: {
-            //                files: ['bower.json'],
-            //                tasks: ['wiredep']
-            //            },
-            //      js: {
-            //        files: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
-            //        tasks: ['newer:jshint:all'],
-            //        options: {
-            //          livereload: '<%= connect.options.livereload %>'
-            //        }
-            //      },
-            //      jsTest: {
-            //        files: ['test/spec/{,*/}*.js'],
-            //        tasks: ['newer:jshint:test', 'karma']
-            //      },
             sass: {
                 files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
                 tasks: ['sass:server']
-            },
-            gruntfile: {
-                files: ['Gruntfile.js']
             },
             template: {
                 files: [
@@ -633,33 +615,6 @@ module.exports = function(grunt) {
         grunt.task.run(['serve:' + target]);
     });
 
-    grunt.registerTask('test', [
-        'clean:server',
-        //'concurrent:test',
-        'autoprefixer',
-        'connect:test',
-        'karma'
-    ]);
-
-    grunt.registerTask('build', [
-        'clean:dist',
-        //        'useminPrepare',
-        'concurrent:dist',
-        'ngtemplates:dyole',
-        'ngtemplates:cliche',
-        //'autoprefixer',
-        'concat',
-        //'ngAnnotate',
-        'copy:dist',
-        'cssmin',
-        'uglify'
-    ]);
-
-    grunt.registerTask('default', [
-        //        'newer:jshint',
-        //        'test',
-        'build'
-    ]);
 
     grunt.registerTask('templates', [
         'ngtemplates:cliche',

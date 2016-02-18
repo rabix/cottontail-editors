@@ -12,13 +12,6 @@ html, body {
   min-height: 0;
 }
 
-body {
-  color: #555;
-  background-color: $gray;
-  background-image: url(../images/bg.png);
-  font-family: 'Open Sans', sans-serif;
-}
-
 .container-fluid {
   padding: 0;
   height: 100%;
@@ -29,17 +22,24 @@ body {
   @extend .flex-one;
 }
 
-@import "common";
-@import "sidebar";
-@import "loader";
-@import "error";
+.rabix {
+  color: #555;
+  font-family: $font-family-base;
+
+  @import "common";
+  @import "sidebar";
+  @import "loader";
+  @import "error";
+  @import "cliche";
+}
+
 @import "elements";
-@import "cliche";
 @import "components/components";
+
 
 /* PAGE
 ================================================ */
-.page {
+.rabix .page {
   position: relative;
   background-color: #fff;
   height: 100%;
@@ -60,44 +60,6 @@ body {
       padding-top: 0;
     }
 
-  }
-
-  /* Home page */
-  &.home {
-    .log-in-btn {
-      width: 300px;
-      margin: 20px auto;
-      display: block;
-    }
-    .subscribe {
-      text-align: center;
-      margin-top: 100px;
-      .alert {
-        width: 400px;
-        margin: 5px auto;
-        padding: 5px;
-      }
-      .input-group {
-        width: 400px;
-        margin: 0 auto;
-      }
-    }
-  }
-
-  /* Repo page */
-  &.repo {
-
-    .nav-tabs {
-      position: relative;
-      z-index: 1;
-      border-bottom: none;
-      @extend .flex-auto;
-    }
-
-    .tab.tab-tbl {
-      margin-top: -1px;
-      border-top: 1px solid #ddd;
-    }
   }
 
   /* Workflow Editor page */
@@ -131,7 +93,7 @@ body {
 
 }
 
-@import "tables";
+//@import "tables";
 @import "overrides/overrides";
 
 

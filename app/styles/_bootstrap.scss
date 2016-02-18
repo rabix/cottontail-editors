@@ -5,11 +5,11 @@
 @import "../../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap/mixins";
 
 // Reset and dependencies
-@import "../../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap/normalize";
+//@import "../../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap/normalize";
 
-// Core CSS
+ //Core CSS
 @import "../../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap/scaffolding";
-@import "../../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap/type";
+//@import "../../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap/type";
 @import "../../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap/code";
 @import "../../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap/grid";
 @import "../../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap/forms";
@@ -22,11 +22,8 @@
 @import "../../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap/input-groups";
 @import "../../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap/navs";
 @import "../../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap/labels";
-@import "../../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap/thumbnails";
 @import "../../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap/alerts";
-@import "../../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap/media";
 @import "../../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap/panels";
-@import "../../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap/responsive-embed";
 @import "../../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap/close";
 
 // Components w/ JavaScript

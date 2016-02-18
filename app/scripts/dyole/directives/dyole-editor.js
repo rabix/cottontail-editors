@@ -9,7 +9,7 @@ angular.module('registryApp.dyole')
                 callbacks: '='
             },
             controller: 'WorkflowEditorCtrl',
-            template: '<div class="dyole-editor">' +
+            template: '<div class="dyole-editor rabix">' +
             '<ng-include class="main" src="\'views/app/workflow-editor.html\'"></ng-include>' +
             '</div>'
         }

@@ -22,9 +22,9 @@
 
 .heading {
   padding: 0 10px 0 15px;
-  background-color: $gray;
-  border-bottom: 2px solid $orange;
-  background-image: url(../images/bg.png);
+  //background-color: $gray;
+  border-bottom: 1px solid $orange;
+  //background-image: url(../images/bg.png);
   @extend .flex-auto;
 
   .separator {
