@@ -350,16 +350,17 @@ angular.module('registryApp.dyole')
              * @private
              */
             _initCanvas: function() {
-                var width = 600,
-                    height = 600,
-                    $parent = this.$parent,
-                    $parentDim = {
+                var width = 600;
+                var height = 600;
+                var $parent = this.$parent;
+                var $parentDim = {
                         width: $parent[0].offsetWidth - 10,
                         height: $parent[0].offsetHeight || $parent[0].parentNode.offsetHeight
                     };
 
-                width = $parentDim.width || width;
-                height = $parentDim.height || height;
+                // in case the view has not initialized yet, width and height would be -10
+                width = $parentDim.width >= 0 ? $parentDim.width : width;
+                height = $parentDim.height >= 0 ? $parentDim.height : height;
 
                 if (height > 0) {
                     height -= 10;
