@@ -149,20 +149,6 @@
   @extend %ellipsis;
 }
 
-/* Remove button for the box */
-.remove-btn {
-  position: absolute;
-  z-index: 3;
-  top: 0;
-  right: 0;
-  color: #555;
-  padding: 5px;
-
-  &:hover, &:active, &:focus {
-    text-decoration: none;
-    color: #666;
-  }
-}
 
 /* Property box for displaying input/output/argument values */
 .property-box {

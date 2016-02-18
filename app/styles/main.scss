@@ -26,13 +26,13 @@ html, body {
   color: #555;
   font-family: $font-family-base;
 
-  @import "common";
   @import "sidebar";
   @import "loader";
   @import "error";
   @import "cliche";
 }
 
+@import "common";
 @import "elements";
 @import "components/components";
 
