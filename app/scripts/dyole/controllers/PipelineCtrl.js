@@ -136,25 +136,35 @@ angular.module('registryApp.dyole')
             $scope.view.loading = true;
             $scope.view.explanation = false;
 
-            var appProject = app.project.split('/'),
-                appData = {
-                    projectOwner: appProject[0],
-                    projectSlug: appProject[1],
-                    appName: app.app_name
-                };
+            if (!_.isFunction($scope.getApp)) {
+                $scope.view.loading = false;
+                console.error('getApp is not a function!');
+                return;
+            }
 
-            App.getApp(appData).then(function(result) {
+            function getNodeSuccess(result) {
+                $scope.view.loading = false;
+                if (typeof result === 'object' && !_.isEmpty(result)) {
+                    Pipeline.addNode(result, e.clientX, e.clientY);
+                }
+            }
 
+            function getNodeError() {
                 $scope.view.loading = false;
 
-                if (typeof result.message === 'object' && !_.isEmpty(result.message)) {
-                    Pipeline.addNode(result.message, e.clientX, e.clientY);
-                } else {
-                    console.error('App does not exist: Message: %s, Status: %s', result.message, result.status);
-                    Notification.error('App does not exist: Message: ' + result.message + ', Status: ' + result.status);
-                }
+                console.error('App does not exist');
+                Notification.error('App does not exist');
+            }
 
-            });
+            var result = $scope.getApp(app);
+
+            if (!_.isUndefined(result) && !_.isUndefined(result.then) && _.isFunction(result.then)) {
+                result.then(getNodeSuccess, getNodeError);
+            } else if (!_.isUndefined(result)) {
+                getNodeSuccess(result);
+            } else {
+                getNodeError();
+            }
         };
 
         var onNodeDroppedOff = $rootScope.$on('node:dropped', function(e, data) {

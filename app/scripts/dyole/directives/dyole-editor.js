@@ -6,7 +6,9 @@ angular.module('registryApp.dyole')
             replace: true,
             scope: {
                 app: '=',
-                callbacks: '='
+                callbacks: '=',
+                getToolbox: '=',
+                getApp: '='
             },
             controller: 'WorkflowEditorCtrl',
             template: '<div class="dyole-editor rabix">' +

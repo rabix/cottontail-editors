@@ -33,9 +33,6 @@ angular.module('registryApp.app')
             /* expose Globals to template */
             $scope.view.globals = Globals;
 
-            /* workflow mode: new or edit */
-            $scope.view.mode = 'edit';
-
             /* loading state of the page */
             $scope.view.loading = true;
 
@@ -51,13 +48,16 @@ angular.module('registryApp.app')
                 otherRepositories: false
             };
 
+            $scope.view.toolbox = {};
+
+            $scope.getToolbox().then(function(tools) {
+                $scope.view.repoTypes.myApps = tools;
+            });
+
             /* visibility flags for repo groups that hold apps */
             $scope.view.repoGroups = {};
 
-            $scope.view.repoTypes = {
-                MyApps: {},
-                PublicApps: {}
-            };
+            $scope.view.repoTypes = {};
 
             /* list of my repos */
             $scope.view.MyApps = {};
@@ -485,16 +485,9 @@ angular.module('registryApp.app')
                 window.location = '/u/' + Globals.projectOwner + '/' + Globals.projectSlug + '/apps/' + Globals.appName + '/edit?type=' + Globals.appType + '&rev=' + revisionId;
             };
 
-//        var onNodeSelectOff = $rootScope.$on('node:select', onNodeSelect);
-//        var onNodeDeselectOff = $rootScope.$on('node:deselect', onNodeDeselect);
-
             var onBeforeRedirectOff = BeforeRedirect.register(function() {
 
                 var deferred = $q.defer();
-
-                if ($scope.view.mode === 'new') {
-                    $scope.$broadcast('save-local', true);
-                }
 
                 deferred.resolve();
 
@@ -819,11 +812,6 @@ angular.module('registryApp.app')
                 var workflow = PipelineInstance.format();
                 _getJsonCallback(workflow);
             };
-
-            $scope.callbacks.onRun = function() {
-                _runCallback = $scope.callbacks.onRun;
-            };
-
 
             //@todo: fix hack for loading workflow
             // this is inside a timeout only because otherwise the .pipeline dom element
