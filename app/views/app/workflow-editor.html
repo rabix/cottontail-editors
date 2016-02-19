@@ -39,7 +39,12 @@
     <div ng-if="!view.loading" class="content content-tbl flex-box-row">
 
         <div class="col flex-box-column flex-one content-col">
-            <div class="pipeline-wrap flex-box-column flex-one" pipeline="view.workflow" edit-mode="true" controller-id="view.id" pipeline-change-fn="onWorkflowChange(value)"></div>
+            <div class="pipeline-wrap flex-box-column flex-one"
+                 pipeline="view.workflow"
+                 get-app="getApp"
+                 edit-mode="true"
+                 controller-id="view.id"
+                 pipeline-change-fn="onWorkflowChange(value)"></div>
         </div>
 
         <div class="col flex-box-column flex-auto sidebar-col" ng-class="{closed: !view.showSidebar}">
@@ -83,39 +88,14 @@
                                     {{ ::view.capitalize(repoType)}}
                                 </span>
 
-                                <ul>
-                                    <li ng-if="(repoTypeObj | isEmpty) || repoTypeObj.apps === 0">
+                                <ul class="nested-list">
+                                    <li ng-if="(repoTypeObj | isEmpty)">
                                         <p class="alert alert-info">
-                                            <span ng-if="repoType === 'MyApps' && !view.user"> {{ view.message }}</span>
-                                            <span ng-if="repoType === 'MyApps' && view.user">You don't have any apps yet</span>
+                                            <span ng-if="repoType === 'MyApps'">You don't have any apps yet</span>
                                             <span ng-if="repoType === 'PublicApps'">There are no public apps</span>
                                         </p>
                                     </li>
-                                    <li ng-repeat="(repoName, apps) in repoTypeObj" ng-class="{open: view.repoGroups[repoName]}" ng-show="filteredApps.length > 0 ">
-
-                                        <span ng-click="toggleRepo(repoName)">
-                                            <i class="fa" ng-class="{'fa-plus-square': !view.repoGroups[repoName], 'fa-minus-square': view.repoGroups[repoName]}"></i>
-                                            {{ ::repoName }}
-                                        </span>
-
-                                        <ul class="apps-inner-list">
-                                            <!--<li ng-if="apps.length !== 0"><span class="label label-info section-name">Apps</span></li>-->
-
-                                            <li ng-repeat="app in filteredApps = (apps | filter:view.searchTerm)"
-                                                ng-if="(view.workflow['sbg:project'] + '/' + view.workflow['sbg:name']) !== (app.project + '/' + app.app_name)" >
-
-                                                <a href drag="app">
-                                                    <i class="fa"><img ng-src="{{ view.globals.base }}img/rabix/{{ ::app.type }}-hex.png" alt=""/></i>
-                                                    <span> {{ ::app.label }} </span>
-                                                    <!--<div class="pull-right">-->
-                                                        <!--<span class="label label-primary"><i class="fa fa-tag"></i> v{{ ::app['sbg:revision'] }} </span>-->
-                                                    <!--</div>-->
-                                                </a>
-                                            </li>
-
-                                        </ul>
-
-                                    </li>
+                                    <repo-item ng-repeat="directory in repoTypeObj.directories" directory="directory"></repo-item>
                                 </ul>
 
                             </li>

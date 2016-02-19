@@ -47,7 +47,7 @@ angular.module('registryApp.dyole')
 
                     if (e.which === 1) {
 
-                        image = images[scope.drag.type.toLowerCase()].img;
+                        image = images[scope.drag.class.toLowerCase()].img;
                         $img = $('<img/>').attr('src', image.src).width(96).height(96);
                         $img.css({
                             position: 'absolute',
