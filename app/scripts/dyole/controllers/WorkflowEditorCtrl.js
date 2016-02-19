@@ -48,11 +48,18 @@ angular.module('registryApp.app')
                 otherRepositories: false
             };
 
-            $scope.view.toolbox = {};
-
-            $scope.getToolbox().then(function(tools) {
-                $scope.view.repoTypes.myApps = tools;
-            });
+            if (!_.isFunction($scope.getToolbox)) {
+                console.error('getToolbox is not a function');
+            } else {
+                var result = $scope.getToolbox();
+                if (!result || !result.then) {
+                    console.error('Expected to get a promise from getToolbox, instead got: ', result);
+                } else {
+                    result.then(function(tools) {
+                        $scope.view.repoTypes.myApps = tools;
+                    });
+                }
+            }
 
             /* visibility flags for repo groups that hold apps */
             $scope.view.repoGroups = {};
@@ -185,15 +192,6 @@ angular.module('registryApp.app')
 
                 $scope.view.loading = false;
             }
-
-
-            /* load tools/workflows grouped by repositories */
-            //$q.all([
-            //    App.getMineAppsByProject(),
-            //    App.getPublicAppsByProject(),
-            //    App.get(),
-            //    App.getValidInstances()
-            //]).then(appsLoaded);
 
             $scope.view.loading = false;
 
