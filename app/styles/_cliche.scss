@@ -369,6 +369,11 @@ $inputs-border-color: #d7d7d7;
   .category-title {
     font-weight: bold;
     cursor: pointer;
+
+      .fa.pull-right{
+          position: absolute;
+          right: 0;
+      }
   }
 }
 
