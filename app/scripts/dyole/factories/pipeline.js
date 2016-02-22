@@ -5,7 +5,7 @@
 'use strict';
 
 angular.module('registryApp.dyole')
-    .factory('pipeline', ['event', 'node', 'connection', '$rootScope', 'systemNodeModel', 'FormaterD2', 'Const', 'common', 'lodash', 'SchemaValidator', 'Notification', 'App', function(Event, Node, Connection, $rootScope, systemNodeModel, Formater, Const, Common, _, Validator, Notification, App) {
+    .service('pipeline', ['event', 'node', 'connection', '$rootScope', 'systemNodeModel', 'FormaterD2', 'Const', 'common', 'lodash', 'SchemaValidator', 'Notification', 'App', function(Event, Node, Connection, $rootScope, systemNodeModel, Formater, Const, Common, _, Validator, Notification, App) {
         /** Temporary hack!! **/
         var initWidth;
 

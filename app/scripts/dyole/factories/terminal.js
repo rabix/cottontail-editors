@@ -172,7 +172,7 @@ angular.module('registryApp.dyole')
 
                 if (terminal.input !== this.model.input && nodeId !== this.parent.model.id) {
 
-                    console.log('Input name: %s, Output name: %s, start_node: %s, end_node: %s', input_name, output_name, start_node.name, end_node.name);
+                    //console.log('Input name: %s, Output name: %s, start_node: %s, end_node: %s', input_name, output_name, start_node.name, end_node.name);
                     var check = _.filter(this.Pipeline.connections, function(connection) {
                         var rel = connection.model;
 

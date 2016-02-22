@@ -8,12 +8,12 @@ angular.module('registryApp.app')
         '$location', '$templateCache', '$filter',
         'Loading', 'App', 'Const', 'BeforeRedirect',
         'Helper', 'PipelineService', 'lodash', 'Globals', 'BeforeUnload',
-        'Api', 'Notification', 'Cliche', '$timeout',
+        'Api', 'Notification', 'Cliche', '$timeout', 'rawRabixWorkflow',
         function($scope, $rootScope, $q, $modal,
                  $location, $templateCache, $filter,
                  Loading, App, Const, BeforeRedirect,
                  Helper, PipelineService, _, Globals, BeforeUnload,
-                 Api, Notification, Cliche, $timeout) {
+                 Api, Notification, Cliche, $timeout, rawRabixWorkflow) {
 
             var PipelineInstance = null;
             var prompt = false;
@@ -29,6 +29,8 @@ angular.module('registryApp.app')
             });
 
             $scope.view = {};
+
+            $scope.view.pipelineId = '';
 
             /* expose Globals to template */
             $scope.view.globals = Globals;
@@ -91,13 +93,6 @@ angular.module('registryApp.app')
 
             $scope.view.searchTerm = '';
 
-            /**
-             * Set controller id for pipeline Service to use it
-             *
-             * @type {string}
-             */
-            $scope.view.id = 'workflowEditorCtrl';
-
             $scope.$watch('Loading.classes', function(n, o) {
                 if (n !== o) {
                     $scope.view.classes = n;
@@ -105,16 +100,17 @@ angular.module('registryApp.app')
             });
 
             var onInstanceRegister = function() {
-                PipelineInstance = PipelineService.getInstance($scope.view.id);
+                PipelineInstance = PipelineService.getInstance($scope.view.pipelineId);
 
-                PipelineInstance.getEventObj().subscribe('controller:node:select', onNodeSelect);
-                PipelineInstance.getEventObj().subscribe('controller:node:deselect', onNodeDeselect);
-                PipelineInstance.getEventObj().subscribe('controller:node:destroy', onNodeDestroy);
+                // fixme event object sometimes doesn't exist, could be a race condition
+                if (PipelineInstance && PipelineInstance.getEventObj()) {
+                    PipelineInstance.getEventObj().subscribe('controller:node:select', onNodeSelect);
+                    PipelineInstance.getEventObj().subscribe('controller:node:deselect', onNodeDeselect);
+                    PipelineInstance.getEventObj().subscribe('controller:node:destroy', onNodeDestroy);
+                }
 
                 console.log('Pipeline Instance cached', PipelineInstance);
             };
-
-            PipelineService.register($scope.view.id, onInstanceRegister, onInstanceRegister);
 
             var toggleState = true;
 
@@ -163,16 +159,25 @@ angular.module('registryApp.app')
              * @private
              */
             function _appsLoaded(app) {
-                var workflow = JSON.parse(app);
+                var workflow;
+
+                if (app === '' || app === '{}') {
+                    workflow = _.assign(_.cloneDeep(rawRabixWorkflow), {id: $scope.externalAppId || ''});
+                    _saveCallback(null, workflow);
+                } else {
+                    workflow = JSON.parse(app);
+                }
+
+                $scope.view.pipelineId = workflow.id || workflow['sbg:id'] || workflow.label;
+
+                PipelineService.register($scope.view.pipelineId, onInstanceRegister, onInstanceRegister);
+
 
                 $scope.view.filtering = false;
-                //$scope.view.message = result[0].status;
 
-                //@todo workflow editor toolkit logic should replace this
-                //$scope.view.repoTypes.MyApps = result[0].message;
-                //$scope.view.repoTypes.PublicApps = result[1].message;
-
-                workflow['sbg:name'] = workflow['sbg:id'].split('/')[2];
+                if (workflow['sbg:id']) {
+                    workflow['sbg:name'] = workflow['sbg:id'].split('/')[2];
+                }
 
                 $scope.view.workflow = workflow;
 
@@ -246,77 +251,77 @@ angular.module('registryApp.app')
             /**
              * Initiate workflow save
              */
-            $scope.save = function() {
-
-                var rev;
-                var workflowJson;
-                var deferred = $q.defer();
-
-                if (!$scope.view.isChanged) {
-                    Notification.error('Pipeline not updated: Graph has no changes.');
-                    return;
-                }
-
-                BeforeRedirect.setReload(true);
-
-                $scope.view.saving = true;
-
-                console.time('Workflow saving');
-                // Saving workflow before fiddling with it's coorindates
-                var workflow = PipelineInstance.format();
-                // Saving SVG string before turning on Loader and removing SVG element from the DOM
-                var svgString = PipelineInstance.getSvgString();
-
-                $scope.view.loading = true;
-
-                App.update(workflow, 'workflow')
-                    .then(function(data) {
-
-                        workflowJson = data.message;
-
-                        rev = data.message['sbg:revision'];
-
-                        if (_.isString(svgString)) {
-                            return App.updateSvg(rev, svgString);
-                        }
-                        else {
-                            return data;
-                        }
-                    })
-                    .then(function(data) {
-                        // If user hits RUN button immediately after saving (before page reload,
-                        // this will use latest revision of the workflow instead current one
-                        Globals.revision = rev;
-
-                        Notification.success('Workflow successfully updated.');
-
-                        // reinstantiate whole workflow after the save, in order to re-render SVG
-                        PipelineService.register($scope.view.id, onInstanceRegister, onInstanceRegister);
-
-                        $scope.view.workflow = workflowJson;
-
-                        $scope.view.saving = false;
-                        $scope.view.loading = false;
-                        $scope.view.isChanged = false;
-                        prompt = false;
-
-                        // check if reload can be skipped while changing the URL
-                        if (history.pushState) {
-                            $location.search({type: 'workflow', rev: rev});
-                        } else {
-                            $scope.view.loading = true;
-                            redirectTo(rev);
-                        }
-
-                        console.timeEnd('Workflow saving');
-                        deferred.resolve(data);
-                    })
-                    .catch(function(trace) {
-                        Notification.error('[Workflow Error] Workflow cannot be saved: ' + trace);
-                    });
-
-                return deferred.promise;
-            };
+            //$scope.save = function() {
+            //
+            //    var rev;
+            //    var workflowJson;
+            //    var deferred = $q.defer();
+            //
+            //    if (!$scope.view.isChanged) {
+            //        Notification.error('Pipeline not updated: Graph has no changes.');
+            //        return;
+            //    }
+            //
+            //    BeforeRedirect.setReload(true);
+            //
+            //    $scope.view.saving = true;
+            //
+            //    console.time('Workflow saving');
+            //    // Saving workflow before fiddling with it's coorindates
+            //    var workflow = PipelineInstance.format();
+            //    // Saving SVG string before turning on Loader and removing SVG element from the DOM
+            //    var svgString = PipelineInstance.getSvgString();
+            //
+            //    $scope.view.loading = true;
+            //
+            //    App.update(workflow, 'workflow')
+            //        .then(function(data) {
+            //
+            //            workflowJson = data.message;
+            //
+            //            rev = data.message['sbg:revision'];
+            //
+            //            if (_.isString(svgString)) {
+            //                return App.updateSvg(rev, svgString);
+            //            }
+            //            else {
+            //                return data;
+            //            }
+            //        })
+            //        .then(function(data) {
+            //            // If user hits RUN button immediately after saving (before page reload,
+            //            // this will use latest revision of the workflow instead current one
+            //            Globals.revision = rev;
+            //
+            //            Notification.success('Workflow successfully updated.');
+            //
+            //            // reinstantiate whole workflow after the save, in order to re-render SVG
+            //            PipelineService.register($scope.view.id, onInstanceRegister, onInstanceRegister);
+            //
+            //            $scope.view.workflow = workflowJson;
+            //
+            //            $scope.view.saving = false;
+            //            $scope.view.loading = false;
+            //            $scope.view.isChanged = false;
+            //            prompt = false;
+            //
+            //            // check if reload can be skipped while changing the URL
+            //            if (history.pushState) {
+            //                $location.search({type: 'workflow', rev: rev});
+            //            } else {
+            //                $scope.view.loading = true;
+            //                redirectTo(rev);
+            //            }
+            //
+            //            console.timeEnd('Workflow saving');
+            //            deferred.resolve(data);
+            //        })
+            //        .catch(function(trace) {
+            //            Notification.error('[Workflow Error] Workflow cannot be saved: ' + trace);
+            //        });
+            //
+            //    return deferred.promise;
+            //};
 
             $scope.toggleSidebar = function() {
 
@@ -767,7 +772,7 @@ angular.module('registryApp.app')
                 onBeforeUnloadOff();
                 onBeforeUnloadOff = undefined;
 
-                PipelineService.removeInstance($scope.view.id);
+                //PipelineService.removeInstance($scope.view.pipelineId);
             });
 
 
@@ -791,40 +796,54 @@ angular.module('registryApp.app')
             }
 
             var _saveCallback = $scope.callbacks.onSave;
-            var _getJsonCallback = $scope.callbacks.getJson;
-            var _runCallback = $scope.callbacks.onRun;
+            var _setWorkingCopyCallback = $scope.callbacks.setWorkflowWorkingCopy;
 
-            $scope.callbacks.onSave = function() {
+            $scope.callbacks.onSave = function(toolId, copyToSave) {
                 var workflow = PipelineInstance.format();
-                var result = _saveCallback(workflow);
+                if (workflow && toolId === $scope.view.pipelineId) {
+                    var result = _saveCallback(null, workflow);
 
-                $scope.view.loading = true;
-                _runPostCallback(result, function (result) {
-                    $scope.view.loading = false;
-                    _appsLoaded(result);
-                    //Notification.success('Workflow saved successfully');
-                });
+                    $scope.view.loading = true;
+                    _runPostCallback(result, function (result) {
+                        $scope.view.loading = false;
+                        _appsLoaded(result);
+                        Notification.success('Workflow saved successfully');
+                    });
+                } else if (toolId === null) {
+                    _saveCallback(null, copyToSave);
+                }
             };
 
-            $scope.callbacks.getJson = function() {
-                var workflow = PipelineInstance.format();
-                _getJsonCallback(workflow);
+            /**
+             * Retrieves current JSON for tool by label from all the workflows currently open.
+             * Calls the original setWorkingCopy function by passing the JSON.
+             *
+             * @param {string} toolId label of reqested tool
+             */
+            $scope.callbacks.setWorkflowWorkingCopy = function (toolId, workingCopy) {
+                if (toolId && _.isString(toolId) &&
+                    (toolId === $scope.view.workflow.id ||
+                    toolId === $scope.view.workflow['sbg:id'] ||
+                    toolId === $scope.view.workflow.label)) {
+
+                    var workflow = _.cloneDeep(PipelineInstance.format());
+                    _setWorkingCopyCallback(null, workflow);
+                } else if (toolId === null) {
+                    _setWorkingCopyCallback(null, workingCopy);
+                }
             };
 
             //@todo: fix hack for loading workflow
             // this is inside a timeout only because otherwise the .pipeline dom element
             // is not initialized at the moment that the canvas should be drawn. canvas init
             // should either wait for domContentLoaded event or setting the app should be delayed
-            //$scope.callbacks.setWorkflow = function(app) {
+            $timeout(function() {
+                _appsLoaded($scope.app);
 
-                $timeout(function() {
-                    _appsLoaded($scope.app);
-
-                    $scope.$watch('app', function(n, o) {
-                        if (n !== o) {
-                            _appsLoaded(n);
-                        }
-                    });
+                $scope.$watch('app', function(n, o) {
+                    if (n !== o) {
+                        _appsLoaded(n);
+                    }
                 });
-            //};
+            });
         }]);

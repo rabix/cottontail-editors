@@ -7,7 +7,7 @@
 /**
  * PipelineService is used for MainController interaction with pipeline instance
  */
-angular.module('registryApp.dyole').factory('PipelineService', [function() {
+angular.module('registryApp.dyole').service('PipelineService', [function() {
 
     var service,
         pipelines = {},
@@ -16,23 +16,24 @@ angular.module('registryApp.dyole').factory('PipelineService', [function() {
 
     service = {
 
-        refresh: function() {
-            _.forEach(refresh, function(callback) {
-                if (callback && _.isFunction(callback)) {
-                    callback();
-                }
-            });
+        refresh: function(id) {
+            if(refresh[id] && _.isFunction(refresh[id])) {
+                refresh[id]();
+            }
         },
+
+        pipelines: pipelines,
 
         /**
          * Register Controller to get Instance of pipeline for it
          *
          * @param id
          * @param onRegister
+         * @param onRefresh
          */
         register: function(id, onRegister, onRefresh) {
 
-            pipelines[id] = null;
+            pipelines[id] = pipelines[id] || null;
 
             if (onRegister) {
                 toCall[id] = onRegister;
@@ -42,8 +43,8 @@ angular.module('registryApp.dyole').factory('PipelineService', [function() {
                 refresh[id] = onRefresh;
             }
 
-            console.log('All registered: ', pipelines);
-            console.log('Registered Controller: ', id);
+            //console.log('All registered: ', pipelines);
+            //console.log('Registered Controller: ', id);
         },
 
         /**
@@ -85,7 +86,7 @@ angular.module('registryApp.dyole').factory('PipelineService', [function() {
         },
 
         /**
-         * Remove Controller id and instance assosiated with it
+         * Remove Controller id and instance associated with it
          *
          * @param id
          */

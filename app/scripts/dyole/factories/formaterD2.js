@@ -288,7 +288,7 @@ angular.module('registryApp.dyole')
 
                             if (isArray) {
                                 _.forEach(schema.suggestedValue, function(val) {
-                                    console.log('Name %s, id %s', val.name, val.id);
+                                    //console.log('Name %s, id %s', val.name, val.id);
                                     values.push({
                                         class: 'File',
                                         name: val.name,
@@ -296,7 +296,7 @@ angular.module('registryApp.dyole')
                                     });
                                 });
                             } else {
-                                console.log('Name %s, id %s', schema.suggestedValue[0].name, schema.suggestedValue[0].id);
+                                //console.log('Name %s, id %s', schema.suggestedValue[0].name, schema.suggestedValue[0].id);
 
                                 schema[internalType][0]['sbg:suggestedValue'] = {
                                     class: 'File',
@@ -392,7 +392,7 @@ angular.module('registryApp.dyole')
 
                         return input['sbg:includeInPorts'] ? true : _common.checkTypeFile(schema);
                     } else {
-                        console.log('Input %s not found on node %s', input_id, node_id);
+                        //console.log('Input %s not found on node %s', input_id, node_id);
                     }
 
                     return false;
@@ -606,7 +606,7 @@ angular.module('registryApp.dyole')
 
                     node.id = _id;
 
-                    console.log('Node: %s; Node id: %s', node.label, node.id);
+                    //console.log('Node: %s; Node id: %s', node.label, node.id);
                 });
 
                 return nodes;
@@ -934,7 +934,7 @@ angular.module('registryApp.dyole')
                     exposed = {},
                     suggestedValues = {},
                     values = {},
-                    idParts;
+                    idParts = [];
 
                 json.dataLinks = _formatter.createDataLinks(json);
 
@@ -966,11 +966,13 @@ angular.module('registryApp.dyole')
                     relations: relations
                 };
 
-                idParts = json['sbg:id'].split('/');
+                if (json['sbg:id']) {
+                    idParts = json['sbg:id'].split('/');
+                }
 
-                model['id'] = json['sbg:id'];
+                model.id= json['sbg:id'] || json.id || '';
                 model.label = json.label || json['sbg:id'];
-                model['sbg:name'] = idParts[2];
+                model['sbg:name'] = idParts[2] || json.label;
                 model.description = json.description || '';
                 model = _mergeSBGProps(json, model);
 

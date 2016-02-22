@@ -69,7 +69,7 @@ angular.module('registryApp.dyole')
 
                 initPipeline(n);
 
-                PipelineService.refresh();
+                PipelineService.refresh($scope.controllerId);
             }
         });
 
@@ -270,7 +270,7 @@ angular.module('registryApp.dyole')
                     Pipeline = null;
                     initPipeline(raw);
 
-                    PipelineService.refresh();
+                    PipelineService.refresh($scope.controllerId);
 
                 }
             }, function() {
@@ -453,7 +453,6 @@ angular.module('registryApp.dyole')
             onNodeLabelEditOff();
 
             if (angular.isDefined(Pipeline)) {
-                // not a single page app anymore
                 //Pipeline.destroy();
                 //Pipeline = null;
             }
@@ -489,28 +488,28 @@ angular.module('registryApp.dyole')
         /**
          * If scope controller is set, expose pipeline methods to service
          */
-        if ($scope.controllerId) {
+        $scope.$watch('controllerId', function(n, o) {
+            if (n !== '') {
 
-            var methods = {
-                flush: $scope.flush,
-                dropNode: dropNode,
-                getUrl: getUrl,
-                fork: fork,
-                format: format,
-                getJSON: format,
-                validate: validate,
-                adjustSize: adjustSize,
-                getEventObj: getEventObj,
-                updateMetadata: updateMetadata,
-                getSvgString: getSvgString,
-                onIncludeInPorts: onIncludeInPorts,
-                getWorkflowHints: getWorkflowHints,
-                getRequireSBGMetadata: getRequireSBGMetadata,
-                updateWorkflowSettings: updateWorkflowSettings
-            };
+                var methods = {
+                    flush: $scope.flush,
+                    dropNode: dropNode,
+                    getUrl: getUrl,
+                    fork: fork,
+                    format: format,
+                    getJSON: format,
+                    validate: validate,
+                    adjustSize: adjustSize,
+                    getEventObj: getEventObj,
+                    updateMetadata: updateMetadata,
+                    getSvgString: getSvgString,
+                    onIncludeInPorts: onIncludeInPorts,
+                    getWorkflowHints: getWorkflowHints,
+                    getRequireSBGMetadata: getRequireSBGMetadata,
+                    updateWorkflowSettings: updateWorkflowSettings
+                };
 
-            PipelineService.setInstance($scope.controllerId, methods);
-
-        }
-
+                PipelineService.setInstance($scope.controllerId, methods);
+            }
+        });
     }]);

@@ -6,6 +6,8 @@ angular.module('registryApp.dyole')
             replace: true,
             scope: {
                 app: '=',
+                externalAppId: '=',
+                isDirty: '=',
                 callbacks: '=',
                 getToolbox: '=',
                 getApp: '='

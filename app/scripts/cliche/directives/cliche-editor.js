@@ -5,7 +5,8 @@ angular.module('registryApp.cliche')
             replace: true,
             scope: {
                 app: '=',
-                callbacks: '='
+                externalAppId: '=',
+                callbacks: '=',
             },
             controller: 'ClicheCtrl',
             template: '<div class="cliche-editor rabix">' +

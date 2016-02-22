@@ -802,9 +802,9 @@ angular.module('registryApp.cliche')
 
                 // blank app is created
                 if (app === '') {
-                    tool = _.assign(_.cloneDeep(rawTool), {});
+                    tool = _.assign(_.cloneDeep(rawTool), {id: $scope.externalAppId || ''});
                     // save it immediately
-                    _saveCallback(tool);
+                    _saveCallback(null, tool);
                 } else {
                     var toolJSON =  JSON.parse(app);
                     tool = _.assign(_.cloneDeep(rawTool), toolJSON);
@@ -831,6 +831,7 @@ angular.module('registryApp.cliche')
                 _prepareStatusCodes();
                 _setUpCategories();
                 _groupByCategory();
+
                 $scope.view.loading = false;
             }
 
@@ -855,28 +856,36 @@ angular.module('registryApp.cliche')
             }
 
             var _saveCallback = $scope.callbacks.onSave;
-            var _getJsonCallback = $scope.callbacks.getJson;
-            var _runCallback = $scope.callbacks.onRun;
+            var _setWorkingCopyCallback = $scope.callbacks.setToolWorkingCopy;
 
-            $scope.callbacks.onSave = function() {
-                var promise = _saveCallback(_removeEmptyFields(Cliche.getTool()));
+            $scope.callbacks.onSave = function(toolId, copyToSave) {
+                if (toolId && _.isString(toolId) &&
+                    (toolId === $scope.view.tool.id ||
+                    toolId === $scope.view.tool['sbg:id'] ||
+                    toolId === $scope.view.tool.label)) {
+                    var promise = _saveCallback(null, _removeEmptyFields(Cliche.getTool()));
+                    $scope.view.loading = true;
+                    _runPostCallback(promise, function (result) {
+                        $scope.view.loading = false;
+                        Notification.success('Tool saved successfully');
+                    });
+                } else if (toolId === null) {
+                    _saveCallback(null, copyToSave);
+                }
 
-                $scope.view.loading = true;
-                _runPostCallback(promise, function (result) {
-                    $scope.view.loading = false;
-                    //Notification.success('Tool saved successfully');
-                });
             };
 
-            $scope.callbacks.getJson = function() {
-                var result = _getJsonCallback(_removeEmptyFields(Cliche.getTool()));
-                _runPostCallback(result, function (result) {
-                    console.log('got this result from get json', result);
-                });
-            };
+            $scope.callbacks.setToolWorkingCopy = function (toolId, workingCopy) {
+                if (toolId && _.isString(toolId) &&
+                    (toolId === $scope.view.tool.id ||
+                    toolId === $scope.view.tool['sbg:id'] ||
+                    toolId === $scope.view.tool.label)) {
 
-            $scope.callbacks.onRun = function() {
-                _runCallback(_removeEmptyFields(Cliche.getTool()));
+                    _setWorkingCopyCallback(null, _removeEmptyFields(Cliche.getTool()));
+                } else if (toolId === null) {
+                    // until it propagates back to the main controller outside the directive
+                    _setWorkingCopyCallback(null, workingCopy);
+                }
             };
 
             $scope.view.loading = true;
