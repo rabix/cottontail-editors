@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('registryApp.dyole')
-    .factory('connection', ['event', 'common', 'lodash', 'Globals', function(Event, Common, _, Globals) {
+    .factory('connection', ['event', 'common', 'lodash', function(Event, Common, _) {
 
         var Connection = function(options) {
 
@@ -98,7 +98,7 @@ angular.module('registryApp.dyole')
                 if (!this.Pipeline.tempConnectionActive) {
 
                     var self = this,
-                        src = Globals.base + 'images/wire-cut.png',
+                        src = '/editors/app/' + 'images/wire-cut.png',
                         canvasOffset = this._getOffset(this.element[0]);
 
                     this.removeWire();

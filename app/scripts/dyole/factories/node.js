@@ -99,12 +99,12 @@ angular.module('registryApp.dyole')
             },
 
             icons: {
-                input: Globals.base + 'images/icon-input-1.png',
-                output: Globals.base + 'images/icon-output-2.png',
-                workflow: Globals.base + 'images/icon-workflow.png',
-                script: Globals.base + 'images/script.png',
-                cmd: Globals.base + 'images/cmd.png',
-                default: Globals.base + 'images/logo.png'
+                input: '/editors/app/' + 'images/icon-input-1.png',
+                output: '/editors/app/' + 'images/icon-output-2.png',
+                workflow: '/editors/app/' + 'images/icon-workflow.png',
+                script: '/editors/app/' + 'images/script.png',
+                cmd: '/editors/app/' + 'images/cmd.png',
+                default: '/editors/app/' + 'images/logo.png'
             },
 
             buttons: {
@@ -760,7 +760,7 @@ angular.module('registryApp.dyole')
                         radius: this.buttons.radius,
                         border: this.buttons.border,
                         image: {
-                            url: Globals.base + 'images/' + this.buttons.info.image.name,
+                            url: '/editors/app/' + 'images/' + this.buttons.info.image.name,
                             width: 14,
                             height: 14
                         }
@@ -776,7 +776,7 @@ angular.module('registryApp.dyole')
                         radius: this.buttons.radius,
                         border: this.buttons.border,
                         image: {
-                            url: Globals.base + 'images/' + this.buttons.delete.image.name,
+                            url: '/editors/app/' + 'images/' + this.buttons.delete.image.name,
                             width: 14,
                             height: 14
                         }
@@ -794,7 +794,7 @@ angular.module('registryApp.dyole')
                             radius: this.buttons.radius,
                             border: this.buttons.border,
                             image: {
-                                url: Globals.base + 'images/' + this.buttons.update.image.name,
+                                url: '/editors/app/' + 'images/' + this.buttons.update.image.name,
                                 width: 14,
                                 height: 14
                             }
@@ -814,7 +814,7 @@ angular.module('registryApp.dyole')
                         radius: 10,
                         border: this.buttons.border,
                         image: {
-                            url: Globals.base + 'images/' + this.buttons.rename.image.name,
+                            url: '/editors/app/' + 'images/' + this.buttons.rename.image.name,
                             width: 13,
                             height: 13
                         },

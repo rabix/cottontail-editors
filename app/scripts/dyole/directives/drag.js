@@ -17,7 +17,7 @@ angular.module('registryApp.dyole')
                     $body = $(document),
                     $svg = $('.pipeline'),
                     images = {},
-                    preloadImgBase = Globals.base + 'images/',
+                    preloadImgBase = '/editors/app/' + 'images/',
                     image, $img;
 
                 /**
