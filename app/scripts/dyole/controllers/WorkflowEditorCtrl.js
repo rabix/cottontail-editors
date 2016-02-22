@@ -248,81 +248,6 @@ angular.module('registryApp.app')
                 });
             };
 
-            /**
-             * Initiate workflow save
-             */
-            //$scope.save = function() {
-            //
-            //    var rev;
-            //    var workflowJson;
-            //    var deferred = $q.defer();
-            //
-            //    if (!$scope.view.isChanged) {
-            //        Notification.error('Pipeline not updated: Graph has no changes.');
-            //        return;
-            //    }
-            //
-            //    BeforeRedirect.setReload(true);
-            //
-            //    $scope.view.saving = true;
-            //
-            //    console.time('Workflow saving');
-            //    // Saving workflow before fiddling with it's coorindates
-            //    var workflow = PipelineInstance.format();
-            //    // Saving SVG string before turning on Loader and removing SVG element from the DOM
-            //    var svgString = PipelineInstance.getSvgString();
-            //
-            //    $scope.view.loading = true;
-            //
-            //    App.update(workflow, 'workflow')
-            //        .then(function(data) {
-            //
-            //            workflowJson = data.message;
-            //
-            //            rev = data.message['sbg:revision'];
-            //
-            //            if (_.isString(svgString)) {
-            //                return App.updateSvg(rev, svgString);
-            //            }
-            //            else {
-            //                return data;
-            //            }
-            //        })
-            //        .then(function(data) {
-            //            // If user hits RUN button immediately after saving (before page reload,
-            //            // this will use latest revision of the workflow instead current one
-            //            Globals.revision = rev;
-            //
-            //            Notification.success('Workflow successfully updated.');
-            //
-            //            // reinstantiate whole workflow after the save, in order to re-render SVG
-            //            PipelineService.register($scope.view.id, onInstanceRegister, onInstanceRegister);
-            //
-            //            $scope.view.workflow = workflowJson;
-            //
-            //            $scope.view.saving = false;
-            //            $scope.view.loading = false;
-            //            $scope.view.isChanged = false;
-            //            prompt = false;
-            //
-            //            // check if reload can be skipped while changing the URL
-            //            if (history.pushState) {
-            //                $location.search({type: 'workflow', rev: rev});
-            //            } else {
-            //                $scope.view.loading = true;
-            //                redirectTo(rev);
-            //            }
-            //
-            //            console.timeEnd('Workflow saving');
-            //            deferred.resolve(data);
-            //        })
-            //        .catch(function(trace) {
-            //            Notification.error('[Workflow Error] Workflow cannot be saved: ' + trace);
-            //        });
-            //
-            //    return deferred.promise;
-            //};
-
             $scope.toggleSidebar = function() {
 
                 $scope.view.showSidebar = !$scope.view.showSidebar;
@@ -558,77 +483,6 @@ angular.module('registryApp.app')
 
             };
 
-            $scope.runWorkflow = function() {
-
-                function createTask() {
-                    // create task and redirect to task page for that task
-                    App.createAppTask($scope.view.workflow['sbg:revision']).then(function(task) {
-                        BeforeRedirect.setReload(true);
-                        $scope.view.saving = true;
-                        $scope.view.loading = true;
-
-                        App.redirectToTaskPage(task);
-                    });
-                }
-
-                if ($scope.view.isChanged) {
-                    var saveFlag = 'save';
-                    var modalInstance = $modal.open({
-                        controller: 'ConfirmCustomCtrl',
-                        template: $templateCache.get('views/partials/confirm-custom.html'),
-                        resolve: {
-                            data: function() {
-                                return {
-                                    message: 'You have unsaved changes!',
-                                    buttons: [
-                                        {
-                                            class: 'btn btn-default',
-                                            modalAction: 'dismiss',
-                                            select: 'cancel',
-                                            text: 'Cancel'
-                                        },
-                                        {
-                                            class: 'btn btn-default',
-                                            modalAction: 'close',
-                                            select: '',
-                                            text: 'Run without saving changes'
-                                        },
-                                        {
-                                            class: 'btn btn-primary',
-                                            modalAction: 'close',
-                                            select: saveFlag,
-                                            text: 'Save changes and run'
-                                        }
-                                    ]
-                                };
-                            } /*data end*/
-                        } /*resolve end*/
-                    });
-
-                    modalInstance.result.then(function(selected) {
-                        if (selected && selected === saveFlag) {
-                            $scope.save().then(function() {
-                                if ($scope.view.isValid) {
-                                    prompt = false;
-                                    createTask();
-                                } else {
-                                    Notification.error('Could not create new task');
-                                }
-                            });
-
-                        } else {
-                            createTask();
-                        }
-
-                    }, function() {
-                        return false;
-                    });
-
-                } else {
-                    createTask();
-                }
-            };
-
             /**
              * Load json importer
              */
@@ -841,7 +695,7 @@ angular.module('registryApp.app')
                 _appsLoaded($scope.app);
 
                 $scope.$watch('app', function(n, o) {
-                    if (n !== o) {
+                    if (n && n !== o) {
                         _appsLoaded(n);
                     }
                 });

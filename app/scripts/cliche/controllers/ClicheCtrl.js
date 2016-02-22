@@ -892,7 +892,7 @@ angular.module('registryApp.cliche')
             _setTool($scope.app);
 
             $scope.$watch('app', function (n, o) {
-                if (n !== o) {
+                if (n && n !== o) {
                     _setTool(n);
                 }
             });
