@@ -18,7 +18,8 @@ module.exports = function(grunt) {
     // Configurable paths for the application
     var appConfig = {
         app: require('./bower.json').appPath || 'app',
-        dist: 'dist'
+        dist: 'dist',
+        buildDist: '../../dist/editors/dist'
     };
 
     // Define the configuration for all the tasks
@@ -108,12 +109,15 @@ module.exports = function(grunt) {
                 }
             }
         },
-        /*uglify: {
+        uglify: {
             dist: {
                 files: {
                     '<%= yeoman.dist %>/scripts/vendor.min.js': [
                         '<%= yeoman.dist %>/scripts/vendor.js'
                     ],
+                   /* '<%= yeoman.dist %>/scripts/raphael.min.js': [
+                        '<%= yeoman.dist %>/scripts/raphael.js'
+                    ],*/
                     '<%= yeoman.dist %>/scripts/dyole.min.js': [
                         '<%= yeoman.dist %>/scripts/util.js',
                         '<%= yeoman.dist %>/scripts/integration.js',
@@ -127,74 +131,82 @@ module.exports = function(grunt) {
                     ]
                 }
             }
-        },*/
-        /*concat: {
+        },
+        concat: {
             options: {
                 separator: ';'
             },
             common: {
                 src: [
-                    '<%= yeoman.app %>/scripts/util/!*.js',
-                    '<%= yeoman.app %>/scripts/util/!**!/!*.js',
-                    '<%= yeoman.app %>/scripts/app/!*.js',
-                    '<%= yeoman.app %>/scripts/app/!**!/!*.js',
-                    '<%= yeoman.app %>/scripts/repo/!*.js',
-                    '<%= yeoman.app %>/scripts/repo/!**!/!*.js',
-                    '<%= yeoman.app %>/scripts/common/!*.js',
-                    '<%= yeoman.app %>/scripts/common/!**!/!*.js'
+                    '<%= yeoman.app %>/scripts/util/*.js',
+                    '<%= yeoman.app %>/scripts/util/**/*.js',
+                    '<%= yeoman.app %>/scripts/app/*.js',
+                    '<%= yeoman.app %>/scripts/app/**/*.js',
+                    '<%= yeoman.app %>/scripts/repo/*.js',
+                    '<%= yeoman.app %>/scripts/repo/**/*.js',
+                    '<%= yeoman.app %>/scripts/common/*.js',
+                    '<%= yeoman.app %>/scripts/common/**/*.js'
                 ],
                 dest: 'dist/scripts/util.js'
             },
             dyole: {
                 src: [
-                    '<%= yeoman.app %>/scripts/cliche/!**!/!*.js',
-                    '<%= yeoman.app %>/scripts/dyole-app/!*.js',
+                    '<%= yeoman.app %>/scripts/cliche/**/*.js',
+                    '<%= yeoman.app %>/scripts/dyole-app/*.js',
                     '<%= yeoman.app %>/scripts/dyole/dyole.config.js',
-                    '<%= yeoman.app %>/scripts/dyole/!**!/!*.js'
+                    '<%= yeoman.app %>/scripts/dyole/**/*.js'
                 ],
                 dest: 'dist/scripts/dyole.js'
             },
             cliche: {
                 src: [
-                    '<%= yeoman.app %>/scripts/cliche-app/!*.js',
-                    '<%= yeoman.app %>/scripts/cliche/!*.js',
-                    '<%= yeoman.app %>/scripts/cliche/!**!/!*.js'
+                    '<%= yeoman.app %>/scripts/cliche-app/*.js',
+                    '<%= yeoman.app %>/scripts/cliche/*.js',
+                    '<%= yeoman.app %>/scripts/cliche/**/*.js'
                 ],
                 dest: 'dist/scripts/cliche.js'
             },
             integration: {
                 src: [
-                    '<%= yeoman.app %>/scripts/integration/!*.js',
-                    '<%= yeoman.app %>/scripts/integration/!**!/!*.js'
+                    '<%= yeoman.app %>/scripts/integration/*.js',
+                    '<%= yeoman.app %>/scripts/integration/**/*.js'
                 ],
                 dest: 'dist/scripts/integration.js'
             },
             vendor: {
                 src: [
-                    'bower_components/angular/angular.js',
-                    'bower_components/angular-resource/angular-resource.js',
-                    'bower_components/angular-cookies/angular-cookies.js',
-                    'bower_components/angular-sanitize/angular-sanitize.js',
-                    'bower_components/angular-animate/angular-animate.js',
-                    'bower_components/angular-ui-router/release/angular-ui-router.js',
-
-                    'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
-                    'bower_components/ng-prettyjson/dist/ng-prettyjson.min.js',
-
-                    'bower_components/angular-marked/angular-marked.js',
-                    'bower_components/ng-tags-input/ng-tags-input.js',
-
-                    'bower_components/angular-ui-notification/dist/angular-ui-notification.min.js',
-
                     '<%= yeoman.app %>/vendor/chronicle/chronicle.js',
                     '<%= yeoman.app %>/vendor/jsandbox/src/jsandbox.js',
                     '<%= yeoman.app %>/vendor/angular-ui-sortable/sortable.min.js'
-
                 ],
                 dest: 'dist/scripts/vendor.js'
             }
-        },*/
+              /*  raphael: {
 
+                    src: [
+                        '<%= yeoman.app %>/vendor/raphael/!*.js'
+                    ],
+                    dest: 'dist/scripts/raphael.js'
+                }*/
+        },
+
+        clean: {
+            options: {
+                force: true
+            },
+            dist: {
+                files: [{
+                    dot: true,
+                    src: [
+                        '.tmp',
+                        '<%= yeoman.dist %>/{,*!/}*',
+                        '!<%= yeoman.dist %>/.git*',
+                        '!<%= yeoman.dist %>/fonts'
+                    ]
+                }]
+            },
+            server: '.tmp'
+        },
 
         // Copies remaining files to places other tasks can use
         copy: {
@@ -204,6 +216,7 @@ module.exports = function(grunt) {
                     dot: true,
                     cwd: '<%= yeoman.app %>',
                     dest: '<%= yeoman.dist %>',
+                    //dest: '<%= yeoman.buildDist %>',
                     src: [
                         '*.{ico,png,txt}',
                         '.htaccess',
@@ -272,6 +285,20 @@ module.exports = function(grunt) {
         }
 
     });
+
+    grunt.registerTask('build', [
+        'clean:dist',
+        //        'useminPrepare',
+       // 'concurrent:dist',
+        'ngtemplates:dyole',
+        'ngtemplates:cliche',
+        //'autoprefixer',
+        'concat',
+        //'ngAnnotate',
+        'copy:dist',
+        'cssmin',
+        'uglify'
+    ]);
 
     grunt.registerTask('templates', [
         'ngtemplates:cliche',
