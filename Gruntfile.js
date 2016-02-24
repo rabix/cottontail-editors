@@ -115,9 +115,6 @@ module.exports = function(grunt) {
                     '<%= yeoman.dist %>/scripts/vendor.min.js': [
                         '<%= yeoman.dist %>/scripts/vendor.js'
                     ],
-                   /* '<%= yeoman.dist %>/scripts/raphael.min.js': [
-                        '<%= yeoman.dist %>/scripts/raphael.js'
-                    ],*/
                     '<%= yeoman.dist %>/scripts/dyole.min.js': [
                         '<%= yeoman.dist %>/scripts/util.js',
                         '<%= yeoman.dist %>/scripts/integration.js',
@@ -181,13 +178,6 @@ module.exports = function(grunt) {
                 ],
                 dest: 'dist/scripts/vendor.js'
             }
-              /*  raphael: {
-
-                    src: [
-                        '<%= yeoman.app %>/vendor/raphael/!*.js'
-                    ],
-                    dest: 'dist/scripts/raphael.js'
-                }*/
         },
 
         clean: {
