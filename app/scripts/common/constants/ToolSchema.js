@@ -386,9 +386,6 @@ var Schema = {
     required: ['id', 'class', 'baseCommand', 'arguments', 'label', 'inputs', 'outputs']
 };
 
-if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
-    module.exports = Schema;
-} else if (typeof angular !== 'undefined') {
-    angular.module('registryApp.common')
-        .constant('toolSchemaDefs', Schema);
-}
+angular.module('registryApp.common')
+    .constant('toolSchemaDefs', Schema);
+

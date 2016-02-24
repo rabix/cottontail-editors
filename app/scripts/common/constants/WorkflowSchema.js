@@ -289,12 +289,5 @@ var Schema = {
     required: ['id', 'class', 'label', 'inputs', 'outputs']
 };
 
-/**
- * Shared code with node
- */
-if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
-    module.exports = Schema;
-} else if (typeof angular !== 'undefined') {
-    angular.module('registryApp.common')
-        .constant('workflowSchemaDefs', Schema);
-}
+angular.module('registryApp.common')
+    .constant('workflowSchemaDefs', Schema);
