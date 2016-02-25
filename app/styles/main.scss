@@ -7,6 +7,14 @@ html, body {
   overflow-x: hidden;
 }
 
+body {
+    font-family: "Open Sans", sans-serif;
+    font-size: 14px;
+    line-height: 1.42857;
+    color: #333333;
+    background-color: #fff;
+}
+
 // firefox hack for fixing content overflow in flexbox containers.
 * {
   min-height: 0;
