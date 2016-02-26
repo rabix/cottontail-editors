@@ -71,13 +71,26 @@ angular.module('registryApp.dyole')
              */
             generateNodeId: function(model, used) {
                 var _id, check = true,
-                    name = (model.softwareDescription && model.softwareDescription.label) ? model.softwareDescription.label : model.label || model.name,
+                    name = (model.softwareDescription && model.softwareDescription.label) ? model.softwareDescription.label : model.label || model.id,
                     n = 0;
 
                 // remove # to start striping and creating unique id
                 if (name.charAt(0) === '#') {
                     name = name.slice(1);
                 }
+
+                var _checkIdPath = function (id) {
+                    var sp = id.split('/');
+
+                    return sp.length > 0;
+                };
+
+
+                if (this,_checkIdPath(name)) {
+                    var tmp = name.split('/');
+                    name = tmp[ tmp.length - 1 ];
+                }
+
 
                 var _fixName = function(n) {
 
