@@ -99,7 +99,7 @@ angular.module('registryApp.dyole')
                     return n.replace(regex, '_');
                 };
 
-                name = _fixName(name);
+                //name = _fixName(name);
 
                 used = used || {};
 
@@ -107,9 +107,9 @@ angular.module('registryApp.dyole')
                     return !!used[id];
                 };
 
-                if (name.charAt(0) !== '#') {
-                    name = '#' + name;
-                }
+                //if (name.charAt(0) !== '#') {
+                //    name = '#' + name;
+                //}
 
                 while (check) {
 

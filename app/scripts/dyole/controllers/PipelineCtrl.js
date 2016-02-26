@@ -32,7 +32,8 @@ angular.module('registryApp.dyole')
             Pipeline = pipeline.getInstance({
                 model: typeof obj.steps !== 'undefined' ? obj || rawPipeline : rawPipeline,
                 $parent: angular.element($element[0].querySelector(selector)),
-                editMode: $scope.editMode
+                editMode: $scope.editMode,
+                getApp: $scope.getApp
             });
 
             // Will be used to check if any of the buttons needs disabling

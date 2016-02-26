@@ -36,6 +36,7 @@ angular.module('registryApp.dyole')
             this.selected = false;
 
             this.isOutdated = this._checkNodeOutdated();
+            //this.isOutdated = true; // make all of them outdated so you can work simultaniusly without overhead of checking
 
             this.inputRefs = this.model.inputs;
 
