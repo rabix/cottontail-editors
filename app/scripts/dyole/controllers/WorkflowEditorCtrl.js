@@ -58,6 +58,8 @@ angular.module('registryApp.app')
                     console.error('Expected to get a promise from getToolbox, instead got: ', result);
                 } else {
                     result.then(function(tools) {
+                        console.log(tools);
+
                         $scope.view.repoTypes.myApps = tools;
                     });
                 }

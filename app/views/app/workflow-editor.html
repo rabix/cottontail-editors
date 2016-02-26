@@ -88,14 +88,25 @@
                                     {{ ::view.capitalize(repoType)}}
                                 </span>
 
-                                <ul class="nested-list">
+                                <ul class="nested-list apps-inner-list">
+
                                     <li ng-if="(repoTypeObj | isEmpty)">
                                         <p class="alert alert-info">
                                             <span ng-if="repoType === 'MyApps'">You don't have any apps yet</span>
                                             <span ng-if="repoType === 'PublicApps'">There are no public apps</span>
                                         </p>
                                     </li>
+
                                     <repo-item ng-repeat="directory in repoTypeObj.directories" directory="directory"></repo-item>
+
+                                    <li ng-repeat="app in filteredApps = (repoTypeObj.files | filter:view.searchTerm)">
+
+                                        <a href drag="app">
+                                            <i class="fa"><span class="tool-icon" ng-class="::app.class"></span></i>
+                                            <span> {{ ::app.name }} </span>
+                                        </a>
+                                    </li>
+
                                 </ul>
 
                             </li>
