@@ -50,18 +50,15 @@ angular.module('registryApp.app')
                 otherRepositories: false
             };
 
-            if (!_.isFunction($scope.getToolbox)) {
-                console.error('getToolbox is not a function');
-            } else {
-                var result = $scope.getToolbox();
-                if (!result || !result.then) {
-                    console.error('Expected to get a promise from getToolbox, instead got: ', result);
-                } else {
-                    result.then(function(tools) {
-                        $scope.view.repoTypes.myApps = tools;
-                    });
+            setTimeout(function(){
+                getToolBox();
+            }, 100);
+
+            $scope.$watch('externalAppId', function(n, o) {
+                if (n !== o) {
+                    getToolBox();
                 }
-            }
+            });
 
             /* visibility flags for repo groups that hold apps */
             $scope.view.repoGroups = {};
@@ -98,6 +95,21 @@ angular.module('registryApp.app')
                     $scope.view.classes = n;
                 }
             });
+
+            function getToolBox() {
+                if (!_.isFunction($scope.getToolbox)) {
+                    console.error('getToolbox is not a function');
+                } else {
+                    var result = $scope.getToolbox();
+                    if (!result || !result.then) {
+                        console.error('Expected to get a promise from getToolbox, instead got: ', result);
+                    } else {
+                        result.then(function(tools) {
+                            $scope.view.repoTypes.myApps = tools;
+                        });
+                    }
+                }
+            }
 
             var onInstanceRegister = function() {
                 PipelineInstance = PipelineService.getInstance($scope.view.pipelineId);
