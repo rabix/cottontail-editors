@@ -70,14 +70,14 @@
 
                     <div class="tab flex-box-column flex-one" ng-class="{loading: view.filtering}" ng-show="view.tab === 'apps'">
                         <form class="search-form" ng-submit="" novalidate>
-                            <div class="input-group">
-                                <input type="text" class="form-control" ng-model="view.searchTerm" placeholder="Search apps"
-                                       required>
-                        <span class="input-group-btn">
-                            <!--<button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>-->
-                            <button ng-disabled="view.searchTerm | isEmpty" class="btn btn-expression btn-default" ng-click="resetSearch()"><i class="fa fa-ban"></i></button>
-                        </span>
-                            </div>
+                            <!--<div class="input-group">-->
+                                <!--<input type="text" class="form-control" ng-model="view.searchTerm" placeholder="Search apps"-->
+                                       <!--required>-->
+                        <!--<span class="input-group-btn">-->
+                            <!--&lt;!&ndash;<button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>&ndash;&gt;-->
+                            <!--<button ng-disabled="view.searchTerm | isEmpty" class="btn btn-expression btn-default" ng-click="resetSearch()"><i class="fa fa-ban"></i></button>-->
+                        <!--</span>-->
+                            <!--</div>-->
                         </form>
                         <ul class="app-sidebar-list">
 
