@@ -5,7 +5,7 @@
 'use strict';
 
 angular.module('registryApp.common')
-    .factory('SandBox', ['$q', 'Cliche', 'lodash', function($q, Cliche, _) {
+    .factory('SandBox', ['$q', 'Cliche', 'lodash', '$window', function($q, Cliche, _, $window) {
 
         var Sandbox;
 
@@ -24,7 +24,7 @@ angular.module('registryApp.common')
              */
             evaluate: function(code, input) {
 
-                Sandbox = new JSandbox();
+                Sandbox = new $window.JSandbox();
 
                 var deferred = $q.defer();
                 var job = Cliche.getJob();

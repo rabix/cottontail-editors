@@ -17,11 +17,11 @@ var JSandbox = (function (self) {
 	var undef_type = "undefined",
 	doc            = self.document,
 	Worker         = self.Worker;
-	
+
 	if (typeof Worker === undef_type) {
 		return;
 	}
-	
+
 	var
 	// repeatedly used properties/strings (for minification)
 	$eval       = "eval",
@@ -37,14 +37,14 @@ var JSandbox = (function (self) {
 	$onresponse = "onresponse",
 	$prototype  = "prototype",
 	$call       = "call",
-	
+
 	str_type   = "string",
 	fun_type   = "function",
-	
-	
+
+
 	Sandbox = function () {
 		var sandbox = this;
-		
+
 		if (!(sandbox instanceof Sandbox)) {
 			return new Sandbox();
 		}
@@ -79,7 +79,7 @@ var JSandbox = (function (self) {
 					if (typeof sandbox[$onresponse] === fun_type) {
 						sandbox[$onresponse](data, request);
 					}
-				
+
 					if (typeof request[$callback] === fun_type) {
 						request[$callback][$call](sandbox, data.results);
 					}
@@ -89,7 +89,7 @@ var JSandbox = (function (self) {
 		};
 	},
 	proto = Sandbox[$prototype],
-	
+
 	createRequestMethod = function (method) {
 		proto[method] = function (options, callback, input, onerror) {
 			if (typeof options === str_type ||
@@ -103,38 +103,38 @@ var JSandbox = (function (self) {
 					onerror  : onerror
 				};
 			}
-			
+
 			if (method === $load && typeof options[$data] === str_type) {
 				options[$data] = [options[$data]];
 			}
-			
+
 			var data  = options[$data],
 				id    = this.createRequestID();
-			
+
 			input = options[$input];
-			
+
 			delete options[$data];
 			delete options[$input];
-			
+
 			this[$requests][id] = options;
-			
+
 			this[$worker].postMessage({
 				id       : id,
 				method   : method,
 				data     : data,
 				input    : input
 			});
-		
+
 			return id;
 		};
 		Sandbox[method] = function () {
 			var sandbox = new Sandbox();
-		
+
 			sandbox[$onresponse] = sandbox[$onerror] = function () {
 				sandbox[$terminate]();
 				sandbox = null;
 			};
-		
+
 			Sandbox[$prototype][method].apply(
 				sandbox,
 				Array[$prototype].slice[$call](arguments)
@@ -144,21 +144,21 @@ var JSandbox = (function (self) {
 	},
 	methods = [$eval, $load, $exec],
 	i = 3; // methods.length
-	
+
 	while (i--) {
 		createRequestMethod(methods[i]);
 	}
-	
+
 	proto[$terminate] = function () {
 		this[$requests] = {};
 		this[$worker].onmessage = null;
 		this[$worker][$terminate]();
 	};
-	
+
 	proto.abort = function (id) {
 		delete this[$requests][id];
 	};
-	
+
 	proto.createRequestID = function () {
 		var id = Math.random().toString();
 		if (id in this[$requests]) {
@@ -166,7 +166,7 @@ var JSandbox = (function (self) {
 		}
 		return id;
 	};
-	
+
 	if (typeof doc !== undef_type) {
 		var linkElems = doc.getElementsByTagName("link");
 		i = linkElems.length;
@@ -178,7 +178,8 @@ var JSandbox = (function (self) {
 			}
 		}
 	}
-	
+
 	return Sandbox;
 }(self)),
 Sandbox = JSandbox;
+window.JSandbox = JSandbox;
