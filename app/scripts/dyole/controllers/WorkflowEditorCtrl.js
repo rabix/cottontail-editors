@@ -173,8 +173,14 @@ angular.module('registryApp.app')
             function _appsLoaded(app) {
                 var workflow;
 
-                if (app === '' || app === '{}') {
-                    workflow = _.assign(_.cloneDeep(rawRabixWorkflow), {id: $scope.externalAppId || ''});
+                // blank workflow is created
+                if (app === null) {
+                    workflow = _.assign(_.cloneDeep(rawRabixWorkflow), {
+                        id: $scope.externalAppId || '',
+                        'ct:path': $scope.externalAppPath || '',
+                        label: $scope.externalAppPath ? _.last($scope.externalAppPath.split('/')).split('.')[0] : 'Workflow'
+                    });
+                    // save it immediately
                     _saveCallback(null, workflow);
                 } else {
                     workflow = JSON.parse(app);
