@@ -293,6 +293,12 @@ module.exports = function(grunt) {
     grunt.registerTask('templates', [
         'ngtemplates:cliche',
         'ngtemplates:dyole'
+    ]);
+
+    grunt.registerTask('dev', [
+        'sass:server',
+        'templates',
+        'watch'
     ])
 };
 
